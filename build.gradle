@@ -1,0 +1,45 @@
+apply plugin: 'java'
+
+group = 'org.incava.diffj'
+version ='1.2.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile files('libs/pmd-4.2.5.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+allprojects {
+    tasks.withType(Compile).all { Compile compile ->
+        compile.options.debug = true
+        compile.options.compilerArgs = ['-Xlint:all']
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            exclude '**/.#*/**'
+        }
+    }
+
+    test {
+        java {
+            exclude '**/.#*/**'
+        }
+    }
+}
+
+jar { 
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } 
+}
+
+test {
+    excludes = [ '**/Abstract*', '**/.#*' ]
+}
+
+manifest.mainAttributes("Main-Class" : "org.incava.diffj.DiffJ")
+logging.captureStandardOutput LogLevel.ERROR
