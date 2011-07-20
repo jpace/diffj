@@ -24,19 +24,16 @@ public class DiffJ {
 
     private int exitValue;
 
-    public DiffJ(String[] args) {
+    public DiffJ(String[] names, boolean briefOutput, boolean contextOutput, boolean highlightOutput) {
         tr.Ace.set(true, 25, 4, 20, 25);
         tr.Ace.setOutput(Qualog.VERBOSE, Qualog.LEVEL4);
         tr.Ace.setOutput(Qualog.QUIET,   Qualog.LEVEL2);
 
-        Options  opts  = Options.get();
-        String[] names = opts.process(args);
-
-        if (opts.briefOutput) {
+        if (briefOutput) {
             report = new BriefReport(System.out);
         }
         else {
-            report = new DetailedReport(System.out, opts.contextOutput, opts.highlightOutput);
+            report = new DetailedReport(System.out, contextOutput, highlightOutput);
         }
 
         exitValue = 0;
@@ -73,7 +70,7 @@ public class DiffJ {
         
         if ((fromIsStdin || from.isFile()) && (toIsStdin || to.isFile())) {
             tr.Ace.log("from: " + from + "; to: " + to);
-            
+
             try {
                 String fromStr = null;
                 FileReader fromRdr = fromIsStdin ? new FileReader(FileDescriptor.in) : new FileReader(from);
@@ -96,18 +93,13 @@ public class DiffJ {
                 if (toRdr != null) {
                     toStr = FileExt.read(toRdr, true);
                 }
-                        
-                ASTCompilationUnit fromCu = compile(from.getName(), new StringReader(fromStr), Options.get().fromSource);
-                ASTCompilationUnit toCu   = compile(to.getName(),   new StringReader(toStr),   Options.get().toSource);
 
-                report.reset(fromIsStdin ? "-" : from.getPath(), fromStr, toIsStdin ? "-" : to.getPath(), toStr);
-            
-                CompilationUnitDiff cud = new CompilationUnitDiff(report, true);
-                // chew the cud here ...
-                cud.compare(fromCu, toCu);
-                if (report.getDifferences().size() > 0) {
-                    exitValue = 1;
-                }
+                Options opts     = Options.get();
+                String  fromName = opts.firstFileName  == null ? (fromIsStdin ? "-" : from.getPath()) : opts.firstFileName;
+                String  toName   = opts.secondFileName == null ? (toIsStdin   ? "-" : to.getPath())   : opts.secondFileName;
+
+                final boolean flushReport = true;
+                new JavaFileDiff(report, fromName, fromStr, Options.get().fromSource, toName, toStr, Options.get().toSource, flushReport);
 
                 report.flush();
             }
@@ -173,57 +165,10 @@ public class DiffJ {
         }
     }
 
-    protected ASTCompilationUnit compile(String name, Reader rdr, String sourceVersion) {
-        TimedEvent init = new TimedEvent(totalInit);
-        try {
-            JavaCharStream jcs = new JavaCharStream(rdr);
-            JavaParser parser = new JavaParser(jcs);
-
-            if (sourceVersion.equals(Java.SOURCE_1_3)) {
-                tr.Ace.log("creating 1.3 parser");
-                parser.setJDK13();
-            }
-            else if (sourceVersion.equals(Java.SOURCE_1_4)) {
-                tr.Ace.log("creating 1.4 parser");
-            }
-            else if (sourceVersion.equals(Java.SOURCE_1_5) || sourceVersion.equals(Java.SOURCE_1_6)) {
-                // no setJDK16 yet in PMD
-                tr.Ace.log("creating 1.5 parser");
-                parser.setJDK15();
-            }
-            else {
-                System.err.println("ERROR: source version '" + sourceVersion + "' not recognized");
-                System.exit(-1);
-            }
-            
-            init.end();
-
-            // tr.Ace.log("running parser");
-            
-            TimedEvent         parse = new TimedEvent(totalParse);
-            ASTCompilationUnit cu    = parser.CompilationUnit();
-            parse.end();
-
-            long total = init.duration + parse.duration; // + analysis.duration;
-            tr.Ace.log("time: total: " + total + "; init: " + init.duration + "; parse: " + parse.duration + "; " + name);
-            // tr.Ace.log("time: total: " + total + "; init: " + init.duration + "; parse: " + parse.duration + "; analysis: " + analysis.duration + "; " + name);
-
-            return cu;
-        }
-        catch (TokenMgrError tme) {
-            System.out.println("Error parsing (tokenizing) " + name + ": " + tme.getMessage());
-            exitValue = 1;
-            return null;
-        }
-        catch (ParseException e) {
-            System.out.println("Parse error in " + name + ": " + e.getMessage());
-            exitValue = -1;
-            return null;
-        }
-    }
-
     public static void main(String[] args) {
-        DiffJ dj = new DiffJ(args);
+        Options  opts  = Options.get();
+        String[] names = opts.process(args);
+        DiffJ    dj    = new DiffJ(names, opts.briefOutput, opts.contextOutput, opts.highlightOutput);
         System.exit(dj.exitValue);
     }
 

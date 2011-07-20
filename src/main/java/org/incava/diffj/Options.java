@@ -106,12 +106,12 @@ public class Options extends OptionSet {
     /**
      * The name of the first file, if not the actual name. Not currently used.
      */
-    private String firstFileName;
+    public String firstFileName;
 
     /**
      * The name of the second file, if not the actual name.
      */
-    private String secondFileName;
+    public String secondFileName;
 
     private static Options instance = new Options();
 
@@ -166,20 +166,29 @@ public class Options extends OptionSet {
         add(toSourceOpt   = new StringOption("to-source",   "The Java source version, of the to-file; " + javaVersions));
         add(sourceOpt     = new StringOption("source",      "The Java source version of both from-file and the to-file"));
 
-        // StringOption nameOpt = new StringOption("name",   "Sets the first/second name to be displayed") {
-        //         public void setValue(String val) {
-        //             if (firstFileName == null) {
-        //                 firstFileName = val;
-        //             }
-        //             else {
-        //                 secondFileName = val;
-        //             }
-        //         }
-        //     };
-        // nameOpt.setShortName('l');
+        tr.Ace.setVerbose(true);
+
+        // svn diff --diff-cmd cmd passes "-u, -L first, -L second, file1, file2":
+        StringOption nameOpt = new StringOption("name",   "Sets the first/second name to be displayed") {
+                public void setValue(String val) {
+                    tr.Ace.onRed("val", val);
+                    if (firstFileName == null) {
+                        firstFileName = val;
+                    }
+                    else {
+                        secondFileName = val;
+                    }
+                }
+            };
+        nameOpt.setShortName('l');
+        nameOpt.setShortName('L');
+        add(nameOpt);
+
+        tr.Ace.yellow("nameOpt", nameOpt);
         
         BooleanOption fmtOpt = new BooleanOption("format",   "Sets the format to unified diff; ignored");
         fmtOpt.setShortName('u');
+        add(fmtOpt);
         
         // addEnvironmentVariable("DIFFJ_PROPERTIES");
         

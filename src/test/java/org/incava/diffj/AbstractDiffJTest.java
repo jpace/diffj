@@ -84,45 +84,18 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
         evaluate(from, to, src, makeReport(new StringWriter()), expectations);
     }
 
-    public void evaluate(String from, String to, String src, Report report, FileDiff ... expectations) {
+    public void evaluate(String fromStr, String toStr, String src, Report report, FileDiff ... expectations) {
+        evaluate("-", fromStr, "-", toStr, src, report, expectations);
+    }
+
+    public void evaluate(String fromName, String fromStr, String toName, String toStr, String src, Report report, FileDiff ... expectations) {
         _report = report;
-        
+
         Collection<FileDiff> diffs = _report.getDifferences();
 
-        _report.reset(from, to);
-
         try {
-            StringReader fromRdr = new StringReader(from);
-            StringReader toRdr = new StringReader(to);
-
-            JavaCharStream jcsFrom = new JavaCharStream(fromRdr);
-            JavaCharStream jcsTo = new JavaCharStream(toRdr);
-
-            JavaParser fromParser = new JavaParser(jcsFrom);
-            JavaParser toParser = new JavaParser(jcsTo);
-
-            tr.Ace.setVerbose(true);
-
-            if (src.equals(Java.SOURCE_1_3)) {
-                fromParser.setJDK13();
-                toParser.setJDK13();
-            }
-            else if (src.equals(Java.SOURCE_1_4)) {
-                // nothing.
-            }
-            else if (src.equals(Java.SOURCE_1_5) || src.equals(Java.SOURCE_1_6)) {
-                fromParser.setJDK15();
-                toParser.setJDK15();
-            }
-            else {
-                fail("ERROR: source version '" + src + "' not recognized");
-            }
-
-            ASTCompilationUnit fromCu = fromParser.CompilationUnit();
-            ASTCompilationUnit toCu   = toParser.CompilationUnit();
-            
-            CompilationUnitDiff cud = new CompilationUnitDiff(_report, false);
-            cud.compare(fromCu, toCu);
+            final boolean flushReport = false;
+            JavaFileDiff jfd = new JavaFileDiff(report, fromName, fromStr, src, toName, toStr, src, flushReport);
             
             if (expectations == null) {
                 // skipping expectations check

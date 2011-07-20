@@ -75,7 +75,34 @@ public class TestDiffJ extends AbstractDiffJTest {
         expected.add("      }");
         expected.add("  }");
         expected.add("");
+
+        tr.Ace.log("expected", expected);
         
         assertEquals(expected, Arrays.asList(output));
     }
+
+    public void testWithSpecifiedFileNames() {
+        String[] output = getOutput(new Lines("public class FN {",
+                                              "}"),
+
+                                    new Lines("public class FN {",
+                                              "    void f() {}",
+                                              "}"));
+        
+        tr.Ace.log("output  ", output);
+
+        List<String> expected = new ArrayList<String>();
+        expected.add("- <=> -");
+
+        expected.add("1,2a2 method added: f()");
+        expected.add("  public class FN {");
+        expected.add("!     " + ANSI.YELLOW + "void f() {}" + ANSI.RESET);
+        expected.add("  }");
+        expected.add("");
+        
+        tr.Ace.log("expected", expected);
+        
+        assertEquals(expected, Arrays.asList(output));
+    }
+
 }
