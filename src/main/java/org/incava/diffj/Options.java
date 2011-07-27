@@ -104,7 +104,7 @@ public class Options extends OptionSet {
     private BooleanOption highlightOpt;
 
     /**
-     * The name of the first file, if not the actual name. Not currently used.
+     * The name of the first file, if not the actual name.
      */
     public String firstFileName;
 
@@ -166,12 +166,15 @@ public class Options extends OptionSet {
         add(toSourceOpt   = new StringOption("to-source",   "The Java source version, of the to-file; " + javaVersions));
         add(sourceOpt     = new StringOption("source",      "The Java source version of both from-file and the to-file"));
 
+        BooleanOption unifiedOption = new BooleanOption("unified",   "Output unified context. Unused; for compatibility with GNU diff");
+        add(unifiedOption);
+        unifiedOption.setShortName('u');
+
         tr.Ace.setVerbose(true);
 
         // svn diff --diff-cmd cmd passes "-u, -L first, -L second, file1, file2":
         StringOption nameOpt = new StringOption("name",   "Sets the first/second name to be displayed") {
                 public void setValue(String val) {
-                    tr.Ace.onRed("val", val);
                     if (firstFileName == null) {
                         firstFileName = val;
                     }
