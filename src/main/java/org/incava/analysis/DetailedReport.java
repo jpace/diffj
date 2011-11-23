@@ -169,4 +169,25 @@ public class DetailedReport extends Report {
 
         return dw.getDifference(ref);
     }
+
+    // public void printFileNames() {
+    //     // extend this for unified (file name per line)
+
+    //     if (fromFileName != null && toFileName != null) {
+    //         String lnsep = System.getProperty("line.separator");
+    //         StringBuffer buf = new StringBuffer();
+    //         buf.append("===================================================================").append(lnsep);
+    //         buf.append("--- " + fromFileName).append(lnsep);
+    //         buf.append("+++ " + fromFileName).append(lnsep);
+            
+    //         try {
+    //             writer.write(buf.toString());
+    //         }
+    //         catch (IOException ioe) {
+    //         }
+            
+    //         fromFileName = null;
+    //         toFileName = null;
+    //     }
+    // }
 }

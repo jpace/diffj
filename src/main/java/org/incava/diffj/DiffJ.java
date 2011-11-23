@@ -11,17 +11,12 @@ import org.incava.ijdk.util.Arrays;
 import org.incava.ijdk.util.TimedEvent;
 import org.incava.ijdk.util.TimedEventSet;
 
-
 public class DiffJ {
-
     private TimedEventSet totalInit = new TimedEventSet();
-
     private TimedEventSet totalParse = new TimedEventSet();
-
     private TimedEventSet totalAnalysis = new TimedEventSet();
 
     private final Report report;
-
     private int exitValue;
 
     public DiffJ(String[] names, boolean briefOutput, boolean contextOutput, boolean highlightOutput) {
@@ -171,5 +166,4 @@ public class DiffJ {
         DiffJ    dj    = new DiffJ(names, opts.briefOutput, opts.contextOutput, opts.highlightOutput);
         System.exit(dj.exitValue);
     }
-
 }

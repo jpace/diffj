@@ -6,11 +6,8 @@ import org.incava.analysis.FileDiff;
 import org.incava.java.*;
 import org.incava.pmd.*;
 
-
 public class MethodDiff extends FunctionDiff {
-
     public static final String METHOD_BLOCK_ADDED = "method block added";
-
     public static final String METHOD_BLOCK_REMOVED = "method block removed";
 
     protected static final int[] VALID_MODIFIERS = new int[] {
@@ -54,8 +51,8 @@ public class MethodDiff extends FunctionDiff {
     protected void compareBodies(ASTMethodDeclaration a, ASTMethodDeclaration b) {
         final int ABSTRACT_METHOD_CHILDREN = 2;
 
-        tr.Ace.cyan("a", a);
-        tr.Ace.cyan("b", b);
+        tr.Ace.log("a", a);
+        tr.Ace.log("b", b);
 
         ASTBlock aBlock = (ASTBlock)SimpleNodeUtil.findChild(a, ASTBlock.class);
         ASTBlock bBlock = (ASTBlock)SimpleNodeUtil.findChild(b, ASTBlock.class);
@@ -81,21 +78,13 @@ public class MethodDiff extends FunctionDiff {
 
     // protected void compareBlocks(String aName, ASTBlock aBlock, String bName, ASTBlock bBlock)
     // {
-    //     tr.Ace.setVerbose(true);
-
     //     tr.Ace.cyan("aBlock", aBlock);
     //     SimpleNodeUtil.dump(aBlock, "");
-
     //     tr.Ace.cyan("bBlock", bBlock);
     //     SimpleNodeUtil.dump(bBlock, "");
-
     //     // walk through, looking for common if and for statements ...
-
     //     tr.Ace.cyan("aChildren(null)", SimpleNodeUtil.findChildren(aBlock));
-
-    //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(bBlock));
-
-        
+    //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(bBlock));        
     // }
 
     protected void compareBlocks(String aName, ASTBlock aBlock, String bName, ASTBlock bBlock) {
@@ -104,5 +93,4 @@ public class MethodDiff extends FunctionDiff {
 
         compareCode(aName, a, bName, b);
     }
-
 }

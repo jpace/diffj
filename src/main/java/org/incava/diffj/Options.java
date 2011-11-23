@@ -12,11 +12,8 @@ import org.incava.ijdk.lang.StringExt;
  * Options.
  */
 public class Options extends OptionSet {
-
     public static int MAXIMUM_WARNING_LEVEL = 100;
-
     public static int MINIMUM_WARNING_LEVEL = -1;
-
     public static int DEFAULT_WARNING_LEVEL = -1;
 
     /**
@@ -34,7 +31,7 @@ public class Options extends OptionSet {
      */
     public static boolean highlightOutput = false;
 
-    public static String VERSION = "1.2.0";
+    public static String VERSION = "1.2.1";
 
     public static String DEFAULT_SOURCE = Java.SOURCE_1_5;
 
@@ -170,8 +167,6 @@ public class Options extends OptionSet {
         add(unifiedOption);
         unifiedOption.setShortName('u');
 
-        tr.Ace.setVerbose(true);
-
         // svn diff --diff-cmd cmd passes "-u, -L first, -L second, file1, file2":
         StringOption nameOpt = new StringOption("name",   "Sets the first/second name to be displayed") {
                 public void setValue(String val) {
@@ -187,8 +182,6 @@ public class Options extends OptionSet {
         nameOpt.setShortName('L');
         add(nameOpt);
 
-        tr.Ace.yellow("nameOpt", nameOpt);
-        
         BooleanOption fmtOpt = new BooleanOption("format",   "Sets the format to unified diff; ignored");
         fmtOpt.setShortName('u');
         add(fmtOpt);
@@ -205,9 +198,6 @@ public class Options extends OptionSet {
      * processing.
      */
     public String[] process(String[] args) {
-        // tr.Ace.setVerbose(true);
-        
-        tr.Ace.log("args: " + args);
         String[] unprocessed = super.process(args);
 
         Integer tabWidthInt = tabWidthOpt.getValue();

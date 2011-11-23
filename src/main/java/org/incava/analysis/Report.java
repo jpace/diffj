@@ -4,8 +4,7 @@ import java.awt.Point;
 import java.io.*;
 import java.util.*;
 import org.incava.ijdk.io.FileExt;
-import org.incava.qualog.Qualog;
-
+// import static tr.Ace.*;
 
 /**
  * Reports errors (differences), in a format that is determined by the subclass.
@@ -147,8 +146,6 @@ public abstract class Report {
             Collection<FileDiff> diffs = collateDifferences(differences);
             for (FileDiff ref : diffs) {
                 String        str = toString(ref);
-                // tr.Ace.log("ref    : " + ref);
-                // tr.Ace.log("writing: " + str);
                 writer.write(str);
             }
             // we can't close STDOUT
@@ -166,6 +163,8 @@ public abstract class Report {
 
     public void printFileNames() {
         // only print file names once per report.
+
+        // extend this for unified (file name per line)
         
         if (fromFileName != null && toFileName != null) {
             StringBuffer buf = new StringBuffer();
@@ -224,5 +223,4 @@ public abstract class Report {
     protected void clear() {
         differences.clear();
     }
-
 }
