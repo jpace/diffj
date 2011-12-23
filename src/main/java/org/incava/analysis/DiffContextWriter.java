@@ -1,34 +1,15 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
 import java.util.*;
 import org.incava.ijdk.io.*;
 import org.incava.ijdk.lang.*;
-import org.incava.qualog.Qualog;
-import org.incava.ijdk.util.ANSI;
-
 
 /**
  * Writes differences with context. Actually returns the differences as strings.
  * Writing is left to the invoker.
  */
 public class DiffContextWriter extends DiffWriter {
-    /**
-     * The end-of-line character/sequence for this OS.
-     */
-    protected final static String EOLN = FileExt.EOLN;
-
-    /**
-     * The color for added code.
-     */
-    protected static String COLOR_ADDED = ANSI.YELLOW;
-
-    /**
-     * The color for deleted code.
-     */
-    protected static String COLOR_DELETED = ANSI.RED;
-
     public DiffContextWriter(String[] fromContents, String[] toContents) {
         super(fromContents, toContents);
     }

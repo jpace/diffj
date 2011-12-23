@@ -1,13 +1,18 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+import java.util.Collection;
 import org.incava.ijdk.io.*;
 import org.incava.ijdk.lang.*;
-import org.incava.qualog.Qualog;
 import org.incava.ijdk.util.ANSI;
-
+import org.incava.qualog.Qualog;
 
 /**
  * Reports differences in long form.
@@ -71,7 +76,7 @@ public class DetailedReport extends Report {
      * adding to this report later, i.e., prior to <code>flush</code>.
      */
     public void reset(File fromFile, File toFile) {
-        super.reset(fromFile, toFile);
+        super.resetFiles(fromFile, toFile);
 
         tr.Ace.log("fromFile: " + fromFile + "; toFile: " + toFile);
         
@@ -94,8 +99,8 @@ public class DetailedReport extends Report {
     public void reset(String fromSource, String toSource) {
         super.reset(fromSource, toSource);
 
-        fromContents = null;
-        toContents = null;
+        this.fromContents = null;
+        this.toContents = null;
         
         fromFileRdr = new StringReader(fromSource);
         toFileRdr = new StringReader(toSource);

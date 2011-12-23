@@ -1,19 +1,11 @@
 package org.incava.analysis;
 
-import java.awt.Point;
-import java.io.*;
-import java.util.*;
-import org.incava.ijdk.io.*;
-import org.incava.ijdk.lang.*;
-import org.incava.qualog.Qualog;
 import org.incava.ijdk.util.ANSI;
-
 
 /**
  * Writes differences with context, and color!
  */
 public class DiffContextHighlightWriter extends DiffContextWriter {
-
     /**
      * The color for added code.
      */
@@ -66,7 +58,6 @@ public class DiffContextHighlightWriter extends DiffContextWriter {
         sb.append(ANSI.RESET);
         
         sb.append(line.substring(tcol, llen));
-            
         sb.append(EOLN);
 
         return sb.toString();

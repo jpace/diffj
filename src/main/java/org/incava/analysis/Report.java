@@ -1,10 +1,15 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 import org.incava.ijdk.io.FileExt;
-// import static tr.Ace.*;
 
 /**
  * Reports errors (differences), in a format that is determined by the subclass.
@@ -64,7 +69,6 @@ public abstract class Report {
      */
     public Report(Writer writer, String fromSource, String toSource) {
         this(writer);
-        
         reset(fromSource, toSource);
     }
 
@@ -77,8 +81,7 @@ public abstract class Report {
      */
     public Report(Writer writer, File fromFile, File toFile) {
         this(writer);
-        
-        reset(fromFile, toFile);
+        resetFiles(fromFile, toFile);
     }
 
     /**
@@ -90,7 +93,6 @@ public abstract class Report {
      */
     public Report(OutputStream os, String fromSource, String toSource) {
         this(os);
-
         reset(fromSource, toSource);
     }
 
@@ -103,8 +105,7 @@ public abstract class Report {
      */
     public Report(OutputStream os, File fromFile, File toFile) {
         this(os);
-
-        reset(fromFile, toFile);
+        resetFiles(fromFile, toFile);
     }
     
     /**
@@ -114,9 +115,9 @@ public abstract class Report {
      * @param fromFile The from-file, containing source code, to which this report applies.
      * @param toFile The to-file, containing source code, to which this report applies.
      */
-    public void reset(File fromFile, File toFile) {
-        fromFileName = fromFile.getPath();
-        toFileName   = toFile.getPath();
+    public void resetFiles(File fromFile, File toFile) {
+        this.fromFileName = fromFile.getPath();
+        this.toFileName   = toFile.getPath();
     }
 
     /**
@@ -124,8 +125,8 @@ public abstract class Report {
      * that are adding to this report later, i.e., prior to <code>flush</code>.
      */
     public void reset(String fromSource, String toSource) {
-        fromFileName = "-";
-        toFileName   = "-";
+        this.fromFileName = "-";
+        this.toFileName   = "-";
     }
 
     /**
@@ -145,7 +146,7 @@ public abstract class Report {
             tr.Ace.log("flushing differences");
             Collection<FileDiff> diffs = collateDifferences(differences);
             for (FileDiff ref : diffs) {
-                String        str = toString(ref);
+                String str = toString(ref);
                 writer.write(str);
             }
             // we can't close STDOUT
@@ -163,7 +164,6 @@ public abstract class Report {
 
     public void printFileNames() {
         // only print file names once per report.
-
         // extend this for unified (file name per line)
         
         if (fromFileName != null && toFileName != null) {

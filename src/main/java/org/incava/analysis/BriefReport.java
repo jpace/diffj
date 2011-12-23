@@ -1,9 +1,11 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.util.*;
-
 
 /**
  * Reports differences briefly, vaguely a la "diff --brief".
@@ -39,8 +41,8 @@ public class BriefReport extends Report {
     protected String toString(FileDiff ref) {
         StringBuffer buf = new StringBuffer();
 
-        Point  del = new Point(ref.firstStart.x,  ref.firstEnd.x);
-        Point  add = new Point(ref.secondStart.x, ref.secondEnd.x);
+        Point del = new Point(ref.firstStart.x,  ref.firstEnd.x);
+        Point add = new Point(ref.secondStart.x, ref.secondEnd.x);
         FileDiff.Type ind = ref.type;
         
         buf.append(toString(del));
@@ -59,26 +61,29 @@ public class BriefReport extends Report {
     public void flush() {
         if (!differences.isEmpty()) {
             printFileNames();
-            try {
-                Collection<FileDiff> diffs = collateDifferences(differences);
-                String lastStr = null;
-                for (FileDiff ref : diffs) {
-                    String str = toString(ref);
-                    if (str.equals(lastStr)) {
-                        tr.Ace.reverse("skipping repeated message");
-                    }
-                    else {
-                        writer.write(str);
-                        lastStr = str;
-                    }
-                }
-                // we can't close STDOUT
-                writer.flush();
-            }
-            catch (IOException ioe) {
-            }
+            writeDifferences();
         }
         clear();
     }
 
+    /**
+     * Writes the differences.
+     */
+    private void writeDifferences() {
+        try {
+            Collection<FileDiff> diffs = collateDifferences(differences);
+            String lastStr = null;
+            for (FileDiff ref : diffs) {
+                String str = toString(ref);
+                if (!str.equals(lastStr)) {
+                    writer.write(str);
+                    lastStr = str;
+                }
+            }
+            // we can't close STDOUT
+            writer.flush();
+        }
+        catch (IOException ioe) {
+        }
+    }
 }

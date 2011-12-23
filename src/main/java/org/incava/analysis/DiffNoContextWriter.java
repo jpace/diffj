@@ -1,20 +1,12 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
-import org.incava.ijdk.io.*;
-import org.incava.ijdk.lang.*;
-import org.incava.qualog.Qualog;
-import org.incava.ijdk.util.ANSI;
-
 
 /**
  * Writes differences. Actually returns the differences as strings. Writing is
  * left to the invoker.
  */
 public class DiffNoContextWriter extends DiffWriter {
-
     public DiffNoContextWriter(String[] fromContents, String[] toContents) {
         super(fromContents, toContents);
     }

@@ -1,13 +1,8 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
-import org.incava.ijdk.io.*;
+import org.incava.ijdk.io.FileExt;
 import org.incava.ijdk.lang.*;
-import org.incava.qualog.Qualog;
-import org.incava.ijdk.util.ANSI;
-
 
 /**
  * Writes differences. Actually returns the differences as strings. Writing is
@@ -73,5 +68,4 @@ public abstract class DiffWriter {
     }
 
     protected abstract void printLines(StringBuilder sb, FileDiff ref);
-
 }
