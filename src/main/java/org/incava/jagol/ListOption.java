@@ -108,7 +108,7 @@ public class ListOption extends Option
      * @see ListOption#convert(String)
      */
     protected void parse(String str) throws InvalidTypeException {
-        List<String> list = StringExt.listify(str);
+        List<String> list = StringExt.toList(str);
         for (String s : list) {
             if (!s.equals("+=")) {
                 value.add(convert(s));
