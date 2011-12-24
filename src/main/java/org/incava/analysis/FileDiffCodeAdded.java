@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.*;
 import net.sourceforge.pmd.ast.Token;
 
-
 /**
  * Code added.
  */

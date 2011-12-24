@@ -1,17 +1,13 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
 import net.sourceforge.pmd.ast.Token;
-
 
 /**
  * A reference to code added, associated with a file by a starting and ending
  * position.
  */
 public class FileDiffAdd extends FileDiff {
-
     public FileDiffAdd(String message, Point firstStart, Point firstEnd, Point secondStart, Point secondEnd) {
         super(Type.ADDED, message, firstStart, firstEnd, secondStart, secondEnd);
     }

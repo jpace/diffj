@@ -1,17 +1,13 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
 import net.sourceforge.pmd.ast.Token;
-
 
 /**
  * A reference to code changed, associated with a file by a starting and ending
  * position.
  */
 public class FileDiffChange extends FileDiff {
-
     public FileDiffChange(String message, Point firstStart, Point firstEnd, Point secondStart, Point secondEnd) {
         super(Type.CHANGED, message, firstStart, firstEnd, secondStart, secondEnd);
     }
