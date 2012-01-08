@@ -23,7 +23,7 @@ public class TestDiffJ extends AbstractDiffJTest {
 
     // to be moved to ijdk.lang.ArrayExt
 
-    public static List<String> appendToAll(String[] array, String str) {
+    public static List<String> appendToAll(List<String> array, String str) {
         List<String> newList = new ArrayList<String>();
 
         for (String element : array) {
@@ -34,8 +34,8 @@ public class TestDiffJ extends AbstractDiffJTest {
     }
 
     public static String readAsString(String fName) {
-        String[] lines = FileExt.readLines(fName);
-        return StringExt.join(appendToAll(lines, FileExt.EOLN), "");
+        List<String> lines = IO.readLines(fName);
+        return StringExt.join(appendToAll(lines, IO.EOLN), "");
     }
 
     public void testWithTabs() {

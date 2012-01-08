@@ -1,13 +1,14 @@
 package org.incava.analysis;
 
 import java.awt.Point;
+import java.util.List;
 
 /**
  * Writes differences. Actually returns the differences as strings. Writing is
  * left to the invoker.
  */
 public class DiffNoContextWriter extends DiffWriter {
-    public DiffNoContextWriter(String[] fromContents, String[] toContents) {
+    public DiffNoContextWriter(List<String> fromContents, List<String> toContents) {
         super(fromContents, toContents);
     }
 
@@ -26,9 +27,9 @@ public class DiffNoContextWriter extends DiffWriter {
         sb.append(EOLN);
     }
 
-    protected void printLines(StringBuilder sb, Point pt, String ind, String[] lines) {
+    protected void printLines(StringBuilder sb, Point pt, String ind, List<String> lines) {
         for (int lnum = pt.x; lnum <= pt.y; ++lnum) {
-            sb.append(ind + " " + lines[lnum - 1]);
+            sb.append(ind + " " + lines.get(lnum - 1));
             sb.append(EOLN);
         }
     }

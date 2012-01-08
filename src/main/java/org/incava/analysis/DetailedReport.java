@@ -9,6 +9,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
 import org.incava.ijdk.io.*;
 import org.incava.ijdk.lang.*;
 import org.incava.ijdk.util.ANSI;
@@ -39,13 +41,13 @@ public class DetailedReport extends Report {
      * The from-contents, separated by new lines, which are included at the end
      * of each string.
      */
-    private String[] fromContents;
+    private List<String> fromContents;
 
     /**
      * The to-contents, separated by new lines, which are included at the end
      * of each string.
      */
-    private String[] toContents;
+    private List<String> toContents;
 
     /**
      * Whether to highlight.
@@ -151,11 +153,11 @@ public class DetailedReport extends Report {
         StringBuilder sb = new StringBuilder();
 
         if (fromContents == null) {
-            fromContents = ReaderExt.readlines(fromFileRdr);
+            fromContents = ReaderExt.readLines(fromFileRdr, EnumSet.noneOf(ReadOptionType.class));
         }
 
         if (toContents == null) {
-            toContents = ReaderExt.readlines(toFileRdr);
+            toContents = ReaderExt.readLines(toFileRdr, EnumSet.noneOf(ReadOptionType.class));
         }
 
         DiffWriter dw = null;

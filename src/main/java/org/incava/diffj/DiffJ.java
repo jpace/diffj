@@ -5,11 +5,10 @@ import java.util.*;
 import net.sourceforge.pmd.ast.*;
 import org.incava.analysis.*;
 import org.incava.ijdk.io.*;
-import org.incava.java.*;
-import org.incava.qualog.Qualog;
-import org.incava.ijdk.util.Arrays;
 import org.incava.ijdk.util.TimedEvent;
 import org.incava.ijdk.util.TimedEventSet;
+import org.incava.java.*;
+import org.incava.qualog.Qualog;
 
 public class DiffJ {
     private TimedEventSet totalInit = new TimedEventSet();
@@ -49,7 +48,7 @@ public class DiffJ {
     }
 
     protected List<String> getJavaFiles(File fd) {
-        return java.util.Arrays.asList(fd.list(new FilenameFilter() {
+        return Arrays.asList(fd.list(new FilenameFilter() {
                 public boolean accept(File dir, String pathname) {
                     File f = new File(dir, pathname);
                     return f.isDirectory() || (f.isFile() && pathname.endsWith(".java"));
@@ -69,7 +68,7 @@ public class DiffJ {
             try {
                 String fromStr = null;
                 FileReader fromRdr = fromIsStdin ? new FileReader(FileDescriptor.in) : new FileReader(from);
-                fromStr = FileExt.read(fromRdr, true);
+                fromStr = ReaderExt.readAsString(fromRdr, EnumSet.of(ReadOptionType.ADD_EOLNS));
 
                 FileReader toRdr = null;
                 String toStr = null;
@@ -86,7 +85,7 @@ public class DiffJ {
                 }
 
                 if (toRdr != null) {
-                    toStr = FileExt.read(toRdr, true);
+                    toStr = ReaderExt.readAsString(toRdr, EnumSet.of(ReadOptionType.ADD_EOLNS));
                 }
 
                 Options opts     = Options.get();

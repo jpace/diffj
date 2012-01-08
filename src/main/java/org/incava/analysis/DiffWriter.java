@@ -1,7 +1,8 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import org.incava.ijdk.io.FileExt;
+import java.util.List;
+import org.incava.ijdk.io.IO;
 import org.incava.ijdk.lang.*;
 
 /**
@@ -12,21 +13,21 @@ public abstract class DiffWriter {
     /**
      * The end-of-line character/sequence for this OS.
      */
-    protected final static String EOLN = FileExt.EOLN;
+    protected final static String EOLN = IO.EOLN;
 
     /**
      * The from-contents, separated by new lines, which are included at the end
      * of each string.
      */
-    protected final String[] fromContents;
+    protected final List<String> fromContents;
 
     /**
      * The to-contents, separated by new lines, which are included at the end
      * of each string.
      */
-    protected final String[] toContents;
+    protected final List<String> toContents;
 
-    public DiffWriter(String[] fromContents, String[] toContents) {
+    public DiffWriter(List<String> fromContents, List<String> toContents) {
         this.fromContents = fromContents;
         this.toContents = toContents;
     }

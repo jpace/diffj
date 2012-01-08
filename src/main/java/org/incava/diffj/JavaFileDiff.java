@@ -5,18 +5,14 @@ import java.util.*;
 import net.sourceforge.pmd.ast.*;
 import org.incava.analysis.*;
 import org.incava.ijdk.io.*;
-import org.incava.java.*;
-import org.incava.qualog.Qualog;
-import org.incava.ijdk.util.Arrays;
 import org.incava.ijdk.util.TimedEvent;
 import org.incava.ijdk.util.TimedEventSet;
-
+import org.incava.java.*;
 
 /**
  * Compares two Java files.
  */
 public class JavaFileDiff {
-
     private int exitValue;
 
     public JavaFileDiff(Report report, String fromName, String fromStr, String fromSource, String toName, String toStr, String toSource, boolean flushReport) {
@@ -89,5 +85,4 @@ public class JavaFileDiff {
             return null;
         }
     }
-
 }

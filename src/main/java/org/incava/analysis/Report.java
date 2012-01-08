@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 import org.incava.ijdk.io.FileExt;
+import org.incava.ijdk.io.IO;
 
 /**
  * Reports errors (differences), in a format that is determined by the subclass.
@@ -18,7 +19,7 @@ public abstract class Report {
     /**
      * The end-of-line character/sequence for this OS.
      */
-    protected final static String EOLN = FileExt.EOLN;
+    protected final static String EOLN = IO.EOLN;
 
     /**
      * The from-file to which this report currently applies. By default, this is

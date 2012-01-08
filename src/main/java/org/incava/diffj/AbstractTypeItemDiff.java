@@ -9,9 +9,7 @@ import org.incava.ijdk.lang.*;
 import org.incava.ijdk.util.*;
 import org.incava.pmd.*;
 
-
 public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends DiffComparator {
-
     private final Class<Type> cls;
 
     public AbstractTypeItemDiff(Collection<FileDiff> differences, Class<Type> cls) {

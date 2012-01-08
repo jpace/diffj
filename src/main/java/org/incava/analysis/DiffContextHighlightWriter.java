@@ -1,5 +1,6 @@
 package org.incava.analysis;
 
+import java.util.List;
 import org.incava.ijdk.util.ANSI;
 
 /**
@@ -16,7 +17,7 @@ public class DiffContextHighlightWriter extends DiffContextWriter {
      */
     protected static String COLOR_DELETED = ANSI.RED;
 
-    public DiffContextHighlightWriter(String[] fromContents, String[] toContents) {
+    public DiffContextHighlightWriter(List<String> fromContents, List<String> toContents) {
         super(fromContents, toContents);
     }
 
@@ -28,8 +29,8 @@ public class DiffContextHighlightWriter extends DiffContextWriter {
     //     printLines(sb, COLOR_ADDED, ref, ref.secondStart.x, ref.secondStart.y, ref.secondEnd.x, ref.secondEnd.y, toContents);
     // }
 
-    protected String getLine(String[] lines, int lidx, int fromLine, int fromColumn, int toLine, int toColumn, boolean isDelete) {
-        String line = lines[lidx - 1];
+    protected String getLine(List<String> lines, int lidx, int fromLine, int fromColumn, int toLine, int toColumn, boolean isDelete) {
+        String line = lines.get(lidx - 1);
 
         StringBuilder sb = new StringBuilder();
 

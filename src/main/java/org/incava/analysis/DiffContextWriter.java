@@ -1,7 +1,7 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.util.*;
+import java.util.List;
 import org.incava.ijdk.io.*;
 import org.incava.ijdk.lang.*;
 
@@ -10,7 +10,7 @@ import org.incava.ijdk.lang.*;
  * Writing is left to the invoker.
  */
 public class DiffContextWriter extends DiffWriter {
-    public DiffContextWriter(String[] fromContents, String[] toContents) {
+    public DiffContextWriter(List<String> fromContents, List<String> toContents) {
         super(fromContents, toContents);
     }
 
@@ -22,17 +22,17 @@ public class DiffContextWriter extends DiffWriter {
         printLines(sb, false, ref, ref.secondStart.x, ref.secondStart.y, ref.secondEnd.x, ref.secondEnd.y, toContents);
     }
 
-    protected String getLine(String[] lines, int lidx, int fromLine, int fromColumn, int toLine, int toColumn, boolean isDelete) {
+    protected String getLine(List<String> lines, int lidx, int fromLine, int fromColumn, int toLine, int toColumn, boolean isDelete) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("! ").append(lines[lidx - 1]).append(EOLN);
+        sb.append("! ").append(lines.get(lidx - 1)).append(EOLN);
 
         return sb.toString();
     }
 
-    protected void printLines(StringBuilder sb, boolean isDelete, FileDiff ref, int fromLine, int fromColumn, int toLine, int toColumn, String[] lines) {
+    protected void printLines(StringBuilder sb, boolean isDelete, FileDiff ref, int fromLine, int fromColumn, int toLine, int toColumn, List<String> lines) {
         for (int lnum = Math.max(0, fromLine - 4); lnum < fromLine - 1; ++lnum) {
-            sb.append("  ").append(lines[lnum]);
+            sb.append("  ").append(lines.get(lnum));
             sb.append(EOLN);
         }
 
@@ -45,8 +45,8 @@ public class DiffContextWriter extends DiffWriter {
             sb.append(line);
         }
 
-        for (int lnum = toLine; lnum < Math.min(toLine + 3, lines.length); ++lnum) {
-            sb.append("  ").append(lines[lnum]);
+        for (int lnum = toLine; lnum < Math.min(toLine + 3, lines.size()); ++lnum) {
+            sb.append("  ").append(lines.get(lnum));
             sb.append(EOLN);
         }
     }
