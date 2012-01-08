@@ -1,12 +1,17 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeSet;
+import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
+import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.analysis.*;
-import org.incava.java.*;
 import org.incava.ijdk.lang.*;
 import org.incava.ijdk.util.*;
+import org.incava.java.*;
 import org.incava.pmd.*;
 
 public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends DiffComparator {
@@ -37,8 +42,8 @@ public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends Diff
         ASTClassOrInterfaceBodyDeclaration[] aDecls = TypeDeclarationUtil.getDeclarations(aNode);
         ASTClassOrInterfaceBodyDeclaration[] bDecls = TypeDeclarationUtil.getDeclarations(bNode);
 
-        List<Type> amds = getDeclarationsOfClass(aDecls, cls);
-        List<Type> bmds = getDeclarationsOfClass(bDecls, cls);
+        List<Type> amds = getDeclarationsOfClass(aDecls, this.cls);
+        List<Type> bmds = getDeclarationsOfClass(bDecls, this.cls);
 
         MultiMap<Double, Pair<Type, Type>> matches = new MultiMap<Double, Pair<Type, Type>>();
 
@@ -46,7 +51,8 @@ public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends Diff
             for (Type bmd : bmds) {
                 double score = getScore(amd, bmd);
                 if (score > 0.0) {
-                    matches.put(score, new Pair<Type, Type>(amd, bmd));
+                    Pair<Type, Type> declPair = new Pair<Type, Type>(amd, bmd);
+                    matches.put(score, declPair);
                 }
             }
         }

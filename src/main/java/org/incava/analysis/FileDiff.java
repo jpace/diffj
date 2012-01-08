@@ -4,13 +4,12 @@ import java.awt.Point;
 import java.io.*;
 import java.util.*;
 import net.sourceforge.pmd.ast.Token;
-
+import org.incava.ijdk.lang.ObjectExt;
 
 /**
  * A message, associated with a file by a starting and ending position.
  */
 public class FileDiff implements Comparable<FileDiff> {
-
     public enum Type {
         ADDED("a"),
         DELETED("d"),
@@ -165,7 +164,7 @@ public class FileDiff implements Comparable<FileDiff> {
     }
 
     protected boolean equal(Point a, Point b) {
-        return a == b || (a != null && a.equals(b));
+        return ObjectExt.areEqual(a, b);
     }
 
     /**
