@@ -1,36 +1,31 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.io.*;
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.util.*;
-import org.incava.ijdk.util.diff.*;
-import org.incava.java.*;
-import org.incava.pmd.*;
-
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import net.sourceforge.pmd.ast.ASTFormalParameter;
+import net.sourceforge.pmd.ast.ASTFormalParameters;
+import net.sourceforge.pmd.ast.ASTName;
+import net.sourceforge.pmd.ast.ASTNameList;
+import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.ast.Token;
+import org.incava.analysis.FileDiff;
+import org.incava.analysis.Report;
+import org.incava.pmdx.Parameter;
+import org.incava.pmdx.ParameterUtil;
+import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.ThrowsUtil;
 
 public class FunctionDiff extends ItemDiff {
-
     public static final String RETURN_TYPE_CHANGED = "return type changed from {0} to {1}";
-
     public static final String PARAMETER_REMOVED = "parameter removed: {0}";
-
     public static final String PARAMETER_ADDED = "parameter added: {0}";
-
     public static final String PARAMETER_REORDERED = "parameter {0} reordered from argument {1} to {2}";
-
-    public static final String PARAMETER_TYPE_CHANGED = "parameter type changed from {0} to {1}";
-    
+    public static final String PARAMETER_TYPE_CHANGED = "parameter type changed from {0} to {1}";    
     public static final String PARAMETER_NAME_CHANGED = "parameter name changed from {0} to {1}";
-
     public static final String PARAMETER_REORDERED_AND_RENAMED = "parameter {0} reordered from argument {1} to {2} and renamed {3}";
-
     public static final String THROWS_REMOVED = "throws removed: {0}";
-
     public static final String THROWS_ADDED = "throws added: {0}";
-
     public static final String THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}";
 
     public FunctionDiff(Report report) {
@@ -56,6 +51,55 @@ public class FunctionDiff extends ItemDiff {
         }
     }
 
+    protected void markParametersAdded(ASTFormalParameters afp, ASTFormalParameters bfp) {
+        Token[] names = ParameterUtil.getParameterNames(bfp);
+        for (int ni = 0; ni < names.length; ++ni) {
+            changed(afp, names[ni], PARAMETER_ADDED, names[ni].image);
+        }
+    }
+
+    protected void markParametersRemoved(ASTFormalParameters afp, ASTFormalParameters bfp) {
+        Token[] names = ParameterUtil.getParameterNames(afp);
+        for (int ni = 0; ni < names.length; ++ni) {                
+            changed(names[ni], bfp, PARAMETER_REMOVED, names[ni].image);
+        }
+    }
+
+    protected void markParameterTypeChanged(Parameter ap, ASTFormalParameters bfp, int idx) {
+        ASTFormalParameter bParam = ParameterUtil.getParameter(bfp, idx);
+        String             bType  = ParameterUtil.getParameterType(bParam);
+        
+        changed(ap.getParameter(), bParam, PARAMETER_TYPE_CHANGED, ap.getType(), bType);
+    }
+
+    protected void markParameterNameChanged(ASTFormalParameter aParam, ASTFormalParameters bfp, int idx) {
+        Token aNameTk = ParameterUtil.getParameterName(aParam);
+        Token bNameTk = ParameterUtil.getParameterName(bfp, idx);
+        changed(aNameTk, bNameTk, PARAMETER_NAME_CHANGED, aNameTk.image, bNameTk.image);
+    }
+
+    protected void checkForReorder(ASTFormalParameter aParam, int aidx, ASTFormalParameters bfp, int bidx) {
+        Token aNameTk = ParameterUtil.getParameterName(aParam);
+        Token bNameTk = ParameterUtil.getParameterName(bfp, bidx);
+        if (aNameTk.image.equals(bNameTk.image)) {
+            changed(aNameTk, bNameTk, PARAMETER_REORDERED, aNameTk.image, aidx, bidx);
+        }
+        else {
+            changed(aNameTk, bNameTk, PARAMETER_REORDERED_AND_RENAMED, aNameTk.image, aidx, bidx, bNameTk.image);
+        }
+    }
+
+    protected void markReordered(ASTFormalParameter aParam, int aidx, ASTFormalParameters bParams, int bidx) {
+        Token aNameTk = ParameterUtil.getParameterName(aParam);
+        ASTFormalParameter bParam = ParameterUtil.getParameter(bParams, bidx);
+        changed(aParam, bParam, PARAMETER_REORDERED, aNameTk.image, aidx, bidx);
+    }
+
+    protected void markRemoved(ASTFormalParameter aParam, ASTFormalParameters bParams) {
+        Token aNameTk = ParameterUtil.getParameterName(aParam);
+        changed(aParam, bParams, PARAMETER_REMOVED, aNameTk.image);
+    }
+
     protected void compareParameters(ASTFormalParameters afp, ASTFormalParameters bfp) {
         List<Parameter> aParams = ParameterUtil.getParameterList(afp);
         tr.Ace.log("aParams", aParams);
@@ -73,21 +117,12 @@ public class FunctionDiff extends ItemDiff {
         // tr.Ace.log("aParamTypes.size: " + aSize + "; bParamTypes.size: " + bSize);
 
         if (aSize == 0) {
-            if (bSize == 0) {
-                // tr.Ace.log("no change in parameters");
-            }
-            else {
-                Token[] names = ParameterUtil.getParameterNames(bfp);
-                for (int ni = 0; ni < names.length; ++ni) {
-                    changed(afp, names[ni], PARAMETER_ADDED, names[ni].image);
-                }
+            if (bSize != 0) {
+                markParametersAdded(afp, bfp);
             }
         }
         else if (bSize == 0) {
-            Token[] names = ParameterUtil.getParameterNames(afp);
-            for (int ni = 0; ni < names.length; ++ni) {                
-                changed(names[ni], bfp, PARAMETER_REMOVED, names[ni].image);
-            }
+            markParametersRemoved(afp, bfp);
         }
         else {
             for (int ai = 0; ai < aSize; ++ai) {
@@ -102,66 +137,32 @@ public class FunctionDiff extends ItemDiff {
 
                 ASTFormalParameter aParam = ParameterUtil.getParameter(afp, ai);
 
-                Token aNameTk = ParameterUtil.getParameterName(aParam);
-
                 if (paramMatch[0] == ai && paramMatch[1] == ai) {
                     // tr.Ace.log("exact match");
                 }
                 else if (paramMatch[0] == ai) {
-                    // tr.Ace.log("name changed");
-                    Token bNameTk = ParameterUtil.getParameterName(bfp, ai);
-                    changed(aNameTk, bNameTk, PARAMETER_NAME_CHANGED, aNameTk.image, bNameTk.image);
+                    markParameterNameChanged(aParam, bfp, ai);
                 }
                 else if (paramMatch[1] == ai) {
-                    // tr.Ace.log("type changed");
-                    ASTFormalParameter bParam = ParameterUtil.getParameter(bfp, ai);
-                    String             bType  = ParameterUtil.getParameterType(bParam);
-                    // tr.Ace.log("bParam: " + bParam + "; bType: " + bType);
-
-                    changed(ap.getParameter(), bParam, PARAMETER_TYPE_CHANGED, ap.getType(), bType);
+                    markParameterTypeChanged(ap, bfp, ai);
                 }
                 else if (paramMatch[0] >= 0) {
-                    // tr.Ace.log("misordered match by type");
-                    Token bNameTk = ParameterUtil.getParameterName(bfp, paramMatch[0]);
-                    // tr.Ace.log("aNameTk: " + aNameTk + "; bNameTk: " + bNameTk);
-                    // tr.Ace.log("aNameTk.image: " + aNameTk.image + "; bNameTk.image: " + bNameTk.image);
-                    if (aNameTk.image.equals(bNameTk.image)) {
-                        changed(aNameTk, bNameTk, PARAMETER_REORDERED, aNameTk.image, ai, paramMatch[0]);
-                    }
-                    else {
-                        changed(aNameTk, bNameTk, PARAMETER_REORDERED_AND_RENAMED, aNameTk.image, ai, paramMatch[0], bNameTk.image);
-                    }
+                    checkForReorder(aParam, ai, bfp, paramMatch[0]);
                 }
                 else if (paramMatch[1] >= 0) {
-                    System.out.println("misordered match by name");
-                    
-                    tr.Ace.log("misordered match by name");
-
-                    ASTFormalParameter bParam = ParameterUtil.getParameter(bfp, paramMatch[1]);
-
-                    changed(aParam, bParam, PARAMETER_REORDERED, aNameTk.image, ai, paramMatch[1]);
+                    markReordered(aParam, ai, bfp, paramMatch[1]);
                 }
                 else {
-                    // tr.Ace.log("not a match");
-                    // tr.Ace.log("aNameTk: " + aNameTk);
-
-                    changed(aParam, bfp, PARAMETER_REMOVED, aNameTk.image);
+                    markRemoved(aParam, bfp);
                 }
             }
-
-            // tr.Ace.log("aParams: " + aParams);
-            // tr.Ace.log("bParams: " + bParams);
 
             Iterator<Parameter> bit = bParams.iterator();
             for (int bi = 0; bit.hasNext(); ++bi) {
                 Parameter bp = bit.next();
-                if (bp == null) {
-                    // tr.Ace.log("already processed");
-                }
-                else {
+                if (bp != null) {
                     ASTFormalParameter bParam = ParameterUtil.getParameter(bfp, bi);
                     Token bName = ParameterUtil.getParameterName(bParam);
-                    // tr.Ace.log("bName: " + bName);
                     changed(afp, bParam, PARAMETER_ADDED, bName.image);
                 }
             }
@@ -170,10 +171,7 @@ public class FunctionDiff extends ItemDiff {
 
     protected void compareThrows(SimpleNode a, ASTNameList at, SimpleNode b, ASTNameList bt) {
         if (at == null) {
-            if (bt == null) {
-                // tr.Ace.log("no change in throws");
-            }
-            else {
+            if (bt != null) {
                 ASTName[] names = (ASTName[])SimpleNodeUtil.findChildren(bt, ASTName.class);
                 for (ASTName name : names) {
                     changed(a, name, THROWS_ADDED, SimpleNodeUtil.toString(name));
@@ -197,33 +195,22 @@ public class FunctionDiff extends ItemDiff {
 
                 int throwsMatch = getMatch(aNames, ai, bNames);
 
-                // tr.Ace.log("throwsMatch: " + throwsMatch);
-
                 if (throwsMatch == ai) {
                     // tr.Ace.log("exact match");
                 }
                 else if (throwsMatch >= 0) {
-                    // tr.Ace.log("misordered match");
                     ASTName bName = ThrowsUtil.getNameNode(bt, throwsMatch);
-                    // tr.Ace.log("aName: " + aName + "; bName: " + bName);
                     String aNameStr = SimpleNodeUtil.toString(aName);
                     changed(aName, bName, THROWS_REORDERED, aNameStr, ai, throwsMatch);
                 }
                 else {
-                    // tr.Ace.log("not a match; aName: " + aName);
                     changed(aName, bt, THROWS_REMOVED, SimpleNodeUtil.toString(aName));
                 }
             }
 
             for (int bi = 0; bi < bNames.length; ++bi) {
-                // tr.Ace.log("b: " + bNames[bi]);
-
-                if (bNames[bi] == null) {
-                    // tr.Ace.log("already processed");
-                }
-                else {
+                if (bNames[bi] != null) {
                     ASTName bName = ThrowsUtil.getNameNode(bt, bi);
-                    // tr.Ace.log("bName: " + bName);
                     changed(at, bName, THROWS_ADDED, SimpleNodeUtil.toString(bName));
                 }
             }
@@ -233,20 +220,14 @@ public class FunctionDiff extends ItemDiff {
     protected int getMatch(ASTName[] aNames, int aIndex, ASTName[] bNames) {
         String aNameStr = SimpleNodeUtil.toString(aNames[aIndex]);
 
-        // tr.Ace.log("aNameStr: " + aNameStr);
-
         for (int bi = 0; bi < bNames.length; ++bi) {
-            if (bNames[bi] == null) {
-                // tr.Ace.log("already consumed");
-            }
-            else if (SimpleNodeUtil.toString(bNames[bi]).equals(aNameStr)) {
+            if (bNames[bi] != null && SimpleNodeUtil.toString(bNames[bi]).equals(aNameStr)) {
                 aNames[aIndex] = null;
-                bNames[bi]     = null;
+                bNames[bi]     = null; // mark as consumed
                 return bi;
             }
         }
 
         return -1;
     }
-
 }

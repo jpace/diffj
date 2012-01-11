@@ -1,3 +1,6 @@
 [submodule "src/main/java/org/incava/ijdk"]
 	path = src/main/java/org/incava/ijdk
 	url = git@github.com:jeugenepace/ijdk.git
+[submodule "src/main/java/org/incava/pmdx"]
+	path = src/main/java/org/incava/pmdx
+	url = git@github.com:jeugenepace/pmdx.git

@@ -1,14 +1,20 @@
 package org.incava.diffj;
 
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.java.*;
-import org.incava.pmd.*;
-
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
+import net.sourceforge.pmd.ast.ASTFormalParameters;
+import net.sourceforge.pmd.ast.ASTNameList;
+import net.sourceforge.pmd.ast.JavaParserConstants;
+import net.sourceforge.pmd.ast.Token;
+import org.incava.analysis.FileDiff;
+import org.incava.analysis.Report;
+import org.incava.pmdx.CtorUtil;
+import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.TypeDeclarationUtil;
 
 public class CtorDiff extends FunctionDiff {
-
     public CtorDiff(Report report) {
         super(report);
     }
@@ -70,5 +76,4 @@ public class CtorDiff extends FunctionDiff {
 
         compareCode(aName, aCode, bName, bCode);
     }
-
 }

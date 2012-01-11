@@ -1,27 +1,28 @@
 package org.incava.diffj;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.util.*;
-import org.incava.ijdk.util.diff.*;
-import org.incava.java.*;
-import org.incava.pmd.*;
-
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+import net.sourceforge.pmd.ast.ASTFieldDeclaration;
+import net.sourceforge.pmd.ast.ASTType;
+import net.sourceforge.pmd.ast.ASTVariableDeclarator;
+import net.sourceforge.pmd.ast.ASTVariableInitializer;
+import net.sourceforge.pmd.ast.JavaParserConstants;
+import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.ast.Token;
+import org.incava.analysis.FileDiff;
+import org.incava.pmdx.FieldUtil;
+import org.incava.pmdx.SimpleNodeUtil;
 
 public class FieldDiff extends ItemDiff {
     public static final String VARIABLE_REMOVED = "variable removed: {0}";
-
     public static final String VARIABLE_ADDED = "variable added: {0}";
-
     public static final String VARIABLE_CHANGED = "variable changed from {0} to {1}";
-
     public static final String VARIABLE_TYPE_CHANGED = "variable type for {0} changed from {1} to {2}";
-
     public static final String INITIALIZER_REMOVED = "initializer removed";
-
     public static final String INITIALIZER_ADDED = "initializer added";
 
     protected static final int[] VALID_MODIFIERS = new int[] {

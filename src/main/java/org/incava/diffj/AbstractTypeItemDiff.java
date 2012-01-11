@@ -8,18 +8,16 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.analysis.*;
-import org.incava.ijdk.lang.*;
-import org.incava.ijdk.util.*;
-import org.incava.java.*;
-import org.incava.pmd.*;
+import org.incava.analysis.FileDiff;
+import org.incava.ijdk.lang.Pair;
+import org.incava.ijdk.util.MultiMap;
+import org.incava.pmdx.TypeDeclarationUtil;
 
 public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends DiffComparator {
     private final Class<Type> cls;
 
     public AbstractTypeItemDiff(Collection<FileDiff> differences, Class<Type> cls) {
         super(differences);
-
         this.cls = cls;
     }
 

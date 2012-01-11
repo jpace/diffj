@@ -1,17 +1,20 @@
 package org.incava.diffj;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.*;
-import org.incava.pmd.SimpleNodeUtil;
-
+import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffChange;
+import org.incava.analysis.FileDiffDelete;
+import org.incava.analysis.Report;
+import org.incava.pmdx.SimpleNodeUtil;
 
 public class DiffComparator {
-
-    private final Report report;
-    
+    private final Report report;    
     private final Collection<FileDiff> fileDiffs;
 
     public DiffComparator(Report report) {

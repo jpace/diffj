@@ -1,13 +1,24 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.io.*;
+import java.io.File;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import org.incava.analysis.BriefReport;
+import org.incava.analysis.DetailedReport;
+import org.incava.analysis.Report;
+import org.incava.ijdk.io.ReadOptionType;
+import org.incava.ijdk.io.ReaderExt;
 import org.incava.ijdk.util.TimedEvent;
 import org.incava.ijdk.util.TimedEventSet;
-import org.incava.java.*;
 import org.incava.qualog.Qualog;
 
 public class DiffJ {

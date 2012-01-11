@@ -1,29 +1,23 @@
 package org.incava.diffj;
 
-import java.util.*;
+import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.Report;
 import org.incava.ijdk.util.TimedEvent;
-import org.incava.pmd.*;
-
 
 public class CompilationUnitDiff extends DiffComparator {
-
-    private final Report report;
-    
+    private final Report report;    
     private final boolean flush;
     
     public CompilationUnitDiff(Report report, boolean flush) {
         super(report);
-
         this.report = report;
         this.flush = flush;
     }
 
     public CompilationUnitDiff(Collection<FileDiff> diffs) {
         super(diffs);
-
         this.report = null;
         this.flush = false;
     }
