@@ -1,12 +1,13 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.util.*;
-import org.incava.analysis.*;
-import org.incava.jagol.*;
-import org.incava.java.*;
+import java.util.Arrays;
+import org.incava.analysis.DetailedReport;
 import org.incava.ijdk.lang.StringExt;
-
+import org.incava.jagol.BooleanOption;
+import org.incava.jagol.IntegerOption;
+import org.incava.jagol.OptionSet;
+import org.incava.jagol.StringOption;
+import org.incava.java.Java;
 
 /**
  * Options.

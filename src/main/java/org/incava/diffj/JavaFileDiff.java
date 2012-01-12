@@ -1,13 +1,14 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.io.*;
-import org.incava.ijdk.util.TimedEvent;
-import org.incava.ijdk.util.TimedEventSet;
-import org.incava.java.*;
+import java.io.Reader;
+import java.io.StringReader;
+import net.sourceforge.pmd.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.ast.JavaCharStream;
+import net.sourceforge.pmd.ast.JavaParser;
+import net.sourceforge.pmd.ast.ParseException;
+import net.sourceforge.pmd.ast.TokenMgrError;
+import org.incava.analysis.Report;
+import org.incava.java.Java;
 
 /**
  * Compares two Java files.
@@ -52,7 +53,6 @@ public class JavaFileDiff {
             parser.setJDK15();
         }
         else {
-            //            ("ERROR: source version '" + sourceVersion + "' not recognized");
             return null;
         }
         

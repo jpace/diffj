@@ -1,10 +1,16 @@
 package org.incava.diffj;
 
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
+import java.util.Collection;
+import java.util.List;
+import net.sourceforge.pmd.ast.ASTBlock;
+import net.sourceforge.pmd.ast.ASTFormalParameters;
+import net.sourceforge.pmd.ast.ASTMethodDeclaration;
+import net.sourceforge.pmd.ast.ASTNameList;
+import net.sourceforge.pmd.ast.JavaParserConstants;
+import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
-import org.incava.java.*;
-import org.incava.pmd.*;
+import org.incava.pmdx.MethodUtil;
+import org.incava.pmdx.SimpleNodeUtil;
 
 public class MethodDiff extends FunctionDiff {
     public static final String METHOD_BLOCK_ADDED = "method block added";
@@ -49,8 +55,6 @@ public class MethodDiff extends FunctionDiff {
     }
 
     protected void compareBodies(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        final int ABSTRACT_METHOD_CHILDREN = 2;
-
         tr.Ace.log("a", a);
         tr.Ace.log("b", b);
 
@@ -58,10 +62,7 @@ public class MethodDiff extends FunctionDiff {
         ASTBlock bBlock = (ASTBlock)SimpleNodeUtil.findChild(b, ASTBlock.class);
 
         if (aBlock == null) {
-            if (bBlock == null) {
-                // neither has a block, so no change
-            }
-            else {
+            if (bBlock != null) {
                 changed(a, b, METHOD_BLOCK_ADDED);
             }
         }

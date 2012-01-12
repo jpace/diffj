@@ -1,24 +1,40 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.java.*;
-import org.incava.pmd.*;
-
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
+import net.sourceforge.pmd.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.ast.ASTImportDeclaration;
+import net.sourceforge.pmd.ast.ASTTypeDeclaration;
+import net.sourceforge.pmd.ast.Token;
+import org.incava.analysis.FileDiff;
+import org.incava.pmdx.CompilationUnitUtil;
 
 public class ImportsDiff extends DiffComparator {
     public static final String IMPORT_REMOVED = "import removed: {0}";
-
     public static final String IMPORT_ADDED = "import added: {0}";
-
     public static final String IMPORT_SECTION_REMOVED = "import section removed";
-
     public static final String IMPORT_SECTION_ADDED = "import section added";
 
     public ImportsDiff(Collection<FileDiff> differences) {
         super(differences);
+    }
+
+    protected void markImportSectionAdded(ASTCompilationUnit a, ASTImportDeclaration[] bImports) {
+        Token a0 = getFirstTypeToken(a);
+        Token a1 = a0;
+        Token b0 = getFirstToken(bImports);
+        Token b1 = getLastToken(bImports);
+        added(a0, a1, b0, b1, IMPORT_SECTION_ADDED);
+    }
+
+    protected void markImportSectionRemoved(ASTImportDeclaration[] aImports, ASTCompilationUnit b) {
+        Token a0 = getFirstToken(aImports);
+        Token a1 = getLastToken(aImports);
+        Token b0 = getFirstTypeToken(b);
+        Token b1 = b0;
+        deleted(a0, a1, b0, b1, IMPORT_SECTION_REMOVED);
     }
 
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
@@ -26,23 +42,12 @@ public class ImportsDiff extends DiffComparator {
         ASTImportDeclaration[] bImports = CompilationUnitUtil.getImports(b);
 
         if (aImports.length == 0) {
-            if (bImports.length == 0) {
-                // tr.Ace.log("neither has imports section");
-            }
-            else {
-                Token a0 = getFirstTypeToken(a);
-                Token a1 = a0;
-                Token b0 = getFirstToken(bImports);
-                Token b1 = getLastToken(bImports);
-                added(a0, a1, b0, b1, IMPORT_SECTION_ADDED);
+            if (bImports.length != 0) {
+                markImportSectionAdded(a, bImports);
             }
         }
         else if (bImports.length == 0) {
-            Token a0 = getFirstToken(aImports);
-            Token a1 = getLastToken(aImports);
-            Token b0 = getFirstTypeToken(b);
-            Token b1 = b0;
-            deleted(a0, a1, b0, b1, IMPORT_SECTION_REMOVED);
+            markImportSectionRemoved(aImports, b);
         }
         else {
             Map<String, ASTImportDeclaration> aNamesToImp = makeImportMap(aImports);
@@ -62,32 +67,33 @@ public class ImportsDiff extends DiffComparator {
                 else if (bimp == null) {
                     deleted(aimp, bImports[0], IMPORT_REMOVED, name);
                 }
-                else {
-                    // tr.Ace.log("no change");
-                }
             }
         }
+    }
+
+    protected String getImportAsString(ASTImportDeclaration imp) {
+        StringBuilder sb = new StringBuilder();   
+        Token tk  = imp.getFirstToken().next;
+        
+        while (tk != null) {
+            if (tk == imp.getLastToken()) {
+                break;
+            }
+            else {
+                sb.append(tk.image);
+                tk = tk.next;
+            }
+        }
+
+        return sb.toString();
     }
 
     protected Map<String, ASTImportDeclaration> makeImportMap(ASTImportDeclaration[] imports) {
         Map<String, ASTImportDeclaration> namesToImp = new HashMap<String, ASTImportDeclaration>();
 
-        for (int ii = 0; ii < imports.length; ++ii) {
-            ASTImportDeclaration imp = imports[ii];
-            StringBuffer         buf = new StringBuffer();   
-            Token                tk  = imp.getFirstToken().next;
-            
-            while (tk != null) {
-                if (tk == imp.getLastToken()) {
-                    break;
-                }
-                else {
-                    buf.append(tk.image);
-                    tk = tk.next;
-                }
-            }
-
-            namesToImp.put(buf.toString(), imp);
+        for (ASTImportDeclaration imp : imports) {
+            String str = getImportAsString(imp);
+            namesToImp.put(str, imp);
         }
         
         return namesToImp;

@@ -1,21 +1,16 @@
 package org.incava.diffj;
 
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.java.*;
-import org.incava.ijdk.lang.*;
-import org.incava.ijdk.util.*;
-import org.incava.pmd.*;
-
+import java.util.Collection;
+import net.sourceforge.pmd.ast.ASTMethodDeclaration;
+import org.incava.analysis.FileDiff;
+import org.incava.pmdx.MethodUtil;
+import org.incava.pmdx.SimpleNodeUtil;
 
 public class TypeMethodDiff extends AbstractTypeItemDiff<ASTMethodDeclaration> {
-
     private final MethodUtil methodUtil;
 
     public TypeMethodDiff(Collection<FileDiff> differences) {
-        super(differences, ASTMethodDeclaration.class);
-        
+        super(differences, ASTMethodDeclaration.class);        
         methodUtil = new MethodUtil();
     }    
 

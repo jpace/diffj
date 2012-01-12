@@ -43,22 +43,19 @@ public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends Diff
         List<Type> amds = getDeclarationsOfClass(aDecls, this.cls);
         List<Type> bmds = getDeclarationsOfClass(bDecls, this.cls);
 
-        MultiMap<Double, Pair<Type, Type>> matches = new MultiMap<Double, Pair<Type, Type>>();
+        TypeMatches<Type> matches = new TypeMatches<Type>();
 
         for (Type amd : amds) {
             for (Type bmd : bmds) {
                 double score = getScore(amd, bmd);
                 if (score > 0.0) {
-                    Pair<Type, Type> declPair = new Pair<Type, Type>(amd, bmd);
-                    matches.put(score, declPair);
+                    matches.add(score, amd, bmd);
                 }
             }
         }
 
-        List<Double> descendingScores = new ArrayList<Double>(new TreeSet<Double>(matches.keySet()));
+        List<Double> descendingScores = matches.getDescendingScores();
         
-        Collections.reverse(descendingScores);
-
         // go through best scores
 
         List<Type> unprocA = new ArrayList<Type>(amds);        

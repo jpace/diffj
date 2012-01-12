@@ -1,18 +1,17 @@
 package org.incava.diffj;
 
-import java.util.*;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.java.*;
-import org.incava.pmd.*;
-
+import java.util.Collection;
+import net.sourceforge.pmd.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.ast.ASTName;
+import net.sourceforge.pmd.ast.ASTPackageDeclaration;
+import net.sourceforge.pmd.ast.SimpleNode;
+import org.incava.analysis.FileDiff;
+import org.incava.pmdx.CompilationUnitUtil;
+import org.incava.pmdx.SimpleNodeUtil;
 
 public class PackageDiff extends DiffComparator {
-
     public static final String PACKAGE_REMOVED = "package removed: {0}";
-
     public static final String PACKAGE_ADDED = "package added: {0}";
-
     public static final String PACKAGE_RENAMED = "package renamed from {0} to {1}";
 
     public PackageDiff(Collection<FileDiff> differences) {
@@ -54,5 +53,4 @@ public class PackageDiff extends DiffComparator {
             }
         }
     }
-    
 }
