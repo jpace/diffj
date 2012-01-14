@@ -7,3 +7,6 @@
 [submodule "src/main/java/org/incava/jagol"]
 	path = src/main/java/org/incava/jagol
 	url = git@github.com:jeugenepace/jagol.git
+[submodule "src/main/java/org/incava/qualog"]
+	path = src/main/java/org/incava/qualog
+	url = git@github.com:jeugenepace/qualog.git
