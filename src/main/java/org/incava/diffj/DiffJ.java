@@ -17,6 +17,7 @@ import org.incava.analysis.DetailedReport;
 import org.incava.analysis.Report;
 import org.incava.ijdk.io.ReadOptionType;
 import org.incava.ijdk.io.ReaderExt;
+import org.incava.ijdk.util.ListExt;
 import org.incava.ijdk.util.TimedEvent;
 import org.incava.ijdk.util.TimedEventSet;
 import org.incava.qualog.Qualog;
@@ -29,7 +30,7 @@ public class DiffJ {
     private final Report report;
     private int exitValue;
 
-    public DiffJ(String[] names, boolean briefOutput, boolean contextOutput, boolean highlightOutput) {
+    public DiffJ(List<String> names, boolean briefOutput, boolean contextOutput, boolean highlightOutput) {
         tr.Ace.set(true, 25, 4, 20, 25);
         tr.Ace.setOutput(Qualog.VERBOSE, Qualog.LEVEL4);
         tr.Ace.setOutput(Qualog.QUIET,   Qualog.LEVEL2);
@@ -43,12 +44,11 @@ public class DiffJ {
 
         exitValue = 0;
 
-        if (names.length >= 2) {
-            tr.Ace.log("names[0]: " + names[0] + "; names[" + (names.length - 1) + "]: " + names[names.length - 1]);
-            File toFile = new File(names[names.length - 1]);
-
-            for (int ni = 0; ni < names.length - 1; ++ni) {
-                File fromFile = new File(names[ni]);
+        if (names.size() >= 2) {
+            File toFile = new File(ListExt.get(names, -1));
+            
+            for (int ni = 0; ni < names.size() - 1; ++ni) {
+                File fromFile = new File(names.get(ni));
                 process(fromFile, toFile);
             }
         }
@@ -171,9 +171,9 @@ public class DiffJ {
     }
 
     public static void main(String[] args) {
-        Options  opts  = Options.get();
-        String[] names = opts.process(args);
-        DiffJ    dj    = new DiffJ(names, opts.briefOutput, opts.contextOutput, opts.highlightOutput);
-        System.exit(dj.exitValue);
+        Options      opts  = Options.get();
+        List<String> names = opts.process(Arrays.asList(args));
+        DiffJ        diffj = new DiffJ(names, opts.briefOutput, opts.contextOutput, opts.highlightOutput);
+        System.exit(diffj.exitValue);
     }
 }

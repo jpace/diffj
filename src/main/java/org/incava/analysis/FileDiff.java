@@ -1,8 +1,6 @@
 package org.incava.analysis;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.ijdk.lang.ObjectExt;
 

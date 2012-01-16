@@ -1,6 +1,7 @@
 package org.incava.diffj;
 
 import java.util.Arrays;
+import java.util.List;
 import org.incava.analysis.DetailedReport;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.jagol.BooleanOption;
@@ -143,13 +144,13 @@ public class Options extends OptionSet {
             verbose = new Boolean(verboseProperty);
         }
 
-        add(briefOpt      = new BooleanOption("brief",     "Display output in brief form"));
-        add(contextOpt    = new BooleanOption("context",   "Show context (non-brief form only)"));
-        add(highlightOpt  = new BooleanOption("highlight", "Whether to use colors (context output only)"));
-        add(tabWidthOpt   = new IntegerOption("tabwidth",  "The number of spaces to treat tabs equal to"));
-        add(recurseOpt    = new BooleanOption("recurse",   "Process directories recursively"));
-        add(verboseOpt    = new BooleanOption("verbose",   "Whether to run in verbose mode (for debugging)"));
-        add(versionOpt    = new BooleanOption("version",   "Displays the version"));
+        briefOpt      = addBooleanOption("brief",     "Display output in brief form");
+        contextOpt    = addBooleanOption("context",   "Show context (non-brief form only)");
+        highlightOpt  = addBooleanOption("highlight", "Whether to use colors (context output only)");
+        tabWidthOpt   = addOption(new IntegerOption("tabwidth",  "The number of spaces to treat tabs equal to"));
+        recurseOpt    = addBooleanOption("recurse",   "Process directories recursively");
+        verboseOpt    = addBooleanOption("verbose",   "Whether to run in verbose mode (for debugging)");
+        versionOpt    = addBooleanOption("version",   "Displays the version");
         recurseOpt.setShortName('r');
         versionOpt.setShortName('v');
 
@@ -160,12 +161,12 @@ public class Options extends OptionSet {
                     "or " + Java.SOURCE_1_6,
                 }), ",");
         
-        add(fromSourceOpt = new StringOption("from-source", "The Java source version, of the from-file; " + javaVersions));
-        add(toSourceOpt   = new StringOption("to-source",   "The Java source version, of the to-file; " + javaVersions));
-        add(sourceOpt     = new StringOption("source",      "The Java source version of both from-file and the to-file"));
+        fromSourceOpt = addOption(new StringOption("from-source", "The Java source version, of the from-file; " + javaVersions));
+        toSourceOpt   = addOption(new StringOption("to-source",   "The Java source version, of the to-file; " + javaVersions));
+        sourceOpt     = addOption(new StringOption("source",      "The Java source version of both from-file and the to-file"));
 
         BooleanOption unifiedOption = new BooleanOption("unified",   "Output unified context. Unused; for compatibility with GNU diff");
-        add(unifiedOption);
+        addOption(unifiedOption);
         unifiedOption.setShortName('u');
 
         // svn diff --diff-cmd cmd passes "-u, -L first, -L second, file1, file2":
@@ -181,11 +182,11 @@ public class Options extends OptionSet {
             };
         nameOpt.setShortName('l');
         nameOpt.setShortName('L');
-        add(nameOpt);
+        addOption(nameOpt);
 
         BooleanOption fmtOpt = new BooleanOption("format",   "Sets the format to unified diff; ignored");
         fmtOpt.setShortName('u');
-        add(fmtOpt);
+        addOption(fmtOpt);
         
         // addEnvironmentVariable("DIFFJ_PROPERTIES");
         
@@ -198,8 +199,8 @@ public class Options extends OptionSet {
      * static variables. Returns the arguments that were not consumed by option
      * processing.
      */
-    public String[] process(String[] args) {
-        String[] unprocessed = super.process(args);
+    public List<String> process(List<String> args) {
+        List<String> unprocessed = super.process(args);
 
         Integer tabWidthInt = tabWidthOpt.getValue();
         if (tabWidthInt != null) {

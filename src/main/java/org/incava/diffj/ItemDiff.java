@@ -22,9 +22,11 @@ public class ItemDiff extends DiffComparator {
     public static final String MODIFIER_REMOVED = "modifier removed: {0}";
     public static final String MODIFIER_ADDED = "modifier added: {0}";
     public static final String MODIFIER_CHANGED = "modifier changed from {0} to {1}";
+
     public static final String ACCESS_REMOVED = "access removed: {0}";
     public static final String ACCESS_ADDED = "access added: {0}";
     public static final String ACCESS_CHANGED = "access changed from {0} to {1}";
+    
     public static final String CODE_CHANGED = "code changed in {0}";
     public static final String CODE_ADDED = "code added in {0}";
     public static final String CODE_REMOVED = "code removed in {0}";
