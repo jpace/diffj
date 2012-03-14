@@ -3,33 +3,30 @@ require 'fileutils'
 
 require 'lib/tasks/common'
 
-task :default => :buildjrubyjar
+task :default => :buildjar
 
 $fname    = "mackworth.rb"
 $clsname  = "MackworthTestMain.class"
 
-$builddir   = "build"
+$builddir   = "build/jruby"
 
 $metainfdir = "META-INF"
 $mfname     = $metainfdir + "/MANIFEST.MF"
+$mainclass  = "DiffJMain"
 
 $jrubyjar   = "/home/jpace/Downloads/jruby-complete-1.6.3.jar"
-$tgtjar     = "mackworth.jar"
+$tgtjar     = "diffj-x.y.z.jar"
 
 $rbfiles = %w{ 
-  csvfile.rb
-  drawer.rb
-  panel.rb
-  spacebarlistener.rb
-  swingutil.rb
-  testframe.rb
+  main.rb
 }
 
 directory $builddir
 
 directory buildfile($metainfdir)
 
-copytask $mfname, [ buildfile($metainfdir), "jar/#{$mfname}" ], :manifest
+copytask $mfname, [ buildfile($metainfdir), "src/main/java/#{$mfname}" ], :manifest
+
 copytask $tgtjar, [ $jrubyjar ], :tgtjar
 
 copygroup $rbfiles, :rbfiles
@@ -42,7 +39,7 @@ end
 
 copytask $clsname, [ $clsname ], :javaclass
   
-task :buildjrubyjar => [ :manifest, :tgtjar, :rbmain, :rbfiles ] do
+task :buildjar => [ :manifest, :tgtjar, :rbmain, :rbfiles ] do
   Dir.chdir $builddir
 
   sh "jar ufm #{$tgtjar} #{$mfname} *.class #{$rbfiles.join(' ')}"
