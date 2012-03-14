@@ -4,9 +4,7 @@ import java.awt.Point;
 import java.text.MessageFormat;
 import org.incava.java.*;
 
-
 public class TestTypeMethodDiff extends AbstractTestItemDiff {
-
     protected final static String[] METHOD_MSGS = TestTypeDiff.METHOD_MSGS;
 
     public TestTypeMethodDiff(String name) {
@@ -71,38 +69,6 @@ public class TestTypeMethodDiff extends AbstractTestItemDiff {
                            "}"),
 
                  NO_CHANGES);
-    }
-
-    public void xtestWithAnnotations() {
-        evaluate(new Lines("public interface AS",
-                           "{",
-                           "  @Foo(name = \"Fred\")",
-                           "  Integer getFred();",
-                           "",
-                           "  void setFred(Integer fred);",
-                           "",
-                           "  @Foo(name = \"Ginger\", targetType = Integer.class)",
-                           "  Collection<Integer> getGinger();",
-                           "",
-                           "  void setGinger(Collection<Integer> ginger);",
-                           "}"),
-
-                 new Lines("public interface AS",
-                           "{",
-                           "  @Foo(name = \"Fred\", targetType = Integer.class)",
-                           "  Collection<Integer> getFred();",
-                           "",
-                           "  void setFred(Collection<Integer> fred);",
-                           "",
-                           "  @Foo(name = \"Ginger\", targetType = Integer.class)",
-                           "  Collection<Integer> getGingers();",
-                           "",
-                           "  void setGingers(Collection<Integer> Gingers);",
-                           "}"),
-
-                 Java.SOURCE_1_5);
-
-        // FileDiff ...
     }
 
     // @todo make assumption of single line, a la TestFieldDiff

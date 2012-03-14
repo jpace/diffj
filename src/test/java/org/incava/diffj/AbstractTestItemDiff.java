@@ -4,9 +4,7 @@ import java.awt.Point;
 import java.text.MessageFormat;
 import org.incava.analysis.*;
 
-
 public class AbstractTestItemDiff extends AbstractDiffJTest {
-
     protected final static String[] MODIFIER_MSGS = new String[] {
         ItemDiff.MODIFIER_REMOVED,
         ItemDiff.MODIFIER_CHANGED,
