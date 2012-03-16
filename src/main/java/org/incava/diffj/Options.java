@@ -14,103 +14,60 @@ import org.incava.java.Java;
  * Options.
  */
 public class Options extends OptionSet {
-    public static int MAXIMUM_WARNING_LEVEL = 100;
-    public static int MINIMUM_WARNING_LEVEL = -1;
-    public static int DEFAULT_WARNING_LEVEL = -1;
+    public static final String VERSION = "1.2.1";
+
+    public static final String DEFAULT_SOURCE = Java.SOURCE_1_5;
 
     /**
      * Whether to use brief or detailed reporting.
      */
-    public static boolean briefOutput = false;
+    public boolean briefOutput = false;
 
     /**
      * Whether to show context (detailed reporting only).
      */
-    public static boolean contextOutput = false;
+    public boolean contextOutput = false;
 
     /**
      * Whether to use colors for highlighting
      */
-    public static boolean highlightOutput = false;
-
-    public static String VERSION = "1.2.1";
-
-    public static String DEFAULT_SOURCE = Java.SOURCE_1_5;
+    public boolean highlightOutput = false;
 
     /**
      * The Java source version, of the from-file.
      */
-    public static String fromSource = DEFAULT_SOURCE;
+    private String fromSource = DEFAULT_SOURCE;
 
     /**
      * The Java source version, of the to-file.
      */
-    public static String toSource = DEFAULT_SOURCE;
+    private String toSource = DEFAULT_SOURCE;
 
     /**
      * Whether to recurse.
      */
-    public static Boolean recurse = Boolean.FALSE;
-
-    /**
-     * The brief option.
-     */
-    private BooleanOption briefOpt;
-
-    /**
-     * The context option.
-     */
-    private BooleanOption contextOpt;
-
-    /**
-     * The tab width option.
-     */
-    private IntegerOption tabWidthOpt;
-
-    /**
-     * The verbose option.
-     */
-    private BooleanOption verboseOpt;
-
-    /**
-     * The version option.
-     */
-    private BooleanOption versionOpt;
-
-    /**
-     * The from-source option.
-     */
-    private StringOption fromSourceOpt;
-
-    /**
-     * The to-source option.
-     */
-    private StringOption toSourceOpt;
-
-    /**
-     * The source option.
-     */
-    private StringOption sourceOpt;
-
-    /**
-     * Whether to process directories recursively.
-     */
-    private BooleanOption recurseOpt;
-
-    /**
-     * Whether to highlight.
-     */
-    private BooleanOption highlightOpt;
+    private Boolean recurse = false;
 
     /**
      * The name of the first file, if not the actual name.
      */
-    public String firstFileName;
+    private String firstFileName;
 
     /**
      * The name of the second file, if not the actual name.
      */
-    public String secondFileName;
+    private String secondFileName;
+
+    private BooleanOption briefOpt;
+    private BooleanOption contextOpt;
+    private IntegerOption tabWidthOpt;
+    private BooleanOption verboseOpt;
+    private BooleanOption versionOpt;
+    private StringOption fromSourceOpt;
+    private StringOption toSourceOpt;
+    private StringOption sourceOpt;
+    private BooleanOption recurseOpt;
+    private BooleanOption highlightOpt;
 
     private static Options instance = new Options();
 
@@ -270,5 +227,62 @@ public class Options extends OptionSet {
         }
 
         return unprocessed;
+    }
+
+
+    /**
+     * Whether to use brief or detailed reporting.
+     */
+    public boolean showBriefOutput() {
+        return briefOutput;
+    }
+
+    /**
+     * Whether to show context (detailed reporting only).
+     */
+    public boolean showContextOutput() {
+        return contextOutput;
+    }
+
+    /**
+     * Whether to use colors for highlighting
+     */
+    public boolean highlightOutput() {
+        return highlightOutput;
+    }
+
+    /**
+     * The Java source version, of the from-file.
+     */
+    public String getFromSource() {
+        return fromSource;
+    }
+
+    /**
+     * The Java source version, of the to-file.
+     */
+    public String getToSource() {
+        return toSource;
+    }
+
+    /**
+     * Whether to recurse.
+     */
+    public Boolean recurse() {
+        return recurse;
+    }
+
+    /**
+     * The name of the first file, if not the actual name.
+     */
+    public String getFirstFileName() {
+        return firstFileName;
+    }
+
+    /**
+     * The name of the second file, if not the actual name.
+     */
+    public String getSecondFileName() {
+        return secondFileName;
     }
 }

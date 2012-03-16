@@ -2,9 +2,12 @@ def buildfile fname
   File.join($builddir, fname)
 end
 
+
 def copytask fname, deps, taskname
   tgtfile = buildfile(fname)
+  puts "copytask: #{fname} #{tgtfile}"
   file tgtfile => deps do |t|
+    puts "cp: #{t.prerequisites.last} #{t.name}"
     cp t.prerequisites.last, t.name
   end
   task taskname => tgtfile

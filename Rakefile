@@ -5,8 +5,8 @@ require 'lib/tasks/common'
 
 task :default => :buildjar
 
-$fname    = "mackworth.rb"
-$clsname  = "MackworthTestMain.class"
+$fname    = "diffj.rb"
+$clsname  = "DiffjMain.class"
 
 $builddir   = "build/jruby"
 
@@ -18,7 +18,7 @@ $jrubyjar   = "/home/jpace/Downloads/jruby-complete-1.6.3.jar"
 $tgtjar     = "diffj-x.y.z.jar"
 
 $rbfiles = %w{ 
-  main.rb
+  diffj.rb
 }
 
 directory $builddir
@@ -34,6 +34,7 @@ copygroup $rbfiles, :rbfiles
 jrubyctask $fname, :rbmain
 
 task :jrubyc => $fname do |t|
+  puts "running: jrubyc -t #{$builddir} --javac #{t.prerequisites.last}"
   sh "jrubyc -t #{$builddir} --javac #{t.prerequisites.last}"
 end
 
