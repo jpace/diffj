@@ -35,13 +35,8 @@ public class DiffJ {
         tr.Ace.setOutput(Qualog.VERBOSE, Qualog.LEVEL4);
         tr.Ace.setOutput(Qualog.QUIET,   Qualog.LEVEL2);
 
-        if (briefOutput) {
-            report = new BriefReport(System.out);
-        }
-        else {
-            report = new DetailedReport(System.out, contextOutput, highlightOutput);
-        }
-
+        report = briefOutput ? new BriefReport(System.out) : new DetailedReport(System.out, contextOutput, highlightOutput);
+        
         exitValue = 0;
 
         if (names.size() >= 2) {
@@ -58,7 +53,7 @@ public class DiffJ {
         }
     }
 
-    protected List<String> getJavaFiles(File fd) {
+    protected List<String> getDirectoriesAndJavaFiles(File fd) {
         return Arrays.asList(fd.list(new FilenameFilter() {
                 public boolean accept(File dir, String pathname) {
                     File f = new File(dir, pathname);
@@ -125,6 +120,33 @@ public class DiffJ {
         }
     }
 
+    protected void processDirectories(File from, File to) {
+        List<String> fromFiles = getDirectoriesAndJavaFiles(from);
+        List<String> toFiles   = getDirectoriesAndJavaFiles(to);     
+        Set<String>  merged    = new TreeSet<String>();
+        
+        merged.addAll(fromFiles);
+        merged.addAll(toFiles);
+
+        for (String fname : merged) {
+            File fromFile = new File(from, fname);
+            File toFile   = new File(to, fname);
+
+            if (fromFile.isDirectory() && toFile.isDirectory()) {
+                Options opts = Options.get();
+                if (opts.recurse()) {
+                    processDirectories(fromFile, toFile);
+                }
+                else {
+                    tr.Ace.log("not recursing");
+                }
+            }
+            else {
+                process(fromFile, toFile);
+            }
+        }
+    }
+
     protected void process(File from, File to) {
         tr.Ace.log("from: " + from + "; to: " + to);
 
@@ -142,31 +164,7 @@ public class DiffJ {
         }
         else if (from.isDirectory()) {
             if (to.isDirectory()) {
-                List<String> fromFiles = getJavaFiles(from);
-                List<String> toFiles   = getJavaFiles(to);
-                
-                Set<String>  merged    = new TreeSet<String>();
-            
-                merged.addAll(fromFiles);
-                merged.addAll(toFiles);
-
-                for (String fname : merged) {
-                    File fromFile = new File(from, fname);
-                    File toFile   = new File(to, fname);
-
-                    if (fromFile.isDirectory() && toFile.isDirectory()) {
-                        Options opts = Options.get();
-                        if (opts.recurse()) {
-                            process(fromFile, toFile);
-                        }
-                        else {
-                            tr.Ace.log("not recursing");
-                        }
-                    }
-                    else {
-                        process(fromFile, toFile);
-                    }
-                }
+                processDirectories(from, to);
             }
             else {
                 File fromFile = new File(from, to.getPath());

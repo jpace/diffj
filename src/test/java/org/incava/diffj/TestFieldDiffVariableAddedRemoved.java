@@ -1,13 +1,10 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.text.MessageFormat;
-import org.incava.analysis.*;
-import org.incava.java.*;
-
+import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffChange;
+import org.incava.java.Java;
 
 public class TestFieldDiffVariableAddedRemoved extends AbstractTestItemDiff {
-
     protected final static String[] VARIABLE_MSGS = new String[] {
         FieldDiff.VARIABLE_REMOVED,
         FieldDiff.VARIABLE_CHANGED, 
@@ -19,24 +16,24 @@ public class TestFieldDiffVariableAddedRemoved extends AbstractTestItemDiff {
     }
     
     public FileDiff makeVariableTypeChangedRef(String varName, String fromType, String toType, 
-                                                    int fromLine, int fromCol, // this assumes that type doesn't span lines
-                                                    int toLine,   int toCol) {
+                                               int fromLine, int fromCol, // this assumes that type doesn't span lines
+                                               int toLine,   int toCol) {
         return makeVariableTypeChangedRef(varName, fromType, toType,
                                           fromLine, fromCol, fromCol + fromType.length() - 1,
                                           toLine,   toCol,   toCol   + toType.length() - 1);
     }
     
     public FileDiff makeVariableTypeChangedRef(String varName, String fromType, String toType, 
-                                                    int fromLine, int fromFromCol, int fromToCol, // this assumes that type doesn't span lines
-                                                    int toLine,   int toFromCol,   int toToCol) {
+                                               int fromLine, int fromFromCol, int fromToCol, // this assumes that type doesn't span lines
+                                               int toLine,   int toFromCol,   int toToCol) {
         return new FileDiffChange(getFromToMessage(FieldDiff.VARIABLE_TYPE_CHANGED, varName, fromType, toType),
-                                        loc(fromLine, fromFromCol), loc(fromLine, fromToCol), 
-                                        loc(toLine,   toFromCol),   loc(toLine, toToCol));
+                                  loc(fromLine, fromFromCol), loc(fromLine, fromToCol), 
+                                  loc(toLine,   toFromCol),   loc(toLine, toToCol));
     }
 
     public FileDiff makeVariableRemovedRef(String varName, 
-                                                int fromLine, int fromCol, 
-                                                int toLine,   int toCol) {
+                                           int fromLine, int fromCol, 
+                                           int toLine,   int toCol) {
         return makeCodeChangedRef(FieldDiff.VARIABLE_REMOVED, varName,  
                                   loc(fromLine, fromCol), loc(fromLine, fromCol, varName), 
                                   loc(toLine, toCol),     loc(toLine,   toCol,   varName));

@@ -1,17 +1,6 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.text.MessageFormat;
-import java.util.*;
-import org.incava.analysis.*;
-import org.incava.analysis.FileDiff;
-import org.incava.ijdk.lang.*;
-import org.incava.ijdk.util.ANSI;
-import org.incava.java.*;
-
-
 public class AbstractTestOutput extends AbstractTestItemDiff {
-
     public AbstractTestOutput(String name) {
         super(name);
     }

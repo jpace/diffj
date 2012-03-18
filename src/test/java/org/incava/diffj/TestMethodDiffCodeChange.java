@@ -1,12 +1,6 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.text.MessageFormat;
-import org.incava.analysis.FileDiff;
-
-
 public class TestMethodDiffCodeChange extends AbstractTestItemDiff {
-
     public TestMethodDiffCodeChange(String name) {
         super(name);
     }

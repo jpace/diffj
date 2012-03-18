@@ -1,7 +1,6 @@
 def buildfile fname
-  File.join($builddir, fname)
+  File.join $builddir, fname
 end
-
 
 def copytask fname, deps, taskname
   tgtfile = buildfile(fname)

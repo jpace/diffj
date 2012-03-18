@@ -1,22 +1,21 @@
 package org.incava.diffj;
 
 import java.awt.Point;
-import java.io.*;
-import java.util.*;
+import java.io.StringWriter;
+import java.util.Collection;
 import junit.framework.TestCase;
-import net.sourceforge.pmd.ast.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.io.*;
-import org.incava.ijdk.lang.*;
-import org.incava.java.*;
+import net.sourceforge.pmd.ast.ParseException;
+import org.incava.analysis.BriefReport;
+import org.incava.analysis.DetailedReport;
+import org.incava.analysis.FileDiff;
+import org.incava.analysis.Report;
+import org.incava.ijdk.lang.StringExt;
+import org.incava.java.Java;
 import org.incava.test.AbstractTestCaseExt;
 
-
 public class AbstractDiffJTest extends AbstractTestCaseExt {
-
     public static final FileDiff[] NO_CHANGES = new FileDiff[0];
-
-    private Report _report;
+    private Report report;
     
     public AbstractDiffJTest(String name) {
         super(name);
@@ -89,27 +88,24 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
     }
 
     public void evaluate(String fromName, String fromStr, String toName, String toStr, String src, Report report, FileDiff ... expectations) {
-        _report = report;
+        this.report = report;
 
-        Collection<FileDiff> diffs = _report.getDifferences();
+        Collection<FileDiff> diffs = this.report.getDifferences();
 
         try {
             final boolean flushReport = false;
             JavaFileDiff jfd = new JavaFileDiff(report, fromName, fromStr, src, toName, toStr, src, flushReport);
             
-            if (expectations == null) {
-                // skipping expectations check
-            }
-            else {
+            if (expectations != null) {
                 if (expectations.length != diffs.size()) {
                     tr.Ace.setVerbose(true);
                     
                     tr.Ace.yellow("diffs.size", String.valueOf(diffs.size()));
                     tr.Ace.yellow("diffs", diffs);
-
+                    
                     tr.Ace.yellow("expectations.length", String.valueOf(expectations.length));
                     tr.Ace.yellow("expectations", expectations);
-
+                    
                     assertEquals("number of differences", expectations.length, diffs.size());
                 }
 
@@ -139,7 +135,7 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
                 }
             }
 
-            _report.flush();
+            this.report.flush();
         }
         catch (ParseException e) {
             fail(e.getMessage());
@@ -159,6 +155,6 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
     }
 
     public Report getReport() {
-        return _report;
+        return report;
     }
 }

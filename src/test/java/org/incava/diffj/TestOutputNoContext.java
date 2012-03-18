@@ -1,17 +1,12 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.incava.analysis.*;
-import org.incava.ijdk.lang.*;
 import org.incava.ijdk.util.ANSI;
 
-
 public class TestOutputNoContext extends AbstractTestOutput {
-
-    private StringWriter _output = null;
-    
     public TestOutputNoContext(String name) {
         super(name);
     }
@@ -22,13 +17,11 @@ public class TestOutputNoContext extends AbstractTestOutput {
 
     public void testImportAdded() {
         String[] output = doImportAddedTest();
-        
         tr.Ace.log("output", output);        
     }
 
     public void testCodeChangedSingleLine() {
         String[] output = doCodeChangedSingleLineTest();
-        
         tr.Ace.log("output", output);        
     }
 

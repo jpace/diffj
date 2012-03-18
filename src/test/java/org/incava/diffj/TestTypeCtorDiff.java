@@ -1,12 +1,6 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.text.MessageFormat;
-import org.incava.analysis.FileDiff;
-
-
 public class TestTypeCtorDiff extends AbstractTestItemDiff {
-
     protected final static String[] CONSTRUCTOR_MSGS = TestTypeDiff.CONSTRUCTOR_MSGS;
 
     public TestTypeCtorDiff(String name) {

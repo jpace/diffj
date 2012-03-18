@@ -2,11 +2,10 @@ package org.incava.diffj;
 
 import java.awt.Point;
 import java.text.MessageFormat;
-import org.incava.analysis.*;
-
+import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffChange;
 
 public class TestCtorDiff extends AbstractTestItemDiff {
-
     protected final static String[] PARAMETER_MSGS = new String[] {
         CtorDiff.PARAMETER_REMOVED,
         null,
@@ -463,8 +462,8 @@ public class TestCtorDiff extends AbstractTestItemDiff {
     }
 
     protected FileDiff makeChangedRef(String msg, 
-                                           String fromStr, String toStr,
-                                           Point fromStart, Point toStart) {
+                                      String fromStr, String toStr,
+                                      Point fromStart, Point toStart) {
         
         return new FileDiffChange(getMessage(null, null, msg, fromStr, toStr), fromStart, loc(fromStart, fromStr), toStart,   loc(toStart, toStr));
     }

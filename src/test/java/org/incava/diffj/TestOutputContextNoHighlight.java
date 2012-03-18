@@ -1,15 +1,10 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.text.MessageFormat;
-import java.util.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.lang.*;
-import org.incava.ijdk.util.ANSI;
-
+import java.io.StringWriter;
+import org.incava.analysis.DetailedReport;
+import org.incava.analysis.Report;
 
 public class TestOutputContextNoHighlight extends AbstractTestOutputContext {
-    
     public TestOutputContextNoHighlight(String name) {
         super(name);
     }

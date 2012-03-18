@@ -1,13 +1,8 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.text.MessageFormat;
-import org.incava.analysis.*;
-import org.incava.java.*;
-
+import org.incava.analysis.FileDiffChange;
 
 public class TestFieldDiff extends AbstractTestItemDiff {
-
     protected final static String[] VARIABLE_MSGS = new String[] {
         FieldDiff.VARIABLE_REMOVED,
         FieldDiff.VARIABLE_CHANGED, 

@@ -1,14 +1,11 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.text.MessageFormat;
-import java.util.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.lang.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.incava.analysis.FileDiff;
 
 public abstract class AbstractTestOutputContext extends AbstractTestOutput {
-
     public AbstractTestOutputContext(String name) {
         super(name);
     }
@@ -20,20 +17,17 @@ public abstract class AbstractTestOutputContext extends AbstractTestOutput {
     }
 
     public void testImportAdded() {
-        String[] output = doImportAddedTest();
-        
+        String[] output = doImportAddedTest();        
         tr.Ace.log("output", output);        
     }
 
     public void testCodeChangedSingleLine() {
-        String[] output = doCodeChangedSingleLineTest();
-        
+        String[] output = doCodeChangedSingleLineTest();        
         tr.Ace.log("output", output);        
     }
 
     public void testCodeChangedMultipleLines() {
-        String[] output = doCodeChangedMultipleLinesTest();
-        
+        String[] output = doCodeChangedMultipleLinesTest();        
         tr.Ace.log("output", output);
 
         // output doesn't have end-of-lines

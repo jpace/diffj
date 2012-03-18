@@ -1,19 +1,15 @@
 package org.incava.diffj;
 
-import java.io.*;
-import java.text.MessageFormat;
-import java.util.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.io.*;
-import org.incava.ijdk.lang.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.incava.ijdk.io.IO;
+import org.incava.ijdk.lang.StringExt;
 import org.incava.ijdk.util.ANSI;
 
-
 public class TestDiffJ extends AbstractDiffJTest {
-
     public TestDiffJ(String name) {
         super(name);
-
         tr.Ace.setVerbose(true);
     }
 
@@ -104,5 +100,4 @@ public class TestDiffJ extends AbstractDiffJTest {
         
         assertEquals(expected, Arrays.asList(output));
     }
-
 }

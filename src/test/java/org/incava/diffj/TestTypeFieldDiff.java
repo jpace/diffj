@@ -1,12 +1,6 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.text.MessageFormat;
-import org.incava.analysis.FileDiff;
-
-
 public class TestTypeFieldDiff extends AbstractTestItemDiff {
-
     protected final static String[] FIELD_MSGS = TestTypeDiff.FIELD_MSGS;
 
     public TestTypeFieldDiff(String name) {

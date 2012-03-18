@@ -2,7 +2,10 @@ package org.incava.diffj;
 
 import java.awt.Point;
 import java.text.MessageFormat;
-import org.incava.analysis.*;
+import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffChange;
+import org.incava.analysis.FileDiffDelete;
 
 public class AbstractTestItemDiff extends AbstractDiffJTest {
     protected final static String[] MODIFIER_MSGS = new String[] {
@@ -71,9 +74,7 @@ public class AbstractTestItemDiff extends AbstractDiffJTest {
         return new FileDiffChange(msg, a0, a1, b0, b1);
     }
 
-    protected FileDiff makeAccessRef(String from, String to,
-                                     Point fromStart,
-                                     Point toStart) {
+    protected FileDiff makeAccessRef(String from, String to, Point fromStart, Point toStart) {
         return makeChangedRef(from, to, ACCESS_MSGS, 
                               fromStart, loc(fromStart, from),
                               toStart,   loc(toStart,   to));

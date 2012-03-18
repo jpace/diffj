@@ -1,9 +1,5 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.text.MessageFormat;
-import org.incava.java.*;
-
 public class TestTypeMethodDiff extends AbstractTestItemDiff {
     protected final static String[] METHOD_MSGS = TestTypeDiff.METHOD_MSGS;
 

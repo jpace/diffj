@@ -1,11 +1,8 @@
 package org.incava.diffj;
 
-import java.util.*;
 import org.incava.ijdk.lang.StringExt;
 
-
 public class Lines {
-
     private String[] lines;
     
     public Lines(String ... lines) {
@@ -23,5 +20,4 @@ public class Lines {
     public String toString() {
         return StringExt.join(this.lines, "");
     }
-
 }

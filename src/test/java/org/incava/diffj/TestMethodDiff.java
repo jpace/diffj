@@ -2,11 +2,9 @@ package org.incava.diffj;
 
 import java.awt.Point;
 import java.text.MessageFormat;
-import org.incava.analysis.*;
-
+import org.incava.analysis.FileDiffChange;
 
 public class TestMethodDiff extends AbstractTestItemDiff {
-
     protected final static String[] PARAM_MSGS = new String[] {
         MethodDiff.PARAMETER_REMOVED,
         null,
@@ -113,8 +111,8 @@ public class TestMethodDiff extends AbstractTestItemDiff {
                            "}"),
                  
                  new FileDiffChange(getMessage(null, null, MethodDiff.RETURN_TYPE_CHANGED, "Object", "Integer"),
-                                          loc(2, 5), loc(2, 10), 
-                                          loc(3, 5), loc(3, 11)));
+                                    loc(2, 5), loc(2, 10), 
+                                    loc(3, 5), loc(3, 11)));
     }
 
     public void testParameterAddedNoneToOne() {
@@ -217,8 +215,8 @@ public class TestMethodDiff extends AbstractTestItemDiff {
                            "}"),
                  
                  new FileDiffChange(getMessage(null, null, MethodDiff.PARAMETER_TYPE_CHANGED, "int", "Integer"), 
-                                          loc(2, 14), loc(2, 18), 
-                                          loc(3, 14), loc(3, 22)));
+                                    loc(2, 14), loc(2, 18), 
+                                    loc(3, 14), loc(3, 22)));
     }
 
     public void testParameterChangedName() {
@@ -233,8 +231,8 @@ public class TestMethodDiff extends AbstractTestItemDiff {
                            "}"),
                  
                  new FileDiffChange(getMessage(null, null, MethodDiff.PARAMETER_NAME_CHANGED, "i", "x"),
-                                          loc(2, 18), loc(2, 18), 
-                                          loc(3, 18), loc(3, 18)));
+                                    loc(2, 18), loc(2, 18), 
+                                    loc(3, 18), loc(3, 18)));
     }
 
     public void testParameterReordered() {
@@ -382,11 +380,11 @@ public class TestMethodDiff extends AbstractTestItemDiff {
                            "}"),
                  
                  new FileDiffChange(throwsReordMsg("ArrayIndexOutOfBoundsException", 0, 1),
-                                          loc(2, 23), loc(2, 52), 
-                                          loc(2, 36), loc(2, 65)),
+                                    loc(2, 23), loc(2, 52), 
+                                    loc(2, 36), loc(2, 65)),
                  new FileDiffChange(throwsReordMsg("IOException", 1, 0),
-                                          loc(2, 55), loc(2, 65), 
-                                          loc(2, 23), loc(2, 33)));
+                                    loc(2, 55), loc(2, 65), 
+                                    loc(2, 23), loc(2, 33)));
     }
 
     public void testAbstractToImplementedMethod() {

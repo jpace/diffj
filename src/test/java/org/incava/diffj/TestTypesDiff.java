@@ -1,12 +1,6 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.text.MessageFormat;
-import org.incava.analysis.FileDiff;
-
-
 public class TestTypesDiff extends AbstractTestItemDiff {
-
     protected final static String[] TYPES_MSGS = new String[] {
         TypesDiff.TYPE_DECLARATION_REMOVED,
         null,

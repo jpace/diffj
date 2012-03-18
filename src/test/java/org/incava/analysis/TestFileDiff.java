@@ -4,9 +4,7 @@ import java.awt.Point;
 import junit.framework.TestCase;
 import org.incava.qualog.Qualog;
 
-
 public class TestFileDiff extends TestCase {
-
     public TestFileDiff(String name) {
         super(name);
         tr.Ace.setVerbose(true);

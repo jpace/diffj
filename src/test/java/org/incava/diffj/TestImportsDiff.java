@@ -1,15 +1,12 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import java.io.*;
-import org.incava.analysis.*;
-import org.incava.ijdk.io.*;
-import org.incava.ijdk.lang.*;
-import org.incava.java.*;
-
+import java.io.StringWriter;
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffDelete;
+import org.incava.ijdk.lang.StringExt;
+import org.incava.java.Java;
 
 public class TestImportsDiff extends AbstractDiffJTest {
-
     public TestImportsDiff(String name) {
         super(name);
     }
@@ -63,7 +60,6 @@ public class TestImportsDiff extends AbstractDiffJTest {
 
                  new Lines("class Test {",
                            "}"),
-
                  
                  new FileDiffDelete(ImportsDiff.IMPORT_SECTION_REMOVED, loc(1, 1), loc(1, 18), loc(1, 1), loc(1, 5)));
     }
