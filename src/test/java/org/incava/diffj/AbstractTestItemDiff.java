@@ -8,6 +8,36 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffDelete;
 
 public class AbstractTestItemDiff extends AbstractDiffJTest {
+    protected final static String[] METHOD_MSGS = new String[] {
+        TypeDiff.METHOD_REMOVED,
+        TypeDiff.METHOD_CHANGED, 
+        TypeDiff.METHOD_ADDED,
+    };
+
+    protected final static String[] FIELD_MSGS = new String[] {
+        TypeDiff.FIELD_REMOVED,
+        null,
+        TypeDiff.FIELD_ADDED,
+    };
+
+    protected final static String[] CLASS_MSGS = new String[] {
+        TypeDiff.INNER_CLASS_REMOVED,
+        null,
+        TypeDiff.INNER_CLASS_ADDED,
+    };
+
+    protected final static String[] INTERFACE_MSGS = new String[] {
+        TypeDiff.INNER_INTERFACE_REMOVED,
+        null,
+        TypeDiff.INNER_INTERFACE_ADDED,
+    };
+
+    protected final static String[] CONSTRUCTOR_MSGS = new String[] {
+        TypeDiff.CONSTRUCTOR_REMOVED,
+        null,
+        TypeDiff.CONSTRUCTOR_ADDED,
+    };
+
     protected final static String[] MODIFIER_MSGS = new String[] {
         ItemDiff.MODIFIER_REMOVED,
         ItemDiff.MODIFIER_CHANGED,
@@ -20,8 +50,64 @@ public class AbstractTestItemDiff extends AbstractDiffJTest {
         ItemDiff.ACCESS_ADDED,
     };
 
+    protected final static String[] TYPES_MSGS = new String[] {
+        TypesDiff.TYPE_DECLARATION_REMOVED,
+        null,
+        TypesDiff.TYPE_DECLARATION_ADDED,
+    };
+
+    protected final static String[] PACKAGE_MSGS = new String[] {
+        PackageDiff.PACKAGE_REMOVED, 
+        PackageDiff.PACKAGE_RENAMED,
+        PackageDiff.PACKAGE_ADDED,
+    };
+
+    protected final static String[] VARIABLE_MSGS = new String[] {
+        FieldDiff.VARIABLE_REMOVED,
+        FieldDiff.VARIABLE_CHANGED, 
+        FieldDiff.VARIABLE_ADDED,
+    };
+
     public AbstractTestItemDiff(String name) {
         super(name);
+    }
+
+    protected FileDiff makeFieldRef(String from, String to, Point a0, Point a1, Point b0, Point b1) {
+        return makeRef(from, to, FIELD_MSGS, a0, a1, b0, b1);
+    }
+
+    protected FileDiff makeMethodRef(String from, String to, Point a0, Point a1, Point b0, Point b1) {
+        return makeRef(from, to, METHOD_MSGS, a0, a1, b0, b1);
+    }
+
+    protected FileDiff makeClassRef(String from, String to, Point a0, Point a1, Point b0, Point b1) {
+        return makeRef(from, to, CLASS_MSGS, a0, a1, b0, b1);
+    }
+
+    protected FileDiff makeInterfaceRef(String from, String to, Point a0, Point a1, Point b0, Point b1) {
+        return makeRef(from, to, INTERFACE_MSGS, a0, a1, b0, b1);
+    }
+
+    protected FileDiff makeTypeRef(String from, String to, Point a0, Point a1, Point b0, Point b1) {
+        return makeRef(from, to, TYPES_MSGS, a0, a1, b0, b1);
+    }
+
+    protected FileDiff makePackageRef(String from, String to, Point fromStart, Point fromEnd, Point toStart, Point toEnd) {
+        return makeRef(from, to, PACKAGE_MSGS, fromStart, fromEnd, toStart, toEnd);
+    }
+
+    protected FileDiff makePackageRef(String from, String to, Point fromStart, Point toStart) {
+        return makeRef(from, to, PACKAGE_MSGS, 
+                       fromStart, loc(fromStart, from),
+                       toStart,   loc(toStart,   to));
+    }
+
+    protected FileDiff makeVariableRef(String from, String to, Point a0, Point a1, Point b0, Point b1) {
+        return makeRef(from, to, VARIABLE_MSGS, a0, a1, b0, b1);
+    }
+
+    protected FileDiff makeConstructorRef(String from, String to, Point a0, Point a1, Point b0, Point b1) {
+        return makeRef(from, to, CONSTRUCTOR_MSGS, a0, a1, b0, b1);
     }
 
     protected FileDiff makeRef(String from, String to, String[] msgs, Point a0, Point a1, Point b0, Point b1) {

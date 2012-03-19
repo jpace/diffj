@@ -1,15 +1,6 @@
 package org.incava.diffj;
 
-import java.awt.Point;
-import org.incava.analysis.FileDiff;
-
 public class TestPackageDiff extends AbstractTestItemDiff {
-    protected final static String[] PACKAGE_MSGS = new String[] {
-        PackageDiff.PACKAGE_REMOVED, 
-        PackageDiff.PACKAGE_RENAMED,
-        PackageDiff.PACKAGE_ADDED,
-    };
-
     public TestPackageDiff(String name) {
         super(name);
     }
@@ -79,15 +70,5 @@ public class TestPackageDiff extends AbstractTestItemDiff {
                            "}"),
                  
                  makePackageRef("org.incava.bar", "org.incava.foo", loc(1, 9), loc(1, 9)));
-    }
-
-    protected FileDiff makePackageRef(String from, String to, Point fromStart, Point fromEnd, Point toStart, Point toEnd) {
-        return makeRef(from, to, PACKAGE_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makePackageRef(String from, String to, Point fromStart, Point toStart) {
-        return makeRef(from, to, PACKAGE_MSGS, 
-                       fromStart, loc(fromStart, from),
-                       toStart,   loc(toStart,   to));
     }
 }

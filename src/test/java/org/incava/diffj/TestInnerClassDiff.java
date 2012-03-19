@@ -1,18 +1,6 @@
 package org.incava.diffj;
 
 public class TestInnerClassDiff extends AbstractTestItemDiff {
-    protected final static String[] METHOD_MSGS = new String[] {
-        TypeDiff.METHOD_REMOVED,
-        TypeDiff.METHOD_CHANGED, 
-        TypeDiff.METHOD_ADDED,
-    };
-
-    protected final static String[] CLASS_MSGS = new String[] {
-        TypeDiff.INNER_CLASS_REMOVED,
-        null,
-        TypeDiff.INNER_CLASS_ADDED,
-    };
-    
     public TestInnerClassDiff(String name) {
         super(name);
     }
@@ -31,7 +19,7 @@ public class TestInnerClassDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef(null, "foo()", METHOD_MSGS, loc(2, 5), loc(3, 5), loc(4, 9), loc(4, 21)));
+                 makeMethodRef(null, "foo()", loc(2, 5), loc(3, 5), loc(4, 9), loc(4, 21)));
     }
 
     public void testMethodRemoved() {
@@ -48,7 +36,7 @@ public class TestInnerClassDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
 
-                 makeRef("foo()", null, METHOD_MSGS, loc(3, 9), loc(3, 21), loc(3, 5), loc(4, 5)));
+                 makeMethodRef("foo()", null, loc(3, 9), loc(3, 21), loc(3, 5), loc(4, 5)));
     }
 
     public void testInnerClassAdded() {
@@ -66,7 +54,7 @@ public class TestInnerClassDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef(null, "I2Test", CLASS_MSGS, loc(2, 5), loc(3, 5), loc(4, 9), loc(5, 9)));
+                 makeClassRef(null, "I2Test", loc(2, 5), loc(3, 5), loc(4, 9), loc(5, 9)));
     }
 
     public void testInnerClassRemoved() {
@@ -83,7 +71,7 @@ public class TestInnerClassDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef("I2Test", null, CLASS_MSGS, loc(3, 9), loc(4, 9), loc(2, 5), loc(3, 5)));
+                 makeClassRef("I2Test", null, loc(3, 9), loc(4, 9), loc(2, 5), loc(3, 5)));
     }
 
     public void testInnerClassMethodAdded() {
@@ -105,7 +93,7 @@ public class TestInnerClassDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef(null, "foo()", METHOD_MSGS, loc(3, 9), loc(4, 9), loc(5, 13), loc(5, 25)));
+                 makeMethodRef(null, "foo()", loc(3, 9), loc(4, 9), loc(5, 13), loc(5, 25)));
     }
 
     public void testInnerClassMethodRemoved() {
@@ -126,7 +114,6 @@ public class TestInnerClassDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef("foo(String)", null, METHOD_MSGS, loc(4, 13), loc(4, 35), loc(4, 9), loc(5, 9)));
+                 makeMethodRef("foo(String)", null, loc(4, 13), loc(4, 35), loc(4, 9), loc(5, 9)));
     }
-
 }

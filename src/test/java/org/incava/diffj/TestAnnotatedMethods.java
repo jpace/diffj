@@ -18,7 +18,6 @@ public class TestAnnotatedMethods extends AbstractTestItemDiff {
                            "    @Foo(name = \"Fred\")",
                            "    Integer getFred();",
                            "}"),
-                 
                  Java.SOURCE_1_6);
     }
 
@@ -30,7 +29,6 @@ public class TestAnnotatedMethods extends AbstractTestItemDiff {
                  new Lines("public interface AS {",
                            "    Integer getFred();",
                            "}"),
-                 
                  Java.SOURCE_1_6);
     }
 
@@ -42,7 +40,6 @@ public class TestAnnotatedMethods extends AbstractTestItemDiff {
                            "    @Foo(name = \"Fred\")",
                            "    Integer getFred();",
                            "}"),
-                 
                  Java.SOURCE_1_6);
     }
 
@@ -58,6 +55,6 @@ public class TestAnnotatedMethods extends AbstractTestItemDiff {
     //              "    void foo() {}",
     //              "}"),
     //              
-    //              makeRef("foo()", null, METHOD_MSGS, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
+    //              makeMethodRef("foo()", null, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
     // }
 }

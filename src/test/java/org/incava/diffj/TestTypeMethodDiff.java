@@ -1,8 +1,6 @@
 package org.incava.diffj;
 
 public class TestTypeMethodDiff extends AbstractTestItemDiff {
-    protected final static String[] METHOD_MSGS = TestTypeDiff.METHOD_MSGS;
-
     public TestTypeMethodDiff(String name) {
         super(name);
     }
@@ -17,7 +15,7 @@ public class TestTypeMethodDiff extends AbstractTestItemDiff {
                            "    void foo() {}",
                            "}"),
                  
-                 makeRef(null, "foo()", METHOD_MSGS, loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 17)));
+                 makeMethodRef(null, "foo()", loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 17)));
     }
 
     public void testClassOneMethodAdded() {
@@ -32,7 +30,7 @@ public class TestTypeMethodDiff extends AbstractTestItemDiff {
                            "    void foo() {}",
                            "}"),
                  
-                 makeRef(null, "foo()", METHOD_MSGS, loc(1, 1), loc(4, 1), loc(4, 5), loc(4, 17)));
+                 makeMethodRef(null, "foo()", loc(1, 1), loc(4, 1), loc(4, 5), loc(4, 17)));
     }
 
     public void testClassAllMethodsRemoved() {
@@ -45,7 +43,7 @@ public class TestTypeMethodDiff extends AbstractTestItemDiff {
                            "",
                            "}"),
                  
-                 makeRef("foo()", null, METHOD_MSGS, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
+                 makeMethodRef("foo()", null, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
     }
 
     public void testClassNoMethodsChanged() {
@@ -79,6 +77,6 @@ public class TestTypeMethodDiff extends AbstractTestItemDiff {
     //              "    void foo() {}",
     //              "}"),
     //              
-    //              makeRef("foo()", null, METHOD_MSGS, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
+    //              makeMethodRef("foo()", null, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
     // }
 }

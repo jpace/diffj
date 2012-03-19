@@ -1,10 +1,22 @@
 require 'rubygems'
 require 'fileutils'
-require 'ant'
-
-require 'lib/tasks/common'
-
 require 'java'
+
+puts "CLASSPATH: #{$CLASSPATH}"
+puts "CLASSPATH.class: #{$CLASSPATH.class}"
+
+$CLASSPATH << "build/libs/diffj-1.2.1.jar"
+$CLASSPATH << "libs/jruby-complete-1.6.3.jar"
+$CLASSPATH << "libs/pmd-4.2.5.jar" # this gets mushed into diffj-1.2.1.jar, but for future builds it won't.
+
+task :nothing do
+  puts "nothing"
+end
+
+puts "CLASSPATH: #{$CLASSPATH}"
+
+require 'ant'
+require 'lib/tasks/common'
 
 if false
   puts "$CLASSPATH: #{$CLASSPATH}"
@@ -56,8 +68,6 @@ if false
 end
 
 # beginning of cleaned up Rake code:
-
-$classpath = "#{ENV['CLASSPATH']}:libs/jruby-complete-1.6.3.jar:libs/pmd-4.2.5.jar:build/libs/diffj-1.2.1.jar"
 
 task :runtest do
   sh "jruby ./src/test/ruby/test_diffj.rb"

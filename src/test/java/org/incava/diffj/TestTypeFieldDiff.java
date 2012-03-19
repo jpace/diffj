@@ -1,8 +1,6 @@
 package org.incava.diffj;
 
 public class TestTypeFieldDiff extends AbstractTestItemDiff {
-    protected final static String[] FIELD_MSGS = TestTypeDiff.FIELD_MSGS;
-
     public TestTypeFieldDiff(String name) {
         super(name);
     }
@@ -17,7 +15,7 @@ public class TestTypeFieldDiff extends AbstractTestItemDiff {
                            "    int i;",
                            "}"),
                  
-                 makeRef(null, "i", FIELD_MSGS, loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 10)));
+                 makeFieldRef(null, "i", loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 10)));
     }
 
     public void testClassOneFieldRemoved() {
@@ -30,7 +28,7 @@ public class TestTypeFieldDiff extends AbstractTestItemDiff {
                            "",
                            "}"),
                  
-                 makeRef("i", null, FIELD_MSGS, loc(2, 5), loc(2, 10), loc(1, 1), loc(3, 1)));
+                 makeFieldRef("i", null, loc(2, 5), loc(2, 10), loc(1, 1), loc(3, 1)));
     }
 
     public void testClassOneFieldRemovedOneFieldAdded() {
@@ -44,7 +42,7 @@ public class TestTypeFieldDiff extends AbstractTestItemDiff {
                            "",
                            "}"),
                  
-                 makeRef(null, "j",  FIELD_MSGS, loc(1, 1), loc(4,  1), loc(2, 5), loc(2, 13)),
-                 makeRef("i",  null, FIELD_MSGS, loc(2, 5), loc(2, 10), loc(1, 1), loc(4,  1)));
+                 makeFieldRef(null, "j",  loc(1, 1), loc(4,  1), loc(2, 5), loc(2, 13)),
+                 makeFieldRef("i",  null, loc(2, 5), loc(2, 10), loc(1, 1), loc(4,  1)));
     }
 }

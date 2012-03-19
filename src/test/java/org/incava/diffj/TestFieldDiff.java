@@ -3,12 +3,6 @@ package org.incava.diffj;
 import org.incava.analysis.FileDiffChange;
 
 public class TestFieldDiff extends AbstractTestItemDiff {
-    protected final static String[] VARIABLE_MSGS = new String[] {
-        FieldDiff.VARIABLE_REMOVED,
-        FieldDiff.VARIABLE_CHANGED, 
-        FieldDiff.VARIABLE_ADDED,
-    };
-
     public TestFieldDiff(String name) {
         super(name);
 
@@ -156,22 +150,6 @@ public class TestFieldDiff extends AbstractTestItemDiff {
                  makeCodeDeletedRef(FieldDiff.CODE_REMOVED, "i", loc(2, 15), loc(2, 17), loc(3, 14), loc(3, 14)));
     }
 
-    public void testVariableChanged() {
-        evaluate(new Lines("class Test {",
-                           "    int i;",
-                           "",
-                           "}"),
-
-                 new Lines("class Test {",
-                           "",
-                           "",
-                           "    int j;",
-                           "",
-                           "}"),
-                 
-                 makeRef("i", "j", VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(4, 9), loc(4, 9)));
-    }
-
     // public static class TestFieldDiffVariableAddedRemoved extends AbstractTestItemDiff {
         
     //     public TestFieldDiffVariableAddedRemoved(String name) {
@@ -201,11 +179,27 @@ public class TestFieldDiff extends AbstractTestItemDiff {
     //                  // variable type changed for k from Object to K
     //                  // variable type changed for v from Object to V
 
-    //                  makeRef(null, "v",  TestTypeDiff.FIELD_MSGS, loc(3, 20), loc(6,  5), loc(7, 23), loc(7, 26)),
+    //                  makeFieldRef(null, "v",  loc(3, 20), loc(6,  5), loc(7, 23), loc(7, 26)),
     //                  makeCodeChangedRef(FieldDiff.VARIABLE_REMOVED, "v",  loc(5, 33), loc(5, 33), loc(6, 25), loc(6, 25)),
     //                  Java.SOURCE_1_5);
     //     }
     // }
+
+    public void testVariableChanged() {
+        evaluate(new Lines("class Test {",
+                           "    int i;",
+                           "",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "",
+                           "",
+                           "    int j;",
+                           "",
+                           "}"),
+                 
+                 makeVariableRef("i", "j", loc(2, 9), loc(2,  9), loc(4, 9), loc(4, 9)));
+    }
 
     public void testVariableWithInitializerChanged() {
         evaluate(new Lines("class Test {",
@@ -218,7 +212,7 @@ public class TestFieldDiff extends AbstractTestItemDiff {
                            "    int j = 4;",
                            "}"),
                  
-                 makeRef("i", "j", VARIABLE_MSGS, loc(2, 9), loc(2, 9), loc(3, 9), loc(3, 9)));
+                 makeVariableRef("i", "j", loc(2, 9), loc(2, 9), loc(3, 9), loc(3, 9)));
     }
 
     public void testVariableTypeChanged() {

@@ -1,18 +1,6 @@
 package org.incava.diffj;
 
 public class TestInnerInterfaceDiff extends AbstractTestItemDiff {
-    protected final static String[] METHOD_MSGS = new String[] {
-        TypeDiff.METHOD_REMOVED,
-        TypeDiff.METHOD_CHANGED, 
-        TypeDiff.METHOD_ADDED,
-    };
-
-    protected final static String[] INTERFACE_MSGS = new String[] {
-        TypeDiff.INNER_INTERFACE_REMOVED,
-        null,
-        TypeDiff.INNER_INTERFACE_ADDED,
-    };
-    
     public TestInnerInterfaceDiff(String name) {
         super(name);
     }
@@ -31,7 +19,7 @@ public class TestInnerInterfaceDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef(null, "foo()", METHOD_MSGS, loc(2, 5), loc(3, 5), loc(4, 9), loc(4, 19)));
+                 makeMethodRef(null, "foo()", loc(2, 5), loc(3, 5), loc(4, 9), loc(4, 19)));
     }
 
     public void testMethodRemoved() {
@@ -48,7 +36,7 @@ public class TestInnerInterfaceDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef("foo()", null, METHOD_MSGS, loc(3, 9), loc(3, 19), loc(3, 5), loc(4, 5)));
+                 makeMethodRef("foo()", null, loc(3, 9), loc(3, 19), loc(3, 5), loc(4, 5)));
     }
 
     public void testInnerInterfaceAdded() {
@@ -66,7 +54,7 @@ public class TestInnerInterfaceDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef(null, "I2Test", INTERFACE_MSGS, loc(2, 5), loc(3, 5), loc(4, 9), loc(5, 9)));
+                 makeInterfaceRef(null, "I2Test", loc(2, 5), loc(3, 5), loc(4, 9), loc(5, 9)));
     }
 
     public void testInnerInterfaceRemoved() {
@@ -83,7 +71,7 @@ public class TestInnerInterfaceDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef("I2Test", null, INTERFACE_MSGS, loc(3, 9), loc(4, 9), loc(2, 5), loc(3, 5)));
+                 makeInterfaceRef("I2Test", null, loc(3, 9), loc(4, 9), loc(2, 5), loc(3, 5)));
     }
 
     public void testInnerInterfaceMethodAdded() {
@@ -105,7 +93,7 @@ public class TestInnerInterfaceDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef(null, "foo()", METHOD_MSGS, loc(3, 9), loc(4, 9), loc(5, 13), loc(5, 23)));
+                 makeMethodRef(null, "foo()", loc(3, 9), loc(4, 9), loc(5, 13), loc(5, 23)));
     }
 
     public void testInnerInterfaceMethodRemoved() {
@@ -126,7 +114,7 @@ public class TestInnerInterfaceDiff extends AbstractTestItemDiff {
                            "    }",
                            "}"),
                  
-                 makeRef("foo()", null, METHOD_MSGS, loc(4, 13), loc(4, 23), loc(4, 9), loc(5, 9)));
+                 makeMethodRef("foo()", null, loc(4, 13), loc(4, 23), loc(4, 9), loc(5, 9)));
     }
 
 }

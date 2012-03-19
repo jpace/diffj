@@ -3,36 +3,6 @@ package org.incava.diffj;
 import org.incava.analysis.FileDiffChange;
 
 public class TestTypeDiff extends AbstractTestItemDiff {
-    protected final static String[] METHOD_MSGS = new String[] {
-        TypeDiff.METHOD_REMOVED,
-        TypeDiff.METHOD_CHANGED, 
-        TypeDiff.METHOD_ADDED,
-    };
-
-    protected final static String[] FIELD_MSGS = new String[] {
-        TypeDiff.FIELD_REMOVED,
-        null,
-        TypeDiff.FIELD_ADDED,
-    };
-
-    protected final static String[] CLASS_MSGS = new String[] {
-        TypeDiff.INNER_CLASS_REMOVED,
-        null,
-        TypeDiff.INNER_CLASS_ADDED,
-    };
-
-    protected final static String[] INTERFACE_MSGS = new String[] {
-        TypeDiff.INNER_INTERFACE_REMOVED,
-        null,
-        TypeDiff.INNER_INTERFACE_ADDED,
-    };
-
-    protected final static String[] CONSTRUCTOR_MSGS = new String[] {
-        TypeDiff.CONSTRUCTOR_REMOVED,
-        null,
-        TypeDiff.CONSTRUCTOR_ADDED,
-    };
-
     public TestTypeDiff(String name) {
         super(name);
     }
@@ -64,7 +34,7 @@ public class TestTypeDiff extends AbstractTestItemDiff {
                  new Lines("public class Test {",
                            "}"),
 
-                 makeChangedRef(null, "public", ACCESS_MSGS, loc(1, 1), loc(1, 5), loc(1, 1), loc(1, 6)));
+                 makeAccessRef(null, "public", loc(1, 1), loc(1, 5), loc(1, 1), loc(1, 6)));
         
         evaluate(new Lines("public class Test {",
                            "}"),
@@ -72,7 +42,7 @@ public class TestTypeDiff extends AbstractTestItemDiff {
                  new Lines("class Test {",
                            "}"),
                  
-                 makeChangedRef("public", null, ACCESS_MSGS, loc(1, 1), loc(1, 6), loc(1, 1), loc(1, 5)));
+                 makeAccessRef("public", null, loc(1, 1), loc(1, 6), loc(1, 1), loc(1, 5)));
     }
 
     public void testClassModifierAdded() {
@@ -151,7 +121,7 @@ public class TestTypeDiff extends AbstractTestItemDiff {
                            "    interface ITest {}",
                            "}"),
                  
-                 makeRef(null, "ITest", INTERFACE_MSGS, loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 22)));
+                 makeInterfaceRef(null, "ITest", loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 22)));
     }
 
     public void testClassInnerInterfaceRemoved() {
@@ -164,7 +134,7 @@ public class TestTypeDiff extends AbstractTestItemDiff {
                            "",
                            "}"),
                  
-                 makeRef("ITest", null, INTERFACE_MSGS, loc(3, 5), loc(3, 22), loc(1, 1), loc(3, 1)));
+                 makeInterfaceRef("ITest", null, loc(3, 5), loc(3, 22), loc(1, 1), loc(3, 1)));
     }
 
     public void testSemicolonDeclarationRemoved() {

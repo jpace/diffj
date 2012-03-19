@@ -1,8 +1,6 @@
 package org.incava.diffj;
 
 public class TestTypeCtorDiff extends AbstractTestItemDiff {
-    protected final static String[] CONSTRUCTOR_MSGS = TestTypeDiff.CONSTRUCTOR_MSGS;
-
     public TestTypeCtorDiff(String name) {
         super(name);
     }
@@ -17,7 +15,7 @@ public class TestTypeCtorDiff extends AbstractTestItemDiff {
                            "    Test(String s) {}",
                            "}"),
 
-                 makeRef(null, "Test(String)", CONSTRUCTOR_MSGS, loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 21)));
+                 makeConstructorRef(null, "Test(String)", loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 21)));
     }
 
     public void testClassConstructorRemoved() {
@@ -30,6 +28,6 @@ public class TestTypeCtorDiff extends AbstractTestItemDiff {
                            "",
                            "}"),
                  
-                 makeRef("Test(int, double, float)", null, CONSTRUCTOR_MSGS, loc(3, 12), loc(3, 44), loc(1, 1), loc(3, 1)));
+                 makeConstructorRef("Test(int, double, float)", null, loc(3, 12), loc(3, 44), loc(1, 1), loc(3, 1)));
     }
 }
