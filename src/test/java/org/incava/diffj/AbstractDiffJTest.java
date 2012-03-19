@@ -118,14 +118,14 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
 
                     assertNotNull("reference not null", ref);
 
-                    assertEquals("expectations[" + di + "].type",    exp.type,    ref.type);
-                    assertEquals("expectations[" + di + "].message", exp.message, ref.message);
+                    assertEquals("expectations[" + di + "].type",    exp.getType(),    ref.getType());
+                    assertEquals("expectations[" + di + "].message", exp.getMessage(), ref.getMessage());
 
                     Point[][] pts = new Point[][] {
-                        { exp.firstStart,  ref.firstStart  },
-                        { exp.secondStart, ref.secondStart },
-                        { exp.firstEnd,    ref.firstEnd    },
-                        { exp.secondEnd,   ref.secondEnd   },
+                        { exp.getFirstStart(),  ref.getFirstStart()  },
+                        { exp.getSecondStart(), ref.getSecondStart() },
+                        { exp.getFirstEnd(),    ref.getFirstEnd()    },
+                        { exp.getSecondEnd(),   ref.getSecondEnd()   },
                     };
                     for (int pi = 0; pi < pts.length; ++pi) {
                         assertEquals("expectations[" + di + "][" + pi + "]", pts[pi][0], pts[pi][1]);

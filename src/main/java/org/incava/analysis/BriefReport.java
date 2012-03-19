@@ -41,15 +41,14 @@ public class BriefReport extends Report {
     protected String toString(FileDiff ref) {
         StringBuffer buf = new StringBuffer();
 
-        Point del = new Point(ref.firstStart.x,  ref.firstEnd.x);
-        Point add = new Point(ref.secondStart.x, ref.secondEnd.x);
-        FileDiff.Type ind = ref.type;
+        Point del = new Point(ref.getFirstStart().x,  ref.getFirstEnd().x);
+        Point add = new Point(ref.getSecondStart().x, ref.getSecondEnd().x);
         
         buf.append(toString(del));
-        buf.append(ref.type);
+        buf.append(ref.getType());
         buf.append(toString(add));
         buf.append(": ");
-        buf.append(ref.message);
+        buf.append(ref.getMessage());
         buf.append(EOLN);
         
         return buf.toString();

@@ -13,12 +13,12 @@ public class DiffNoContextWriter extends DiffWriter {
     }
 
     protected void printFrom(StringBuilder sb, FileDiff ref) {
-        Point del = new Point(ref.firstStart.x,  ref.firstEnd.x);
+        Point del = new Point(ref.getFirstStart().x,  ref.getFirstEnd().x);
         printLines(sb, del, "<", fromContents);
     }
 
     protected void printTo(StringBuilder sb, FileDiff ref) {
-        Point add = new Point(ref.secondStart.x, ref.secondEnd.x);
+        Point add = new Point(ref.getSecondStart().x, ref.getSecondEnd().x);
         printLines(sb, add, ">", toContents);
     }
 

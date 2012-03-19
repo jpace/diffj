@@ -55,16 +55,14 @@ public abstract class DiffWriter {
     }
 
     protected void printDiffSummary(StringBuilder sb, FileDiff ref) {
-        Point del = new Point(ref.firstStart.x,  ref.firstEnd.x);
-        Point add = new Point(ref.secondStart.x, ref.secondEnd.x);
-
-        FileDiff.Type ind = ref.type;
+        Point del = new Point(ref.getFirstStart().x,  ref.getFirstEnd().x);
+        Point add = new Point(ref.getSecondStart().x, ref.getSecondEnd().x);
 
         sb.append(toString(del));
-        sb.append(ind);
+        sb.append(ref.getType());
         sb.append(toString(add));
         sb.append(' ');
-        sb.append(ref.message);
+        sb.append(ref.getMessage());
         sb.append(EOLN);
     }
 

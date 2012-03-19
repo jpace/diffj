@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-# $CLASSPATH << "src/main/jkjkljlk"
-
 require 'test/unit'
 require 'java'
 

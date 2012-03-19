@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.awt.Point;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;

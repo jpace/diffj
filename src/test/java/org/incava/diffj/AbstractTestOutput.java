@@ -157,5 +157,4 @@ public class AbstractTestOutput extends AbstractTestItemDiff {
                   "    }\n" +
                   "}\n");
     }
-
 }

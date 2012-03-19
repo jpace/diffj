@@ -208,7 +208,7 @@ public class ItemDiff extends DiffComparator {
 
             tr.Ace.log("ref", ref);
 
-            if (ref != null && ref.firstStart.x == aStPt.x) {
+            if (ref != null && ref.getFirstStart().x == aStPt.x) {
                 ref = replaceReference(aName, ref, aEndPt, bEndPt);
             }
             else {

@@ -15,18 +15,16 @@ public class DiffContextWriter extends DiffWriter {
     }
 
     protected void printFrom(StringBuilder sb, FileDiff ref) {
-        printLines(sb, true, ref, ref.firstStart.x, ref.firstStart.y, ref.firstEnd.x, ref.firstEnd.y, fromContents);
+        printLines(sb, true, ref, ref.getFirstStart().x, ref.getFirstStart().y, ref.getFirstEnd().x, ref.getFirstEnd().y, fromContents);
     }
 
     protected void printTo(StringBuilder sb, FileDiff ref) {
-        printLines(sb, false, ref, ref.secondStart.x, ref.secondStart.y, ref.secondEnd.x, ref.secondEnd.y, toContents);
+        printLines(sb, false, ref, ref.getSecondStart().x, ref.getSecondStart().y, ref.getSecondEnd().x, ref.getSecondEnd().y, toContents);
     }
 
     protected String getLine(List<String> lines, int lidx, int fromLine, int fromColumn, int toLine, int toColumn, boolean isDelete) {
         StringBuilder sb = new StringBuilder();
-
         sb.append("! ").append(lines.get(lidx - 1)).append(EOLN);
-
         return sb.toString();
     }
 
