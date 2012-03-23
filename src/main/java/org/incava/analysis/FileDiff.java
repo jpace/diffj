@@ -1,6 +1,5 @@
 package org.incava.analysis;
 
-import java.awt.Point;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.ijdk.lang.ObjectExt;
 import org.incava.ijdk.text.Location;
@@ -26,12 +25,12 @@ public class FileDiff implements Comparable<FileDiff> {
         }
     }
 
-    public static Point toBeginPoint(Token t) {
-        return t == null ? null : new Point(t.beginLine, t.beginColumn);
+    public static Location toBeginLocation(Token t) {
+        return t == null ? null : new Location(t.beginLine, t.beginColumn);
     }
     
-    public static Point toEndPoint(Token t) {
-        return t == null ? null : new Point(t.endLine, t.endColumn);
+    public static Location toEndLocation(Token t) {
+        return t == null ? null : new Location(t.endLine, t.endColumn);
     }
 
     /**
@@ -41,24 +40,14 @@ public class FileDiff implements Comparable<FileDiff> {
     private final String message;
    
     /**
-     * The line and colum where the reference starts in the first file.
+     * The location in the first file.
      */
-    private final Location firstStart;
+    private final LocationRange firstLocation;
 
     /**
-     * The line and column where the reference ends in the first file.
+     * The location in the second file.
      */
-    private final Location firstEnd;
-
-    /**
-     * The line and colum where the reference starts in the second file.
-     */
-    private final Location secondStart;
-
-    /**
-     * The line and column where the reference ends in the second file.
-     */
-    private final Location secondEnd;
+    private final LocationRange secondLocation;
 
     private final Type type;
 
@@ -72,32 +61,11 @@ public class FileDiff implements Comparable<FileDiff> {
      * @param secondStart In the to-file, where the reference begins.
      * @param secondEnd   In the to-file, where the reference ends.
      */
-    // public FileDiff(Type type, String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
-    //     this.type        = type;
-    //     this.message     = message;
-    //     this.firstStart  = pointToLocation(firstStart);
-    //     this.firstEnd    = pointToLocation(firstEnd);
-    //     this.secondStart = secondStart;
-    //     this.secondEnd   = secondEnd;
-    // }
-
-    /**
-     * Creates a reference from a message and begin and end positions.
-     *
-     * @param type        What type this reference is.
-     * @param message     The message applying to this reference.
-     * @param firstStart  In the from-file, where the reference begins.
-     * @param firstEnd    In the from-file, where the reference ends.
-     * @param secondStart In the to-file, where the reference begins.
-     * @param secondEnd   In the to-file, where the reference ends.
-     */
-    public FileDiff(Type type, String message, Point firstStart, Point firstEnd, Point secondStart, Point secondEnd) {
-        this.type        = type;
-        this.message     = message;
-        this.firstStart  = pointToLocation(firstStart);
-        this.firstEnd    = pointToLocation(firstEnd);
-        this.secondStart = pointToLocation(secondStart);
-        this.secondEnd   = pointToLocation(secondEnd);
+    public FileDiff(Type type, String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
+        this.type           = type;
+        this.message        = message;
+        this.firstLocation  = new LocationRange(firstStart, firstEnd);
+        this.secondLocation = secondStart == null ? null : new LocationRange(secondStart, secondEnd);
     }
 
     /**
@@ -109,14 +77,14 @@ public class FileDiff implements Comparable<FileDiff> {
      * @param b       The token in the second file.
      */
     public FileDiff(Type type, String message, Token a, Token b) {
-        this(type, message, toBeginPoint(a), toEndPoint(a), toBeginPoint(b), toEndPoint(b));
+        this(type, message, toBeginLocation(a), toEndLocation(a), toBeginLocation(b), toEndLocation(b));
     }
 
     /**
      * Creates a reference from a message and two beginning and ending tokens.
      */
     public FileDiff(Type type, String message, Token a0, Token a1, Token b0, Token b1) {
-        this(type, message, toBeginPoint(a0), toEndPoint(a1), toBeginPoint(b0), toEndPoint(b1));
+        this(type, message, toBeginLocation(a0), toEndLocation(a1), toBeginLocation(b0), toEndLocation(b1));
     }
 
     /**
@@ -130,35 +98,18 @@ public class FileDiff implements Comparable<FileDiff> {
         if (this == other) {
             return 0;
         }
-        
-        Point[][] pts = new Point[][] {
-            { getFirstStart(),  other.getFirstStart()  },
-            { getSecondStart(), other.getSecondStart() },
-            { getFirstEnd(),    other.getFirstEnd()    },
-            { getSecondEnd(),   other.getSecondEnd()   },
-        };
-        for (int i = 0; i < pts.length; ++i) {
-            // tr.Ace.log("pts[" + i + "][" + 0 + "]: " + pts[i][0] + "; pts[" + i + "][" + 0 + "]: " + pts[i][1]);
-            if (pts[i][0] == null) {
-                if (pts[i][1] != null) {
-                    return 1;
-                }
-            }
-            else if (pts[i][1] == null) {
-                return -1;
-            }
-            else {
-                int cmp = pts[i][0].x - pts[i][1].x;
-                if (cmp == 0) {
-                    cmp = pts[i][0].y - pts[i][1].y;
-                }
-                if (cmp != 0) {
-                    return cmp;
-                }
-            }
+
+        int cmp = ObjectExt.compare(firstLocation, other.firstLocation);
+        if (cmp != 0) {
+            return cmp;
         }
 
-        int cmp = type.compareTo(other.type);
+        cmp = ObjectExt.compare(secondLocation, other.secondLocation);
+        if (cmp != 0) {
+            return cmp;
+        }
+
+        cmp = type.compareTo(other.type);
         if (cmp == 0) {
             cmp = message.compareTo(other.message);
         }
@@ -189,41 +140,27 @@ public class FileDiff implements Comparable<FileDiff> {
         sb.append("[");
         sb.append(type.toString());
         sb.append(" from: ");
-        sb.append(toString(firstStart, firstEnd));
-        if (secondStart != null) {
-            sb.append(" to: ").append(toString(secondStart, secondEnd));
+        sb.append(toString(firstLocation));
+        if (secondLocation != null) {
+            sb.append(" to: ").append(toString(secondLocation));
         }
         sb.append("] (").append(message).append(")");
         return sb.toString();
     }
 
     /**
-     * Returns the line and colum where the reference starts in the first file.
+     * Returns the location in the first file.
      */
-    public Point getFirstStart() {
-        return locationToPoint(firstStart);
+    public LocationRange getFirstLocation() {
+        return firstLocation;
     }
 
     /**
-     * Returns the line and column where the reference ends in the first file.
+     * Returns the location in the second file.
      */
-    public Point getFirstEnd() {
-        return locationToPoint(firstEnd);
+    public LocationRange getSecondLocation() {
+        return secondLocation;
     }
-
-    /**
-     * Returns the line and colum where the reference starts in the second file.
-     */
-    public Point getSecondStart() {
-        return locationToPoint(secondStart);
-    }
-
-    /**
-     * Returns the line and column where the reference ends in the second file.
-     */
-    public Point getSecondEnd() {
-        return locationToPoint(secondEnd);
-    }    
 
     public void print(DiffContextWriter dw, StringBuilder sb) {
     }
@@ -237,14 +174,6 @@ public class FileDiff implements Comparable<FileDiff> {
 
     public Type getType() {
         return type;
-    }
-
-    private static Point locationToPoint(Location loc) {
-        return loc == null ? null : new Point(loc.getLine(), loc.getColumn());
-    }
-
-    private static Location pointToLocation(Point pt) {
-        return pt == null ? null : new Location(pt.x, pt.y);
     }
 
     /**
@@ -262,6 +191,15 @@ public class FileDiff implements Comparable<FileDiff> {
     public static String toString(Location a, Location b) {
         StringBuilder sb = new StringBuilder();
         sb.append(toString(a)).append(" .. ").append(toString(b));
+        return sb.toString();
+    }
+
+    /**
+     * Returns "x:y .. x:y".
+     */
+    public static String toString(LocationRange lr) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(toString(lr.getStart())).append(" .. ").append(toString(lr.getEnd()));
         return sb.toString();
     }
 }

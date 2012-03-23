@@ -1,6 +1,5 @@
 package org.incava.analysis;
 
-import java.awt.Point;
 import java.util.List;
 import org.incava.ijdk.io.IO;
 import org.incava.ijdk.lang.*;
@@ -32,11 +31,11 @@ public abstract class DiffWriter {
         this.toContents = toContents;
     }
 
-    public String toString(Point pt) {
+    public String toString(int x, int y) {
         StringBuffer buf = new StringBuffer();
-        buf.append(pt.x);
-        if (pt.x != pt.y) {
-            buf.append(",").append(pt.y);
+        buf.append(x);
+        if (x != y) {
+            buf.append(",").append(y);
         }
         return buf.toString();
     }
@@ -55,12 +54,9 @@ public abstract class DiffWriter {
     }
 
     protected void printDiffSummary(StringBuilder sb, FileDiff ref) {
-        Point del = new Point(ref.getFirstStart().x,  ref.getFirstEnd().x);
-        Point add = new Point(ref.getSecondStart().x, ref.getSecondEnd().x);
-
-        sb.append(toString(del));
+        sb.append(toString(ref.getFirstLocation().getStart().getLine(),  ref.getFirstLocation().getEnd().getLine()));
         sb.append(ref.getType());
-        sb.append(toString(add));
+        sb.append(toString(ref.getSecondLocation().getStart().getLine(), ref.getSecondLocation().getEnd().getLine()));
         sb.append(' ');
         sb.append(ref.getMessage());
         sb.append(EOLN);

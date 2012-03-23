@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.awt.Point;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,6 +12,8 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffCodeAdded;
 import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.analysis.Report;
+import org.incava.ijdk.text.Location;
+import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.*;
 import org.incava.ijdk.util.diff.Diff;
 import org.incava.ijdk.util.diff.Difference;
@@ -105,9 +106,9 @@ public class ItemDiff extends DiffComparator {
         }
     }
 
-    protected FileDiff replaceReference(String aName, FileDiff ref, Point aEndPt, Point bEndPt) {
+    protected FileDiff replaceReference(String aName, FileDiff ref, Location aEndLoc, Location bEndLoc) {
         String   newMsg  = MessageFormat.format(CODE_CHANGED, aName);
-        FileDiff newDiff = new FileDiffChange(newMsg, ref.getFirstStart(), aEndPt, ref.getSecondStart(), bEndPt);
+        FileDiff newDiff = new FileDiffChange(newMsg, ref.getFirstLocation().getStart(), aEndLoc, ref.getSecondLocation().getStart(), bEndLoc);
         
         getFileDiffs().remove(ref);
         
@@ -116,20 +117,9 @@ public class ItemDiff extends DiffComparator {
         return newDiff;
     }
 
-    protected FileDiff addReference(String aName, String msg,
-                                    Point aStPt, Point aEndPt,
-                                    Point bStPt, Point bEndPt) {
-        // String codeChgType = FileDiff.CHANGED;
-
-        // // the change type is add if the new line is on its own line:
-
-        // if (msg == CODE_ADDED && onEntireLine(b, addStart, addEnd, bStart, bEnd)) {
-        //     codeChgType = FileDiff.ADDED;
-        // }
-        // else if (msg == CODE_REMOVED && onEntireLine(a, delStart, delEnd, aStart, aEnd)) {
-        //     codeChgType = FileDiff.DELETED;
-        // }
-
+    protected FileDiff addReference(String aName, String msg, 
+                                    Location aStLoc, Location aEndLoc,
+                                    Location bStLoc, Location bEndLoc) {
         // This assumes that a and b have the same name. Wouldn't they?
         String str = MessageFormat.format(msg, aName);
 
@@ -137,13 +127,13 @@ public class ItemDiff extends DiffComparator {
 
         if (msg == CODE_ADDED) {
             // this will show as add when highlighted, as change when not.
-            ref = new FileDiffCodeAdded(str, aStPt, aEndPt, bStPt, bEndPt);
+            ref = new FileDiffCodeAdded(str, aStLoc, aEndLoc, bStLoc, bEndLoc);
         }
         else if (msg == CODE_REMOVED) {
-            ref = new FileDiffCodeDeleted(str, aStPt, aEndPt, bStPt, bEndPt);
+            ref = new FileDiffCodeDeleted(str, aStLoc, aEndLoc, bStLoc, bEndLoc);
         }
         else {
-            ref = new FileDiffChange(str, aStPt, aEndPt, bStPt, bEndPt);
+            ref = new FileDiffChange(str, aStLoc, aEndLoc, bStLoc, bEndLoc);
         }                    
 
         add(ref);
@@ -201,18 +191,18 @@ public class ItemDiff extends DiffComparator {
 
             tr.Ace.log("msg", msg);
             
-            Point aStPt  = FileDiff.toBeginPoint(aStart);
-            Point aEndPt = FileDiff.toEndPoint(aEnd);
-            Point bStPt  = FileDiff.toBeginPoint(bStart);
-            Point bEndPt = FileDiff.toEndPoint(bEnd);
+            Location aStLoc  = FileDiff.toBeginLocation(aStart);
+            Location aEndLoc = FileDiff.toEndLocation(aEnd);
+            Location bStLoc  = FileDiff.toBeginLocation(bStart);
+            Location bEndLoc = FileDiff.toEndLocation(bEnd);
 
             tr.Ace.log("ref", ref);
 
-            if (ref != null && ref.getFirstStart().x == aStPt.x) {
-                ref = replaceReference(aName, ref, aEndPt, bEndPt);
+            if (ref != null && ref.getFirstLocation().getStart().getLine() == aStLoc.getLine()) {
+                ref = replaceReference(aName, ref, aEndLoc, bEndLoc);
             }
             else {
-                ref = addReference(aName, msg, aStPt, aEndPt, bStPt, bEndPt);
+                ref = addReference(aName, msg, aStLoc, aEndLoc, bStLoc, bEndLoc);
             }
         }
     }

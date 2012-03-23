@@ -21,7 +21,7 @@ public class Options extends OptionSet {
     /**
      * Whether to use brief or detailed reporting.
      */
-    public boolean briefOutput = false;
+    private boolean briefOutput = false;
 
     /**
      * Whether to show context (detailed reporting only).
@@ -221,10 +221,14 @@ public class Options extends OptionSet {
             fromSource = fromSourceStr;
         }
 
+        tr.Ace.yellow("fromSource", fromSource);
+
         String toSourceStr = toSourceOpt.getValue();
         if (toSourceStr != null) {
             toSource = toSourceStr;
         }
+
+        tr.Ace.yellow("toSource", toSource);
 
         return unprocessed;
     }
@@ -255,6 +259,7 @@ public class Options extends OptionSet {
      * The Java source version, of the from-file.
      */
     public String getFromSource() {
+        tr.Ace.yellow("fromSource", fromSource);
         return fromSource;
     }
 

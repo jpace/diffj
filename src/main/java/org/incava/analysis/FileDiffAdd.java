@@ -1,14 +1,15 @@
 package org.incava.analysis;
 
-import java.awt.Point;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.ijdk.text.Location;
+import org.incava.ijdk.text.LocationRange;
 
 /**
  * A reference to code added, associated with a file by a starting and ending
  * position.
  */
 public class FileDiffAdd extends FileDiff {
-    public FileDiffAdd(String message, Point firstStart, Point firstEnd, Point secondStart, Point secondEnd) {
+    public FileDiffAdd(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
         super(Type.ADDED, message, firstStart, firstEnd, secondStart, secondEnd);
     }
 

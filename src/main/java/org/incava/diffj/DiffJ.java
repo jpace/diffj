@@ -1,49 +1,82 @@
 package org.incava.diffj;
 
 import java.io.File;
-import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.incava.analysis.BriefReport;
 import org.incava.analysis.DetailedReport;
 import org.incava.analysis.Report;
-import org.incava.ijdk.io.ReadOptionType;
-import org.incava.ijdk.io.ReaderExt;
 import org.incava.ijdk.util.ListExt;
-import org.incava.ijdk.util.TimedEvent;
-import org.incava.ijdk.util.TimedEventSet;
 import org.incava.qualog.Qualog;
 
 public class DiffJ {
-    private TimedEventSet totalInit = new TimedEventSet();
-    private TimedEventSet totalParse = new TimedEventSet();
-    private TimedEventSet totalAnalysis = new TimedEventSet();
-
     private final Report report;
     private int exitValue;
-
-    public DiffJ(List<String> names, boolean briefOutput, boolean contextOutput, boolean highlightOutput) {
+    private final boolean recurseDirectories;
+    private final String fromName;
+    private final String toName;
+    private final String fromSource;
+    private final String toSource;
+    
+    public DiffJ(boolean briefOutput, boolean contextOutput, boolean highlightOutput, 
+                 boolean recurseDirectories,
+                 String fromName, String fromSource,
+                 String toName, String toSource) {
         tr.Ace.set(true, 25, 4, 20, 25);
         tr.Ace.setOutput(Qualog.VERBOSE, Qualog.LEVEL4);
         tr.Ace.setOutput(Qualog.QUIET,   Qualog.LEVEL2);
+        tr.Ace.setVerbose(true);
+        tr.Ace.stack("this", this, 15);
 
-        report = briefOutput ? new BriefReport(System.out) : new DetailedReport(System.out, contextOutput, highlightOutput);
-        
-        exitValue = 0;
+        System.err.println("*******************************************************");
 
+        this.report = briefOutput ? new BriefReport(System.out) : new DetailedReport(System.out, contextOutput, highlightOutput);
+        this.recurseDirectories = recurseDirectories;
+        this.fromName = fromName;
+        this.toName = toName;
+        this.fromSource = fromSource;
+        this.toSource = toSource;
+        this.exitValue = 0;
+    }
+
+    protected int getExitValue() {
+        return exitValue;
+    }
+
+    protected void setExitValue(int ev) {
+        exitValue = ev;
+    }
+
+    protected File getFile(String name) {
+        File file = null;
+        if (name.equals("-")) {
+            file = null;
+        }
+        else {
+            file = new File(name);
+        }
+        return file;
+    }
+
+    public boolean isStdin(File file) {
+        return file == null || file.getName().equals("-");
+    }
+
+    public void processNames(List<String> names) {
+        tr.Ace.yellow("names", names);
         if (names.size() >= 2) {
-            File toFile = new File(ListExt.get(names, -1));
-            
+            String toName = ListExt.get(names, -1);
+            tr.Ace.yellow("toName", toName);
+            File toFile = getFile(toName);
+            tr.Ace.yellow("toFile", toFile);
             for (int ni = 0; ni < names.size() - 1; ++ni) {
-                File fromFile = new File(names.get(ni));
+                File fromFile = getFile(names.get(ni));
+                tr.Ace.yellow("fromFile", fromFile);
                 process(fromFile, toFile);
             }
         }
@@ -53,55 +86,17 @@ public class DiffJ {
         }
     }
 
-    protected List<String> getDirectoriesAndJavaFiles(File fd) {
-        return Arrays.asList(fd.list(new FilenameFilter() {
-                public boolean accept(File dir, String pathname) {
-                    File f = new File(dir, pathname);
-                    return f.isDirectory() || (f.isFile() && pathname.endsWith(".java"));
-                }
-            }));
-    }
-
     /**
      * Process the "files", which, if null, are considered to be standard input.
      */
     protected void processFiles(File from, File to) {
-        boolean fromIsStdin = from.getName().equals("-");
-        boolean toIsStdin   = to.getName().equals("-");
-
         tr.Ace.log("from: " + from + "; to: " + to);
 
         try {
-            String fromStr = null;
-            FileReader fromRdr = fromIsStdin ? new FileReader(FileDescriptor.in) : new FileReader(from);
-            fromStr = ReaderExt.readAsString(fromRdr, EnumSet.of(ReadOptionType.ADD_EOLNS));
-
-            FileReader toRdr = null;
-            String toStr = null;
-            if (toIsStdin) {
-                if (fromIsStdin) {
-                    toStr = fromStr; // need to clone this string?
-                }
-                else {
-                    toRdr = new FileReader(FileDescriptor.in);
-                }
-            }
-            else {
-                toRdr = new FileReader(to);
-            }
-
-            if (toRdr != null) {
-                toStr = ReaderExt.readAsString(toRdr, EnumSet.of(ReadOptionType.ADD_EOLNS));
-            }
-
-            Options opts     = Options.get();
-            String  fromName = opts.getFirstFileName()  == null ? (fromIsStdin ? "-" : from.getPath()) : opts.getFirstFileName();
-            String  toName   = opts.getSecondFileName() == null ? (toIsStdin   ? "-" : to.getPath())   : opts.getSecondFileName();
-
+            JavaFile fromFile = new JavaFile(from, fromName, fromSource);
+            JavaFile toFile = new JavaFile(to, toName, toSource);
             final boolean flushReport = true;
-            new JavaFileDiff(report, fromName, fromStr, opts.getFromSource(), toName, toStr, opts.getToSource(), flushReport);
-
-            report.flush();
+            new JavaFileDiff(report, fromFile, toFile, flushReport);
         }
         catch (FileNotFoundException e) {
             System.out.println("Error opening file: " + e.getMessage());
@@ -112,18 +107,26 @@ public class DiffJ {
             exitValue = -1;
         }
         catch (Throwable t) {
-            tr.Ace.log("from", from);
-            tr.Ace.log("to", to);
+            tr.Ace.log("t", t);
             t.printStackTrace();
             exitValue = -1;
-            System.exit(exitValue);
         }
     }
 
-    protected void processDirectories(File from, File to) {
-        List<String> fromFiles = getDirectoriesAndJavaFiles(from);
-        List<String> toFiles   = getDirectoriesAndJavaFiles(to);     
+    protected void processDirectories(JavaDirectory from, JavaDirectory to) {
+        tr.Ace.setVerbose(true);
+
+        List<String> fromFiles = from.getSubDirsAndJavaFiles();
+        tr.Ace.onRed("fromFiles", fromFiles);
+        List<JavaFSElement> fromElements = from.subelements();
+        tr.Ace.onGreen("fromElements", fromElements);
+        List<String> toFiles   = to.getSubDirsAndJavaFiles();
+        tr.Ace.onRed("toFiles", toFiles);
+        List<JavaFSElement> toElements = to.subelements();
+        tr.Ace.onGreen("toElements", toElements);
         Set<String>  merged    = new TreeSet<String>();
+
+        tr.Ace.setVerbose(false);
         
         merged.addAll(fromFiles);
         merged.addAll(toFiles);
@@ -132,57 +135,87 @@ public class DiffJ {
             File fromFile = new File(from, fname);
             File toFile   = new File(to, fname);
 
-            if (fromFile.isDirectory() && toFile.isDirectory()) {
-                Options opts = Options.get();
-                if (opts.recurse()) {
-                    processDirectories(fromFile, toFile);
+            if (!verifyExists(fromFile) || !verifyExists(toFile)) {
+                continue;
+            }
+
+            if (fromFile.isDirectory()) {
+                if (toFile.isDirectory()) {
+                    if (recurseDirectories) {
+                        processDirectories(new JavaDirectory(fromFile, fromSource), new JavaDirectory(toFile, toSource));
+                    }
                 }
                 else {
-                    tr.Ace.log("not recursing");
+                    processDirFile(fromFile, toFile);
                 }
             }
+            else if (toFile.isDirectory()) {
+                processFileDir(fromFile, toFile);
+            }
             else {
-                process(fromFile, toFile);
+                processFiles(fromFile, toFile);
             }
         }
     }
 
+    protected static boolean isProcessedAsFile(File file) {
+        return file == null || file.isFile() || file.getName().equals("-");
+    }
+
+    protected static boolean verifyExists(File file) {
+        if (file.exists()) {
+            return true;
+        }
+        else {
+            System.err.println(file.getPath() + " does not exist");
+            return false;
+        }
+    }
+
+    protected void processDirFile(File fromDir, File toFile) {
+        File fromFile = new File(fromDir, toFile.getPath());
+        if (verifyExists(fromFile)) {
+            processFiles(fromFile, toFile);
+        }
+    }
+
+    protected void processFileDir(File fromFile, File toDir) {
+        File toFile = new File(toDir, fromFile.getPath());
+        if (verifyExists(toFile)) {
+            processFiles(fromFile, toFile);
+        }
+    }
+    
     protected void process(File from, File to) {
         tr.Ace.log("from: " + from + "; to: " + to);
-
-        boolean fromIsStdin = from.getName().equals("-");
-        boolean toIsStdin   = to.getName().equals("-");
         
-        if ((fromIsStdin || from.isFile()) && (toIsStdin || to.isFile())) {
+        // stdin doesn't "exist", so we check for stdin first
+        if (isProcessedAsFile(from) && isProcessedAsFile(to)) {
             processFiles(from, to);
         }
-        else if (!from.exists()) {
-            System.err.println(from.getPath() + " does not exist");
-        }
-        else if (!to.exists()) {
-            System.err.println(to.getPath() + " does not exist");
-        }
-        else if (from.isDirectory()) {
-            if (to.isDirectory()) {
-                processDirectories(from, to);
+        else if (verifyExists(from) && verifyExists(to)) {
+            if (from.isDirectory()) {
+                if (to.isDirectory()) {
+                    processDirectories(new JavaDirectory(from, fromSource), new JavaDirectory(to, toSource));
+                }
+                else {
+                    processDirFile(from, to);
+                }
             }
-            else {
-                File fromFile = new File(from, to.getPath());
-                tr.Ace.log("fromFile: " + fromFile + " (" + fromFile.exists() + ")");
-                process(fromFile, to);
+            else if (to.isDirectory()) {
+                processFileDir(from, to);
             }
-        }
-        else if (to.isDirectory()) {
-            File toFile = new File(to, from.getPath());
-            tr.Ace.log("toFile: " + toFile + " (" + toFile.exists() + ")");
-            process(from, toFile);
         }
     }
 
     public static void main(String[] args) {
         Options      opts  = Options.get();
         List<String> names = opts.process(Arrays.asList(args));
-        DiffJ        diffj = new DiffJ(names, opts.briefOutput, opts.contextOutput, opts.highlightOutput);
+        DiffJ        diffj = new DiffJ(opts.showBriefOutput(), opts.showContextOutput(), opts.highlightOutput(),
+                                       opts.recurse(),
+                                       opts.getFirstFileName(), opts.getFromSource(),
+                                       opts.getSecondFileName(), opts.getToSource());
+        diffj.processNames(names);
         System.exit(diffj.exitValue);
     }
 }

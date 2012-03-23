@@ -1,6 +1,5 @@
 package org.incava.analysis;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -209,13 +208,13 @@ public abstract class Report {
         }
     }
 
-    protected String toString(Point pt) {
-        StringBuffer buf = new StringBuffer();
-        buf.append(pt.x);
-        if (pt.x != pt.y) {
-            buf.append(",").append(pt.y);
+    protected String toString(int x, int y) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(x);
+        if (x != y) {
+            sb.append(",").append(y);
         }
-        return buf.toString();
+        return sb.toString();
     }
 
     /**

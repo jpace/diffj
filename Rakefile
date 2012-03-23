@@ -13,8 +13,6 @@ task :nothing do
   puts "nothing"
 end
 
-puts "CLASSPATH: #{$CLASSPATH}"
-
 require 'ant'
 require 'lib/tasks/common'
 

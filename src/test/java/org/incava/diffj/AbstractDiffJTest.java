@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.awt.Point;
 import java.io.StringWriter;
 import java.util.Collection;
 import junit.framework.TestCase;
@@ -10,6 +9,7 @@ import org.incava.analysis.DetailedReport;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.Report;
 import org.incava.ijdk.lang.StringExt;
+import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
 import org.incava.test.AbstractTestCaseExt;
 
@@ -29,16 +29,16 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
         return false;
     }
 
-    public Point loc(int line, int column) {
-        return new Point(line, column);
+    public Location loc(int line, int column) {
+        return new Location(line, column);
     }
 
-    public Point loc(int line, int col, String var) {
+    public Location loc(int line, int col, String var) {
         return loc(line, col + var.length() - 1);
     }
 
-    public Point loc(Point pt, String var) {
-        return loc(pt.x, pt.y + (var == null ? 0 : var.length() - 1));
+    public Location loc(Location loc, String var) {
+        return loc(loc.getLine(), loc.getColumn() + (var == null ? 0 : var.length() - 1));
     }
 
     public String[] getOutput(String fromLines, String toLines) {
@@ -76,7 +76,7 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
     }
 
     public void evaluate(String from, String to, FileDiff ... expectations) {
-        evaluate(from, to, Java.SOURCE_1_3, expectations);
+        evaluate(from, to, Java.SOURCE_1_5, expectations);
     }
 
     public void evaluate(String from, String to, String src, FileDiff ... expectations) {
@@ -93,8 +93,16 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
         Collection<FileDiff> diffs = this.report.getDifferences();
 
         try {
+            JavaFile fromFile = new JavaFile(fromName, fromStr, src);
+            tr.Ace.cyan("fromFile", fromFile);
+            tr.Ace.cyan("fromStr", fromStr);
+            JavaFile toFile = new JavaFile(toName, toStr, src);
+            tr.Ace.green("toFile", toFile);
+            tr.Ace.green("toStr", toStr);
+
             final boolean flushReport = false;
-            JavaFileDiff jfd = new JavaFileDiff(report, fromName, fromStr, src, toName, toStr, src, flushReport);
+            JavaFileDiff jfd = new JavaFileDiff(report, fromFile, toFile, flushReport);
+            tr.Ace.yellow("jfd", jfd);
             
             if (expectations != null) {
                 if (expectations.length != diffs.size()) {
@@ -120,16 +128,8 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
 
                     assertEquals("expectations[" + di + "].type",    exp.getType(),    ref.getType());
                     assertEquals("expectations[" + di + "].message", exp.getMessage(), ref.getMessage());
-
-                    Point[][] pts = new Point[][] {
-                        { exp.getFirstStart(),  ref.getFirstStart()  },
-                        { exp.getSecondStart(), ref.getSecondStart() },
-                        { exp.getFirstEnd(),    ref.getFirstEnd()    },
-                        { exp.getSecondEnd(),   ref.getSecondEnd()   },
-                    };
-                    for (int pi = 0; pi < pts.length; ++pi) {
-                        assertEquals("expectations[" + di + "][" + pi + "]", pts[pi][0], pts[pi][1]);
-                    }
+                    assertEquals("expectations[" + di + "].first",   exp.getFirstLocation(), ref.getFirstLocation());
+                    assertEquals("expectations[" + di + "].second",  exp.getSecondLocation(), ref.getSecondLocation());
 
                     ++di;
                 }
@@ -137,7 +137,8 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
 
             this.report.flush();
         }
-        catch (ParseException e) {
+        catch (Exception e) {
+            e.printStackTrace();
             fail(e.getMessage());
         }
     }

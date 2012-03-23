@@ -1,9 +1,9 @@
 package org.incava.analysis;
 
-import java.awt.Point;
 import java.util.List;
 import org.incava.ijdk.io.*;
 import org.incava.ijdk.lang.*;
+import org.incava.ijdk.text.LocationRange;
 
 /**
  * Writes differences with context. Actually returns the differences as strings.
@@ -15,11 +15,11 @@ public class DiffContextWriter extends DiffWriter {
     }
 
     protected void printFrom(StringBuilder sb, FileDiff ref) {
-        printLines(sb, true, ref, ref.getFirstStart().x, ref.getFirstStart().y, ref.getFirstEnd().x, ref.getFirstEnd().y, fromContents);
+        printLines(sb, true, ref, ref.getFirstLocation(), fromContents);
     }
 
     protected void printTo(StringBuilder sb, FileDiff ref) {
-        printLines(sb, false, ref, ref.getSecondStart().x, ref.getSecondStart().y, ref.getSecondEnd().x, ref.getSecondEnd().y, toContents);
+        printLines(sb, false, ref, ref.getSecondLocation(), toContents);
     }
 
     protected String getLine(List<String> lines, int lidx, int fromLine, int fromColumn, int toLine, int toColumn, boolean isDelete) {
@@ -28,7 +28,12 @@ public class DiffContextWriter extends DiffWriter {
         return sb.toString();
     }
 
-    protected void printLines(StringBuilder sb, boolean isDelete, FileDiff ref, int fromLine, int fromColumn, int toLine, int toColumn, List<String> lines) {
+    protected void printLines(StringBuilder sb, boolean isDelete, FileDiff ref, LocationRange loc, List<String> lines) {
+        int fromLine = loc.getStart().getLine();
+        int fromColumn = loc.getStart().getColumn();
+        int toLine = loc.getEnd().getLine();
+        int toColumn = loc.getEnd().getColumn();
+        
         for (int lnum = Math.max(0, fromLine - 4); lnum < fromLine - 1; ++lnum) {
             sb.append("  ").append(lines.get(lnum));
             sb.append(EOLN);
@@ -48,24 +53,6 @@ public class DiffContextWriter extends DiffWriter {
             sb.append(EOLN);
         }
     }
-
-    // protected void printLines(StringBuilder sb, Point pt, String[] lines) {
-    //     for (int lnum = Math.max(0, pt.x - 4); lnum < pt.x - 1; ++lnum) {
-    //         sb.append("  " + lines[lnum]);
-    //         sb.append(EOLN);
-    //     }
-
-    //     // point is 1-indexed, lines are 0-indexed
-    //     for (int lnum = pt.x - 1; lnum < pt.y; ++lnum) {
-    //         sb.append(" !" + lines[lnum]);
-    //         sb.append(EOLN);
-    //     }
-
-    //     for (int lnum = pt.y; lnum < Math.min(pt.y + 3, lines.length); ++lnum) {
-    //         sb.append("  " + lines[lnum]);
-    //         sb.append(EOLN);
-    //     }
-    // }
 
     protected void printLines(StringBuilder sb, FileDiff ref) {
         ref.print(this, sb);

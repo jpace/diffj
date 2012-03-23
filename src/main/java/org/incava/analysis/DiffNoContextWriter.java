@@ -1,7 +1,7 @@
 package org.incava.analysis;
 
-import java.awt.Point;
 import java.util.List;
+import org.incava.ijdk.text.LocationRange;
 
 /**
  * Writes differences. Actually returns the differences as strings. Writing is
@@ -13,13 +13,11 @@ public class DiffNoContextWriter extends DiffWriter {
     }
 
     protected void printFrom(StringBuilder sb, FileDiff ref) {
-        Point del = new Point(ref.getFirstStart().x,  ref.getFirstEnd().x);
-        printLines(sb, del, "<", fromContents);
+        printLines(sb, ref.getFirstLocation(), "<", fromContents);
     }
 
     protected void printTo(StringBuilder sb, FileDiff ref) {
-        Point add = new Point(ref.getSecondStart().x, ref.getSecondEnd().x);
-        printLines(sb, add, ">", toContents);
+        printLines(sb, ref.getSecondLocation(), ">", toContents);
     }
 
     protected void printLines(StringBuilder sb, FileDiff ref) {
@@ -27,8 +25,10 @@ public class DiffNoContextWriter extends DiffWriter {
         sb.append(EOLN);
     }
 
-    protected void printLines(StringBuilder sb, Point pt, String ind, List<String> lines) {
-        for (int lnum = pt.x; lnum <= pt.y; ++lnum) {
+    protected void printLines(StringBuilder sb, LocationRange loc, String ind, List<String> lines) {
+        int fromLine = loc.getStart().getLine();
+        int throughLine = loc.getEnd().getLine();
+        for (int lnum = fromLine; lnum <= throughLine; ++lnum) {
             sb.append(ind + " " + lines.get(lnum - 1));
             sb.append(EOLN);
         }

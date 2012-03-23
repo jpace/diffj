@@ -1,7 +1,8 @@
 package org.incava.analysis;
 
-import java.awt.Point;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.ijdk.text.Location;
+import org.incava.ijdk.text.LocationRange;
 
 /**
  * A reference to code deleted, associated with a file by a starting and ending
@@ -10,7 +11,7 @@ import net.sourceforge.pmd.ast.Token;
  * @todo fix the names.
  */
 public class FileDiffDelete extends FileDiff {
-    public FileDiffDelete(String message, Point firstStart, Point firstEnd, Point secondStart, Point secondEnd) {
+    public FileDiffDelete(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
         super(Type.DELETED, message, firstStart, firstEnd, secondStart, secondEnd);
     }
 

@@ -1,6 +1,5 @@
 package org.incava.analysis;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -39,19 +38,16 @@ public class BriefReport extends Report {
      * Returns the given difference, in brief format.
      */
     protected String toString(FileDiff ref) {
-        StringBuffer buf = new StringBuffer();
-
-        Point del = new Point(ref.getFirstStart().x,  ref.getFirstEnd().x);
-        Point add = new Point(ref.getSecondStart().x, ref.getSecondEnd().x);
+        StringBuilder sb = new StringBuilder();
         
-        buf.append(toString(del));
-        buf.append(ref.getType());
-        buf.append(toString(add));
-        buf.append(": ");
-        buf.append(ref.getMessage());
-        buf.append(EOLN);
+        sb.append(toString(ref.getFirstLocation().getStart().getLine(),  ref.getFirstLocation().getEnd().getLine()));
+        sb.append(ref.getType());
+        sb.append(toString(ref.getSecondLocation().getStart().getLine(), ref.getSecondLocation().getEnd().getLine()));
+        sb.append(": ");
+        sb.append(ref.getMessage());
+        sb.append(EOLN);
         
-        return buf.toString();
+        return sb.toString();
     }
 
     /**

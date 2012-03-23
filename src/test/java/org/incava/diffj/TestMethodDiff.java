@@ -1,8 +1,8 @@
 package org.incava.diffj;
 
-import java.awt.Point;
 import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
+import org.incava.ijdk.text.Location;
 
 public class TestMethodDiff extends AbstractTestItemDiff {
     protected final static String[] PARAM_MSGS = new String[] {
@@ -678,7 +678,7 @@ public class TestMethodDiff extends AbstractTestItemDiff {
                           from, to);
     }
 
-    protected FileDiffChange makeParamReorderedRef(String paramName, int oldPosition, int newPosition, Point fromStart, Point toStart) {
+    protected FileDiffChange makeParamReorderedRef(String paramName, int oldPosition, int newPosition, Location fromStart, Location toStart) {
         String msg = MessageFormat.format(MethodDiff.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
         return new FileDiffChange(msg, fromStart, loc(fromStart, paramName), toStart, loc(toStart, paramName));
     }

@@ -21,14 +21,6 @@ public class DiffContextHighlightWriter extends DiffContextWriter {
         super(fromContents, toContents);
     }
 
-    // protected void printFrom(StringBuilder sb, FileDiff ref) {
-    //     printLines(sb, COLOR_DELETED, ref, ref.firstStart.x, ref.firstStart.y, ref.firstEnd.x, ref.firstEnd.y, fromContents);
-    // }
-
-    // protected void printTo(StringBuilder sb, FileDiff ref) {
-    //     printLines(sb, COLOR_ADDED, ref, ref.secondStart.x, ref.secondStart.y, ref.secondEnd.x, ref.secondEnd.y, toContents);
-    // }
-
     protected String getLine(List<String> lines, int lidx, int fromLine, int fromColumn, int toLine, int toColumn, boolean isDelete) {
         String line = lines.get(lidx - 1);
 

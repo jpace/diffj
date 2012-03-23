@@ -3,12 +3,25 @@
 
 require 'test/unit'
 require 'java'
-
-import org.incava.diffj.DiffJ
+require 'rubygems'
+require 'riel'
+require 'diffj'
 
 class DiffJTest < Test::Unit::TestCase
   def test_diffj_ctor
-    diffj = DiffJ.new %w{ /tmp/CU.0.java /tmp/CU.1.java }, false, false, false
+    fnames = %w{ /tmp/CU.0.java /tmp/CU.1.java }
+    brief = false
+    context = true
+    highlight = true
+    recurse = true
+    fromname = nil
+    fromver = "1.5"
+    toname = nil
+    tover = "1.5"
+    
+    diffj = DiffJRuby.new brief, context, highlight, recurse, fromname, fromver, toname, tover
+    diffj.process_things fnames
+    
     assert_not_nil diffj
   end
 end

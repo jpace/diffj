@@ -1,14 +1,7 @@
 package org.incava.diffj;
 
-import java.io.Reader;
-import java.io.StringReader;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.ast.JavaCharStream;
-import net.sourceforge.pmd.ast.JavaParser;
-import net.sourceforge.pmd.ast.ParseException;
-import net.sourceforge.pmd.ast.TokenMgrError;
 import org.incava.analysis.Report;
-import org.incava.java.Java;
 
 /**
  * Compares two Java files.
@@ -16,14 +9,14 @@ import org.incava.java.Java;
 public class JavaFileDiff {
     private int exitValue;
 
-    public JavaFileDiff(Report report, String fromName, String fromStr, String fromSource, String toName, String toStr, String toSource, boolean flushReport) {
+    public JavaFileDiff(Report report, JavaFile fromFile, JavaFile toFile, boolean flushReport) {
         exitValue = 0;
 
-        ASTCompilationUnit fromCu = compile(fromName, new StringReader(fromStr), fromSource);
-        ASTCompilationUnit toCu   = compile(toName,   new StringReader(toStr),   toSource);
+        ASTCompilationUnit fromCu = compile(fromFile);
+        ASTCompilationUnit toCu   = compile(toFile);
         
-        report.reset(fromName, fromStr, toName, toStr);
-            
+        report.reset(fromFile.getName(), fromFile.getContents(), toFile.getName(), toFile.getContents());
+        
         CompilationUnitDiff cud = new CompilationUnitDiff(report, flushReport);
         // chew the cud here ...
         cud.compare(fromCu, toCu);
@@ -37,52 +30,19 @@ public class JavaFileDiff {
         }
     }
 
-    public static ASTCompilationUnit compile(Reader rdr, String sourceVersion) throws Exception {
-        JavaCharStream jcs = new JavaCharStream(rdr);
-
-        JavaParser parser = new JavaParser(jcs);
-        
-        if (sourceVersion.equals(Java.SOURCE_1_3)) {
-            parser.setJDK13();
-        }
-        else if (sourceVersion.equals(Java.SOURCE_1_4)) {
-            // nothing.
-        }
-        else if (sourceVersion.equals(Java.SOURCE_1_5) || sourceVersion.equals(Java.SOURCE_1_6)) {
-            // no setJDK16 yet in PMD
-            parser.setJDK15();
-        }
-        else {
-            return null;
-        }
-        
-        return parser.CompilationUnit();
-    }
-
-    protected ASTCompilationUnit compile(String name, Reader rdr, String sourceVersion) {
+    protected ASTCompilationUnit compile(JavaFile file) {
         try {
-            ASTCompilationUnit cu = compile(rdr, sourceVersion);
-
-            if (cu == null) {
-                System.err.println("ERROR: source version '" + sourceVersion + "' not recognized");
-            }
-            
-            return cu;
+            return file.compile();
         }
-        catch (TokenMgrError tme) {
-            System.out.println("Error parsing (tokenizing) " + name + ": " + tme.getMessage());
+        catch (DiffJException de) {
+            tr.Ace.red("de", de);
+            System.err.println("Error: " + de.getMessage());
             exitValue = 1;
             return null;
         }
-        catch (ParseException e) {
-            System.out.println("Parse error in " + name + ": " + e.getMessage());
-            exitValue = -1;
-            return null;
-        }
-        catch (Exception e) {
-            System.out.println("Exception in " + name + ": " + e.getMessage());
-            exitValue = -1;
-            return null;
-        }
+    }
+
+    public int getExitValue() {
+        return exitValue;
     }
 }
