@@ -1,14 +1,9 @@
 package org.incava.diffj;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * A directory that may or not have Java files.
@@ -24,42 +19,45 @@ public class JavaDirectory extends JavaFSElement {
         super(file.getPath(), sourceVersion);
     }
 
-    public List<String> getSubDirsAndJavaFiles() {
-        List <String> subdirs = Arrays.asList(list(new FilenameFilter() {
-                public boolean accept(File dir, String pathname) {
-                    File f = new File(dir, pathname);
-                    return f.isDirectory() || (f.isFile() && pathname.endsWith(".java"));
-                }
-            }));
-        tr.Ace.onBlue("subdirs", subdirs);
-        return subdirs;
+    public JavaFile createJavaFile(File file, String label) {
+        try {
+            return new JavaFile(file, label, getSourceVersion());
+        }
+        catch (IOException ioe) {
+            // what to do with this? ...
+            tr.Ace.red("ioe", ioe);
+            return null;
+        }
     }
 
-    public List<JavaFSElement> subelements() {
-        String[] contents = list();
-        List<JavaFSElement> subelements = new ArrayList<JavaFSElement>();
-        if (contents == null) {
-            return subelements;
-        }
+    public JavaDirectory createJavaDirectory(File file) {
+        return new JavaDirectory(file, getSourceVersion());
+    }
 
-        String sourceVersion = getSourceVersion();
-
-        for (String c : contents) {
-            File f = new File(this, c);
-            if (f.isDirectory()) {
-                subelements.add(new JavaDirectory(new File(this, c), sourceVersion));
-            }
-            else if (f.isFile() && c.endsWith(".java")) {
-                // null == name (does that make sense for a directory?)
-                try {
-                    subelements.add(new JavaFile(new File(this, c), null, sourceVersion));
-                }
-                catch (IOException ioe) {
-                    // what to do with this? ...
-                    tr.Ace.red("ioe", ioe);
-                }
+    public JavaFSElement getElement(String name) {
+        File[] files = listFiles();
+        for (File file : files) {
+            if (file.getName().equals(name)) {
+                return file.isDirectory() ? createJavaDirectory(file) : createJavaFile(file, null);
             }
         }
-        return subelements;
+
+        return null;
+    }
+
+    public List<String> getElementNames() {
+        File[] files = listFiles();
+        List<String> names = new ArrayList<String>();
+        if (files == null) {
+            return names;
+        }
+        
+        for (File file : files) {
+            if (file.isDirectory() || (file.isFile() && file.getName().endsWith(".java"))) {
+                names.add(file.getName());
+            }
+        }
+
+        return names;
     }
 }

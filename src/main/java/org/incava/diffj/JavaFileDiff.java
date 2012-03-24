@@ -15,7 +15,7 @@ public class JavaFileDiff {
         ASTCompilationUnit fromCu = compile(fromFile);
         ASTCompilationUnit toCu   = compile(toFile);
         
-        report.reset(fromFile.getName(), fromFile.getContents(), toFile.getName(), toFile.getContents());
+        report.reset(fromFile.getLabel(), fromFile.getContents(), toFile.getLabel(), toFile.getContents());
         
         CompilationUnitDiff cud = new CompilationUnitDiff(report, flushReport);
         // chew the cud here ...

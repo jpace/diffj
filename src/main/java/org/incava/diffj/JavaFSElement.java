@@ -1,13 +1,7 @@
 package org.incava.diffj;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import org.incava.analysis.Report;
 
 /**
  * A filesystem element, such as a directory or a file.
@@ -29,5 +23,16 @@ public class JavaFSElement extends File {
 
     protected String getSourceVersion() {
         return sourceVersion;
+    }
+
+    public String getBaseName() {
+        return getAbsoluteFile().getName();
+    }
+
+    public int process(Report report, JavaFSElement elmt, int exitValue) {
+        tr.Ace.onBlue("this", this);
+        tr.Ace.onBlue("elmt", elmt);
+
+        return -1;
     }
 }
