@@ -24,6 +24,7 @@ public class DiffJ {
     private final String toLabel;
     private final String fromSource;
     private final String toSource;
+    private final JavaElementFactory jef;
     
     public DiffJ(boolean briefOutput, boolean contextOutput, boolean highlightOutput, 
                  boolean recurseDirectories,
@@ -44,6 +45,7 @@ public class DiffJ {
         this.fromSource = fromSource;
         this.toSource = toSource;
         this.exitValue = 0;
+        this.jef = new JavaElementFactory();
     }
 
     protected int getExitValue() {
@@ -55,39 +57,16 @@ public class DiffJ {
     }
 
     protected JavaFSElement getJavaElement(File file, String label, String source) {
-        if (file == null || file.getName().equals("-") || (file.isFile() && verifyExists(file, label))) {
-            return getJavaFile(file, label, source);
-        }
-        else if (file.isDirectory()) {
-            return new JavaDirectory(file, source);
-        }
-        else {
-            verifyExists(file, label);
-        }
-        return null;
-    }
-
-    public static String getName(File file, String label) {
-        return label == null ? file.getAbsolutePath() : label;
-    }
-
-    protected JavaFile getJavaFile(File file, String label, String source) {
         try {
-            return new JavaFile(file, label, source);
+            return jef.createElement(file, label, source);
         }
-        catch (FileNotFoundException e) {
-            System.out.println("Error opening file '" + file.getAbsolutePath() + "': " + e.getMessage());
-            exitValue = -1;
+        catch (DiffJException de) {
+            tr.Ace.red("de", de);
+            de.printStackTrace(System.out);
+            System.err.println(de.getMessage());
+            exitValue = 1;
+            return null;
         }
-        catch (IOException e) {
-            System.out.println("I/O error with file '" + file.getAbsolutePath() + "': " + e);
-            exitValue = -1;
-        }
-        return null;
-    }
-
-    public boolean isStdin(File file) {
-        return file == null || file.getName().equals("-");
     }
 
     public void processNames(List<String> names) {
@@ -106,7 +85,16 @@ public class DiffJ {
                 JavaFSElement fromFile = getJavaElement(new File(names.get(ni)), fromLabel, fromSource);
                 tr.Ace.yellow("fromFile", fromFile);
                 if (fromFile != null) {
-                    process(fromFile, toElement, true);
+                    try {
+                        compare(fromFile, toElement, true);
+                    }
+                    catch (DiffJException de) {
+                        tr.Ace.red("de", de);
+                        de.printStackTrace(System.out);
+                        System.err.println(de.getMessage());
+                        exitValue = 1;
+                        break;
+                    }
                 }
             }
         }
@@ -119,29 +107,23 @@ public class DiffJ {
         tr.Ace.onGreen("exitValue", "" + exitValue);
     }
 
-    protected void process(JavaFSElement from, JavaFSElement to, boolean canReadDir) {
+    protected void compare(JavaFSElement from, JavaFSElement to, boolean canReadDir) throws DiffJException {
         tr.Ace.log("from: " + from + "; to: " + to);
 
         if (from instanceof JavaFile && to instanceof JavaFile) {
             JavaFile fromFile = (JavaFile)from;
             JavaFile toFile = (JavaFile)to;
-            exitValue = fromFile.process(report, toFile, exitValue);
+            exitValue = fromFile.compare(report, toFile, exitValue);
         }
         else if (from instanceof JavaFile && to instanceof JavaDirectory) {
             JavaFile fromFile = (JavaFile)from;
             JavaDirectory toDir = (JavaDirectory)to;
-            JavaFile toFile = (JavaFile)getJavaElement(new File(toDir, fromFile.getName()), fromLabel, fromSource);
-            if (toFile != null) {
-                exitValue = fromFile.process(report, toFile, exitValue);
-            }
+            exitValue = fromFile.compare(report, toDir, exitValue);
         }
         else if (from instanceof JavaDirectory && to instanceof JavaFile) {
             JavaDirectory fromDir = (JavaDirectory)from;
             JavaFile toFile = (JavaFile)to;
-            JavaFile fromFile = (JavaFile)getJavaElement(new File(fromDir, toFile.getName()), toLabel, toSource);
-            if (fromFile != null) {
-                exitValue = fromFile.process(report, toFile, exitValue);
-            }
+            exitValue = fromDir.compare(report, toFile, exitValue);
         }
         else if (from instanceof JavaDirectory && to instanceof JavaDirectory && canReadDir) {
             JavaDirectory fromDir = (JavaDirectory)from;
@@ -150,7 +132,7 @@ public class DiffJ {
         }
     }
 
-    protected void processDirectories(JavaDirectory from, JavaDirectory to, boolean canRecurse) {
+    protected void processDirectories(JavaDirectory from, JavaDirectory to, boolean canRecurse) throws DiffJException {
         tr.Ace.setVerbose(true);
 
         Set<String> names = new TreeSet<String>();
@@ -172,21 +154,10 @@ public class DiffJ {
 
             tr.Ace.setVerbose(false);
 
-            process(fromElmt, toElmt, recurseDirectories);
+            compare(fromElmt, toElmt, recurseDirectories);
         }
 
         tr.Ace.setVerbose(false);
-    }
-
-    protected boolean verifyExists(File file, String label) {
-        if (file != null && file.exists()) {
-            return true;
-        }
-        else {
-            System.err.println(getName(file, label) + " does not exist");
-            exitValue = 1;
-            return false;
-        }
     }
 
     public static void main(String[] args) {

@@ -2,6 +2,7 @@ package org.incava.diffj;
 
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -23,6 +24,36 @@ import org.incava.java.Java;
 public class JavaFile extends JavaFSElement {
     public static final long serialVersionUID = 1L;
 
+    public static JavaFile createFile(File file, JavaFSElement otherElmt) throws DiffJException {
+        tr.Ace.onRed("file: " + file + "; otherElmt: " + otherElmt);
+        try {
+            JavaElementFactory jef = new JavaElementFactory();
+            return (JavaFile)jef.createElement(new File(file, otherElmt.getName()), null, otherElmt.getSourceVersion());
+        }
+        catch (DiffJException de) {
+            throw de;
+        }
+        catch (Exception e) {
+            tr.Ace.log("e", e);
+            e.printStackTrace();
+            throw new DiffJException(e);
+        }
+    }
+
+    public static int compare(Report report, JavaFile fromFile, JavaFile toFile, int exitValue) throws DiffJException {
+        tr.Ace.onRed("fromFile: " + fromFile + "; toFile: " + toFile);
+        try {
+            final boolean flushReport = true;
+            JavaFileDiff jfd = new JavaFileDiff(report, fromFile, toFile, flushReport);
+            return jfd.getExitValue() == 0 ? exitValue : jfd.getExitValue();
+        }
+        catch (Exception e) {
+            tr.Ace.log("e", e);
+            e.printStackTrace();
+            throw new DiffJException(e);
+        }
+    }
+
     private final String label; // not necessarily the same as the name.
     private final String contents;
 
@@ -32,12 +63,20 @@ public class JavaFile extends JavaFSElement {
         this.contents = contents;
     }
 
-    public JavaFile(File file, String label, String sourceVersion) throws IOException {
+    public JavaFile(File file, String label, String sourceVersion) throws DiffJException {
         super(file.getPath(), sourceVersion);
-        boolean isStdin = file == null || file.getName().equals("-");
-        FileReader reader = isStdin ? new FileReader(FileDescriptor.in) : new FileReader(file);
-        this.contents = ReaderExt.readAsString(reader, EnumSet.of(ReadOptionType.ADD_EOLNS));
-        this.label = label == null ? (isStdin ? "-" : file.getPath()) : label;
+        try {
+            boolean isStdin = file == null || file.getName().equals("-");
+            FileReader reader = isStdin ? new FileReader(FileDescriptor.in) : new FileReader(file);
+            this.contents = ReaderExt.readAsString(reader, EnumSet.of(ReadOptionType.ADD_EOLNS));
+            this.label = label == null ? (isStdin ? "-" : file.getPath()) : label;
+        }
+        catch (FileNotFoundException e) {
+            throw new DiffJException("Error opening file '" + file.getAbsolutePath() + "': " + e.getMessage(), e);
+        }
+        catch (IOException e) {
+            throw new DiffJException("I/O error with file '" + file.getAbsolutePath() + "': " + e.getMessage(), e);
+        }
     }
 
     /** 
@@ -96,30 +135,13 @@ public class JavaFile extends JavaFSElement {
         }
     }
 
-    // public int process(Report report, JavaFSElement elmt, int exitValue) {
-    //     tr.Ace.onBlue("this", this);
-    //     tr.Ace.onBlue("elmt", elmt);
+    public int compare(Report report, JavaFile toFile, int exitValue) throws DiffJException {
+        tr.Ace.onRed("from: " + this + "; toFile: " + toFile);
+        return compare(report, this, toFile, exitValue);
+    }
 
-    //     if (elmt instanceof JavaFile) {
-    //         return processFiles(report, (JavaFile)elmt, exitValue);
-    //     }
-    //     else {
-    //         return -1;
-    //     }
-    // }
-
-    public int process(Report report, JavaFile to, int exitValue) {
-        tr.Ace.log("from: " + this + "; to: " + to);
-
-        try {
-            final boolean flushReport = true;
-            JavaFileDiff jfd = new JavaFileDiff(report, this, to, flushReport);
-            return jfd.getExitValue() == 0 ? exitValue : jfd.getExitValue();
-        }
-        catch (Throwable t) {
-            tr.Ace.log("t", t);
-            t.printStackTrace();
-            return -1;
-        }
+    public int compare(Report report, JavaDirectory toDir, int exitValue) throws DiffJException {
+        tr.Ace.onCyan("from: " + this + "; toDir: " + toDir);
+        return compare(report, this, createFile(toDir, this), exitValue);
     }
 }

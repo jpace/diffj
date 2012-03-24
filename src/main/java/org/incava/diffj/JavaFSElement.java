@@ -29,7 +29,7 @@ public class JavaFSElement extends File {
         return getAbsoluteFile().getName();
     }
 
-    public int process(Report report, JavaFSElement elmt, int exitValue) {
+    public int compare(Report report, JavaFSElement elmt, int exitValue) {
         tr.Ace.onBlue("this", this);
         tr.Ace.onBlue("elmt", elmt);
 
