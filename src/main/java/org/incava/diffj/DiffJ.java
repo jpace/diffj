@@ -1,19 +1,12 @@
 package org.incava.diffj;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import org.incava.analysis.BriefReport;
 import org.incava.analysis.DetailedReport;
 import org.incava.analysis.Report;
 import org.incava.ijdk.util.ListExt;
-import org.incava.ijdk.util.MultiMap;
 import org.incava.qualog.Qualog;
 
 public class DiffJ {
@@ -34,9 +27,7 @@ public class DiffJ {
         tr.Ace.setOutput(Qualog.VERBOSE, Qualog.LEVEL4);
         tr.Ace.setOutput(Qualog.QUIET,   Qualog.LEVEL2);
         tr.Ace.setVerbose(true);
-        tr.Ace.stack("this", this, 15);
-
-        System.err.println("*******************************************************");
+        // tr.Ace.stack("this", this, 15);
 
         this.report = briefOutput ? new BriefReport(System.out) : new DetailedReport(System.out, contextOutput, highlightOutput);
         this.recurseDirectories = recurseDirectories;
@@ -46,6 +37,10 @@ public class DiffJ {
         this.toSource = toSource;
         this.exitValue = 0;
         this.jef = new JavaElementFactory();
+    }
+
+    protected Report getReport() {
+        return report;
     }
 
     protected int getExitValue() {
@@ -58,106 +53,61 @@ public class DiffJ {
 
     protected JavaFSElement getJavaElement(File file, String label, String source) {
         try {
-            return jef.createElement(file, label, source);
+            return jef.createElement(file, label, source, recurseDirectories);
         }
         catch (DiffJException de) {
-            tr.Ace.red("de", de);
-            de.printStackTrace(System.out);
+            // de.printStackTrace(System.out);
             System.err.println(de.getMessage());
             exitValue = 1;
             return null;
         }
     }
 
-    public void processNames(List<String> names) {
-        tr.Ace.yellow("names", names);
-        if (names.size() >= 2) {
-            String lastName = ListExt.get(names, -1);
-            tr.Ace.yellow("lastName", lastName);
-            JavaFSElement toElement = getJavaElement(new File(lastName), toLabel, toSource);
-            tr.Ace.yellow("toElement", toElement);
-            if (toElement == null) {
-                tr.Ace.onGreen("exitValue", "" + exitValue);
-                return;
-            }
+    public JavaFSElement getToElement(String toName) {
+        return getJavaElement(new File(toName), toLabel, toSource);
+    }
 
-            for (int ni = 0; ni < names.size() - 1; ++ni) {
-                JavaFSElement fromFile = getJavaElement(new File(names.get(ni)), fromLabel, fromSource);
-                tr.Ace.yellow("fromFile", fromFile);
-                if (fromFile != null) {
-                    try {
-                        compare(fromFile, toElement, true);
-                    }
-                    catch (DiffJException de) {
-                        tr.Ace.red("de", de);
-                        de.printStackTrace(System.out);
-                        System.err.println(de.getMessage());
-                        exitValue = 1;
-                        break;
-                    }
-                }
+    public JavaFSElement getFromElement(String fromName) {
+        return getJavaElement(new File(fromName), fromLabel, fromSource);
+    }
+
+    public boolean compareElements(String fromName, JavaFSElement toElmt) {
+        try {
+            JavaFSElement fromElmt = getFromElement(fromName);
+            if (fromElmt == null) {
+                return false;
             }
+            exitValue = fromElmt.compareTo(report, toElmt, exitValue);
+            return true;
         }
-        else {
+        catch (DiffJException de) {
+            // de.printStackTrace(System.out);
+            System.err.println(de.getMessage());
+            exitValue = 1;
+            return false;
+        }
+    }
+
+    public void processNames(List<String> names) {
+        if (names.size() < 2) {
             System.err.println("usage: diffj from-file to-file");
             exitValue = 1;
         }
 
+        String lastName = ListExt.get(names, -1);
+        JavaFSElement toElmt = getToElement(lastName);
+        if (toElmt == null) {
+            return;
+        }
+
+        for (int ni = 0; ni < names.size() - 1; ++ni) {
+            if (!compareElements(names.get(ni), toElmt)) {
+                break;
+            }
+        }
+
         tr.Ace.setVerbose(true);
         tr.Ace.onGreen("exitValue", "" + exitValue);
-    }
-
-    protected void compare(JavaFSElement from, JavaFSElement to, boolean canReadDir) throws DiffJException {
-        tr.Ace.log("from: " + from + "; to: " + to);
-
-        if (from instanceof JavaFile && to instanceof JavaFile) {
-            JavaFile fromFile = (JavaFile)from;
-            JavaFile toFile = (JavaFile)to;
-            exitValue = fromFile.compare(report, toFile, exitValue);
-        }
-        else if (from instanceof JavaFile && to instanceof JavaDirectory) {
-            JavaFile fromFile = (JavaFile)from;
-            JavaDirectory toDir = (JavaDirectory)to;
-            exitValue = fromFile.compare(report, toDir, exitValue);
-        }
-        else if (from instanceof JavaDirectory && to instanceof JavaFile) {
-            JavaDirectory fromDir = (JavaDirectory)from;
-            JavaFile toFile = (JavaFile)to;
-            exitValue = fromDir.compare(report, toFile, exitValue);
-        }
-        else if (from instanceof JavaDirectory && to instanceof JavaDirectory && canReadDir) {
-            JavaDirectory fromDir = (JavaDirectory)from;
-            JavaDirectory toDir = (JavaDirectory)to;
-            processDirectories(fromDir, toDir, recurseDirectories);
-        }
-    }
-
-    protected void processDirectories(JavaDirectory from, JavaDirectory to, boolean canRecurse) throws DiffJException {
-        tr.Ace.setVerbose(true);
-
-        Set<String> names = new TreeSet<String>();
-        names.addAll(from.getElementNames());
-        names.addAll(to.getElementNames());
-        
-        for (String name : names) {
-            tr.Ace.bold("name", name);
-
-            JavaFSElement fromElmt = from.getElement(name);
-            tr.Ace.bold("fromElmt", fromElmt);
-
-            JavaFSElement toElmt = to.getElement(name);
-            tr.Ace.bold("toElmt", toElmt);
-
-            if (fromElmt == null || toElmt == null) {
-                continue;
-            }
-
-            tr.Ace.setVerbose(false);
-
-            compare(fromElmt, toElmt, recurseDirectories);
-        }
-
-        tr.Ace.setVerbose(false);
     }
 
     public static void main(String[] args) {

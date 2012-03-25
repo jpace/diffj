@@ -6,7 +6,7 @@ import org.incava.analysis.Report;
 /**
  * A filesystem element, such as a directory or a file.
  */
-public class JavaFSElement extends File {
+public abstract class JavaFSElement extends File {
     public static final long serialVersionUID = 1L;
 
     private final String sourceVersion;
@@ -25,14 +25,9 @@ public class JavaFSElement extends File {
         return sourceVersion;
     }
 
-    public String getBaseName() {
-        return getAbsoluteFile().getName();
-    }
+    public abstract int compareTo(Report report, JavaFSElement elmt, int exitValue) throws DiffJException;
 
-    public int compare(Report report, JavaFSElement elmt, int exitValue) {
-        tr.Ace.onBlue("this", this);
-        tr.Ace.onBlue("elmt", elmt);
+    public abstract int compareFrom(Report report, JavaFile file, int exitValue) throws DiffJException;
 
-        return -1;
-    }
+    public abstract int compareFrom(Report report, JavaDirectory dir, int exitValue) throws DiffJException;
 }

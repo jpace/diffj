@@ -10,8 +10,7 @@ include Java
 import org.incava.ijdk.lang.StringExt
 import org.incava.diffj.DiffJ
 import org.incava.diffj.Options
-
-import org.incava.diffj.DiffJ
+import org.incava.diffj.DiffJException
 
 class DiffJRuby < DiffJ
   def initialize brief, context, highlight, recurse, fromname, fromver, toname, tover
@@ -19,18 +18,38 @@ class DiffJRuby < DiffJ
     $stderr.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".yellow
   end
 
-  def process_things names
-    if names.size >= 2
-      tofile = java.io.File.new(names[-1])
-      puts "tofile: #{tofile}".on_green
+  def compare from_name, to_elmt
+    begin 
+      fromElmt = getFromElement from_name
+      puts "fromElmt: #{fromElmt}".on_blue
+      return false unless fromElmt
+      exitValue = fromElmt.compareTo report, to_elmt, exit_value
+      return true;
+    rescue DiffJException => de
+      puts "de: #{de}".red
+      de.printStackTrace();
+      $stderr.puts(de.getMessage())
+      exit_value = 1;
+      return false
+    end
+  end
 
-      names[0 ... -1].each do |fromname|
-        puts "fromname: #{fromname}".on_blue
-        process java.io.File.new(fromname), tofile
-      end
-    else
+  def process_things names
+    if names.size < 2
       $stderr.puts "usage: diffj from-file to-file"
       exit_value = 1
+      return
+    end
+
+    to_elmt = get_to_element names[-1]
+    puts "to_elmt: #{to_elmt}".on_green
+    puts "to_elmt: #{to_elmt.class}".on_green
+
+    return unless to_elmt
+
+    names[0 ... -1].each do |fromname|
+      puts "fromname: #{fromname}".on_blue
+      compare fromname, to_elmt
     end
   end
 end

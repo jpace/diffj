@@ -55,8 +55,8 @@ public class MethodDiff extends FunctionDiff {
     }
 
     protected void compareBodies(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        tr.Ace.log("a", a);
-        tr.Ace.log("b", b);
+        // tr.Ace.log("a", a);
+        // tr.Ace.log("b", b);
 
         ASTBlock aBlock = (ASTBlock)SimpleNodeUtil.findChild(a, ASTBlock.class);
         ASTBlock bBlock = (ASTBlock)SimpleNodeUtil.findChild(b, ASTBlock.class);

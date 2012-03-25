@@ -3,6 +3,8 @@ package org.incava.diffj;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import org.incava.analysis.Report;
 
 /**
@@ -11,12 +13,15 @@ import org.incava.analysis.Report;
 public class JavaDirectory extends JavaFSElement {
     public static final long serialVersionUID = 1L;
 
-    public JavaDirectory(String name, String sourceVersion) {
+    private final boolean canRecurse;
+
+    public JavaDirectory(String name, String sourceVersion, boolean canRecurse) {
         super(name, sourceVersion);
+        this.canRecurse = canRecurse;
     }
 
-    public JavaDirectory(File file, String sourceVersion) {
-        super(file.getPath(), sourceVersion);
+    public JavaDirectory(File file, String sourceVersion, boolean canRecurse) {
+        this(file.getPath(), sourceVersion, canRecurse);
     }
 
     public JavaFile createJavaFile(File file, String label) throws DiffJException {
@@ -24,7 +29,7 @@ public class JavaDirectory extends JavaFSElement {
     }
 
     public JavaDirectory createJavaDirectory(File file) {
-        return new JavaDirectory(file, getSourceVersion());
+        return new JavaDirectory(file, getSourceVersion(), canRecurse);
     }
 
     public JavaFSElement getElement(String name) throws DiffJException {
@@ -54,24 +59,31 @@ public class JavaDirectory extends JavaFSElement {
         return names;
     }
 
-    public int compare(Report report, JavaFile toFile, int exitValue) throws DiffJException {
-        tr.Ace.reverse("from: " + this + "; toFile: " + toFile);
-        return JavaFile.compare(report, JavaFile.createFile(this, toFile), toFile, exitValue);
-        // }
-        // try {
-        //     final boolean flushReport = true;
-        //     JavaElementFactory jef = new JavaElementFactory();
-        //     JavaFile fromFile = (JavaFile)jef.createElement(new File(this, toFile.getName()), null, toFile.getSourceVersion());
-        //     JavaFileDiff jfd = new JavaFileDiff(report, fromFile, toFile, flushReport);
-        //     return jfd.getExitValue() == 0 ? exitValue : jfd.getExitValue();
-        // }
-        // catch (DiffJException de) {
-        //     throw de;
-        // }
-        // catch (Exception e) {
-        //     tr.Ace.log("e", e);
-        //     e.printStackTrace();
-        //     throw new DiffJException(e);
-        // }
+    public int compareTo(Report report, JavaFSElement toElmt, int exitValue) throws DiffJException {
+        return toElmt.compareFrom(report, this, exitValue);
     }
+
+    public int compareFrom(Report report, JavaFile fromFile, int exitValue) throws DiffJException {
+        return JavaFile.compare(report, fromFile, JavaFile.createFile(this, fromFile), exitValue);
+    }
+
+    public int compareFrom(Report report, JavaDirectory fromDir, int exitValue) throws DiffJException {
+        Set<String> names = new TreeSet<String>();
+        names.addAll(fromDir.getElementNames());
+        names.addAll(getElementNames());
+        
+        for (String name : names) {
+            JavaFSElement fromElmt = fromDir.getElement(name);
+            JavaFSElement toElmt = getElement(name);
+
+            if (fromElmt != null && toElmt != null && (fromElmt.isFile() || (fromElmt.isDirectory() && canRecurse))) {
+                tr.Ace.setVerbose(false);
+                exitValue = fromElmt.compareTo(report, toElmt, exitValue);
+                tr.Ace.setVerbose(true);
+            }
+        }
+
+        return exitValue;
+    }
+
 }

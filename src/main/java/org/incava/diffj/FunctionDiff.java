@@ -102,14 +102,14 @@ public class FunctionDiff extends ItemDiff {
 
     protected void compareParameters(ASTFormalParameters afp, ASTFormalParameters bfp) {
         List<Parameter> aParams = ParameterUtil.getParameterList(afp);
-        tr.Ace.log("aParams", aParams);
+        // tr.Ace.log("aParams", aParams);
         List<Parameter> bParams = ParameterUtil.getParameterList(bfp);
-        tr.Ace.log("bParams", bParams);
+        // tr.Ace.log("bParams", bParams);
         
         List<String> aParamTypes = ParameterUtil.getParameterTypes(afp);
-        tr.Ace.log("aParamTypes", aParamTypes);
+        // tr.Ace.log("aParamTypes", aParamTypes);
         List<String> bParamTypes = ParameterUtil.getParameterTypes(bfp);
-        tr.Ace.log("bParamTypes", bParamTypes);
+        // tr.Ace.log("bParamTypes", bParamTypes);
 
         int aSize = aParamTypes.size();
         int bSize = bParamTypes.size();
@@ -126,14 +126,14 @@ public class FunctionDiff extends ItemDiff {
         }
         else {
             for (int ai = 0; ai < aSize; ++ai) {
-                tr.Ace.log("ai", String.valueOf(ai));
+                // tr.Ace.log("ai", String.valueOf(ai));
                 
                 Parameter ap = aParams.get(ai);
-                tr.Ace.log("ap", ap);
+                // tr.Ace.log("ap", ap);
 
                 int[] paramMatch = ParameterUtil.getMatch(aParams, ai, bParams);
 
-                tr.Ace.log("paramMatch", paramMatch);
+                // tr.Ace.log("paramMatch", paramMatch);
 
                 ASTFormalParameter aParam = ParameterUtil.getParameter(afp, ai);
 

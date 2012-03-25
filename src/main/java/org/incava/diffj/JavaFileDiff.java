@@ -20,9 +20,13 @@ public class JavaFileDiff {
         CompilationUnitDiff cud = new CompilationUnitDiff(report, flushReport);
         // chew the cud here ...
         cud.compare(fromCu, toCu);
+
+        tr.Ace.setVerbose(true);
+        tr.Ace.yellow("this", this);
         
         if (report.getDifferences().size() > 0) {
             exitValue = 1;
+            tr.Ace.yellow("exitValue", "" + exitValue);
         }
 
         if (flushReport) {

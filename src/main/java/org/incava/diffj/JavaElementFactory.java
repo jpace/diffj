@@ -7,12 +7,22 @@ import org.incava.analysis.Report;
  * Creates Java filesystem elements (files and directories).
  */
 public class JavaElementFactory {
-    public JavaFSElement createElement(File file, String label, String source) throws DiffJException {
+    public JavaFSElement createElement(File file, String label, String source, boolean recurseDirectories) throws DiffJException {
         if (file == null || file.getName().equals("-") || (file.isFile() && verifyExists(file, label))) {
             return new JavaFile(file, label, source);
         }
         else if (file.isDirectory()) {
-            return new JavaDirectory(file, source);
+            return new JavaDirectory(file, source, recurseDirectories);
+        }
+        else {
+            noSuchFile(file, label);
+            return null;
+        }
+    }
+
+    public JavaFile createFile(File file, String label, String source) throws DiffJException {
+        if (file == null || file.getName().equals("-") || (file.isFile() && verifyExists(file, label))) {
+            return new JavaFile(file, label, source);
         }
         else {
             noSuchFile(file, label);

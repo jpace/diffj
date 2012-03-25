@@ -28,7 +28,7 @@ public class JavaFile extends JavaFSElement {
         tr.Ace.onRed("file: " + file + "; otherElmt: " + otherElmt);
         try {
             JavaElementFactory jef = new JavaElementFactory();
-            return (JavaFile)jef.createElement(new File(file, otherElmt.getName()), null, otherElmt.getSourceVersion());
+            return jef.createFile(new File(file, otherElmt.getName()), null, otherElmt.getSourceVersion());
         }
         catch (DiffJException de) {
             throw de;
@@ -45,6 +45,9 @@ public class JavaFile extends JavaFSElement {
         try {
             final boolean flushReport = true;
             JavaFileDiff jfd = new JavaFileDiff(report, fromFile, toFile, flushReport);
+            tr.Ace.yellow("exitValue", "" + exitValue);
+            tr.Ace.yellow("jfd.getExitValue()", "" + jfd.getExitValue());
+
             return jfd.getExitValue() == 0 ? exitValue : jfd.getExitValue();
         }
         catch (Exception e) {
@@ -135,13 +138,15 @@ public class JavaFile extends JavaFSElement {
         }
     }
 
-    public int compare(Report report, JavaFile toFile, int exitValue) throws DiffJException {
-        tr.Ace.onRed("from: " + this + "; toFile: " + toFile);
-        return compare(report, this, toFile, exitValue);
+    public int compareTo(Report report, JavaFSElement toElmt, int exitValue) throws DiffJException {
+        return toElmt.compareFrom(report, this, exitValue);
     }
 
-    public int compare(Report report, JavaDirectory toDir, int exitValue) throws DiffJException {
-        tr.Ace.onCyan("from: " + this + "; toDir: " + toDir);
-        return compare(report, this, createFile(toDir, this), exitValue);
+    public int compareFrom(Report report, JavaFile fromFile, int exitValue) throws DiffJException {
+        return compare(report, fromFile, this, exitValue);
+    }
+
+    public int compareFrom(Report report, JavaDirectory fromDir, int exitValue) throws DiffJException {
+        return compare(report, createFile(fromDir, this), this, exitValue);
     }
 }
