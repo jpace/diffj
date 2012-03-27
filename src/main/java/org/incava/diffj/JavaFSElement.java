@@ -16,18 +16,13 @@ public abstract class JavaFSElement extends File {
         this.sourceVersion = sourceVersion;
     }
 
-    public JavaFSElement(File file, String sourceVersion) {
-        super(file.getPath());
-        this.sourceVersion = sourceVersion;
-    }
-
     protected String getSourceVersion() {
         return sourceVersion;
     }
 
-    public abstract int compareTo(Report report, JavaFSElement elmt, int exitValue) throws DiffJException;
+    public abstract int compareTo(Report report, JavaFSElement elmt) throws DiffJException;
 
-    public abstract int compareFrom(Report report, JavaFile file, int exitValue) throws DiffJException;
+    public abstract int compareFrom(Report report, JavaFile file) throws DiffJException;
 
-    public abstract int compareFrom(Report report, JavaDirectory dir, int exitValue) throws DiffJException;
+    public abstract int compareFrom(Report report, JavaDirectory dir) throws DiffJException;
 }

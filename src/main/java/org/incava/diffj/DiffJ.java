@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.incava.analysis.BriefReport;
 import org.incava.analysis.DetailedReport;
+import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 import org.incava.ijdk.util.ListExt;
 import org.incava.qualog.Qualog;
@@ -18,6 +19,7 @@ public class DiffJ {
     private final String fromSource;
     private final String toSource;
     private final JavaElementFactory jef;
+    private final FileDiffs fileDiffs;
     
     public DiffJ(boolean briefOutput, boolean contextOutput, boolean highlightOutput, 
                  boolean recurseDirectories,
@@ -37,6 +39,7 @@ public class DiffJ {
         this.toSource = toSource;
         this.exitValue = 0;
         this.jef = new JavaElementFactory();
+        this.fileDiffs = report.getDifferences();
     }
 
     protected Report getReport() {
@@ -77,11 +80,13 @@ public class DiffJ {
             if (fromElmt == null) {
                 return false;
             }
-            exitValue = fromElmt.compareTo(report, toElmt, exitValue);
+            fromElmt.compareTo(report, toElmt);
+            if (fileDiffs.wasAdded()) {
+                exitValue = 1;
+            }
             return true;
         }
         catch (DiffJException de) {
-            // de.printStackTrace(System.out);
             System.err.println(de.getMessage());
             exitValue = 1;
             return false;
@@ -105,8 +110,6 @@ public class DiffJ {
                 break;
             }
         }
-
-        tr.Ace.setVerbose(true);
         tr.Ace.onGreen("exitValue", "" + exitValue);
     }
 

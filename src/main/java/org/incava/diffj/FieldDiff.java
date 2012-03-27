@@ -12,7 +12,7 @@ import net.sourceforge.pmd.ast.ASTVariableInitializer;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -29,7 +29,7 @@ public class FieldDiff extends ItemDiff {
         JavaParserConstants.STATIC,
     };
 
-    public FieldDiff(Collection<FileDiff> differences) {
+    public FieldDiff(FileDiffs differences) {
         super(differences);
     }
 
@@ -47,10 +47,7 @@ public class FieldDiff extends ItemDiff {
         ASTVariableInitializer binit = (ASTVariableInitializer)SimpleNodeUtil.findChild(b, ASTVariableInitializer.class);
         
         if (ainit == null) {
-            if (binit == null) {
-                // no change in init
-            }
-            else {
+            if (binit != null) {
                 changed(a, binit, INITIALIZER_ADDED);
             }
         }

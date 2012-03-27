@@ -24,11 +24,11 @@ import org.incava.java.Java;
 public class JavaFile extends JavaFSElement {
     public static final long serialVersionUID = 1L;
 
-    public static JavaFile createFile(File file, JavaFSElement otherElmt) throws DiffJException {
-        tr.Ace.onRed("file: " + file + "; otherElmt: " + otherElmt);
+    public static JavaFile createFile(File dir, JavaFSElement otherElmt) throws DiffJException {
+        tr.Ace.onRed("dir: " + dir + "; otherElmt: " + otherElmt);
         try {
             JavaElementFactory jef = new JavaElementFactory();
-            return jef.createFile(new File(file, otherElmt.getName()), null, otherElmt.getSourceVersion());
+            return jef.createFile(new File(dir, otherElmt.getName()), null, otherElmt.getSourceVersion());
         }
         catch (DiffJException de) {
             throw de;
@@ -40,38 +40,37 @@ public class JavaFile extends JavaFSElement {
         }
     }
 
-    public static int compare(Report report, JavaFile fromFile, JavaFile toFile, int exitValue) throws DiffJException {
+    public static int compare(Report report, JavaFile fromFile, JavaFile toFile) throws DiffJException {
         tr.Ace.onRed("fromFile: " + fromFile + "; toFile: " + toFile);
         try {
-            final boolean flushReport = true;
-            JavaFileDiff jfd = new JavaFileDiff(report, fromFile, toFile, flushReport);
-            tr.Ace.yellow("exitValue", "" + exitValue);
-            tr.Ace.yellow("jfd.getExitValue()", "" + jfd.getExitValue());
-
-            return jfd.getExitValue() == 0 ? exitValue : jfd.getExitValue();
+            fromFile.compare(report, toFile);
         }
         catch (Exception e) {
             tr.Ace.log("e", e);
             e.printStackTrace();
             throw new DiffJException(e);
         }
+        finally {
+            report.flush();
+        }
+        return 0;
     }
 
     private final String label; // not necessarily the same as the name.
     private final String contents;
 
-    public JavaFile(String label, String contents, String sourceVersion) {
-        super(label, sourceVersion);
-        this.label = label;
-        this.contents = contents;
-    }
-
-    public JavaFile(File file, String label, String sourceVersion) throws DiffJException {
-        super(file.getPath(), sourceVersion);
+    protected JavaFile(File file, String label, String contents, String sourceVersion) throws DiffJException {
+        super(label != null ? label : file.getPath(), sourceVersion);
         try {
             boolean isStdin = file == null || file.getName().equals("-");
-            FileReader reader = isStdin ? new FileReader(FileDescriptor.in) : new FileReader(file);
-            this.contents = ReaderExt.readAsString(reader, EnumSet.of(ReadOptionType.ADD_EOLNS));
+            if (contents != null) {
+                this.contents = contents;
+            }
+            else {
+                isStdin = file == null || file.getName().equals("-");
+                FileReader reader = isStdin ? new FileReader(FileDescriptor.in) : new FileReader(file);
+                this.contents = ReaderExt.readAsString(reader, EnumSet.of(ReadOptionType.ADD_EOLNS));
+            }
             this.label = label == null ? (isStdin ? "-" : file.getPath()) : label;
         }
         catch (FileNotFoundException e) {
@@ -82,14 +81,19 @@ public class JavaFile extends JavaFSElement {
         }
     }
 
+    public JavaFile(String label, String contents, String sourceVersion) throws DiffJException {
+        this(null, label, contents, sourceVersion);
+    }
+
+    public JavaFile(File file, String label, String sourceVersion) throws DiffJException {
+        this(file, label, null, sourceVersion);
+    }
+
     /** 
      * Constructor for stdin.
      */
-    public JavaFile(String label, String sourceVersion) {
-        super(label == null ? "-" : label, sourceVersion);
-        FileReader reader = new FileReader(FileDescriptor.in);
-        this.contents = ReaderExt.readAsString(reader, EnumSet.of(ReadOptionType.ADD_EOLNS));
-        this.label = label == null ? "-" : label;
+    public JavaFile(String label, String sourceVersion) throws DiffJException {
+        this(null, label, null, sourceVersion);
     }
 
     public String getLabel() {
@@ -138,15 +142,38 @@ public class JavaFile extends JavaFSElement {
         }
     }
 
-    public int compareTo(Report report, JavaFSElement toElmt, int exitValue) throws DiffJException {
-        return toElmt.compareFrom(report, this, exitValue);
+    public int compareTo(Report report, JavaFSElement toElmt) throws DiffJException {
+        return toElmt.compareFrom(report, this);
     }
 
-    public int compareFrom(Report report, JavaFile fromFile, int exitValue) throws DiffJException {
-        return compare(report, fromFile, this, exitValue);
+    public int compareFrom(Report report, JavaFile fromFile) throws DiffJException {
+        return compare(report, fromFile, this);
     }
 
-    public int compareFrom(Report report, JavaDirectory fromDir, int exitValue) throws DiffJException {
-        return compare(report, createFile(fromDir, this), this, exitValue);
+    public int compareFrom(Report report, JavaDirectory fromDir) throws DiffJException {
+        return compare(report, createFile(fromDir, this), this);
+    }
+
+    public int compare(Report report, JavaFile toFile) throws DiffJException {
+        try {
+            ASTCompilationUnit fromCu = compile();
+            ASTCompilationUnit toCu   = toFile.compile();
+            
+            report.reset(getLabel(), getContents(), toFile.getLabel(), toFile.getContents());
+        
+            CompilationUnitDiff cud = new CompilationUnitDiff(report);
+            // chew the cud here ...
+            cud.compare(fromCu, toCu);
+
+            tr.Ace.setVerbose(true);
+            tr.Ace.yellow("this", this);
+        }
+        catch (DiffJException de) {
+            tr.Ace.red("de", de);
+            System.err.println("Error: " + de.getMessage());
+            throw de;
+        }
+
+        return 0;
     }
 }

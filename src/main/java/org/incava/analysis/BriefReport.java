@@ -54,7 +54,7 @@ public class BriefReport extends Report {
      * Writes all differences, and clears the list.
      */
     public void flush() {
-        if (!differences.isEmpty()) {
+        if (hasDifferences()) {
             printFileNames();
             writeDifferences();
         }
@@ -66,7 +66,7 @@ public class BriefReport extends Report {
      */
     private void writeDifferences() {
         try {
-            Collection<FileDiff> diffs = collateDifferences(differences);
+            Collection<FileDiff> diffs = getDifferences();
             String lastStr = null;
             for (FileDiff ref : diffs) {
                 String str = toString(ref);

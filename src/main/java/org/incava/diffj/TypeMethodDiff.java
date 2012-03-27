@@ -2,14 +2,14 @@ package org.incava.diffj;
 
 import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class TypeMethodDiff extends AbstractTypeItemDiff<ASTMethodDeclaration> {
     private final MethodUtil methodUtil;
 
-    public TypeMethodDiff(Collection<FileDiff> differences) {
+    public TypeMethodDiff(FileDiffs differences) {
         super(differences, ASTMethodDeclaration.class);        
         methodUtil = new MethodUtil();
     }    

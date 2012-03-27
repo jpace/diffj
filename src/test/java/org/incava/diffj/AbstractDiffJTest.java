@@ -100,9 +100,7 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
             tr.Ace.green("toFile", toFile);
             tr.Ace.green("toStr", toStr);
 
-            final boolean flushReport = false;
-            JavaFileDiff jfd = new JavaFileDiff(report, fromFile, toFile, flushReport);
-            tr.Ace.yellow("jfd", jfd);
+            fromFile.compare(report, toFile);
             
             if (expectations != null) {
                 if (expectations.length != diffs.size()) {

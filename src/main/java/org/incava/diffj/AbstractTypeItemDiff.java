@@ -9,6 +9,7 @@ import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
 import org.incava.pmdx.TypeDeclarationUtil;
@@ -16,7 +17,7 @@ import org.incava.pmdx.TypeDeclarationUtil;
 public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends DiffComparator {
     private final Class<Type> cls;
 
-    public AbstractTypeItemDiff(Collection<FileDiff> differences, Class<Type> cls) {
+    public AbstractTypeItemDiff(FileDiffs differences, Class<Type> cls) {
         super(differences);
         this.cls = cls;
     }

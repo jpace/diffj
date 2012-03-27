@@ -9,6 +9,7 @@ import net.sourceforge.pmd.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 
 public class ImportsDiff extends DiffComparator {
@@ -17,7 +18,7 @@ public class ImportsDiff extends DiffComparator {
     public static final String IMPORT_SECTION_REMOVED = "import section removed";
     public static final String IMPORT_SECTION_ADDED = "import section added";
 
-    public ImportsDiff(Collection<FileDiff> differences) {
+    public ImportsDiff(FileDiffs differences) {
         super(differences);
     }
 

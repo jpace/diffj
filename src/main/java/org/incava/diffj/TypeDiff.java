@@ -13,6 +13,7 @@ import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
@@ -56,7 +57,7 @@ public class TypeDiff extends ItemDiff {
         super(report);
     }
 
-    public TypeDiff(Collection<FileDiff> differences) {
+    public TypeDiff(FileDiffs differences) {
         super(differences);
     }
 
@@ -176,18 +177,18 @@ public class TypeDiff extends ItemDiff {
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
-        Collection<FileDiff> refs = getFileDiffs();
+        FileDiffs diffs = getFileDiffs();
         
-        TypeMethodDiff tmd = new TypeMethodDiff(refs);
+        TypeMethodDiff tmd = new TypeMethodDiff(diffs);
         tmd.compare(aNode, bNode);
         
-        TypeFieldDiff tfd = new TypeFieldDiff(refs);
+        TypeFieldDiff tfd = new TypeFieldDiff(diffs);
         tfd.compare(aNode, bNode);
         
-        TypeCtorDiff ctd = new TypeCtorDiff(refs);
+        TypeCtorDiff ctd = new TypeCtorDiff(diffs);
         ctd.compare(aNode, bNode);
         
-        TypeInnerTypeDiff titd = new TypeInnerTypeDiff(refs, this);
+        TypeInnerTypeDiff titd = new TypeInnerTypeDiff(diffs, this);
         titd.compare(aNode, bNode);
     }
 

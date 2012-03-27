@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTFormalParameter;
@@ -10,7 +9,7 @@ import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
-import org.incava.analysis.Report;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.Parameter;
 import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
@@ -28,11 +27,7 @@ public class FunctionDiff extends ItemDiff {
     public static final String THROWS_ADDED = "throws added: {0}";
     public static final String THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}";
 
-    public FunctionDiff(Report report) {
-        super(report);
-    }
-
-    public FunctionDiff(Collection<FileDiff> differences) {
+    public FunctionDiff(FileDiffs differences) {
         super(differences);
     }
 

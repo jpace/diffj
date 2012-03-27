@@ -9,6 +9,7 @@ import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -24,7 +25,7 @@ public class MethodDiff extends FunctionDiff {
         JavaParserConstants.STRICTFP
     };
 
-    public MethodDiff(Collection<FileDiff> differences) {
+    public MethodDiff(FileDiffs differences) {
         super(differences);
     }
 

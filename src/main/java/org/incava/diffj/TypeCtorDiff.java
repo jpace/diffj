@@ -3,11 +3,12 @@ package org.incava.diffj;
 import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class TypeCtorDiff extends AbstractTypeItemDiff<ASTConstructorDeclaration> {
-    public TypeCtorDiff(Collection<FileDiff> differences) {
+    public TypeCtorDiff(FileDiffs differences) {
         super(differences, ASTConstructorDeclaration.class);
     }    
 

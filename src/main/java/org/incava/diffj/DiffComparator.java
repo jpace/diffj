@@ -10,28 +10,29 @@ import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffDelete;
+import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class DiffComparator {
     private final Report report;    
-    private final Collection<FileDiff> fileDiffs;
+    private final FileDiffs fileDiffs;
 
     public DiffComparator(Report report) {
         this.report = report;
         this.fileDiffs = report.getDifferences();
     }
 
-    public DiffComparator(Collection<FileDiff> refs) {
+    public DiffComparator(FileDiffs diffs) {
         this.report = null;
-        this.fileDiffs = refs;
+        this.fileDiffs = diffs;
     }
 
     public DiffComparator() {
-        this(new ArrayList<FileDiff>());
+        this(new FileDiffs());
     }
 
-    public Collection<FileDiff> getFileDiffs() {
+    public FileDiffs getFileDiffs() {
         return fileDiffs;
     }
 

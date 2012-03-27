@@ -2,13 +2,13 @@ package org.incava.diffj;
 
 import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.ClassUtil;
 
 public class TypeInnerTypeDiff extends AbstractTypeItemDiff<ASTClassOrInterfaceDeclaration> {
     private final TypeDiff typeDiff;
 
-    public TypeInnerTypeDiff(Collection<FileDiff> differences, TypeDiff typeDiff) {
+    public TypeInnerTypeDiff(FileDiffs differences, TypeDiff typeDiff) {
         super(differences, ASTClassOrInterfaceDeclaration.class);
         this.typeDiff = typeDiff;
     }

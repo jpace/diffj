@@ -2,12 +2,12 @@ package org.incava.diffj;
 
 import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTFieldDeclaration;
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class TypeFieldDiff extends AbstractTypeItemDiff<ASTFieldDeclaration> {
-    public TypeFieldDiff(Collection<FileDiff> differences) {
+    public TypeFieldDiff(FileDiffs differences) {
         super(differences, ASTFieldDeclaration.class);
     }    
 

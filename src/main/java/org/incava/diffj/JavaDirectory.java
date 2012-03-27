@@ -15,13 +15,9 @@ public class JavaDirectory extends JavaFSElement {
 
     private final boolean canRecurse;
 
-    public JavaDirectory(String name, String sourceVersion, boolean canRecurse) {
-        super(name, sourceVersion);
-        this.canRecurse = canRecurse;
-    }
-
     public JavaDirectory(File file, String sourceVersion, boolean canRecurse) {
-        this(file.getPath(), sourceVersion, canRecurse);
+        super(file.getPath(), sourceVersion);
+        this.canRecurse = canRecurse;
     }
 
     public JavaFile createJavaFile(File file, String label) throws DiffJException {
@@ -59,31 +55,42 @@ public class JavaDirectory extends JavaFSElement {
         return names;
     }
 
-    public int compareTo(Report report, JavaFSElement toElmt, int exitValue) throws DiffJException {
-        return toElmt.compareFrom(report, this, exitValue);
+    public int compareTo(Report report, JavaFSElement toElmt) throws DiffJException {
+        return toElmt.compareFrom(report, this);
     }
 
-    public int compareFrom(Report report, JavaFile fromFile, int exitValue) throws DiffJException {
-        return JavaFile.compare(report, fromFile, JavaFile.createFile(this, fromFile), exitValue);
+    public int compareFromFile(Report report, JavaFile fromFile) throws DiffJException {
+        return JavaFile.compare(report, fromFile, JavaFile.createFile(this, fromFile));
     }
 
-    public int compareFrom(Report report, JavaDirectory fromDir, int exitValue) throws DiffJException {
+    public int compareFromDirectory(Report report, JavaDirectory fromDir) throws DiffJException {
         Set<String> names = new TreeSet<String>();
         names.addAll(fromDir.getElementNames());
         names.addAll(getElementNames());
+        tr.Ace.yellow("names", names);
         
         for (String name : names) {
+            tr.Ace.yellow("name", name);
             JavaFSElement fromElmt = fromDir.getElement(name);
+            tr.Ace.yellow("fromElmt", fromElmt);
             JavaFSElement toElmt = getElement(name);
+            tr.Ace.yellow("toElmt", toElmt);
 
             if (fromElmt != null && toElmt != null && (fromElmt.isFile() || (fromElmt.isDirectory() && canRecurse))) {
                 tr.Ace.setVerbose(false);
-                exitValue = fromElmt.compareTo(report, toElmt, exitValue);
+                fromElmt.compareTo(report, toElmt);
                 tr.Ace.setVerbose(true);
             }
         }
 
-        return exitValue;
+        return 0;
     }
 
+    public int compareFrom(Report report, JavaFile fromFile) throws DiffJException {
+        return compareFromFile(report, fromFile);
+    }
+
+    public int compareFrom(Report report, JavaDirectory fromDir) throws DiffJException {
+        return compareFromDirectory(report, fromDir);
+    }
 }

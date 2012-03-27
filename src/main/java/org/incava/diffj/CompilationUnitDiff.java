@@ -3,53 +3,27 @@ package org.incava.diffj;
 import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
-import org.incava.ijdk.util.TimedEvent;
 
 public class CompilationUnitDiff extends DiffComparator {
-    private final Report report;    
-    private final boolean flush;
-    
-    public CompilationUnitDiff(Report report, boolean flush) {
+    public CompilationUnitDiff(Report report) {
         super(report);
-        this.report = report;
-        this.flush = flush;
-    }
-
-    public CompilationUnitDiff(Collection<FileDiff> diffs) {
-        super(diffs);
-        this.report = null;
-        this.flush = false;
-    }
-
-    public CompilationUnitDiff() {
-        this.report = null;
-        this.flush = false;
     }
 
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
-        Collection<FileDiff> refs = getFileDiffs();
-        tr.Ace.log("refs", refs);
+        FileDiffs diffs = getFileDiffs();
+        tr.Ace.log("diffs", diffs);
         
         if (a != null && b != null) {
-            PackageDiff pd = new PackageDiff(refs);
+            PackageDiff pd = new PackageDiff(diffs);
             pd.compare(a, b);
             
-            if (flush && report != null) {
-                report.flush();
-            }
-            
-            ImportsDiff id = new ImportsDiff(refs);
+            ImportsDiff id = new ImportsDiff(diffs);
             id.compare(a, b);
-            
-            if (flush && report != null) {
-                report.flush();
-            }
 
-            // TimedEvent typetime = new TimedEvent("type");
-            TypesDiff td = new TypesDiff(refs);
+            TypesDiff td = new TypesDiff(diffs);
             td.compare(a, b);
-            // typetime.close();
         }
     }
 }

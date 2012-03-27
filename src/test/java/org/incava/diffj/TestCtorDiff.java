@@ -459,8 +459,8 @@ public class TestCtorDiff extends AbstractTestItemDiff {
         tr.Ace.setVerbose(true);
         tr.Ace.yellow("this", this);
 
-        JavaFile jf = new JavaFile("name", lines.toString(), "1.6");
         try {
+            JavaFile jf = new JavaFile("name", lines.toString(), "1.6");
             org.incava.pmdx.SimpleNodeUtil.dump(jf.compile());
         }
         catch (Exception e) {
@@ -479,8 +479,8 @@ public class TestCtorDiff extends AbstractTestItemDiff {
         tr.Ace.setVerbose(true);
         tr.Ace.yellow("this", this);
 
-        JavaFile jf = new JavaFile("name", lines.toString(), "1.6");
         try {
+            JavaFile jf = new JavaFile("name", lines.toString(), "1.6");
             org.incava.pmdx.SimpleNodeUtil.dump(jf.compile());
         }
         catch (Exception e) {

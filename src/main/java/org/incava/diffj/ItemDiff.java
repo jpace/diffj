@@ -11,6 +11,7 @@ import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffCodeAdded;
 import org.incava.analysis.FileDiffCodeDeleted;
+import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
@@ -46,7 +47,7 @@ public class ItemDiff extends DiffComparator {
         super(report);
     }
 
-    public ItemDiff(Collection<FileDiff> differences) {
+    public ItemDiff(FileDiffs differences) {
         super(differences);
     }
 

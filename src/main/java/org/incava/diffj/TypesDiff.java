@@ -8,6 +8,7 @@ import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
@@ -18,7 +19,7 @@ public class TypesDiff extends ItemDiff {
     public static final String TYPE_DECLARATION_ADDED = "type declaration added: {0}";
     public static final String TYPE_DECLARATION_REMOVED = "type declaration removed: {0}";
 
-    public TypesDiff(Collection<FileDiff> differences) {
+    public TypesDiff(FileDiffs differences) {
         super(differences);
     }
 

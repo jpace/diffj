@@ -124,11 +124,11 @@ public class DetailedReport extends Report {
      * Writes all differences, and clears the list.
      */
     public void flush() {
-        if (!differences.isEmpty()) {
+        if (hasDifferences()) {
             printFileNames();
             try {
                 tr.Ace.log("flushing differences");
-                Collection<FileDiff> diffs = collateDifferences(differences);
+                Collection<FileDiff> diffs = getDifferences();
                 for (FileDiff ref : diffs) {
                     String str = toString(ref);
                     writer.write(str);

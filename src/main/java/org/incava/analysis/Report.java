@@ -40,7 +40,12 @@ public abstract class Report {
     /**
      * The set of differences, which are maintained in sorted order.
      */
-    protected Set<FileDiff> differences = new TreeSet<FileDiff>();
+    private FileDiffs differences;
+
+    /**
+     * Whether any differences were stored in this report.
+     */
+    private boolean hadDifferences;
 
     /**
      * Creates a report for the given writer.
@@ -49,6 +54,8 @@ public abstract class Report {
      */
     public Report(Writer writer) {
         this.writer = writer;
+        hadDifferences = false;
+        differences = new FileDiffs();
     }
 
     /**
@@ -144,7 +151,7 @@ public abstract class Report {
     public void flush() {
         try {
             tr.Ace.log("flushing differences");
-            Collection<FileDiff> diffs = collateDifferences(differences);
+            FileDiffs diffs = getDifferences();
             for (FileDiff ref : diffs) {
                 String str = toString(ref);
                 writer.write(str);
@@ -158,8 +165,8 @@ public abstract class Report {
         clear();
     }
 
-    public Collection<FileDiff> collateDifferences(Collection<FileDiff> diffs) {
-        return diffs;
+    public FileDiffs getDifferences() {
+        return differences;
     }
 
     public void printFileNames() {
@@ -182,10 +189,6 @@ public abstract class Report {
             fromFileName = null;
             toFileName = null;
         }
-    }
-
-    public Collection<FileDiff> getDifferences() {
-        return differences;
     }
     
     /**
@@ -222,5 +225,16 @@ public abstract class Report {
      */
     protected void clear() {
         differences.clear();
+    }
+
+    /**
+     * Returns whether there are or were (meaning already flushed) differences.
+     */
+    public boolean hadDifferences() {
+        return hadDifferences;
+    }
+
+    public boolean hasDifferences() {
+        return !differences.isEmpty();
     }
 }

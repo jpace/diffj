@@ -8,18 +8,13 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiff;
-import org.incava.analysis.Report;
+import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class CtorDiff extends FunctionDiff {
-    public CtorDiff(Report report) {
-        super(report);
-    }
-
-    public CtorDiff(Collection<FileDiff> differences) {
+    public CtorDiff(FileDiffs differences) {
         super(differences);
     }
 

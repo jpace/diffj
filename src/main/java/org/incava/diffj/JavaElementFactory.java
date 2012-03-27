@@ -8,8 +8,9 @@ import org.incava.analysis.Report;
  */
 public class JavaElementFactory {
     public JavaFSElement createElement(File file, String label, String source, boolean recurseDirectories) throws DiffJException {
-        if (file == null || file.getName().equals("-") || (file.isFile() && verifyExists(file, label))) {
-            return new JavaFile(file, label, source);
+        JavaFile javaFile = createFile(file, label, source);
+        if (javaFile != null) {
+            return javaFile;
         }
         else if (file.isDirectory()) {
             return new JavaDirectory(file, source, recurseDirectories);
@@ -25,7 +26,6 @@ public class JavaElementFactory {
             return new JavaFile(file, label, source);
         }
         else {
-            noSuchFile(file, label);
             return null;
         }
     }
