@@ -91,6 +91,24 @@ module Java
         info "self: #{self}".magenta
         self.class.compare_xxx report, self.class.create_file_xxx(from_dir, self), self
       end
+
+      def compare_xxx report, toFile
+        begin
+          fromCu = compile()
+          toCu   = toFile.compile()
+            
+          report.reset(getLabel(), getContents(), toFile.getLabel(), toFile.getContents())
+          
+          cud = CompilationUnitDiff.new(report)
+          # chew the cud here ...
+          cud.compare(fromCu, toCu)
+        rescue DiffJException => de
+          info "de: #{de}".on_red
+          $stderr.puts "Error: " + de.getMessage()
+          throw de
+        end
+        0
+      end
     end
 
     class DirectoryJRuby < JavaDirectory
