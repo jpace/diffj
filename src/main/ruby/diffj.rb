@@ -4,15 +4,12 @@
 require 'rubygems'
 require 'java'
 require 'riel'
-require 'java_fs_element'
+require 'diffj/io'
 
 include Java
 
-import org.incava.ijdk.lang.StringExt
-import org.incava.diffj.DiffJ
 import org.incava.diffj.Options
 import org.incava.diffj.DiffJException
-import org.incava.diffj.JavaElementFactory
 import org.incava.analysis.BriefReport
 import org.incava.analysis.DetailedReport
 
@@ -25,14 +22,13 @@ class DiffJRuby
   attr_reader :exit_value
   
   def initialize brief, context, highlight, recurse, from_label, fromver, to_label, tover
-    $stderr.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".yellow
     @report = brief ? BriefReport.new(java.lang.System.out) : DetailedReport.new(java.lang.System.out, context, highlight)
     @recurseDirectories = recurse
     @from_label = from_label
     @fromver = fromver
     @to_label = to_label
     @tover = tover
-    @jef = Java::FS::Factory.new
+    @jef = Java::IO::Factory.new
     @exit_value = 0
   end
 
@@ -40,12 +36,9 @@ class DiffJRuby
     begin
       info "fname: #{fname}"
       @jef.create_element java.io.File.new(fname), label, source, @recurseDirectories
-    rescue DiffJException => de
-      puts "de: #{de}"
-      puts "de.class: #{de.class}"
-      de.printStackTrace(java.lang.System.out)
-      $stderr.puts de.getMessage()
-      setExitValue(1)
+    rescue StandardError => de
+      $stderr.puts de.message
+      @exit_value = 1
       nil
     end
   end
@@ -61,18 +54,13 @@ class DiffJRuby
   def compare from_name, to_elmt
     begin 
       from_elmt = create_from_element from_name
-      info "from_elmt: #{from_elmt}".on_blue
       return false unless from_elmt
-      ev = from_elmt.compare_to_xxx @report, to_elmt
+      from_elmt.compare_to @report, to_elmt
       @exit_value = @report.differences.wasAdded ? 1 : 0
-      info "exit_value: #{exit_value}".on_blue
       return true;
     rescue DiffJException => de
-      info "de: #{de}".red
-      de.printStackTrace();
-      $stderr.puts(de.getMessage())
+      $stderr.puts de.message
       @exit_value = 1
-      info "exit_value: #{exit_value}".on_blue
       return false
     end
   end
@@ -84,14 +72,8 @@ class DiffJRuby
       return
     end
 
-    to_elmt = create_to_element names[-1]
-    info "to_elmt: #{to_elmt}".on_green
-    info "to_elmt: #{to_elmt.class}".on_green
-
-    return unless to_elmt
-
+    return unless to_elmt = create_to_element(names[-1])
     names[0 ... -1].each do |fromname|
-      info "fromname: #{fromname}".on_blue
       compare fromname, to_elmt
     end
   end
@@ -115,36 +97,4 @@ if __FILE__ == $0
   diffj.process_things rarray
   puts "exiting with value: #{diffj.exit_value}"
   exit diffj.exit_value
-end
-
-__END__
-
-class DiffJMain
-  java_signature 'void main(String[])'
-  def self.main args
-    puts "< hello"
-    puts "> world"
-    c = StringExt.contains("hello", "l"[0])
-    puts "c: #{c}"
-
-    args.each do |arg|
-      puts "arg: #{arg}"
-    end
-
-    opts = Options.get
-    puts "opts: #{opts}"
-    puts "opts.class: #{opts.class}"
-    opts.methods.sort.each do |m|
-      puts m
-    end
-
-    puts "opts.briefOutput: #{opts.showBriefOutput}"
-    puts "opts.contextOutput: #{opts.showContextOutput}"
-
-    DiffJ.main args
-  end
-end
-
-if __FILE__ == $0
-  DiffJMain.main Array.new
 end

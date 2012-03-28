@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w
+#!/usr/bin/jruby -w
 # -*- ruby -*-
 
 require 'rubygems'
@@ -14,7 +14,7 @@ import ::Java::net.sourceforge.pmd.ast.TokenMgrError
 import ::Java::net.sourceforge.pmd.ast.ParseException
 
 module Java
-  module FS
+  module IO
     class Element < java.io.File
       include Loggable
 
@@ -46,7 +46,7 @@ module Java
           Log.info "other_elmt: #{other_elmt}"
           
           begin
-            ::Java::FS::Factory.new.create_file(java.io.File.new(dir, other_elmt.getName()), nil, other_elmt.source_version);
+            ::Java::IO::Factory.new.create_file(java.io.File.new(dir, other_elmt.getName()), nil, other_elmt.source_version);
           rescue DiffJException => de
             raise de
           rescue java.lang.Throwable => e

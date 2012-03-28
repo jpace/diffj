@@ -67,7 +67,6 @@ public class JavaFile extends JavaFSElement {
                 this.contents = contents;
             }
             else {
-                isStdin = file == null || file.getName().equals("-");
                 FileReader reader = isStdin ? new FileReader(FileDescriptor.in) : new FileReader(file);
                 this.contents = ReaderExt.readAsString(reader, EnumSet.of(ReadOptionType.ADD_EOLNS));
             }

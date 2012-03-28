@@ -224,7 +224,9 @@ public abstract class Report {
      * Clears the list of differences.
      */
     protected void clear() {
+        tr.Ace.yellow("differences", differences);
         differences.clear();
+        tr.Ace.yellow("differences", differences);
     }
 
     /**
