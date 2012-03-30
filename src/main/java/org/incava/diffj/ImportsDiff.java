@@ -1,7 +1,9 @@
 package org.incava.diffj;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
@@ -11,6 +13,7 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
+import org.incava.pmdx.SimpleNodeUtil;
 
 public class ImportsDiff extends DiffComparator {
     public static final String IMPORT_REMOVED = "import removed: {0}";

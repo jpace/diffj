@@ -54,13 +54,20 @@ public class TypesDiff extends ItemDiff {
     }
 
     protected Map<String, ASTTypeDeclaration> makeTDMap(ASTTypeDeclaration[] types) {
+        tr.Ace.setVerbose(true);
+
         Map<String, ASTTypeDeclaration> namesToTD = new HashMap<String, ASTTypeDeclaration>();
         for (ASTTypeDeclaration type : types) {
+            tr.Ace.yellow("type", type);
             Token tk = TypeDeclarationUtil.getName(type);
             if (tk != null) {
+                tr.Ace.yellow("tk", tk);
+                tr.Ace.yellow("tk.image", tk.image);
                 namesToTD.put(tk.image, type);
             }
         }
+
+        tr.Ace.setVerbose(false);
 
         return namesToTD;
     }

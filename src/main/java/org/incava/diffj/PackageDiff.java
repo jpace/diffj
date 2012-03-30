@@ -26,7 +26,7 @@ public class PackageDiff extends DiffComparator {
         if (aPkg == null) {
             if (bPkg != null) {
                 ASTName    name = (ASTName)SimpleNodeUtil.findChild(bPkg, ASTName.class);
-                SimpleNode aPos = SimpleNodeUtil.findChild(a, null);
+                SimpleNode aPos = SimpleNodeUtil.findChild(a);
 
                 if (aPos == null) {
                     aPos = a;
@@ -36,7 +36,7 @@ public class PackageDiff extends DiffComparator {
         }
         else if (bPkg == null) {
             ASTName    name = (ASTName)SimpleNodeUtil.findChild(aPkg, ASTName.class);
-            SimpleNode bPos = SimpleNodeUtil.findChild(b, null);
+            SimpleNode bPos = SimpleNodeUtil.findChild(b);
 
             if (bPos == null) {
                 bPos = b;

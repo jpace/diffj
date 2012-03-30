@@ -28,7 +28,7 @@ class DiffJRuby
     @fromver = fromver
     @to_label = to_label
     @tover = tover
-    @jef = Java::IO::Factory.new
+    @jef = DiffJ::IO::Factory.new
     @exit_value = 0
   end
 

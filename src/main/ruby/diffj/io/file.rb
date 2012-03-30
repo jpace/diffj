@@ -1,43 +1,23 @@
-#!/usr/bin/ruby -w
+#!/usr/bin/jruby -w
 # -*- ruby -*-
 
 require 'rubygems'
 require 'riel'
 require 'java'
 require 'set'
+require 'diffj/ast'
+require 'diffj/io/element'
+require 'diffj/io/factory'
 
 include Java
 
-import org.incava.diffj.CompilationUnitDiff
 import org.incava.diffj.DiffJException
 import ::Java::net.sourceforge.pmd.ast.TokenMgrError
 import ::Java::net.sourceforge.pmd.ast.ParseException
 
-module Java
-  module FS
-    class Element < java.io.File
-      include Loggable
-
-      attr_reader :source_version
-
-      def initialize name, srcver
-        super(name)
-        info "name: #{name}"
-        @name = name
-        @source_version = srcver
-      end
-
-      def compare_to report, elmt
-      end
-
-      def compare_from_file report, file
-      end
-
-      def compare_from_dir report, dir
-      end
-    end
-
-    class FileJRuby < Element
+module DiffJ
+  module IO
+    class File < Element
       include Loggable
       
       class << self
@@ -46,7 +26,7 @@ module Java
           Log.info "other_elmt: #{other_elmt}"
           
           begin
-            ::Java::FS::Factory.new.create_file(java.io.File.new(dir, other_elmt.getName()), nil, other_elmt.source_version);
+            ::DiffJ::IO::Factory.new.create_file(java.io.File.new(dir, other_elmt.getName()), nil, other_elmt.source_version);
           rescue DiffJException => de
             raise de
           rescue java.lang.Throwable => e
@@ -144,14 +124,14 @@ module Java
         
         report.reset label, contents, to_file.label, to_file.contents
         
-        cud = CompilationUnitDiff.new report
+        cud = ::DiffJ::CompUnitDiff.new report
         cud.compare from_comp_unit, to_comp_unit
 
         report.flush
       end
     end
 
-    class DirectoryJRuby < Element
+    class Directory < Element
       include Loggable
 
       def initialize file, srcver, recurse
@@ -161,15 +141,15 @@ module Java
       end
       
       def create_java_file file, label
-        FileJRuby.new file, label, nil, source_version
+        File.new file, label, nil, source_version
       end
 
       def create_java_directory file
-        DirectoryJRuby.new file, source_version, @recurse
+        self.class.new file, source_version, @recurse
       end
 
       def element_names
-        files = listFiles()
+        files = listFiles
         names = Array.new
         files && files.each do |file|
           names << file.name if file.directory? || (file.file? && file.name.index(%r{\.java$}))
@@ -178,10 +158,10 @@ module Java
       end
 
       def element name
-        files = listFiles()
+        files = listFiles
         files.each do |file|
-          if file.getName() == name
-            return file.isDirectory() ? create_java_directory(file) : create_java_file(file, nil)
+          if file.name == name
+            return file.directory ? create_java_directory(file) : create_java_file(file, nil)
           end
         end
         nil
@@ -196,7 +176,7 @@ module Java
       def compare_from_file report, from_file
         info "self: #{self}"
         info "from_file: #{from_file}"
-        FileJRuby.compare report, from_file, FileJRuby.create_file(self, from_file)
+        File.compare report, from_file, File.create_file(self, from_file)
       end
 
       def compare_from_dir report, from_dir
@@ -227,7 +207,7 @@ module Java
         if javafile
           javafile
         elsif file.directory?
-          DirectoryJRuby.new file, source, recurse
+          Directory.new file, source, recurse
         else
           no_such_file file, label
           nil
@@ -236,7 +216,7 @@ module Java
 
       def create_file file, label, source
         if file.nil? || file.name == "-" || (file.file? && verify_exists(file, label))
-          FileJRuby.new file, label, nil, source
+          File.new file, label, nil, source
         else
           nil
         end
@@ -256,7 +236,7 @@ module Java
       end
 
       def name file, label
-        label || file.xxxabsolute_path
+        label || file.absolute_path
       end
     end
   end
