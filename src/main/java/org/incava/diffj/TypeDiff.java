@@ -109,12 +109,13 @@ public class TypeDiff extends ItemDiff {
         compareDeclarations(at, bt);
     }
 
-    protected Map<String, ASTClassOrInterfaceType> getExtImpMap(ASTClassOrInterfaceDeclaration coid, Class extImpClass) {
+    protected Map<String, ASTClassOrInterfaceType> getExtImpMap(ASTClassOrInterfaceDeclaration coid, String extImpClassName) {
         Map<String, ASTClassOrInterfaceType> map = new HashMap<String, ASTClassOrInterfaceType>();
-        SimpleNode list = SimpleNodeUtil.findChild(coid, extImpClass);
+        SimpleNode list = SimpleNodeUtil.findChild(coid, extImpClassName);
 
         if (list != null) {
-            ASTClassOrInterfaceType[] types = (ASTClassOrInterfaceType[])SimpleNodeUtil.findChildren(list, ASTClassOrInterfaceType.class);
+            Collection<ASTClassOrInterfaceType> types = new ArrayList<ASTClassOrInterfaceType>();
+            SimpleNodeUtil.fetchChildren(types, list, "net.sourceforge.pmd.ast.ASTClassOrInterfaceType");
             for (ASTClassOrInterfaceType type : types) {
                 map.put(SimpleNodeUtil.toString(type), type);
             }
@@ -128,9 +129,9 @@ public class TypeDiff extends ItemDiff {
                                  String addMsg,
                                  String chgMsg,
                                  String delMsg,
-                                 Class extImpCls) {
-        Map<String, ASTClassOrInterfaceType> aMap = getExtImpMap(at, extImpCls);
-        Map<String, ASTClassOrInterfaceType> bMap = getExtImpMap(bt, extImpCls);
+                                 String extImpClsName) {
+        Map<String, ASTClassOrInterfaceType> aMap = getExtImpMap(at, extImpClsName);
+        Map<String, ASTClassOrInterfaceType> bMap = getExtImpMap(bt, extImpClsName);
 
         // I don't like this special case, but it is better than two separate
         // "add" and "remove" messages.
@@ -168,11 +169,11 @@ public class TypeDiff extends ItemDiff {
     }
 
     protected void compareExtends(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        compareImpExt(at, bt, EXTENDED_TYPE_ADDED, EXTENDED_TYPE_CHANGED, EXTENDED_TYPE_REMOVED, ASTExtendsList.class);
+        compareImpExt(at, bt, EXTENDED_TYPE_ADDED, EXTENDED_TYPE_CHANGED, EXTENDED_TYPE_REMOVED, "net.sourceforge.pmd.ast.ASTExtendsList");
     }
 
     protected void compareImplements(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        compareImpExt(at, bt, IMPLEMENTED_TYPE_ADDED, IMPLEMENTED_TYPE_CHANGED, IMPLEMENTED_TYPE_REMOVED, ASTImplementsList.class);
+        compareImpExt(at, bt, IMPLEMENTED_TYPE_ADDED, IMPLEMENTED_TYPE_CHANGED, IMPLEMENTED_TYPE_REMOVED, "net.sourceforge.pmd.ast.ASTImplementsList");
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {

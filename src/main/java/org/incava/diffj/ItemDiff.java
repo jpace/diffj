@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
@@ -58,7 +59,7 @@ public class ItemDiff extends DiffComparator {
      */
     protected Map<Integer, Token> getModifierMap(SimpleNode node) {
         List<Token>         mods   = SimpleNodeUtil.getLeadingTokens(node);        
-        Map<Integer, Token> byKind = new HashMap<Integer, Token>();
+        Map<Integer, Token> byKind = new TreeMap<Integer, Token>();
 
         for (Token tk : mods) {
             byKind.put(Integer.valueOf(tk.kind), tk);
