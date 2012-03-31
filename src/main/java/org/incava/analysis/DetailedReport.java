@@ -127,14 +127,15 @@ public class DetailedReport extends Report {
         if (hasDifferences()) {
             printFileNames();
             try {
-                tr.Ace.log("flushing differences");
+                tr.Ace.stack("flushing differences");
                 Collection<FileDiff> diffs = getDifferences();
                 for (FileDiff ref : diffs) {
                     String str = toString(ref);
                     writer.write(str);
                 }
-                // we can't close STDOUT
                 writer.flush();
+                
+                // we can't close STDOUT:
                 // writer.close();
             }
             catch (IOException ioe) {

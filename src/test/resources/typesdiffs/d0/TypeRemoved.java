@@ -1,0 +1,5 @@
+class TypeRemoved {
+}
+
+class TheTypeRemoved {
+}

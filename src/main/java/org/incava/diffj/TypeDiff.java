@@ -61,17 +61,12 @@ public class TypeDiff extends ItemDiff {
         super(differences);
     }
 
-    public void compare(SimpleNode aType, SimpleNode bType) {
-        // should have only one child, the type itself, either an interface or a
-        // class declaration
-
-        ASTTypeDeclaration a = (ASTTypeDeclaration)aType;
-        ASTTypeDeclaration b = (ASTTypeDeclaration)bType;
-
-        compare(a, b);
-    }
-
     public void compare(ASTTypeDeclaration a, ASTTypeDeclaration b) {
+        tr.Ace.setVerbose(true);
+
+        tr.Ace.yellow("a", a);
+        tr.Ace.yellow("b", b);
+
         // should have only one child, the type itself, either an interface or a
         // class declaration
 
@@ -87,8 +82,12 @@ public class TypeDiff extends ItemDiff {
     }
 
     public void compare(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        tr.Ace.log("at", at);
-        tr.Ace.log("bt", bt);
+        tr.Ace.setVerbose(true);
+        tr.Ace.cyan("at", at);
+        tr.Ace.cyan("bt", bt);
+
+        tr.Ace.cyan("at.interface?", "" + at.isInterface());
+        tr.Ace.cyan("bt.interface?", "" + bt.isInterface());
 
         if (!at.isInterface() && bt.isInterface()) {
             changed(at, bt, TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);

@@ -68,5 +68,13 @@ end
 # beginning of cleaned up Rake code:
 
 task :runtest do
-  sh "jruby ./src/test/ruby/test_diffj.rb"
+  sh "jruby -Isrc/main/ruby -Isrc/test/ruby src/test/ruby/test_types_diff.rb"
+end
+
+task :tests do
+  tests = Dir.glob("src/test/ruby/**/test_*.rb")
+  puts "tests: #{tests}"
+  tests.each do |test|
+    sh "jruby -Isrc/main/ruby -Isrc/test/ruby #{test}"
+  end
 end

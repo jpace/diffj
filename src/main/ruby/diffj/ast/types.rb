@@ -4,12 +4,12 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/ast/type'
 
 include Java
 
 import org.incava.diffj.DiffComparator
 import org.incava.diffj.TypeDiff
-import org.incava.diffj.TypesDiff
 import org.incava.pmdx.CompilationUnitUtil
 import org.incava.pmdx.TypeDeclarationUtil
 
@@ -63,8 +63,8 @@ module DiffJ
           a_name = TypeDeclarationUtil.getName atd
           deleted atd, cub, TYPE_DECLARATION_REMOVED, a_name.image
         else
-          differ = TypeDiff.new file_diffs
-          differ.compare atd, btd
+          differ = TypeComparator.new file_diffs
+          differ.compare_xxx atd, btd
         end
       end
     end

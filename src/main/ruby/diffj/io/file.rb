@@ -36,6 +36,7 @@ module DiffJ
 
         def compare report, from_file, to_file
           from_file.compare report, to_file
+          report.flush
         end
       end
 
@@ -61,9 +62,9 @@ module DiffJ
           end
           @label = label || (isStdin ? "-" : file.getPath())
         rescue java.io.FileNotFoundException => e
-          raise DiffJException.new("Error opening file '" + file.getAbsolutePath() + "': " + e.getMessage(), e)
+          raise DiffJException.new "Error opening file '" + file.getAbsolutePath() + "': " + e.getMessage(), e
         rescue java.io.IOException => e
-          raise DiffJException.new("I/O error with file '" + file.getAbsolutePath() + "': " + e.getMessage(), e)
+          raise DiffJException.new "I/O error with file '" + file.getAbsolutePath() + "': " + e.getMessage(), e
         end
       end
 
@@ -126,8 +127,6 @@ module DiffJ
         
         cud = ::DiffJ::CompUnitDiff.new report
         cud.compare from_comp_unit, to_comp_unit
-
-        report.flush
       end
     end
 

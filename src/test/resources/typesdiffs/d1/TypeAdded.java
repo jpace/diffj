@@ -1,0 +1,5 @@
+class TypeAdded {
+}
+
+class TheTypeAdded {
+}

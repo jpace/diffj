@@ -148,23 +148,8 @@ public abstract class Report {
     /**
      * Writes all differences, and clears the list.
      */
-    public void flush() {
-        try {
-            tr.Ace.log("flushing differences");
-            FileDiffs diffs = getDifferences();
-            for (FileDiff ref : diffs) {
-                String str = toString(ref);
-                writer.write(str);
-            }
-            // we can't close STDOUT
-            writer.flush();
-            // writer.close();
-        }
-        catch (IOException ioe) {
-        }
-        clear();
-    }
-
+    public abstract void flush();
+    
     public FileDiffs getDifferences() {
         return differences;
     }

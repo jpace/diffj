@@ -31,7 +31,7 @@ module DiffJ
       id.compare cua, cub
 
       td = TpsDiff.new diffs
-      td.compare_xxx cua, cub
+      td.compare cua, cub
     end
   end
 end
