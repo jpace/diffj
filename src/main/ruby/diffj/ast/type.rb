@@ -170,7 +170,7 @@ module DiffJ
       diffs = getFileDiffs
         
       tmd = MethodDeclComparator.new diffs
-      tmd.compare_xxx from_node, to_node
+      tmd.compare from_node, to_node
         
       tfd = TypeFieldDiff.new diffs
       tfd.compare from_node, to_node
