@@ -1,7 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'typediff/typetestcase'
+require 'type/typetestcase'
 
 include Java
 
