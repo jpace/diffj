@@ -5,6 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/ast/methoddecl'
+require 'diffj/ast/fielddecl'
 
 include Java
 
@@ -12,9 +13,7 @@ import org.incava.diffj.DiffComparator
 import org.incava.diffj.ItemDiff
 import org.incava.diffj.TypeCtorDiff
 import org.incava.diffj.TypeDiff
-import org.incava.diffj.TypeFieldDiff
 import org.incava.diffj.TypeInnerTypeDiff
-import org.incava.diffj.TypeMethodDiff
 import org.incava.pmdx.ItemUtil
 import org.incava.pmdx.SimpleNodeUtil
 
@@ -172,7 +171,7 @@ module DiffJ
       tmd = MethodDeclComparator.new diffs
       tmd.compare from_node, to_node
         
-      tfd = TypeFieldDiff.new diffs
+      tfd = FieldDeclComparator.new diffs
       tfd.compare from_node, to_node
         
       ctd = TypeCtorDiff.new diffs
