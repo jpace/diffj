@@ -8,8 +8,12 @@ include Java
 import org.incava.diffj.ImportsDiff
 
 class DiffJImportsTestCase < DiffJTestCase
-  def run_imp_test expected_fdiffs, basename
-    run_fdiff_test expected_fdiffs, 'impdiffs', basename
+  def subdir
+    'impdiffs'
+  end
+
+  def run_imp_test basename, *expected_fdiffs
+    run_fdiff_test expected_fdiffs, subdir, basename
   end
 
   def section_added from_start, from_end, to_start, to_end
@@ -29,28 +33,18 @@ class DiffJImportsTestCase < DiffJTestCase
   end
 
   def test_section_added
-    expected_fdiffs = Array.new
-    expected_fdiffs << section_added(loc(1, 1), loc(1, 5), loc(1, 1), loc(2, 30))
-    run_imp_test expected_fdiffs, 'ImpSctnAdded'
+    run_imp_test 'ImpSctnAdded', section_added(loc(1, 1), loc(1, 5), loc(1, 1), loc(2, 30))
   end
 
   def test_section_removed
-    expected_fdiffs = Array.new
-    expected_fdiffs << section_removed(loc(1, 1), loc(2, 32), loc(1, 1), loc(1, 5))
-    run_imp_test expected_fdiffs, 'ImpSctnRemoved'
+    run_imp_test 'ImpSctnRemoved', section_removed(loc(1, 1), loc(2, 32), loc(1, 1), loc(1, 5))
   end
 
   def test_import_added
-    name = 'org.incava.Added'
-    expected_fdiffs = Array.new
-    expected_fdiffs << import_added(name, loc(1, 1), loc(1, 27), loc(2, 1), loc(2, 24))
-    run_imp_test expected_fdiffs, 'ImpAdded'
+    run_imp_test 'ImpAdded', import_added('org.incava.Added', loc(1, 1), loc(1, 27), loc(2, 1), loc(2, 24))
   end
 
   def test_section_removed
-    name = "org.incava.Removed"
-    expected_fdiffs = Array.new
-    expected_fdiffs << import_removed(name, loc(2, 1), loc(2, 26), loc(1, 1), loc(1, 27))
-    run_imp_test expected_fdiffs, 'ImpRemoved'
+    run_imp_test 'ImpRemoved', import_removed('org.incava.Removed', loc(2, 1), loc(2, 26), loc(1, 1), loc(1, 27))
   end
 end

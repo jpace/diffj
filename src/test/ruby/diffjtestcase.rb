@@ -14,7 +14,7 @@ class DiffJTestCase < Test::Unit::TestCase
   
   TESTBED_DIR = '/proj/org/incava/diffj/src/test/resources'
   
-  def run_test dirname
+  def run_diffj_test dirname
     fnames = %w{ d0 d1 }.collect { |subdir| TESTBED_DIR + '/' + dirname + '/' + subdir }
     brief = false
     context = true
@@ -135,11 +135,58 @@ class DiffJTestCase < Test::Unit::TestCase
     make_fdiff org.incava.analysis.FileDiffAdd, msgvals, from_start, from_end, to_start, to_end
   end
 
+  def make_fdiff_delete msgvals, from_start, from_end, to_start, to_end
+    make_fdiff org.incava.analysis.FileDiffDelete, msgvals, from_start, from_end, to_start, to_end
+  end
+
   def make_fdiff_change msgvals, from_start, from_end, to_start, to_end
     make_fdiff org.incava.analysis.FileDiffChange, msgvals, from_start, from_end, to_start, to_end
   end
 
-  def make_fdiff_delete msgvals, from_start, from_end, to_start, to_end
-    make_fdiff org.incava.analysis.FileDiffDelete, msgvals, from_start, from_end, to_start, to_end
+  def subdir
+    raise "subdir: must be implemented by subclasses"
+  end  
+
+  def added_msg_fmt
+    raise "added_msg_fmt: must be implemented by subclasses"
+  end  
+
+  def removed_msg_fmt
+    raise "removed_msg_fmt: must be implemented by subclasses"
+  end
+
+  def changed_msg_fmt
+    raise "changed_msg_fmt: must be implemented by subclasses"
+  end  
+  
+  # a filediff with type "change" (so from and to contexts are displayed), but
+  # with a message of the form: "X added".
+  def added_change what, from_start, from_end, to_start, to_end = nil
+    make_fdiff_change format(added_msg_fmt, what), from_start, from_end, to_start, to_end || loctext(to_start, what)
+  end
+
+  def added_add what, from_start, from_end, to_start, to_end = nil
+    make_fdiff_add format(added_msg_fmt, what), from_start, from_end, to_start, to_end || loctext(to_start, what)
+  end
+
+  def added what, from_start, from_end, to_start, to_end = nil
+    stack "warning: use added_change".red
+    make_fdiff_change format(added_msg_fmt, what), from_start, from_end, to_start, to_end || loctext(to_start, what)
+  end
+
+  def removed what, from_start, to_start, to_end
+    make_fdiff_change format(removed_msg_fmt, what), from_start, loctext(from_start, what), to_start, to_end
+  end
+
+  def removed_change what, from_start, to_start, to_end
+    make_fdiff_change format(removed_msg_fmt, what), from_start, loctext(from_start, what), to_start, to_end
+  end
+
+  def removed_delete what, from_start, to_start, to_end
+    make_fdiff_delete format(removed_msg_fmt, what), from_start, loctext(from_start, what), to_start, to_end
+  end
+
+  def changed from, to, from_start, to_start
+    make_fdiff_change format(changed_msg_fmt, from, to), from_start, loctext(from_start, from), to_start, loctext(to_start, to)
   end
 end

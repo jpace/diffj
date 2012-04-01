@@ -8,29 +8,31 @@ include Java
 import org.incava.diffj.TypesDiff
 
 class DiffJTypesTestCase < DiffJTestCase
-  def run_type_test expected_fdiffs, basename
-    run_fdiff_test expected_fdiffs, 'typesdiffs', basename
+  def subdir
+    'typesdiffs'
   end
 
-  def type_added name, from_start, from_end, to_start, to_end
-    make_fdiff_add format(TypesDiff::TYPE_DECLARATION_ADDED, name), from_start, from_end, to_start, to_end
+  def run_types_test basename, *expected_fdiffs
+    run_fdiff_test expected_fdiffs, subdir, basename
   end
 
-  def type_removed name, from_start, from_end, to_start, to_end
-    make_fdiff_delete format(TypesDiff::TYPE_DECLARATION_REMOVED, name), from_start, from_end, to_start, to_end
+  def added_msg_fmt
+    TypesDiff::TYPE_DECLARATION_ADDED
+  end
+
+  def removed_msg_fmt
+    TypesDiff::TYPE_DECLARATION_REMOVED
+  end
+
+  def removed name, from_start, from_end, to_start, to_end
+    make_fdiff_delete format(removed_msg_fmt, name), from_start, from_end, to_start, to_end
   end
 
   def test_type_added
-    name = 'TheTypeAdded'
-    expected_fdiffs = Array.new
-    expected_fdiffs << type_added(name, loc(1, 1), loc(2, 2), loc(4, 1), loc(5, 1))
-    run_type_test expected_fdiffs, 'TypeAdded'
+    run_types_test 'TypeAdded', added_add('TheTypeAdded', loc(1, 1), loc(2, 2), loc(4, 1), loc(5, 1))
   end
 
   def test_section_removed
-    name = "TheTypeRemoved"
-    expected_fdiffs = Array.new
-    expected_fdiffs << type_removed(name, loc(4, 1), loc(5, 1), loc(1, 1), loc(2, 2))
-    run_type_test expected_fdiffs, 'TypeRemoved'
+    run_types_test 'TypeRemoved', removed("TheTypeRemoved", loc(4, 1), loc(5, 1), loc(1, 1), loc(2, 2))
   end
 end
