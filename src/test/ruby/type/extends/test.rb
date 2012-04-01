@@ -7,7 +7,7 @@ include Java
 
 import org.incava.diffj.TypeDiff
 
-class DiffJTypeExtendsTestCase < DiffJTypeTestCase
+class DiffJ::TypeExtendsTestCase < DiffJTypeTestCase
   def subdir
     'extends'
   end
