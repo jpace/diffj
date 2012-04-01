@@ -7,7 +7,7 @@ include Java
 
 import org.incava.diffj.TypesDiff
 
-class DiffJTypesTestCase < DiffJTestCase
+class DiffJ::TypesTestCase < DiffJ::TestCase
   def subdir
     'types'
   end

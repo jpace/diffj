@@ -7,9 +7,9 @@ include Java
 
 import org.incava.diffj.PackageDiff
 
-class DiffJPackageTestCase < DiffJTestCase
+class DiffJ::PackagesTestCase < DiffJ::TestCase
   def subdir
-    'package'
+    'packages'
   end
 
   def run_pkg_test basename, *expected_fdiffs

@@ -5,7 +5,7 @@ require 'diffjtestcase'
 
 include Java
 
-class DiffJTypeTestCase < DiffJTestCase
+class DiffJTypeTestCase < DiffJ::TestCase
   BASEDIR = 'typediffs'
 
   def run_test basename, *expected_fdiffs

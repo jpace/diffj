@@ -9,7 +9,7 @@ require 'diffj'
 
 include Java
 
-class DiffJTestCase < Test::Unit::TestCase
+class DiffJ::TestCase < Test::Unit::TestCase
   include Loggable
   
   TESTBED_DIR = '/proj/org/incava/diffj/src/test/resources'
