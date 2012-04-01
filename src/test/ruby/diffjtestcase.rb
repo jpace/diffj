@@ -193,18 +193,24 @@ class DiffJ::TestCase < Test::Unit::TestCase
   def added what, from_start, from_end, to_start, to_end = nil
     stack "warning: use added_change".red
     make_fdiff_change format(added_msg_fmt, what), from_start, from_end, to_start, to_end || loctext(to_start, what)
+    fail
   end
 
   def removed what, from_start, to_start, to_end
+    stack "warning: use removed_change".red
     make_fdiff_change format(removed_msg_fmt, what), from_start, loctext(from_start, what), to_start, to_end
+    fail
   end
 
   def removed_change what, from_start, to_start, to_end
     make_fdiff_change format(removed_msg_fmt, what), from_start, loctext(from_start, what), to_start, to_end
   end
 
-  def removed_delete what, from_start, to_start, to_end
-    make_fdiff_delete format(removed_msg_fmt, what), from_start, loctext(from_start, what), to_start, to_end
+  def removed_delete what, from_start, *params
+    from_end = params.size == 2 ? loctext(from_start, what) : params[0]
+    to_start = params[-2]
+    to_end = params[-1]
+    make_fdiff_delete format(removed_msg_fmt, what), from_start, from_end, to_start, to_end
   end
 
   def changed from, to, from_start, to_start

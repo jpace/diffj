@@ -25,11 +25,11 @@ class DiffJ::TypeAccessTestCase < DiffJTypeTestCase
   end
 
   def test_removed
-    run_test 'Removed', removed("public", loc(1, 1), loc(1, 1), loc(1, 5))
+    run_test 'Removed', removed_change("public", loc(1, 1), loc(1, 1), loc(1, 5))
   end
 
   def test_added
-    run_test 'Added', added("public", loc(1, 1), loc(1, 5), loc(1, 1))
+    run_test 'Added', added_change("public", loc(1, 1), loc(1, 5), loc(1, 1))
   end
 
   def test_changed

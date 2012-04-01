@@ -15,19 +15,27 @@ import org.incava.ijdk.util.MultiMap;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends DiffComparator {
-    private final Class<Type> cls;
+    private final String clsName;
+
+    public AbstractTypeItemDiff(FileDiffs differences, String clsName) {
+        super(differences);
+        this.clsName = clsName;
+    }
 
     public AbstractTypeItemDiff(FileDiffs differences, Class<Type> cls) {
-        super(differences);
-        this.cls = cls;
+        this(differences, cls == null ? (String)null : cls.getName());
+    }
+
+    public String getClassName() {
+        return clsName;
     }
 
     @SuppressWarnings("unchecked")
-    public static <Type extends SimpleNode> List<Type> getDeclarationsOfClass(ASTClassOrInterfaceBodyDeclaration[] decls, Class<Type> cls) {
+    public <Type extends SimpleNode> List<Type> getDeclarationsOfClass(ASTClassOrInterfaceBodyDeclaration[] decls) {
         List<Type> declList = new ArrayList<Type>();
 
         for (ASTClassOrInterfaceBodyDeclaration decl : decls) {
-            SimpleNode dec = TypeDeclarationUtil.getDeclaration(decl, cls);
+            SimpleNode dec = TypeDeclarationUtil.getDeclaration(decl, clsName);
 
             if (dec != null) {
                 declList.add((Type)dec);
@@ -37,13 +45,7 @@ public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends Diff
         return declList;
     }
 
-    public void compare(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
-        ASTClassOrInterfaceBodyDeclaration[] aDecls = TypeDeclarationUtil.getDeclarations(aNode);
-        ASTClassOrInterfaceBodyDeclaration[] bDecls = TypeDeclarationUtil.getDeclarations(bNode);
-
-        List<Type> amds = getDeclarationsOfClass(aDecls, this.cls);
-        List<Type> bmds = getDeclarationsOfClass(bDecls, this.cls);
-
+    public TypeMatches<Type> getTypeMatches(List<Type> amds, List<Type> bmds) {
         TypeMatches<Type> matches = new TypeMatches<Type>();
 
         for (Type amd : amds) {
@@ -54,16 +56,12 @@ public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends Diff
                 }
             }
         }
+        return matches;
+    }
 
+    public void compareMatches(TypeMatches<Type> matches, List<Type> unprocA, List<Type> unprocB) {
         List<Double> descendingScores = matches.getDescendingScores();
         
-        // go through best scores
-
-        List<Type> unprocA = new ArrayList<Type>(amds);        
-        List<Type> unprocB = new ArrayList<Type>(bmds);
-
-        Collection<FileDiff> diffs = getFileDiffs();
-
         for (Double score : descendingScores) {
             // don't repeat comparisons ...
 
@@ -74,19 +72,34 @@ public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends Diff
                 Type amd = declPair.getFirst();
                 Type bmd = declPair.getSecond();
 
-                if (!unprocA.contains(amd) || !unprocB.contains(bmd)) {
-                    continue;
+                if (unprocA.contains(amd) && unprocB.contains(bmd)) {
+                    doCompare(amd, bmd);
+                    
+                    procA.add(amd);
+                    procB.add(bmd);
                 }
-
-                doCompare(amd, bmd);
-
-                procA.add(amd);
-                procB.add(bmd);
             }
 
             unprocA.removeAll(procA);
             unprocB.removeAll(procB);
         }
+    }
+
+    public List<Type> getDeclarationsOfClassType(ASTClassOrInterfaceDeclaration coid) {
+        ASTClassOrInterfaceBodyDeclaration[] decls = TypeDeclarationUtil.getDeclarations(coid);
+        return getDeclarationsOfClass(decls);
+    }
+
+    public void compare(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
+        List<Type> amds = getDeclarationsOfClassType(aNode);
+        List<Type> bmds = getDeclarationsOfClassType(bNode);
+
+        TypeMatches<Type> matches = getTypeMatches(amds, bmds);
+
+        List<Type> unprocA = new ArrayList<Type>(amds);        
+        List<Type> unprocB = new ArrayList<Type>(bmds);
+
+        compareMatches(matches, unprocA, unprocB);
 
         addRemoved(unprocA, bNode);        
         addAdded(unprocB, aNode);

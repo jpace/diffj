@@ -21,10 +21,10 @@ class DiffJ::TypeClsModifiersTestCase < DiffJTypeTestCase
   end
 
   def test_added
-    run_test 'Added', added('abstract', loc(1, 1), loc(1, 6), loc(1, 8))
+    run_test 'Added', added_change('abstract', loc(1, 1), loc(1, 6), loc(1, 8))
   end
 
   def test_removed
-    run_test 'Removed', removed('strictfp', loc(1, 8), loc(1, 1), loc(1, 6))
+    run_test 'Removed', removed_change('strictfp', loc(1, 8), loc(1, 1), loc(1, 6))
   end
 end

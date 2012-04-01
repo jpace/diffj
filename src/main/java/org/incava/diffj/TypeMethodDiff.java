@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
@@ -20,8 +19,8 @@ public class TypeMethodDiff extends AbstractTypeItemDiff<ASTMethodDeclaration> {
         differ.compare(a, b);
     }
 
-    public double getScore(ASTMethodDeclaration a, ASTMethodDeclaration b) {        
-        return methodUtil.getMatchScore(a, b);
+    public double getScore(ASTMethodDeclaration a, ASTMethodDeclaration b) {
+        return MethodUtil.getMatchScore(a, b);
     }
 
     public String getName(ASTMethodDeclaration md) {

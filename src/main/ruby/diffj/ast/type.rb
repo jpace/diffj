@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/ast/methoddecl'
 
 include Java
 
@@ -168,8 +169,8 @@ module DiffJ
     def compare_declarations_xxx from_node, to_node
       diffs = getFileDiffs
         
-      tmd = TypeMethodDiff.new diffs
-      tmd.compare from_node, to_node
+      tmd = MethodDeclComparator.new diffs
+      tmd.compare_xxx from_node, to_node
         
       tfd = TypeFieldDiff.new diffs
       tfd.compare from_node, to_node

@@ -27,11 +27,11 @@ class DiffJ::TypeImplementsTestCase < DiffJTypeTestCase
   end
 
   def test_added
-    run_test 'Added', added("java.util.List", loc(1, 8), loc(2, 1), loc(1, 31))
+    run_test 'Added', added_change("java.util.List", loc(1, 8), loc(2, 1), loc(1, 31))
   end
 
   def test_removed
-    run_test 'Removed', removed("Runnable", loc(1, 33), loc(1, 8), loc(2, 1))
+    run_test 'Removed', removed_change("Runnable", loc(1, 33), loc(1, 8), loc(2, 1))
   end
 
   def test_changed

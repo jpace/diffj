@@ -25,11 +25,11 @@ class DiffJ::TypeExtendsTestCase < DiffJTypeTestCase
   end
 
   def test_added
-    run_test 'Added', added("java.io.File", loc(1, 8), loc(2, 1), loc(1, 28))
+    run_test 'Added', added_change("java.io.File", loc(1, 8), loc(2, 1), loc(1, 28))
   end
 
   def test_removed
-    run_test 'Removed', removed("java.lang.StringBuilder", loc(1, 30), loc(1, 8), loc(2, 1))
+    run_test 'Removed', removed_change("java.lang.StringBuilder", loc(1, 30), loc(1, 8), loc(2, 1))
   end
 
   def test_changed
