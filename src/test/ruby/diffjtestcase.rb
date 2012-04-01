@@ -30,7 +30,7 @@ class DiffJTestCase < Test::Unit::TestCase
     assert_not_nil diffj
   end
 
-  def run_fdiff_test expected_fdiffs, dirname, basename
+  def get_diffj 
     brief = false
     context = true
     highlight = true
@@ -40,8 +40,40 @@ class DiffJTestCase < Test::Unit::TestCase
     toname = nil
     tover = "1.5"
     
-    diffj = DiffJ::CLI.new brief, context, highlight, recurse, fromname, fromver, toname, tover
+    DiffJ::CLI.new brief, context, highlight, recurse, fromname, fromver, toname, tover
+  end
 
+  def get_from_and_to_filenames dirname, basename
+    fnames = %w{ d0 d1 }.collect { |subdir| TESTBED_DIR + '/' + dirname + '/' + subdir + '/' + basename + '.java' }
+
+    fromname, toname = *fnames
+    info "fromname: #{fromname}"
+    info "toname: #{toname}"
+
+    [ fromname, toname ]
+  end
+
+  def assert_differences_match expected_diffs, actual_diffs
+    info "expected_diffs: #{expected_diffs.class}"
+    info "actual_diffs: #{actual_diffs.class}"
+
+    if expected_diffs.length != actual_diffs.length
+      info "mismatched number of diffs".red
+      maxlen = [ expected_diffs.length, actual_diffs.length ].max
+      (0 ... maxlen).each do |fdidx|
+        info "expected_diffs[#{fdidx}]: #{expected_diffs[fdidx]}; #{expected_diffs[fdidx].class}"
+      end
+      assert_equal expected_diffs.length, actual_diffs.length, "mismatched number of diffs"
+    else
+      actual_diffs.each_with_index do |actdiff, fdidx|
+        expdiff = expected_diffs[fdidx]
+        assert_diffs_equal expdiff, actdiff, "diff[#{fdidx}]"
+      end      
+    end    
+  end
+
+  def run_fdiff_test expected_fdiffs, dirname, basename
+    diffj = get_diffj
     report = diffj.report
     info "report: #{report}"
     info "report.differences: #{report.differences}"
@@ -51,6 +83,8 @@ class DiffJTestCase < Test::Unit::TestCase
     fromname, toname = *fnames
     info "fromname: #{fromname}"
     info "toname: #{toname}"
+
+    fromname, toname = get_from_and_to_filenames dirname, basename
 
     fromfile = diffj.create_from_element fromname
     tofile = diffj.create_to_element toname
@@ -68,19 +102,7 @@ class DiffJTestCase < Test::Unit::TestCase
     info "expected_fdiffs: #{expected_fdiffs.class}"
     info "actual_fdiffs: #{actual_fdiffs.class}"
 
-    if expected_fdiffs.length != actual_fdiffs.length
-      info "mismatched number of fdiffs".red
-      maxlen = [ expected_fdiffs.length, actual_fdiffs.length ].max
-      (0 ... maxlen).each do |fdidx|
-        info "expected_fdiffs[#{fdidx}]: #{expected_fdiffs[fdidx]}; #{expected_fdiffs[fdidx].class}"
-      end
-      assert_equal expected_fdiffs.length, actual_fdiffs.length, "mismatched number of fdiffs"
-    else
-      actual_fdiffs.each_with_index do |actfdiff, fdidx|
-        expfdiff = expected_fdiffs[fdidx]
-        assert_fdiffs_equal expfdiff, actfdiff, "fdiff[#{fdidx}]"
-      end      
-    end    
+    assert_differences_match expected_fdiffs, actual_fdiffs
   end
 
   def assert_equal exp, act, msg
@@ -96,12 +118,11 @@ class DiffJTestCase < Test::Unit::TestCase
     end
   end
 
-  def assert_fdiffs_equal exp, act, msg = ""
+  def assert_diffs_equal exp, act, msg = ""
     info "exp.type: #{exp.type}"
     info "act.type: #{act.type}"
     assert_equal exp.type, act.type, msg + ".type"
     assert_equal exp.message, act.message, msg + ".message"
-
 
     assert_equal exp.first_location, act.first_location, msg + ".first_location"
 

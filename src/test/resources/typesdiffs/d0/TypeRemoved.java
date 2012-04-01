@@ -1,5 +1,0 @@
-class TypeRemoved {
-}
-
-class TheTypeRemoved {
-}

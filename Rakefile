@@ -72,7 +72,7 @@ task :runtest do
 end
 
 task :tests do
-  tests = Dir.glob("src/test/ruby/**/test_*.rb")
+  tests = Dir.glob("src/test/ruby/**/test*.rb")
   puts "tests: #{tests}"
   tests.each do |test|
     sh "jruby -Isrc/main/ruby -Isrc/test/ruby #{test}"

@@ -1,5 +1,0 @@
-class TypeAdded {
-}
-
-class TheTypeAdded {
-}
