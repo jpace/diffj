@@ -6,6 +6,7 @@ require 'riel'
 require 'java'
 require 'diffj/ast/methoddecl'
 require 'diffj/ast/fielddecl'
+require 'diffj/ast/ctordecl'
 
 include Java
 
@@ -174,7 +175,7 @@ module DiffJ
       tfd = FieldDeclComparator.new diffs
       tfd.compare from_node, to_node
         
-      ctd = TypeCtorDiff.new diffs
+      ctd = CtorDeclComparator.new diffs
       ctd.compare from_node, to_node
         
       titd = TypeInnerTypeDiff.new diffs, self

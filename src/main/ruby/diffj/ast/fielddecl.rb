@@ -18,25 +18,25 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
     super diffs, "net.sourceforge.pmd.ast.ASTFieldDeclaration"
   end
 
-  def get_score amd, bmd
-    FieldUtil.getMatchScore amd, bmd
+  def get_score from_field, to_field
+    FieldUtil.getMatchScore from_field, to_field
   end
 
   def do_compare from, to
-    differ = FieldDiff.new(getFileDiffs())
-    differ.compareAccess(SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to))
-    differ.compare(from, to)
+    differ = FieldDiff.new getFileDiffs()
+    differ.compareAccess SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
+    differ.compare from, to
   end
 
   def get_name fielddecl
     FieldUtil.getNames fielddecl
   end
 
-  def get_added_message methdecl
+  def get_added_message fielddecl
     TypeDiff::FIELD_ADDED
   end
 
-  def get_removed_message methdecl
+  def get_removed_message fielddecl
     TypeDiff::FIELD_REMOVED
   end
 end

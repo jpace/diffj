@@ -1,0 +1,6 @@
+class Added {
+
+    Added() {
+    }
+
+}
