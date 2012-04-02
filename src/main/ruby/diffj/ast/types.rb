@@ -64,7 +64,7 @@ module DiffJ
           deleted atd, cub, TYPE_DECLARATION_REMOVED, a_name.image
         else
           differ = TypeComparator.new file_diffs
-          differ.compare_xxx atd, btd
+          differ.compare atd, btd
         end
       end
     end
