@@ -9,12 +9,11 @@ require 'diffj/ast/type'
 include Java
 
 import org.incava.diffj.DiffComparator
-import org.incava.diffj.TypeDiff
 import org.incava.pmdx.CompilationUnitUtil
 import org.incava.pmdx.TypeDeclarationUtil
 
 module DiffJ
-  class TpsDiff < DiffComparator
+  class TypesComparator < DiffComparator
     include Loggable
 
     TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface"

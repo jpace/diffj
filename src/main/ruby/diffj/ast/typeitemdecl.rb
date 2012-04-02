@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/ast/item'
 
 include Java
 
@@ -15,7 +16,7 @@ import org.incava.pmdx.MethodUtil
 
 module DiffJ; end
 
-class DiffJ::TypeItemDeclComparator < DiffComparator
+class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
   include Loggable
 
   def initialize diffs, clsname

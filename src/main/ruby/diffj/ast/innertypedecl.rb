@@ -5,10 +5,10 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/ast/typeitemdecl'
+require 'diffj/ast/type'
 
 include Java
 
-import org.incava.diffj.TypeDiff
 import org.incava.pmdx.ClassUtil
 
 class DiffJ::InnerTypeComparator < DiffJ::TypeItemDeclComparator
@@ -34,10 +34,10 @@ class DiffJ::InnerTypeComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_added_message coid
-    coid.isInterface() ? TypeDiff::INNER_INTERFACE_ADDED : TypeDiff::INNER_CLASS_ADDED
+    coid.interface? ? DiffJ::TypeComparator::INNER_INTERFACE_ADDED : DiffJ::TypeComparator::INNER_CLASS_ADDED
   end
 
   def get_removed_message coid
-    coid.isInterface() ? TypeDiff::INNER_INTERFACE_REMOVED : TypeDiff::INNER_CLASS_REMOVED
+    coid.interface? ? DiffJ::TypeComparator::INNER_INTERFACE_REMOVED : DiffJ::TypeComparator::INNER_CLASS_REMOVED
   end
 end

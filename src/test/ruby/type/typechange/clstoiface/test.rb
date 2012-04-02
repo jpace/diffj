@@ -5,6 +5,8 @@ require 'type/typetestcase'
 
 include Java
 
+import org.incava.diffj.TypesDiff
+
 class DiffJ::TypeChangeClsToIfaceTestCase < DiffJTypeTestCase
   def subdir
     'typechange/clstoiface'

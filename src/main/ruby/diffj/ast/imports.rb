@@ -11,7 +11,7 @@ import org.incava.diffj.DiffComparator
 import org.incava.pmdx.CompilationUnitUtil
 
 module DiffJ
-  class ImpDiff < DiffComparator
+  class ImportsComparator < DiffComparator
     include Loggable
 
     IMPORT_REMOVED = "import removed: {0}"

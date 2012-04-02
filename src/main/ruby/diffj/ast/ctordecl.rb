@@ -5,6 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/ast/typeitemdecl'
+require 'diffj/ast/type'
 
 include Java
 
@@ -33,10 +34,10 @@ class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_added_message ctordecl
-    TypeDiff::CONSTRUCTOR_ADDED
+    DiffJ::TypeComparator::CONSTRUCTOR_ADDED
   end
 
   def get_removed_message ctordecl
-    TypeDiff::CONSTRUCTOR_REMOVED
+    DiffJ::TypeComparator::CONSTRUCTOR_REMOVED
   end
 end

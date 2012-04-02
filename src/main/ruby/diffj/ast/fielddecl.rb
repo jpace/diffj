@@ -5,6 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/ast/typeitemdecl'
+require 'diffj/ast/type'
 
 include Java
 
@@ -33,10 +34,10 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_added_message fielddecl
-    TypeDiff::FIELD_ADDED
+    DiffJ::TypeComparator::FIELD_ADDED
   end
 
   def get_removed_message fielddecl
-    TypeDiff::FIELD_REMOVED
+    DiffJ::TypeComparator::FIELD_REMOVED
   end
 end
