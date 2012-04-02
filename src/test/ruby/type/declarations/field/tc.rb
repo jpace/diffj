@@ -1,28 +1,24 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'type/typetestcase'
+require 'type/declarations/tc'
 
 include Java
 
 import org.incava.diffj.TypeDiff
 
-class DiffJ::TypeDeclarationsFieldTestCase < DiffJTypeTestCase
-  def subdir
-    # info "self.class: #{self.class}"
-    # self.class.to_s.sub(%r{.*::(\w+)TestCase}, '\1').downcase
-    'declarations/field'
-  end
-  
-  def added_msg_fmt
-    TypeDiff::FIELD_ADDED
-  end  
+module DiffJ::Type::Declarations::Field
+  class TestCase < DiffJ::Type::Declarations::TestCase
+    def added_msg_fmt
+      TypeDiff::FIELD_ADDED
+    end  
 
-  def changed_msg_fmt
-    TypeDiff::FIELD_CHANGED    # not implemented ?
-  end
+    def changed_msg_fmt
+      TypeDiff::FIELD_CHANGED    # not implemented ?
+    end
 
-  def removed_msg_fmt
-    TypeDiff::FIELD_REMOVED
+    def removed_msg_fmt
+      TypeDiff::FIELD_REMOVED
+    end
   end
 end
