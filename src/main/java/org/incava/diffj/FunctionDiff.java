@@ -151,26 +151,26 @@ public class FunctionDiff extends ItemDiff {
     protected void compareThrows(SimpleNode a, ASTNameList at, SimpleNode b, ASTNameList bt) {
         if (at == null) {
             if (bt != null) {
-                ASTName[] names = (ASTName[])SimpleNodeUtil.findChildren(bt, ASTName.class);
+                List<ASTName> names = SimpleNodeUtil.snatchChildren(bt, "net.sourceforge.pmd.ast.ASTName");
                 for (ASTName name : names) {
                     changed(a, name, THROWS_ADDED, SimpleNodeUtil.toString(name));
                 }
             }
         }
         else if (bt == null) {
-            ASTName[] names = (ASTName[])SimpleNodeUtil.findChildren(at, ASTName.class);
+            List<ASTName> names = SimpleNodeUtil.snatchChildren(at, "net.sourceforge.pmd.ast.ASTName");
             for (ASTName name : names) {
                 changed(name, b, THROWS_REMOVED, SimpleNodeUtil.toString(name));
             }
         }
         else {
-            ASTName[] aNames = (ASTName[])SimpleNodeUtil.findChildren(at, ASTName.class);
-            ASTName[] bNames = (ASTName[])SimpleNodeUtil.findChildren(bt, ASTName.class);
+            List<ASTName> aNames = SimpleNodeUtil.snatchChildren(at, "net.sourceforge.pmd.ast.ASTName");
+            List<ASTName> bNames = SimpleNodeUtil.snatchChildren(bt, "net.sourceforge.pmd.ast.ASTName");
 
-            for (int ai = 0; ai < aNames.length; ++ai) {
+            for (int ai = 0; ai < aNames.size(); ++ai) {
                 // save a reference to the name here, in case it gets removed
                 // from the array in getMatch.
-                ASTName aName = aNames[ai];
+                ASTName aName = aNames.get(ai);
 
                 int throwsMatch = getMatch(aNames, ai, bNames);
 
@@ -187,8 +187,8 @@ public class FunctionDiff extends ItemDiff {
                 }
             }
 
-            for (int bi = 0; bi < bNames.length; ++bi) {
-                if (bNames[bi] != null) {
+            for (int bi = 0; bi < bNames.size(); ++bi) {
+                if (bNames.get(bi) != null) {
                     ASTName bName = ThrowsUtil.getNameNode(bt, bi);
                     changed(at, bName, THROWS_ADDED, SimpleNodeUtil.toString(bName));
                 }
@@ -196,13 +196,13 @@ public class FunctionDiff extends ItemDiff {
         }
     }
 
-    protected int getMatch(ASTName[] aNames, int aIndex, ASTName[] bNames) {
-        String aNameStr = SimpleNodeUtil.toString(aNames[aIndex]);
+    protected int getMatch(List<ASTName> aNames, int aIndex, List<ASTName> bNames) {
+        String aNameStr = SimpleNodeUtil.toString(aNames.get(aIndex));
 
-        for (int bi = 0; bi < bNames.length; ++bi) {
-            if (bNames[bi] != null && SimpleNodeUtil.toString(bNames[bi]).equals(aNameStr)) {
-                aNames[aIndex] = null;
-                bNames[bi]     = null; // mark as consumed
+        for (int bi = 0; bi < bNames.size(); ++bi) {
+            if (bNames.get(bi) != null && SimpleNodeUtil.toString(bNames.get(bi)).equals(aNameStr)) {
+                aNames.set(aIndex, null);
+                bNames.set(bi,     null); // mark as consumed
                 return bi;
             }
         }

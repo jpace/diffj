@@ -9,7 +9,7 @@ import org.incava.pmdx.SimpleNodeUtil;
 
 public class TypeCtorDiff extends AbstractTypeItemDiff<ASTConstructorDeclaration> {
     public TypeCtorDiff(FileDiffs differences) {
-        super(differences, ASTConstructorDeclaration.class);
+        super(differences, "net.sourceforge.pmd.ast.ASTConstructorDeclaration");
     }    
 
     public void doCompare(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {

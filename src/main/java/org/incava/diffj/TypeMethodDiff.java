@@ -9,7 +9,7 @@ public class TypeMethodDiff extends AbstractTypeItemDiff<ASTMethodDeclaration> {
     private final MethodUtil methodUtil;
 
     public TypeMethodDiff(FileDiffs differences) {
-        super(differences, ASTMethodDeclaration.class);        
+        super(differences, "net.sourceforge.pmd.ast.ASTMethodDeclaration");        
         methodUtil = new MethodUtil();
     }    
 

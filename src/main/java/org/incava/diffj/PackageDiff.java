@@ -19,13 +19,17 @@ public class PackageDiff extends DiffComparator {
         super(differences);        
     }
 
+    public ASTName findChildName(ASTPackageDeclaration pkg) {
+        return (ASTName)SimpleNodeUtil.findChild(pkg, "net.sourceforge.pmd.ast.ASTName");
+    }
+
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
         ASTPackageDeclaration aPkg = CompilationUnitUtil.getPackage(a);
         ASTPackageDeclaration bPkg = CompilationUnitUtil.getPackage(b);
 
         if (aPkg == null) {
             if (bPkg != null) {
-                ASTName    name = (ASTName)SimpleNodeUtil.findChild(bPkg, ASTName.class);
+                ASTName    name = findChildName(bPkg);
                 SimpleNode aPos = SimpleNodeUtil.findChild(a);
 
                 if (aPos == null) {
@@ -35,7 +39,7 @@ public class PackageDiff extends DiffComparator {
             }
         }
         else if (bPkg == null) {
-            ASTName    name = (ASTName)SimpleNodeUtil.findChild(aPkg, ASTName.class);
+            ASTName    name = findChildName(aPkg);
             SimpleNode bPos = SimpleNodeUtil.findChild(b);
 
             if (bPos == null) {
@@ -44,9 +48,9 @@ public class PackageDiff extends DiffComparator {
             deleted(name, bPos, PACKAGE_REMOVED);
         }
         else {
-            ASTName aName = (ASTName)SimpleNodeUtil.findChild(aPkg, ASTName.class);
+            ASTName aName = findChildName(aPkg);
             String  aStr  = SimpleNodeUtil.toString(aName);
-            ASTName bName = (ASTName)SimpleNodeUtil.findChild(bPkg, ASTName.class);
+            ASTName bName = findChildName(bPkg);
             String  bStr  = SimpleNodeUtil.toString(bName);
 
             if (!aStr.equals(bStr)) {

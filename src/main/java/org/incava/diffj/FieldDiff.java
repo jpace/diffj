@@ -43,8 +43,8 @@ public class FieldDiff extends ItemDiff {
     }
 
     protected void compareVariables(ASTVariableDeclarator a, ASTVariableDeclarator b) {
-        ASTVariableInitializer ainit = (ASTVariableInitializer)SimpleNodeUtil.findChild(a, ASTVariableInitializer.class);
-        ASTVariableInitializer binit = (ASTVariableInitializer)SimpleNodeUtil.findChild(b, ASTVariableInitializer.class);
+        ASTVariableInitializer ainit = (ASTVariableInitializer)SimpleNodeUtil.findChild(a, "net.sourceforge.pmd.ast.ASTVariableInitializer");
+        ASTVariableInitializer binit = (ASTVariableInitializer)SimpleNodeUtil.findChild(b, "net.sourceforge.pmd.ast.ASTVariableInitializer");
         
         if (ainit == null) {
             if (binit != null) {
@@ -70,11 +70,10 @@ public class FieldDiff extends ItemDiff {
         }
     }
 
-    protected static Map<String, ASTVariableDeclarator> makeVDMap(ASTVariableDeclarator[] vds) {
+    protected static Map<String, ASTVariableDeclarator> makeVDMap(List<ASTVariableDeclarator> vds) {
         Map<String, ASTVariableDeclarator> namesToVD = new HashMap<String, ASTVariableDeclarator>();
 
-        for (int vi = 0; vi < vds.length; ++vi) {
-            ASTVariableDeclarator vd = vds[vi];
+        for (ASTVariableDeclarator vd : vds) {
             String name = FieldUtil.getName(vd).image;
             namesToVD.put(name, vd);
         }
@@ -83,11 +82,11 @@ public class FieldDiff extends ItemDiff {
     }
 
     protected void compareVariables(ASTFieldDeclaration a, ASTFieldDeclaration b) {
-        ASTType aType = (ASTType)SimpleNodeUtil.findChild(a, ASTType.class);
-        ASTType bType = (ASTType)SimpleNodeUtil.findChild(b, ASTType.class);        
+        ASTType aType = (ASTType)SimpleNodeUtil.findChild(a, "net.sourceforge.pmd.ast.ASTType");
+        ASTType bType = (ASTType)SimpleNodeUtil.findChild(b, "net.sourceforge.pmd.ast.ASTType");        
 
-        ASTVariableDeclarator[] avds = (ASTVariableDeclarator[])SimpleNodeUtil.findChildren(a, ASTVariableDeclarator.class);
-        ASTVariableDeclarator[] bvds = (ASTVariableDeclarator[])SimpleNodeUtil.findChildren(b, ASTVariableDeclarator.class);
+        List<ASTVariableDeclarator> avds = SimpleNodeUtil.snatchChildren(a, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+        List<ASTVariableDeclarator> bvds = SimpleNodeUtil.snatchChildren(b, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
 
         Map<String, ASTVariableDeclarator> aNamesToVD = makeVDMap(avds);
         Map<String, ASTVariableDeclarator> bNamesToVD = makeVDMap(bvds);
@@ -101,20 +100,20 @@ public class FieldDiff extends ItemDiff {
             ASTVariableDeclarator bvd = bNamesToVD.get(name);
 
             if (avd == null || bvd == null) {
-                if (avds.length == 1 && bvds.length == 1) {
-                    Token aTk = FieldUtil.getName(avds[0]);
-                    Token bTk = FieldUtil.getName(bvds[0]);
+                if (avds.size() == 1 && bvds.size() == 1) {
+                    Token aTk = FieldUtil.getName(avds.get(0));
+                    Token bTk = FieldUtil.getName(bvds.get(0));
                     changed(aTk, bTk, VARIABLE_CHANGED);
-                    compareVariables(avds[0], bvds[0]);
+                    compareVariables(avds.get(0), bvds.get(0));
                 }
                 else if (avd == null) {
-                    Token aTk = FieldUtil.getName(avds[0]);
+                    Token aTk = FieldUtil.getName(avds.get(0));
                     Token bTk = FieldUtil.getName(bvd);
                     changed(aTk, bTk, VARIABLE_ADDED, name);
                 }
                 else {
                     Token aTk = FieldUtil.getName(avd);
-                    Token bTk = FieldUtil.getName(bvds[0]);
+                    Token bTk = FieldUtil.getName(bvds.get(0));
                     changed(aTk, bTk, VARIABLE_REMOVED, name);
                 }
             }

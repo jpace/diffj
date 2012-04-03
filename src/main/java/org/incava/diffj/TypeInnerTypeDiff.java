@@ -9,7 +9,7 @@ public class TypeInnerTypeDiff extends AbstractTypeItemDiff<ASTClassOrInterfaceD
     private final TypeDiff typeDiff;
 
     public TypeInnerTypeDiff(FileDiffs differences, TypeDiff typeDiff) {
-        super(differences, ASTClassOrInterfaceDeclaration.class);
+        super(differences, "net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration");
         this.typeDiff = typeDiff;
     }
 

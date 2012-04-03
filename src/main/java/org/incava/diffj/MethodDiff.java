@@ -59,8 +59,8 @@ public class MethodDiff extends FunctionDiff {
         // tr.Ace.log("a", a);
         // tr.Ace.log("b", b);
 
-        ASTBlock aBlock = (ASTBlock)SimpleNodeUtil.findChild(a, ASTBlock.class);
-        ASTBlock bBlock = (ASTBlock)SimpleNodeUtil.findChild(b, ASTBlock.class);
+        ASTBlock aBlock = (ASTBlock)SimpleNodeUtil.findChild(a, "net.sourceforge.pmd.ast.ASTBlock");
+        ASTBlock bBlock = (ASTBlock)SimpleNodeUtil.findChild(b, "net.sourceforge.pmd.ast.ASTBlock");
 
         if (aBlock == null) {
             if (bBlock != null) {

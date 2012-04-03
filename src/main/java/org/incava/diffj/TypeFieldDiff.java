@@ -8,7 +8,7 @@ import org.incava.pmdx.SimpleNodeUtil;
 
 public class TypeFieldDiff extends AbstractTypeItemDiff<ASTFieldDeclaration> {
     public TypeFieldDiff(FileDiffs differences) {
-        super(differences, ASTFieldDeclaration.class);
+        super(differences, "net.sourceforge.pmd.ast.ASTFieldDeclaration");
     }    
 
     public void doCompare(ASTFieldDeclaration a, ASTFieldDeclaration b) {
