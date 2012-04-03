@@ -17,14 +17,21 @@ import org.incava.pmdx.ThrowsUtil;
 
 public class FunctionDiff extends ItemDiff {
     public static final String RETURN_TYPE_CHANGED = "return type changed from {0} to {1}";
+
     public static final String PARAMETER_REMOVED = "parameter removed: {0}";
     public static final String PARAMETER_ADDED = "parameter added: {0}";
+
     public static final String PARAMETER_REORDERED = "parameter {0} reordered from argument {1} to {2}";
+
     public static final String PARAMETER_TYPE_CHANGED = "parameter type changed from {0} to {1}";    
+
     public static final String PARAMETER_NAME_CHANGED = "parameter name changed from {0} to {1}";
+
     public static final String PARAMETER_REORDERED_AND_RENAMED = "parameter {0} reordered from argument {1} to {2} and renamed {3}";
+
     public static final String THROWS_REMOVED = "throws removed: {0}";
     public static final String THROWS_ADDED = "throws added: {0}";
+
     public static final String THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}";
 
     public FunctionDiff(FileDiffs differences) {
@@ -100,50 +107,58 @@ public class FunctionDiff extends ItemDiff {
         int aSize = aParamTypes.size();
         int bSize = bParamTypes.size();
 
-        if (aSize == 0) {
-            if (bSize != 0) {
-                markParametersAdded(afp, bfp);
+        if (aSize > 0) {
+            if (bSize > 0) {
+                compareEachParameter(afp, aParams, bfp, bParams, aSize);
+            }
+            else {
+                markParametersRemoved(afp, bfp);
             }
         }
-        else if (bSize == 0) {
-            markParametersRemoved(afp, bfp);
+        else if (bSize > 0) {
+            markParametersAdded(afp, bfp);
         }
-        else {
-            for (int ai = 0; ai < aSize; ++ai) {
-                Parameter ap = aParams.get(ai);
+    }
 
-                int[] paramMatch = ParameterUtil.getMatch(aParams, ai, bParams);
+    /**
+     * Compares each parameter. Assumes that the lists are the same size.
+     */
+    protected void compareEachParameter(ASTFormalParameters afp, List<Parameter> aParams, ASTFormalParameters bfp, List<Parameter> bParams, int size) {
+        for (int idx = 0; idx < size; ++idx) {
+            Parameter ap = aParams.get(idx);
 
-                ASTFormalParameter aParam = ParameterUtil.getParameter(afp, ai);
+            int[] paramMatch = ParameterUtil.getMatch(aParams, idx, bParams);
 
-                if (paramMatch[0] == ai && paramMatch[1] == ai) {
-                    // tr.Ace.log("exact match");
-                }
-                else if (paramMatch[0] == ai) {
-                    markParameterNameChanged(aParam, bfp, ai);
-                }
-                else if (paramMatch[1] == ai) {
-                    markParameterTypeChanged(ap, bfp, ai);
-                }
-                else if (paramMatch[0] >= 0) {
-                    checkForReorder(aParam, ai, bfp, paramMatch[0]);
-                }
-                else if (paramMatch[1] >= 0) {
-                    markReordered(aParam, ai, bfp, paramMatch[1]);
-                }
-                else {
-                    markRemoved(aParam, bfp);
-                }
+            ASTFormalParameter aParam = ParameterUtil.getParameter(afp, idx);
+
+            if (paramMatch[0] == idx && paramMatch[1] == idx) {
+                // tr.Ace.log("exact match");
             }
+            else if (paramMatch[0] == idx) {
+                markParameterNameChanged(aParam, bfp, idx);
+            }
+            else if (paramMatch[1] == idx) {
+                markParameterTypeChanged(ap, bfp, idx);
+            }
+            else if (paramMatch[0] >= 0) {
+                checkForReorder(aParam, idx, bfp, paramMatch[0]);
+            }
+            else if (paramMatch[1] >= 0) {
+                markReordered(aParam, idx, bfp, paramMatch[1]);
+            }
+            else {
+                markRemoved(aParam, bfp);
+            }
+        }
 
-            Iterator<Parameter> bit = bParams.iterator();
-            for (int bi = 0; bit.hasNext(); ++bi) {
-                Parameter bp = bit.next();
-                if (bp != null) {
-                    ASTFormalParameter bParam = ParameterUtil.getParameter(bfp, bi);
-                    Token bName = ParameterUtil.getParameterName(bParam);
-                    changed(afp, bParam, PARAMETER_ADDED, bName.image);
-                }
+        Iterator<Parameter> bit = bParams.iterator();
+        for (int bidx = 0; bit.hasNext(); ++bidx) {
+            Parameter bp = bit.next();
+            tr.Ace.onYellow("bp", bp);
+            if (bp != null) {
+                ASTFormalParameter bParam = ParameterUtil.getParameter(bfp, bidx);
+                Token bName = ParameterUtil.getParameterName(bParam);
+                changed(afp, bParam, PARAMETER_ADDED, bName.image);
             }
         }
     }

@@ -5,14 +5,17 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/ast/item'
+require 'diffj/ast/function'
 
 include Java
 
 import org.incava.diffj.MethodDiff
+import org.incava.pmdx.ParameterUtil
+import org.incava.pmdx.MethodUtil
 
 module DiffJ
   class MethodComparator < MethodDiff
-    include Loggable
+    include Loggable, FunctionComparator
 
     METHOD_BLOCK_ADDED = "method block added"
     METHOD_BLOCK_REMOVED = "method block removed"
@@ -27,6 +30,8 @@ module DiffJ
     
     def initialize diffs
       super
+
+      # fake superclass, for now:
       @itemcomp = ItemComparator.new diffs
     end
 
@@ -41,15 +46,12 @@ module DiffJ
       @itemcomp.compare_modifiers SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to), VALID_MODIFIERS
     end
 
-    def function_compare_return_types_xxx from, to
-      from_ret_type     = from.jjtGetChild(0)
-      to_ret_type       = to.jjtGetChild(0)
-      from_ret_type_str = SimpleNodeUtil.toString from_ret_type
-      to_ret_type_str   = SimpleNodeUtil.toString to_ret_type
-
-      if from_ret_type_str != to_ret_type_str
-        changed from_ret_type, to_ret_type, RETURN_TYPE_CHANGED, from_ret_type_str, to_ret_type_str
-      end
+    def method_compare_parameters_xxx from, to
+      from_params = MethodUtil.getParameters from
+      to_params = MethodUtil.getParameters to
+      
+      # should be calling super:
+      function_compare_parameters_xxx from_params, to_params
     end
 
     def compare_xxx from, to
@@ -57,9 +59,9 @@ module DiffJ
       info "to  : #{to}".on_red
 
       compare_modifiers_xxx from, to
-      function_compare_return_types_xxx from, to
+      compare_return_types_xxx from, to
+      method_compare_parameters_xxx from, to
 
-      compareParameters(from, to)
       compareThrows(from, to)
       compareBodies(from, to)
     end

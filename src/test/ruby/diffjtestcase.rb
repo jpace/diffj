@@ -213,7 +213,21 @@ class DiffJ::TestCase < Test::Unit::TestCase
     make_fdiff_delete format(removed_msg_fmt, what), from_start, from_end, to_start, to_end
   end
 
-  def changed from, to, from_start, to_start
-    make_fdiff_change format(changed_msg_fmt, from, to), from_start, loctext(from_start, from), to_start, loctext(to_start, to)
+  def changed *args
+    params = args.dup
+    msgargs = Array.new
+    while params[0].kind_of?(String) || params[0].kind_of?(Integer)
+      msgargs << params.shift
+    end
+    msg = format(changed_msg_fmt, *msgargs)
+
+    from_start, from_end, to_start, to_end = if params.length == 4
+                                               params
+                                             else
+                                               [ params[0], loctext(params[0], msgargs[0]),
+                                                 params[1], loctext(params[1], msgargs[1]) ]
+                                             end
+    
+    make_fdiff_change msg, from_start, from_end, to_start, to_end
   end
 end
