@@ -25,8 +25,8 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
 
   # this is from the superclass, not TypeMethodDiff:
   def compare from_coid, to_coid
-    info "from_coid: #{from_coid}; #{from_coid.class}".on_green
-    info "to_coid: #{to_coid}; #{to_coid.class}".on_green
+    info "from_coid: #{from_coid}; #{from_coid.class}".green
+    info "to_coid: #{to_coid}; #{to_coid.class}".green
 
     from_decls = declarations_of_class_type from_coid
     to_decls = declarations_of_class_type to_coid
