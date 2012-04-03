@@ -4,16 +4,16 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/ast/element'
 require 'diffj/ast/type'
 
 include Java
 
-import org.incava.diffj.DiffComparator
 import org.incava.pmdx.CompilationUnitUtil
 import org.incava.pmdx.TypeDeclarationUtil
 
 module DiffJ
-  class TypesComparator < DiffComparator
+  class TypesComparator < ElementComparator
     include Loggable
 
     TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface"
@@ -62,7 +62,7 @@ module DiffJ
           a_name = TypeDeclarationUtil.getName atd
           deleted atd, cub, TYPE_DECLARATION_REMOVED, a_name.image
         else
-          differ = TypeComparator.new file_diffs
+          differ = TypeComparator.new filediffs
           differ.compare atd, btd
         end
       end

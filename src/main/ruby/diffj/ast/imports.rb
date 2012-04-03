@@ -4,14 +4,14 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/ast/element'
 
 include Java
 
-import org.incava.diffj.DiffComparator
 import org.incava.pmdx.CompilationUnitUtil
 
 module DiffJ
-  class ImportsComparator < DiffComparator
+  class ImportsComparator < ElementComparator
     include Loggable
 
     IMPORT_REMOVED = "import removed: {0}"

@@ -4,15 +4,15 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/ast/element'
 
 include Java
 
-import org.incava.diffj.DiffComparator
 import org.incava.pmdx.ItemUtil
 import org.incava.pmdx.SimpleNodeUtil
 
 module DiffJ
-  class ItemComparator < DiffComparator
+  class ItemComparator < ElementComparator
     include Loggable
 
     MODIFIER_REMOVED = "modifier removed: {0}"

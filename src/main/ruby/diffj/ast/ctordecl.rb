@@ -24,7 +24,7 @@ class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def do_compare from, to
-    differ = CtorDiff.new file_diffs
+    differ = CtorDiff.new filediffs
     differ.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
     differ.compare from, to
   end

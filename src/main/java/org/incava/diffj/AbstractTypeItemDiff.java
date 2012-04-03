@@ -31,7 +31,7 @@ public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends Diff
     }
 
     @SuppressWarnings("unchecked")
-    public <Type extends SimpleNode> List<Type> getDeclarationsOfClass(ASTClassOrInterfaceBodyDeclaration[] decls) {
+    public <Type extends SimpleNode> List<Type> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls) {
         List<Type> declList = new ArrayList<Type>();
 
         for (ASTClassOrInterfaceBodyDeclaration decl : decls) {
@@ -86,7 +86,7 @@ public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends Diff
     }
 
     public List<Type> getDeclarationsOfClassType(ASTClassOrInterfaceDeclaration coid) {
-        ASTClassOrInterfaceBodyDeclaration[] decls = TypeDeclarationUtil.getDeclarations(coid);
+        List<ASTClassOrInterfaceBodyDeclaration> decls = TypeDeclarationUtil.getDeclarations(coid);
         return getDeclarationsOfClass(decls);
     }
 

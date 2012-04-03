@@ -24,7 +24,7 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def do_compare from, to
-    differ = FieldDiff.new getFileDiffs()
+    differ = FieldDiff.new filediffs
     differ.compareAccess SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
     differ.compare from, to
   end

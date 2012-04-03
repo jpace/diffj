@@ -10,26 +10,22 @@ require 'diffj/ast/types'
 
 include Java
 
-import org.incava.diffj.DiffComparator
-
 module DiffJ
-  class CompUnitDiff < DiffComparator
+  class CompUnitDiff
     def initialize report
-      super report
+      @filediffs = report.differences
     end
     
     def compare cua, cub
-      diffs = file_diffs
-
       return unless cua && cub
 
-      pd = PackageComparator.new diffs
+      pd = PackageComparator.new @filediffs
       pd.compare cua, cub
       
-      id = ImportsComparator.new diffs
+      id = ImportsComparator.new @filediffs
       id.compare cua, cub
 
-      td = TypesComparator.new diffs
+      td = TypesComparator.new @filediffs
       td.compare cua, cub
     end
   end

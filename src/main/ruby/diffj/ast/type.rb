@@ -115,7 +115,7 @@ module DiffJ
     end
 
     def compare_declarations from_node, to_node
-      diffs = getFileDiffs
+      diffs = filediffs
         
       tmd = MethodDeclComparator.new diffs
       tmd.compare from_node, to_node

@@ -8,7 +8,6 @@ require 'diffj/ast/item'
 
 include Java
 
-import org.incava.diffj.DiffComparator
 import org.incava.diffj.MethodDiff
 import org.incava.diffj.TypeMatches
 import org.incava.diffj.TypeMethodDiff
