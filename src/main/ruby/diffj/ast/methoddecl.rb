@@ -6,6 +6,7 @@ require 'riel'
 require 'java'
 require 'diffj/ast/typeitemdecl'
 require 'diffj/ast/type'
+require 'diffj/ast/method'
 
 include Java
 
@@ -26,9 +27,9 @@ class DiffJ::MethodDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def do_compare from, to
-    differ = MethodDiff.new filediffs
-    differ.compareAccess(SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to))
-    differ.compare(from, to)
+    differ = ::DiffJ::MethodComparator.new filediffs
+    differ.compare_access_xxx SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
+    differ.compare_xxx from, to
   end
 
   def get_name methdecl

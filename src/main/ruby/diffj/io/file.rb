@@ -26,7 +26,7 @@ module DiffJ
           Log.info "other_elmt: #{other_elmt}"
           
           begin
-            ::DiffJ::IO::Factory.new.create_file(java.io.File.new(dir, other_elmt.getName()), nil, other_elmt.source_version);
+            ::DiffJ::IO::Factory.new.create_file(java.io.File.new(dir, other_elmt.getName()), nil, other_elmt.source_version)
           rescue DiffJException => de
             raise de
           rescue java.lang.Throwable => e
