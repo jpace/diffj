@@ -2,10 +2,9 @@
 # -*- ruby -*-
 
 require 'diffjtestcase'
+require 'diffj/ast/package'
 
 include Java
-
-import org.incava.diffj.PackageDiff
 
 class DiffJ::PackagesTestCase < DiffJ::TestCase
   def subdir
@@ -17,15 +16,15 @@ class DiffJ::PackagesTestCase < DiffJ::TestCase
   end
 
   def added_msg_fmt
-    PackageDiff::PACKAGE_ADDED
+    ::DiffJ::PackageComparator::PACKAGE_ADDED
   end
 
   def changed_msg_fmt
-    PackageDiff::PACKAGE_RENAMED
+    ::DiffJ::PackageComparator::PACKAGE_RENAMED
   end
 
   def removed_msg_fmt
-    PackageDiff::PACKAGE_REMOVED
+    ::DiffJ::PackageComparator::PACKAGE_REMOVED
   end
 
   def test_package_added

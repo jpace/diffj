@@ -9,9 +9,6 @@ require 'diffj/ast/item'
 include Java
 
 import org.incava.diffj.MethodDiff
-import org.incava.diffj.TypeMatches
-import org.incava.diffj.TypeMethodDiff
-import org.incava.pmdx.MethodUtil
 
 module DiffJ; end
 
@@ -23,7 +20,6 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
     @clsname = clsname
   end
 
-  # this is from the superclass, not TypeMethodDiff:
   def compare from_coid, to_coid
     info "from_coid: #{from_coid}; #{from_coid.class}".green
     info "to_coid: #{to_coid}; #{to_coid.class}".green
@@ -42,15 +38,29 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
     add_added from_coid, to_unproc
   end
 
+  def get_type_matches amds, bmds
+    matches = Hash.new { |h, k| h[k] = Array.new }
+    
+    amds.each do |amd|
+      bmds.each do |bmd|
+        score = get_score amd, bmd
+        if score > 0.0
+          matches[score] << [ amd, bmd ]
+        end
+      end
+    end
+    info "matches: #{matches}".yellow    
+    matches
+  end
+
   def compare_matches matches, from_unproc, to_unproc
-    descendingScores = matches.getDescendingScores()
-    descendingScores.each do |score|
+    matches.sort.reverse.each do |score, decls|
       from_proc = Array.new
       to_proc = Array.new
 
-      matches.get(score).each do |declPair|
-        amd = declPair.getFirst()
-        bmd = declPair.getSecond()
+      decls.each do |decl|
+        amd = decl[0]
+        bmd = decl[1]
 
         if from_unproc.include?(amd) && to_unproc.include?(bmd)
           do_compare amd, bmd
@@ -82,20 +92,6 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
 
   def get_score amd, bmd
     raise "abstract method!"
-  end
-
-  def get_type_matches amds, bmds
-    matches = TypeMatches.new
-    amds.each do |amd|
-      bmds.each do |bmd|
-        score = get_score amd, bmd
-        if score > 0.0
-          matches.add score, amd, bmd
-        end
-      end
-    end
-    info "matches: #{matches}".yellow    
-    matches
   end
 
   def add_added from_coid, to
