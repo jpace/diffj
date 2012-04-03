@@ -2,6 +2,7 @@ package org.incava.diffj;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
@@ -24,8 +25,8 @@ public class TypesDiff extends ItemDiff {
     }
 
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
-        ASTTypeDeclaration[] aTypes = CompilationUnitUtil.getTypeDeclarations(a);
-        ASTTypeDeclaration[] bTypes = CompilationUnitUtil.getTypeDeclarations(b);
+        List<ASTTypeDeclaration> aTypes = CompilationUnitUtil.getTypeDeclarations(a);
+        List<ASTTypeDeclaration> bTypes = CompilationUnitUtil.getTypeDeclarations(b);
 
         Map<String, ASTTypeDeclaration> aNamesToTD = makeTDMap(aTypes);
         Map<String, ASTTypeDeclaration> bNamesToTD = makeTDMap(bTypes);
@@ -53,7 +54,7 @@ public class TypesDiff extends ItemDiff {
         }
     }
 
-    protected Map<String, ASTTypeDeclaration> makeTDMap(ASTTypeDeclaration[] types) {
+    protected Map<String, ASTTypeDeclaration> makeTDMap(List<ASTTypeDeclaration> types) {
         tr.Ace.setVerbose(true);
 
         Map<String, ASTTypeDeclaration> namesToTD = new HashMap<String, ASTTypeDeclaration>();

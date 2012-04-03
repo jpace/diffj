@@ -11,7 +11,6 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
-import org.incava.pmdx.TypeDeclarationUtil;
 
 public class CtorDiff extends FunctionDiff {
     public CtorDiff(FileDiffs differences) {
@@ -50,11 +49,9 @@ public class CtorDiff extends FunctionDiff {
         while (it.hasNext()) {
             Token tk = it.next();
             if (tk.kind == JavaParserConstants.LBRACE) {
-                // tr.Ace.log("breaking at: " + obj);
                 break;
             }
             else {
-                // tr.Ace.log("deleting: " + obj);
                 it.remove();
             }
         }

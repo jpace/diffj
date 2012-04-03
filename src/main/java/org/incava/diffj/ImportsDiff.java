@@ -25,7 +25,7 @@ public class ImportsDiff extends DiffComparator {
         super(differences);
     }
 
-    protected void markImportSectionAdded(ASTCompilationUnit a, ASTImportDeclaration[] bImports) {
+    protected void markImportSectionAdded(ASTCompilationUnit a, List<ASTImportDeclaration> bImports) {
         Token a0 = getFirstTypeToken(a);
         Token a1 = a0;
         Token b0 = getFirstToken(bImports);
@@ -33,7 +33,7 @@ public class ImportsDiff extends DiffComparator {
         added(a0, a1, b0, b1, IMPORT_SECTION_ADDED);
     }
 
-    protected void markImportSectionRemoved(ASTImportDeclaration[] aImports, ASTCompilationUnit b) {
+    protected void markImportSectionRemoved(List<ASTImportDeclaration> aImports, ASTCompilationUnit b) {
         Token a0 = getFirstToken(aImports);
         Token a1 = getLastToken(aImports);
         Token b0 = getFirstTypeToken(b);
@@ -42,15 +42,15 @@ public class ImportsDiff extends DiffComparator {
     }
 
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
-        ASTImportDeclaration[] aImports = CompilationUnitUtil.getImports(a);
-        ASTImportDeclaration[] bImports = CompilationUnitUtil.getImports(b);
+        List<ASTImportDeclaration> aImports = CompilationUnitUtil.getImports(a);
+        List<ASTImportDeclaration> bImports = CompilationUnitUtil.getImports(b);
 
-        if (aImports.length == 0) {
-            if (bImports.length != 0) {
+        if (aImports.size() == 0) {
+            if (bImports.size() != 0) {
                 markImportSectionAdded(a, bImports);
             }
         }
-        else if (bImports.length == 0) {
+        else if (bImports.size() == 0) {
             markImportSectionRemoved(aImports, b);
         }
         else {
@@ -66,10 +66,10 @@ public class ImportsDiff extends DiffComparator {
                 ASTImportDeclaration bimp = bNamesToImp.get(name);
             
                 if (aimp == null) {
-                    added(aImports[0], bimp, IMPORT_ADDED, name);
+                    added(aImports.get(0), bimp, IMPORT_ADDED, name);
                 }
                 else if (bimp == null) {
-                    deleted(aimp, bImports[0], IMPORT_REMOVED, name);
+                    deleted(aimp, bImports.get(0), IMPORT_REMOVED, name);
                 }
             }
         }
@@ -92,7 +92,7 @@ public class ImportsDiff extends DiffComparator {
         return sb.toString();
     }
 
-    protected Map<String, ASTImportDeclaration> makeImportMap(ASTImportDeclaration[] imports) {
+    protected Map<String, ASTImportDeclaration> makeImportMap(List<ASTImportDeclaration> imports) {
         Map<String, ASTImportDeclaration> namesToImp = new HashMap<String, ASTImportDeclaration>();
 
         for (ASTImportDeclaration imp : imports) {
@@ -103,17 +103,17 @@ public class ImportsDiff extends DiffComparator {
         return namesToImp;
     }
 
-    protected Token getFirstToken(ASTImportDeclaration[] imports) {
-        return imports[0].getFirstToken();
+    protected Token getFirstToken(List<ASTImportDeclaration> imports) {
+        return imports.get(0).getFirstToken();
     }
 
-    protected Token getLastToken(ASTImportDeclaration[] imports) {
-        return imports[imports.length - 1].getLastToken();
+    protected Token getLastToken(List<ASTImportDeclaration> imports) {
+        return imports.get(imports.size() - 1).getLastToken();
     }
 
     protected Token getFirstTypeToken(ASTCompilationUnit cu) {
-        ASTTypeDeclaration[] types = CompilationUnitUtil.getTypeDeclarations(cu);
-        Token t = types.length > 0 ? types[0].getFirstToken() : null;
+        List<ASTTypeDeclaration> types = CompilationUnitUtil.getTypeDeclarations(cu);
+        Token t = types.size() > 0 ? types.get(0).getFirstToken() : null;
 
         // if there are no types (ie. the file has only a package and/or import
         // statements), then just point to the first token in the compilation
