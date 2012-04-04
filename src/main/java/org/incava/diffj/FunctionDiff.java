@@ -38,187 +38,190 @@ public class FunctionDiff extends ItemDiff {
         super(differences);
     }
 
-    protected void compareReturnTypes(SimpleNode a, SimpleNode b) {
-        SimpleNode art    = (SimpleNode)a.jjtGetChild(0);
-        SimpleNode brt    = (SimpleNode)b.jjtGetChild(0);
-        String     artStr = SimpleNodeUtil.toString(art);
-        String     brtStr = SimpleNodeUtil.toString(brt);
+    public List<ASTName> getChildNames(ASTNameList nameList) {
+        return SimpleNodeUtil.snatchChildren(nameList, "net.sourceforge.pmd.ast.ASTName");
+    }
 
-        if (!artStr.equals(brtStr)) {
-            changed(art, brt, RETURN_TYPE_CHANGED, artStr, brtStr);
+    protected void compareReturnTypes(SimpleNode fromNode, SimpleNode toNode) {
+        SimpleNode fromRetType    = (SimpleNode)fromNode.jjtGetChild(0);
+        SimpleNode toRetType    = (SimpleNode)toNode.jjtGetChild(0);
+        String     fromRetTypeStr = SimpleNodeUtil.toString(fromRetType);
+        String     toRetTypeStr = SimpleNodeUtil.toString(toRetType);
+
+        if (!fromRetTypeStr.equals(toRetTypeStr)) {
+            changed(fromRetType, toRetType, RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
         }
     }
 
-    protected void markParametersAdded(ASTFormalParameters afp, ASTFormalParameters bfp) {
-        List<Token> names = ParameterUtil.getParameterNames(bfp);
+    protected void markParametersAdded(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
+        List<Token> names = ParameterUtil.getParameterNames(toFormalParams);
         for (Token name : names) {
-            changed(afp, name, PARAMETER_ADDED, name.image);
+            changed(fromFormalParams, name, PARAMETER_ADDED, name.image);
         }
     }
 
-    protected void markParametersRemoved(ASTFormalParameters afp, ASTFormalParameters bfp) {
-        List<Token> names = ParameterUtil.getParameterNames(afp);
+    protected void markParametersRemoved(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
+        List<Token> names = ParameterUtil.getParameterNames(fromFormalParams);
         for (Token name : names) {
-            changed(name, bfp, PARAMETER_REMOVED, name.image);
+            changed(name, toFormalParams, PARAMETER_REMOVED, name.image);
         }
     }
 
-    protected void markParameterTypeChanged(Parameter ap, ASTFormalParameters bfp, int idx) {
-        ASTFormalParameter bParam = ParameterUtil.getParameter(bfp, idx);
-        String             bType  = ParameterUtil.getParameterType(bParam);
-        changed(ap.getParameter(), bParam, PARAMETER_TYPE_CHANGED, ap.getType(), bType);
+    protected void markParameterTypeChanged(Parameter fromParam, ASTFormalParameters toFormalParams, int idx) {
+        ASTFormalParameter toParam = ParameterUtil.getParameter(toFormalParams, idx);
+        String toType = ParameterUtil.getParameterType(toParam);
+        changed(fromParam.getParameter(), toParam, PARAMETER_TYPE_CHANGED, fromParam.getType(), toType);
     }
 
-    protected void markParameterNameChanged(ASTFormalParameter aParam, ASTFormalParameters bfp, int idx) {
-        Token aNameTk = ParameterUtil.getParameterName(aParam);
-        Token bNameTk = ParameterUtil.getParameterName(bfp, idx);
-        changed(aNameTk, bNameTk, PARAMETER_NAME_CHANGED, aNameTk.image, bNameTk.image);
+    protected void markParameterNameChanged(ASTFormalParameter fromParam, ASTFormalParameters toFormalParams, int idx) {
+        Token fromNameTk = ParameterUtil.getParameterName(fromParam);
+        Token toNameTk = ParameterUtil.getParameterName(toFormalParams, idx);
+        changed(fromNameTk, toNameTk, PARAMETER_NAME_CHANGED, fromNameTk.image, toNameTk.image);
     }
 
-    protected void checkForReorder(ASTFormalParameter aParam, int aidx, ASTFormalParameters bfp, int bidx) {
-        Token aNameTk = ParameterUtil.getParameterName(aParam);
-        Token bNameTk = ParameterUtil.getParameterName(bfp, bidx);
-        if (aNameTk.image.equals(bNameTk.image)) {
-            changed(aNameTk, bNameTk, PARAMETER_REORDERED, aNameTk.image, aidx, bidx);
+    protected void checkForReorder(ASTFormalParameter fromParam, int fromIdx, ASTFormalParameters toFormalParams, int toIdx) {
+        Token fromNameTk = ParameterUtil.getParameterName(fromParam);
+        Token toNameTk = ParameterUtil.getParameterName(toFormalParams, toIdx);
+        if (fromNameTk.image.equals(toNameTk.image)) {
+            changed(fromNameTk, toNameTk, PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
         }
         else {
-            changed(aNameTk, bNameTk, PARAMETER_REORDERED_AND_RENAMED, aNameTk.image, aidx, bidx, bNameTk.image);
+            changed(fromNameTk, toNameTk, PARAMETER_REORDERED_AND_RENAMED, fromNameTk.image, fromIdx, toIdx, toNameTk.image);
         }
     }
 
-    protected void markReordered(ASTFormalParameter aParam, int aidx, ASTFormalParameters bParams, int bidx) {
-        Token aNameTk = ParameterUtil.getParameterName(aParam);
-        ASTFormalParameter bParam = ParameterUtil.getParameter(bParams, bidx);
-        changed(aParam, bParam, PARAMETER_REORDERED, aNameTk.image, aidx, bidx);
+    protected void markReordered(ASTFormalParameter fromParam, int fromIdx, ASTFormalParameters toParams, int toIdx) {
+        Token fromNameTk = ParameterUtil.getParameterName(fromParam);
+        ASTFormalParameter toParam = ParameterUtil.getParameter(toParams, toIdx);
+        changed(fromParam, toParam, PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
     }
 
-    protected void markRemoved(ASTFormalParameter aParam, ASTFormalParameters bParams) {
-        Token aNameTk = ParameterUtil.getParameterName(aParam);
-        changed(aParam, bParams, PARAMETER_REMOVED, aNameTk.image);
+    protected void markRemoved(ASTFormalParameter fromParam, ASTFormalParameters toParams) {
+        Token fromNameTk = ParameterUtil.getParameterName(fromParam);
+        changed(fromParam, toParams, PARAMETER_REMOVED, fromNameTk.image);
     }
 
-    protected void compareParameters(ASTFormalParameters afp, ASTFormalParameters bfp) {
-        List<Parameter> aParams = ParameterUtil.getParameterList(afp);
-        List<Parameter> bParams = ParameterUtil.getParameterList(bfp);
+    protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
+        List<Parameter> fromParams = ParameterUtil.getParameterList(fromFormalParams);
+        List<Parameter> toParams = ParameterUtil.getParameterList(toFormalParams);
         
-        List<String> aParamTypes = ParameterUtil.getParameterTypes(afp);
-        List<String> bParamTypes = ParameterUtil.getParameterTypes(bfp);
+        List<String> fromParamTypes = ParameterUtil.getParameterTypes(fromFormalParams);
+        List<String> toParamTypes = ParameterUtil.getParameterTypes(toFormalParams);
 
-        int aSize = aParamTypes.size();
-        int bSize = bParamTypes.size();
+        int fromSize = fromParamTypes.size();
+        int toSize = toParamTypes.size();
 
-        if (aSize > 0) {
-            if (bSize > 0) {
-                compareEachParameter(afp, aParams, bfp, bParams, aSize);
+        if (fromSize > 0) {
+            if (toSize > 0) {
+                compareEachParameter(fromFormalParams, fromParams, toFormalParams, toParams, fromSize);
             }
             else {
-                markParametersRemoved(afp, bfp);
+                markParametersRemoved(fromFormalParams, toFormalParams);
             }
         }
-        else if (bSize > 0) {
-            markParametersAdded(afp, bfp);
+        else if (toSize > 0) {
+            markParametersAdded(fromFormalParams, toFormalParams);
         }
     }
 
     /**
      * Compares each parameter. Assumes that the lists are the same size.
      */
-    protected void compareEachParameter(ASTFormalParameters afp, List<Parameter> aParams, ASTFormalParameters bfp, List<Parameter> bParams, int size) {
+    protected void compareEachParameter(ASTFormalParameters fromFormalParams, List<Parameter> fromParams, ASTFormalParameters toFormalParams, List<Parameter> toParams, int size) {
         for (int idx = 0; idx < size; ++idx) {
-            Parameter ap = aParams.get(idx);
+            Parameter fromParam = fromParams.get(idx);
+            int[] paramMatch = ParameterUtil.getMatch(fromParams, idx, toParams);
 
-            int[] paramMatch = ParameterUtil.getMatch(aParams, idx, bParams);
-
-            ASTFormalParameter aParam = ParameterUtil.getParameter(afp, idx);
+            ASTFormalParameter fromFormalParam = ParameterUtil.getParameter(fromFormalParams, idx);
 
             if (paramMatch[0] == idx && paramMatch[1] == idx) {
                 // tr.Ace.log("exact match");
             }
             else if (paramMatch[0] == idx) {
-                markParameterNameChanged(aParam, bfp, idx);
+                markParameterNameChanged(fromFormalParam, toFormalParams, idx);
             }
             else if (paramMatch[1] == idx) {
-                markParameterTypeChanged(ap, bfp, idx);
+                markParameterTypeChanged(fromParam, toFormalParams, idx);
             }
             else if (paramMatch[0] >= 0) {
-                checkForReorder(aParam, idx, bfp, paramMatch[0]);
+                checkForReorder(fromFormalParam, idx, toFormalParams, paramMatch[0]);
             }
             else if (paramMatch[1] >= 0) {
-                markReordered(aParam, idx, bfp, paramMatch[1]);
+                markReordered(fromFormalParam, idx, toFormalParams, paramMatch[1]);
             }
             else {
-                markRemoved(aParam, bfp);
+                markRemoved(fromFormalParam, toFormalParams);
             }
         }
 
-        Iterator<Parameter> bit = bParams.iterator();
-        for (int bidx = 0; bit.hasNext(); ++bidx) {
-            Parameter bp = bit.next();
-            tr.Ace.onYellow("bp", bp);
-            if (bp != null) {
-                ASTFormalParameter bParam = ParameterUtil.getParameter(bfp, bidx);
-                Token bName = ParameterUtil.getParameterName(bParam);
-                changed(afp, bParam, PARAMETER_ADDED, bName.image);
+        Iterator<Parameter> toIt = toParams.iterator();
+        for (int toIdx = 0; toIt.hasNext(); ++toIdx) {
+            Parameter toParam = toIt.next();
+            tr.Ace.onYellow("toParam", toParam);
+            if (toParam != null) {
+                ASTFormalParameter toFormalParam = ParameterUtil.getParameter(toFormalParams, toIdx);
+                Token toName = ParameterUtil.getParameterName(toFormalParam);
+                changed(fromFormalParams, toFormalParam, PARAMETER_ADDED, toName.image);
             }
         }
     }
 
-    protected void compareThrows(SimpleNode a, ASTNameList at, SimpleNode b, ASTNameList bt) {
-        if (at == null) {
-            if (bt != null) {
-                List<ASTName> names = SimpleNodeUtil.snatchChildren(bt, "net.sourceforge.pmd.ast.ASTName");
+    protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
+        if (fromNameList == null) {
+            if (toNameList != null) {
+                List<ASTName> names = getChildNames(toNameList);
                 for (ASTName name : names) {
-                    changed(a, name, THROWS_ADDED, SimpleNodeUtil.toString(name));
+                    changed(fromNode, name, THROWS_ADDED, SimpleNodeUtil.toString(name));
                 }
             }
         }
-        else if (bt == null) {
-            List<ASTName> names = SimpleNodeUtil.snatchChildren(at, "net.sourceforge.pmd.ast.ASTName");
+        else if (toNameList == null) {
+            List<ASTName> names = getChildNames(fromNameList);
             for (ASTName name : names) {
-                changed(name, b, THROWS_REMOVED, SimpleNodeUtil.toString(name));
+                changed(name, toNode, THROWS_REMOVED, SimpleNodeUtil.toString(name));
             }
         }
         else {
-            List<ASTName> aNames = SimpleNodeUtil.snatchChildren(at, "net.sourceforge.pmd.ast.ASTName");
-            List<ASTName> bNames = SimpleNodeUtil.snatchChildren(bt, "net.sourceforge.pmd.ast.ASTName");
+            List<ASTName> fromNames = getChildNames(fromNameList);
+            List<ASTName> toNames = getChildNames(toNameList);
 
-            for (int ai = 0; ai < aNames.size(); ++ai) {
+            for (int fromIdx = 0; fromIdx < fromNames.size(); ++fromIdx) {
                 // save a reference to the name here, in case it gets removed
                 // from the array in getMatch.
-                ASTName aName = aNames.get(ai);
+                ASTName fromName = fromNames.get(fromIdx);
 
-                int throwsMatch = getMatch(aNames, ai, bNames);
+                int throwsMatch = getMatch(fromNames, fromIdx, toNames);
 
-                if (throwsMatch == ai) {
+                if (throwsMatch == fromIdx) {
                     // tr.Ace.log("exact match");
                 }
                 else if (throwsMatch >= 0) {
-                    ASTName bName = ThrowsUtil.getNameNode(bt, throwsMatch);
-                    String aNameStr = SimpleNodeUtil.toString(aName);
-                    changed(aName, bName, THROWS_REORDERED, aNameStr, ai, throwsMatch);
+                    ASTName toName = ThrowsUtil.getNameNode(toNameList, throwsMatch);
+                    String fromNameStr = SimpleNodeUtil.toString(fromName);
+                    changed(fromName, toName, THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
                 }
                 else {
-                    changed(aName, bt, THROWS_REMOVED, SimpleNodeUtil.toString(aName));
+                    changed(fromName, toNameList, THROWS_REMOVED, SimpleNodeUtil.toString(fromName));
                 }
             }
 
-            for (int bi = 0; bi < bNames.size(); ++bi) {
-                if (bNames.get(bi) != null) {
-                    ASTName bName = ThrowsUtil.getNameNode(bt, bi);
-                    changed(at, bName, THROWS_ADDED, SimpleNodeUtil.toString(bName));
+            for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
+                if (toNames.get(toIdx) != null) {
+                    ASTName toName = ThrowsUtil.getNameNode(toNameList, toIdx);
+                    changed(fromNameList, toName, THROWS_ADDED, SimpleNodeUtil.toString(toName));
                 }
             }
         }
     }
 
-    protected int getMatch(List<ASTName> aNames, int aIndex, List<ASTName> bNames) {
-        String aNameStr = SimpleNodeUtil.toString(aNames.get(aIndex));
+    protected int getMatch(List<ASTName> fromNames, int fromIdx, List<ASTName> toNames) {
+        String fromNameStr = SimpleNodeUtil.toString(fromNames.get(fromIdx));
 
-        for (int bi = 0; bi < bNames.size(); ++bi) {
-            if (bNames.get(bi) != null && SimpleNodeUtil.toString(bNames.get(bi)).equals(aNameStr)) {
-                aNames.set(aIndex, null);
-                bNames.set(bi,     null); // mark as consumed
-                return bi;
+        for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
+            if (toNames.get(toIdx) != null && SimpleNodeUtil.toString(toNames.get(toIdx)).equals(fromNameStr)) {
+                fromNames.set(fromIdx, null);
+                toNames.set(toIdx, null); // mark as consumed
+                return toIdx;
             }
         }
 
