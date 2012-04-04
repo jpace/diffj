@@ -36,9 +36,8 @@ module DiffJ
     end
 
     def compare_access_xxx from, to
-      info "from: #{from}".on_red
-      info "to  : #{to}".on_red
-
+      info "from: #{from}"
+      info "to  : #{to}"
       @itemcomp.compare_access from, to
     end
 

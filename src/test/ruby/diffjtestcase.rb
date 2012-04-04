@@ -202,8 +202,20 @@ class DiffJ::TestCase < Test::Unit::TestCase
     fail
   end
 
-  def removed_change what, from_start, to_start, to_end
-    make_fdiff_change format(removed_msg_fmt, what), from_start, loctext(from_start, what), to_start, to_end
+  def removed_change what, *args
+    from_start = from_end = to_start = to_end = nil
+    from_start, from_end, to_start, to_end = if args.size == 3
+                                               [ args[0], loctext(args[0], what), args[1], args[2] ]
+                                             else
+                                               args
+                                             end
+    
+    info "from_start: #{from_start}".cyan
+    info "from_end: #{from_end}".cyan
+    info "to_start: #{to_start}".cyan
+    info "to_end: #{to_end}".cyan
+
+    make_fdiff_change format(removed_msg_fmt, what), from_start, from_end, to_start, to_end
   end
 
   def removed_delete what, from_start, *params
@@ -214,12 +226,22 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def changed *args
+    fdiff_args = create_fdiff_args changed_msg_fmt, args
+    make_fdiff_change(*fdiff_args)
+  end
+
+  def create_fdiff_args msg_fmt, args
+    info "args: #{args}".red
+
     params = args.dup
     msgargs = Array.new
     while params[0].kind_of?(String) || params[0].kind_of?(Integer)
       msgargs << params.shift
     end
-    msg = format(changed_msg_fmt, *msgargs)
+    msg = format(msg_fmt, *msgargs)
+
+    info "msgargs: #{msgargs}".yellow
+    info "params: #{params}".yellow
 
     from_start, from_end, to_start, to_end = if params.length == 4
                                                params
@@ -228,6 +250,6 @@ class DiffJ::TestCase < Test::Unit::TestCase
                                                  params[1], loctext(params[1], msgargs[1]) ]
                                              end
     
-    make_fdiff_change msg, from_start, from_end, to_start, to_end
+    [ msg, from_start, from_end, to_start, to_end ]
   end
 end

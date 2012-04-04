@@ -102,8 +102,13 @@ public class FunctionDiff extends ItemDiff {
     }
 
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
+        tr.Ace.setVerbose(true);
+
         List<Parameter> fromParams = ParameterUtil.getParameterList(fromFormalParams);
         List<Parameter> toParams = ParameterUtil.getParameterList(toFormalParams);
+
+        tr.Ace.blue("fromParams", fromParams);
+        tr.Ace.blue("toParams", toParams);
         
         List<String> fromParamTypes = ParameterUtil.getParameterTypes(fromFormalParams);
         List<String> toParamTypes = ParameterUtil.getParameterTypes(toFormalParams);
@@ -122,15 +127,29 @@ public class FunctionDiff extends ItemDiff {
         else if (toSize > 0) {
             markParametersAdded(fromFormalParams, toFormalParams);
         }
+
+        tr.Ace.setVerbose(false);
     }
 
     /**
      * Compares each parameter. Assumes that the lists are the same size.
      */
     protected void compareEachParameter(ASTFormalParameters fromFormalParams, List<Parameter> fromParams, ASTFormalParameters toFormalParams, List<Parameter> toParams, int size) {
+        tr.Ace.setVerbose(true);
+
+        tr.Ace.onBlue("fromParams", fromParams);
+        tr.Ace.onBlue("toParams", toParams);
+
         for (int idx = 0; idx < size; ++idx) {
             Parameter fromParam = fromParams.get(idx);
+
+            tr.Ace.green("fromParams", fromParams);
+            tr.Ace.green("toParams", toParams);
+
             int[] paramMatch = ParameterUtil.getMatch(fromParams, idx, toParams);
+
+            tr.Ace.blue("fromParams", fromParams);
+            tr.Ace.blue("toParams", toParams);
 
             ASTFormalParameter fromFormalParam = ParameterUtil.getParameter(fromFormalParams, idx);
 
@@ -152,7 +171,11 @@ public class FunctionDiff extends ItemDiff {
             else {
                 markRemoved(fromFormalParam, toFormalParams);
             }
+            tr.Ace.yellow("fromParams", fromParams);
+            tr.Ace.yellow("toParams", toParams);
         }
+
+        tr.Ace.onBlue("toParams", toParams);
 
         Iterator<Parameter> toIt = toParams.iterator();
         for (int toIdx = 0; toIt.hasNext(); ++toIdx) {
@@ -160,57 +183,77 @@ public class FunctionDiff extends ItemDiff {
             tr.Ace.onYellow("toParam", toParam);
             if (toParam != null) {
                 ASTFormalParameter toFormalParam = ParameterUtil.getParameter(toFormalParams, toIdx);
+                tr.Ace.yellow("toFormalParam", toFormalParam);
                 Token toName = ParameterUtil.getParameterName(toFormalParam);
+                tr.Ace.yellow("toName", toName);
                 changed(fromFormalParams, toFormalParam, PARAMETER_ADDED, toName.image);
             }
         }
+
+        tr.Ace.setVerbose(false);
     }
 
+    protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, String msg, ASTName name) {
+        changed(fromNode, toNode, msg, SimpleNodeUtil.toString(name));
+    }
+
+    protected void addAllThrows(SimpleNode fromNode, ASTNameList toNameList) {
+        List<ASTName> names = getChildNames(toNameList);
+        for (ASTName name : names) {
+            changeThrows(fromNode, name, THROWS_ADDED, name);
+        }
+    }
+
+    protected void removeAllThrows(ASTNameList fromNameList, SimpleNode toNode) {
+        List<ASTName> names = getChildNames(fromNameList);
+        for (ASTName name : names) {
+            changeThrows(name, toNode, THROWS_REMOVED, name);
+        }
+    }
+
+    protected void compareEachThrow(ASTNameList fromNameList, ASTNameList toNameList) {
+        List<ASTName> fromNames = getChildNames(fromNameList);
+        List<ASTName> toNames = getChildNames(toNameList);
+
+        for (int fromIdx = 0; fromIdx < fromNames.size(); ++fromIdx) {
+            // save a reference to the name here, in case it gets removed
+            // from the array in getMatch.
+            ASTName fromName = fromNames.get(fromIdx);
+
+            int throwsMatch = getMatch(fromNames, fromIdx, toNames);
+
+            if (throwsMatch == fromIdx) {
+                // tr.Ace.log("exact match");
+            }
+            else if (throwsMatch >= 0) {
+                ASTName toName = ThrowsUtil.getNameNode(toNameList, throwsMatch);
+                String fromNameStr = SimpleNodeUtil.toString(fromName);
+                changed(fromName, toName, THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
+            }
+            else {
+                changeThrows(fromName, toNameList, THROWS_REMOVED, fromName);
+            }
+        }
+
+        for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
+            if (toNames.get(toIdx) != null) {
+                ASTName toName = ThrowsUtil.getNameNode(toNameList, toIdx);
+                changeThrows(fromNameList, toName, THROWS_ADDED, toName);
+            }
+        }
+    }
+    
     protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
         if (fromNameList == null) {
             if (toNameList != null) {
-                List<ASTName> names = getChildNames(toNameList);
-                for (ASTName name : names) {
-                    changed(fromNode, name, THROWS_ADDED, SimpleNodeUtil.toString(name));
-                }
+                addAllThrows(fromNode, toNameList);
             }
         }
         else if (toNameList == null) {
-            List<ASTName> names = getChildNames(fromNameList);
-            for (ASTName name : names) {
-                changed(name, toNode, THROWS_REMOVED, SimpleNodeUtil.toString(name));
-            }
+            removeAllThrows(fromNameList, toNode);
         }
         else {
-            List<ASTName> fromNames = getChildNames(fromNameList);
-            List<ASTName> toNames = getChildNames(toNameList);
-
-            for (int fromIdx = 0; fromIdx < fromNames.size(); ++fromIdx) {
-                // save a reference to the name here, in case it gets removed
-                // from the array in getMatch.
-                ASTName fromName = fromNames.get(fromIdx);
-
-                int throwsMatch = getMatch(fromNames, fromIdx, toNames);
-
-                if (throwsMatch == fromIdx) {
-                    // tr.Ace.log("exact match");
-                }
-                else if (throwsMatch >= 0) {
-                    ASTName toName = ThrowsUtil.getNameNode(toNameList, throwsMatch);
-                    String fromNameStr = SimpleNodeUtil.toString(fromName);
-                    changed(fromName, toName, THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
-                }
-                else {
-                    changed(fromName, toNameList, THROWS_REMOVED, SimpleNodeUtil.toString(fromName));
-                }
-            }
-
-            for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
-                if (toNames.get(toIdx) != null) {
-                    ASTName toName = ThrowsUtil.getNameNode(toNameList, toIdx);
-                    changed(fromNameList, toName, THROWS_ADDED, SimpleNodeUtil.toString(toName));
-                }
-            }
+            compareEachThrow(fromNameList, toNameList);
         }
     }
 
