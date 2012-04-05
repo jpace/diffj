@@ -53,6 +53,13 @@ module DiffJ
       function_compare_parameters_xxx from_params, to_params
     end
 
+    def method_compare_throws_xxx from, to
+      from_list = MethodUtil.getThrowsList from
+      to_list = MethodUtil.getThrowsList to
+
+      function_compare_throws_xxx from, from_list, to, to_list
+    end
+
     def compare_xxx from, to
       info "from: #{from}".on_red
       info "to  : #{to}".on_red
@@ -61,7 +68,7 @@ module DiffJ
       compare_return_types_xxx from, to
       method_compare_parameters_xxx from, to
 
-      compareThrows(from, to)
+      method_compare_throws_xxx from, to
       compareBodies(from, to)
     end
   end

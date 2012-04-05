@@ -7,6 +7,8 @@ require 'java'
 
 include Java
 
+import org.incava.pmdx.ThrowsUtil
+
 module DiffJ
   module FunctionComparator # < FunctionDiff
 
@@ -127,12 +129,71 @@ module DiffJ
       if from_size > 0
         if to_size > 0
           function_compare_each_parameter_xxx from_params, from_param_list, to_params, to_param_list, from_size
-          # compare_each_parameter from_params, from_param_list, to_params, to_param_list, from_size
         else
           function_mark_parameters_removed_xxx from_params, to_params
         end
       elsif to_size > 0
         function_mark_parameters_added_xxx from_params, to_params
+      end
+    end
+
+    def function_change_throws_xxx from_node, to_node, msg, name
+      changed from_node, to_node, msg, SimpleNodeUtil.toString(name)
+    end
+
+    def function_add_all_throws_xxx from_node, to_name_list
+      names = getChildNames to_name_list
+      names.each do |name|
+        function_change_throws_xxx from_node, name, THROWS_ADDED, name
+      end
+    end
+
+    def function_remove_all_throws_xxx from_name_list, to_node
+      names = getChildNames from_name_list
+      names.each do |name|
+        function_change_throws_xxx name, to_node, THROWS_REMOVED, name
+      end
+    end
+
+    def function_compare_each_throw_xxx from_name_list, to_name_list
+      from_names = getChildNames from_name_list
+      to_names = getChildNames to_name_list
+
+      (0 ... from_names.size()).each do |from_idx|
+        # save a reference to the name here, in case it gets removed
+        # from the array in getMatch.
+        from_name = from_names.get from_idx
+        
+        throws_match = getMatch from_names, from_idx, to_names
+
+        if throws_match == from_idx
+          next
+        elsif throws_match >= 0
+          to_name = ThrowsUtil.getNameNode to_name_list, throws_match
+          from_name_str = SimpleNodeUtil.toString from_name
+          changed from_name, to_name, THROWS_REORDERED, from_name_str, from_idx, throws_match
+        else
+          function_change_throws_xxx from_name, to_name_list, THROWS_REMOVED, from_name
+        end
+      end
+
+      (0 ... to_names.size()).each do |to_idx|
+        if to_names.get(to_idx)
+          to_name = ThrowsUtil.getNameNode to_name_list, to_idx
+          function_change_throws_xxx from_name_list, to_name, THROWS_ADDED, to_name
+        end
+      end
+    end
+
+    def function_compare_throws_xxx from_node, from_name_list, to_node, to_name_list
+      if from_name_list.nil?
+        if to_name_list
+          function_add_all_throws_xxx from_node, to_name_list
+        end
+      elsif to_name_list.nil?
+        function_remove_all_throws_xxx from_name_list, to_node
+      else
+        function_compare_each_throw_xxx from_name_list, to_name_list
       end
     end
   end
