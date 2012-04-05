@@ -60,6 +60,28 @@ module DiffJ
       function_compare_throws_xxx from, from_list, to, to_list
     end
 
+    def method_get_block node
+      SimpleNodeUtil.findChild node, "net.sourceforge.pmd.ast.ASTBlock"
+    end
+    
+    def method_compare_bodies_xxx from, to
+      from_block = method_get_block from
+      to_block = method_get_block to
+
+      if from_block.nil?
+        if to_block
+          changed from, to, METHOD_BLOCK_ADDED
+        end
+      elsif to_block.nil?
+        changed from, to, METHOD_BLOCK_REMOVED
+      else
+        from_name = MethodUtil.getFullName from
+        to_name = MethodUtil.getFullName to
+            
+        compareBlocks from_name, from_block, to_name, to_block
+      end
+    end
+
     def compare_xxx from, to
       info "from: #{from}".on_red
       info "to  : #{to}".on_red
@@ -69,7 +91,7 @@ module DiffJ
       method_compare_parameters_xxx from, to
 
       method_compare_throws_xxx from, to
-      compareBodies(from, to)
+      method_compare_bodies_xxx from, to
     end
   end
 end

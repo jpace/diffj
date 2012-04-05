@@ -29,70 +29,70 @@ public class MethodDiff extends FunctionDiff {
         super(differences);
     }
 
-    public void compare(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        compareModifiers(a, b);
-        compareReturnTypes(a, b);
-        compareParameters(a, b);
-        compareThrows(a, b);
-        compareBodies(a, b);
+    public void compare(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+        compareModifiers(from, to);
+        compareReturnTypes(from, to);
+        compareParameters(from, to);
+        compareThrows(from, to);
+        compareBodies(from, to);
     }
 
-    protected void compareModifiers(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        compareModifiers(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b), VALID_MODIFIERS);
+    protected void compareModifiers(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+        compareModifiers(SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to), VALID_MODIFIERS);
     }
 
-    protected void compareParameters(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        ASTFormalParameters afp = MethodUtil.getParameters(a);
-        ASTFormalParameters bfp = MethodUtil.getParameters(b);
+    protected void compareParameters(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+        ASTFormalParameters fromFormalParams = MethodUtil.getParameters(from);
+        ASTFormalParameters toFormalParams = MethodUtil.getParameters(to);
 
-        compareParameters(afp, bfp);
+        compareParameters(fromFormalParams, toFormalParams);
     }
 
-    protected void compareThrows(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        ASTNameList at = MethodUtil.getThrowsList(a);
-        ASTNameList bt = MethodUtil.getThrowsList(b);
+    protected void compareThrows(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+        ASTNameList fromThrowsList = MethodUtil.getThrowsList(from);
+        ASTNameList toThrowsList = MethodUtil.getThrowsList(to);
 
-        compareThrows(a, at, b, bt);
+        compareThrows(from, fromThrowsList, to, toThrowsList);
     }
 
-    protected void compareBodies(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        // tr.Ace.log("a", a);
-        // tr.Ace.log("b", b);
+    protected void compareBodies(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+        // tr.Ace.log("from", from);
+        // tr.Ace.log("to", to);
 
-        ASTBlock aBlock = (ASTBlock)SimpleNodeUtil.findChild(a, "net.sourceforge.pmd.ast.ASTBlock");
-        ASTBlock bBlock = (ASTBlock)SimpleNodeUtil.findChild(b, "net.sourceforge.pmd.ast.ASTBlock");
+        ASTBlock fromBlock = (ASTBlock)SimpleNodeUtil.findChild(from, "net.sourceforge.pmd.ast.ASTBlock");
+        ASTBlock toBlock = (ASTBlock)SimpleNodeUtil.findChild(to, "net.sourceforge.pmd.ast.ASTBlock");
 
-        if (aBlock == null) {
-            if (bBlock != null) {
-                changed(a, b, METHOD_BLOCK_ADDED);
+        if (fromBlock == null) {
+            if (toBlock != null) {
+                changed(from, to, METHOD_BLOCK_ADDED);
             }
         }
-        else if (bBlock == null) {
-            changed(a, b, METHOD_BLOCK_REMOVED);
+        else if (toBlock == null) {
+            changed(from, to, METHOD_BLOCK_REMOVED);
         }
         else {
-            String aName = MethodUtil.getFullName(a);
-            String bName = MethodUtil.getFullName(b);
+            String fromName = MethodUtil.getFullName(from);
+            String toName = MethodUtil.getFullName(to);
             
-            compareBlocks(aName, aBlock, bName, bBlock);
+            compareBlocks(fromName, fromBlock, toName, toBlock);
         }
     }
 
-    // protected void compareBlocks(String aName, ASTBlock aBlock, String bName, ASTBlock bBlock)
+    // protected void compareBlocks(String fromName, ASTBlock fromBlock, String toName, ASTBlock toBlock)
     // {
-    //     tr.Ace.cyan("aBlock", aBlock);
-    //     SimpleNodeUtil.dump(aBlock, "");
-    //     tr.Ace.cyan("bBlock", bBlock);
-    //     SimpleNodeUtil.dump(bBlock, "");
+    //     tr.Ace.cyan("fromBlock", fromBlock);
+    //     SimpleNodeUtil.dump(fromBlock, "");
+    //     tr.Ace.cyan("toBlock", toBlock);
+    //     SimpleNodeUtil.dump(toBlock, "");
     //     // walk through, looking for common if and for statements ...
-    //     tr.Ace.cyan("aChildren(null)", SimpleNodeUtil.findChildren(aBlock));
-    //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(bBlock));        
+    //     tr.Ace.cyan("aChildren(null)", SimpleNodeUtil.findChildren(fromBlock));
+    //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(toBlock));        
     // }
 
-    protected void compareBlocks(String aName, ASTBlock aBlock, String bName, ASTBlock bBlock) {
-        List<Token> a = SimpleNodeUtil.getChildrenSerially(aBlock);
-        List<Token> b = SimpleNodeUtil.getChildrenSerially(bBlock);
+    protected void compareBlocks(String fromName, ASTBlock fromBlock, String toName, ASTBlock toBlock) {
+        List<Token> from = SimpleNodeUtil.getChildrenSerially(fromBlock);
+        List<Token> to = SimpleNodeUtil.getChildrenSerially(toBlock);
 
-        compareCode(aName, a, bName, b);
+        compareCode(fromName, from, toName, to);
     }
 }

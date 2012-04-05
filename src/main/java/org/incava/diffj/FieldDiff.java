@@ -33,40 +33,40 @@ public class FieldDiff extends ItemDiff {
         super(differences);
     }
 
-    public void compare(ASTFieldDeclaration a, ASTFieldDeclaration b) {
-        compareModifiers(a, b);
-        compareVariables(a, b);
+    public void compare(ASTFieldDeclaration from, ASTFieldDeclaration to) {
+        compareModifiers(from, to);
+        compareVariables(from, to);
     }
 
-    protected void compareModifiers(ASTFieldDeclaration a, ASTFieldDeclaration b) {
-        compareModifiers((SimpleNode)a.jjtGetParent(), (SimpleNode)b.jjtGetParent(), VALID_MODIFIERS);
+    protected void compareModifiers(ASTFieldDeclaration from, ASTFieldDeclaration to) {
+        compareModifiers((SimpleNode)from.jjtGetParent(), (SimpleNode)to.jjtGetParent(), VALID_MODIFIERS);
     }
 
-    protected void compareVariables(ASTVariableDeclarator a, ASTVariableDeclarator b) {
-        ASTVariableInitializer ainit = (ASTVariableInitializer)SimpleNodeUtil.findChild(a, "net.sourceforge.pmd.ast.ASTVariableInitializer");
-        ASTVariableInitializer binit = (ASTVariableInitializer)SimpleNodeUtil.findChild(b, "net.sourceforge.pmd.ast.ASTVariableInitializer");
+    protected void compareVariables(ASTVariableDeclarator from, ASTVariableDeclarator to) {
+        ASTVariableInitializer fromInit = (ASTVariableInitializer)SimpleNodeUtil.findChild(from, "net.sourceforge.pmd.ast.ASTVariableInitializer");
+        ASTVariableInitializer toInit = (ASTVariableInitializer)SimpleNodeUtil.findChild(to, "net.sourceforge.pmd.ast.ASTVariableInitializer");
         
-        if (ainit == null) {
-            if (binit != null) {
-                changed(a, binit, INITIALIZER_ADDED);
+        if (fromInit == null) {
+            if (toInit != null) {
+                changed(from, toInit, INITIALIZER_ADDED);
             }
         }
-        else if (binit == null) {
-            changed(ainit, b, INITIALIZER_REMOVED);
+        else if (toInit == null) {
+            changed(fromInit, to, INITIALIZER_REMOVED);
         }
         else {
-            List<Token> aCode = SimpleNodeUtil.getChildrenSerially(ainit);
-            List<Token> bCode = SimpleNodeUtil.getChildrenSerially(binit);
+            List<Token> aCode = SimpleNodeUtil.getChildrenSerially(fromInit);
+            List<Token> bCode = SimpleNodeUtil.getChildrenSerially(toInit);
 
-            // It is logically impossible for this to execute where "b"
-            // represents the from-file, and "a" the to-file, since "a.name"
-            // would have matched "b.name" in the first loop of
+            // It is logically impossible for this to execute where "to"
+            // represents the from-file, and "from" the to-file, since "from.name"
+            // would have matched "to.name" in the first loop of
             // compareVariableLists
 
-            String aName = FieldUtil.getName(a).image;
-            String bName = FieldUtil.getName(b).image;
+            String fromName = FieldUtil.getName(from).image;
+            String toName = FieldUtil.getName(to).image;
             
-            compareCode(aName, aCode, bName, bCode);
+            compareCode(fromName, aCode, toName, bCode);
         }
     }
 
@@ -81,53 +81,53 @@ public class FieldDiff extends ItemDiff {
         return namesToVD;
     }
 
-    protected void compareVariables(ASTFieldDeclaration a, ASTFieldDeclaration b) {
-        ASTType aType = (ASTType)SimpleNodeUtil.findChild(a, "net.sourceforge.pmd.ast.ASTType");
-        ASTType bType = (ASTType)SimpleNodeUtil.findChild(b, "net.sourceforge.pmd.ast.ASTType");        
+    protected void compareVariables(ASTFieldDeclaration from, ASTFieldDeclaration to) {
+        ASTType fromType = (ASTType)SimpleNodeUtil.findChild(from, "net.sourceforge.pmd.ast.ASTType");
+        ASTType toType = (ASTType)SimpleNodeUtil.findChild(to, "net.sourceforge.pmd.ast.ASTType");        
 
-        List<ASTVariableDeclarator> avds = SimpleNodeUtil.snatchChildren(a, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
-        List<ASTVariableDeclarator> bvds = SimpleNodeUtil.snatchChildren(b, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+        List<ASTVariableDeclarator> fromVarDecls = SimpleNodeUtil.snatchChildren(from, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+        List<ASTVariableDeclarator> toVarDecls = SimpleNodeUtil.snatchChildren(to, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
 
-        Map<String, ASTVariableDeclarator> aNamesToVD = makeVDMap(avds);
-        Map<String, ASTVariableDeclarator> bNamesToVD = makeVDMap(bvds);
+        Map<String, ASTVariableDeclarator> fromNamesToVD = makeVDMap(fromVarDecls);
+        Map<String, ASTVariableDeclarator> toNamesToVD = makeVDMap(toVarDecls);
 
         Collection<String> names = new TreeSet<String>();
-        names.addAll(aNamesToVD.keySet());
-        names.addAll(bNamesToVD.keySet());
+        names.addAll(fromNamesToVD.keySet());
+        names.addAll(toNamesToVD.keySet());
 
         for (String name : names) {
-            ASTVariableDeclarator avd = aNamesToVD.get(name);
-            ASTVariableDeclarator bvd = bNamesToVD.get(name);
+            ASTVariableDeclarator fromVarDecl = fromNamesToVD.get(name);
+            ASTVariableDeclarator toVarDecl = toNamesToVD.get(name);
 
-            if (avd == null || bvd == null) {
-                if (avds.size() == 1 && bvds.size() == 1) {
-                    Token aTk = FieldUtil.getName(avds.get(0));
-                    Token bTk = FieldUtil.getName(bvds.get(0));
-                    changed(aTk, bTk, VARIABLE_CHANGED);
-                    compareVariables(avds.get(0), bvds.get(0));
+            if (fromVarDecl == null || toVarDecl == null) {
+                if (fromVarDecls.size() == 1 && toVarDecls.size() == 1) {
+                    Token fromTk = FieldUtil.getName(fromVarDecls.get(0));
+                    Token toTk = FieldUtil.getName(toVarDecls.get(0));
+                    changed(fromTk, toTk, VARIABLE_CHANGED);
+                    compareVariables(fromVarDecls.get(0), toVarDecls.get(0));
                 }
-                else if (avd == null) {
-                    Token aTk = FieldUtil.getName(avds.get(0));
-                    Token bTk = FieldUtil.getName(bvd);
-                    changed(aTk, bTk, VARIABLE_ADDED, name);
+                else if (fromVarDecl == null) {
+                    Token fromTk = FieldUtil.getName(fromVarDecls.get(0));
+                    Token toTk = FieldUtil.getName(toVarDecl);
+                    changed(fromTk, toTk, VARIABLE_ADDED, name);
                 }
                 else {
-                    Token aTk = FieldUtil.getName(avd);
-                    Token bTk = FieldUtil.getName(bvds.get(0));
-                    changed(aTk, bTk, VARIABLE_REMOVED, name);
+                    Token fromTk = FieldUtil.getName(fromVarDecl);
+                    Token toTk = FieldUtil.getName(toVarDecls.get(0));
+                    changed(fromTk, toTk, VARIABLE_REMOVED, name);
                 }
             }
             else {
                 // types changed?
 
-                String aTypeStr = SimpleNodeUtil.toString(aType);
-                String bTypeStr = SimpleNodeUtil.toString(bType);
+                String fromTypeStr = SimpleNodeUtil.toString(fromType);
+                String toTypeStr = SimpleNodeUtil.toString(toType);
 
-                if (!aTypeStr.equals(bTypeStr)) {
-                    changed(aType, bType, VARIABLE_TYPE_CHANGED, name, aTypeStr, bTypeStr);
+                if (!fromTypeStr.equals(toTypeStr)) {
+                    changed(fromType, toType, VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
                 }
 
-                compareVariables(avd, bvd);
+                compareVariables(fromVarDecl, toVarDecl);
             }
         }
     }

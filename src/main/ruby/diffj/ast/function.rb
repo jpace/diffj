@@ -4,14 +4,14 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/ast/item'
 
 include Java
 
 import org.incava.pmdx.ThrowsUtil
 
 module DiffJ
-  module FunctionComparator # < FunctionDiff
-
+  module FunctionComparator # < ItemComparator
     RETURN_TYPE_CHANGED = "return type changed from {0} to {1}"
 
     PARAMETER_REMOVED = "parameter removed: {0}"
@@ -35,6 +35,10 @@ module DiffJ
       if from_ret_type_str != to_ret_type_str
         changed from_ret_type, to_ret_type, RETURN_TYPE_CHANGED, from_ret_type_str, to_ret_type_str
       end
+    end
+
+    def function_get_child_names_xxx name_list
+      SimpleNodeUtil.snatchChildren name_list, "net.sourceforge.pmd.ast.ASTName"
     end
 
     def function_compare_each_parameter_xxx from_formal_params, from_params, to_formal_params, to_params, size
@@ -142,38 +146,52 @@ module DiffJ
     end
 
     def function_add_all_throws_xxx from_node, to_name_list
-      names = getChildNames to_name_list
+      names = function_get_child_names_xxx to_name_list
       names.each do |name|
         function_change_throws_xxx from_node, name, THROWS_ADDED, name
       end
     end
 
     def function_remove_all_throws_xxx from_name_list, to_node
-      names = getChildNames from_name_list
+      names = function_get_child_names_xxx from_name_list
       names.each do |name|
         function_change_throws_xxx name, to_node, THROWS_REMOVED, name
       end
     end
 
+    def function_get_match_xxx from_names, from_idx, to_names
+      from_name_str = SimpleNodeUtil.toString(from_names.get(from_idx))
+
+      (0 ... to_names.size).each do |to_idx|
+        to_name = to_names.get(to_idx)
+        if to_name && SimpleNodeUtil.toString(to_name) == from_name_str
+          from_names.set(from_idx, nil)
+          to_names.set(to_idx, nil) # mark as consumed
+          return to_idx
+        end
+      end
+      nil
+    end
+
     def function_compare_each_throw_xxx from_name_list, to_name_list
-      from_names = getChildNames from_name_list
-      to_names = getChildNames to_name_list
+      from_names = function_get_child_names_xxx from_name_list
+      to_names = function_get_child_names_xxx to_name_list
 
       (0 ... from_names.size()).each do |from_idx|
         # save a reference to the name here, in case it gets removed
         # from the array in getMatch.
         from_name = from_names.get from_idx
         
-        throws_match = getMatch from_names, from_idx, to_names
+        throws_match = function_get_match_xxx from_names, from_idx, to_names
 
-        if throws_match == from_idx
+        if throws_match.nil?
+          function_change_throws_xxx from_name, to_name_list, THROWS_REMOVED, from_name
+        elsif throws_match == from_idx
           next
-        elsif throws_match >= 0
+        elsif throws_match
           to_name = ThrowsUtil.getNameNode to_name_list, throws_match
           from_name_str = SimpleNodeUtil.toString from_name
           changed from_name, to_name, THROWS_REORDERED, from_name_str, from_idx, throws_match
-        else
-          function_change_throws_xxx from_name, to_name_list, THROWS_REMOVED, from_name
         end
       end
 
