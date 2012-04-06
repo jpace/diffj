@@ -78,8 +78,15 @@ module DiffJ
         from_name = MethodUtil.getFullName from
         to_name = MethodUtil.getFullName to
             
-        compareBlocks from_name, from_block, to_name, to_block
+        function_compare_blocks_xxx from_name, from_block, to_name, to_block
       end
+    end
+
+    def method_compare_blocks_xxx from_name, from_block, to_name, to_block
+      from = SimpleNodeUtil.getChildrenSerially from_block
+      to = SimpleNodeUtil.getChildrenSerially to_block
+
+      compareCode from_name, from, to_name, to
     end
 
     def compare_xxx from, to
