@@ -143,68 +143,75 @@ public class ItemDiff extends DiffComparator {
         return ref;
     }
 
-    protected void compareCode(String aName, List<Token> a, String bName, List<Token> b) {
-        Diff<Token> d = new Diff<Token>(a, b, new TokenComparator());
+    protected FileDiff processDifference(Difference diff, String fromName, List<Token> fromList, List<Token> toList, FileDiff prevRef) {
+        int delStart = diff.getDeletedStart();
+        int delEnd   = diff.getDeletedEnd();
+        int addStart = diff.getAddedStart();
+        int addEnd   = diff.getAddedEnd();
+
+        tr.Ace.log("diff", diff);
+
+        String msg    = null;
+        Token  fromStart = null;
+        Token  fromEnd   = null;
+        Token  toStart = null;
+        Token  toEnd   = null;
+
+        if (delEnd == Difference.NONE) {
+            if (addEnd == Difference.NONE) {
+                // WTF?
+                return null;
+            }
+            else {
+                fromStart = getStart(fromList, delStart);
+                fromEnd   = fromStart;
+                toStart = toList.get(addStart);
+                toEnd   = toList.get(addEnd);
+                msg    = CODE_ADDED;
+            }
+        }
+        else if (addEnd == Difference.NONE) {
+            fromStart = fromList.get(delStart);
+            fromEnd   = fromList.get(delEnd);
+            toStart = getStart(toList, addStart);
+            toEnd   = toStart;
+            msg    = CODE_REMOVED;
+        }
+        else {
+            fromStart = fromList.get(delStart);
+            fromEnd   = fromList.get(delEnd);
+            toStart = toList.get(addStart);
+            toEnd   = toList.get(addEnd);
+            msg    = CODE_CHANGED;
+        }
+
+        tr.Ace.log("msg", msg);
+            
+        Location fromStLoc  = FileDiff.toBeginLocation(fromStart);
+        Location fromEndLoc = FileDiff.toEndLocation(fromEnd);
+        Location toStLoc  = FileDiff.toBeginLocation(toStart);
+        Location toEndLoc = FileDiff.toEndLocation(toEnd);
+
+        tr.Ace.log("prevRef", prevRef);
+
+        if (prevRef != null && prevRef.getFirstLocation().getStart().getLine() == fromStLoc.getLine()) {
+            return replaceReference(fromName, prevRef, fromEndLoc, toEndLoc);
+        }
+        else {
+            return addReference(fromName, msg, fromStLoc, fromEndLoc, toStLoc, toEndLoc);
+        }
+    }
+
+    protected void compareCode(String fromName, List<Token> fromList, String toName, List<Token> toList) {
+        Diff<Token> d = new Diff<Token>(fromList, toList, new TokenComparator());
         
         FileDiff ref = null;
         List<Difference> diffList = d.diff();
 
         for (Difference diff : diffList) {
-            int delStart = diff.getDeletedStart();
-            int delEnd   = diff.getDeletedEnd();
-            int addStart = diff.getAddedStart();
-            int addEnd   = diff.getAddedEnd();
-
-            tr.Ace.log("diff", diff);
-
-            String msg    = null;
-            Token  aStart = null;
-            Token  aEnd   = null;
-            Token  bStart = null;
-            Token  bEnd   = null;
-
-            if (delEnd == Difference.NONE) {
-                if (addEnd == Difference.NONE) {
-                    // WTF?
-                    return;
-                }
-                else {
-                    aStart = getStart(a, delStart);
-                    aEnd   = aStart;
-                    bStart = b.get(addStart);
-                    bEnd   = b.get(addEnd);
-                    msg    = CODE_ADDED;
-                }
-            }
-            else if (addEnd == Difference.NONE) {
-                aStart = a.get(delStart);
-                aEnd   = a.get(delEnd);
-                bStart = getStart(b, addStart);
-                bEnd   = bStart;
-                msg    = CODE_REMOVED;
-            }
-            else {
-                aStart = a.get(delStart);
-                aEnd   = a.get(delEnd);
-                bStart = b.get(addStart);
-                bEnd   = b.get(addEnd);
-                msg    = CODE_CHANGED;
-            }
-
-            tr.Ace.log("msg", msg);
-            
-            Location aStLoc  = FileDiff.toBeginLocation(aStart);
-            Location aEndLoc = FileDiff.toEndLocation(aEnd);
-            Location bStLoc  = FileDiff.toBeginLocation(bStart);
-            Location bEndLoc = FileDiff.toEndLocation(bEnd);
-
-            tr.Ace.log("ref", ref);
-
-            if (ref != null && ref.getFirstLocation().getStart().getLine() == aStLoc.getLine()) {
-                ref = replaceReference(aName, ref, aEndLoc, bEndLoc);
-            }
-            else {
-                ref = addReference(aName, msg, aStLoc, aEndLoc, bStLoc, bEndLoc);
+            ref = processDifference(diff, fromName, fromList, toList, ref);
+            if (ref == null) {
+                return;
             }
         }
     }
