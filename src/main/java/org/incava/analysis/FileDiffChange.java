@@ -9,6 +9,10 @@ import org.incava.ijdk.text.LocationRange;
  * position.
  */
 public class FileDiffChange extends FileDiff {
+    public FileDiffChange(String message, LocationRange fromLoc, LocationRange toLoc) {
+        super(Type.CHANGED, message, fromLoc, toLoc);
+    }
+    
     public FileDiffChange(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
         super(Type.CHANGED, message, firstStart, firstEnd, secondStart, secondEnd);
     }

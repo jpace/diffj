@@ -8,6 +8,10 @@ import org.incava.ijdk.text.LocationRange;
  * Code deleted.
  */
 public class FileDiffCodeDeleted extends FileDiffDelete {
+    public FileDiffCodeDeleted(String message, LocationRange fromLoc, LocationRange toLoc) {
+        super(message, fromLoc, toLoc);
+    }
+
     public FileDiffCodeDeleted(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
         super(message, firstStart, firstEnd, secondStart, secondEnd);
     }

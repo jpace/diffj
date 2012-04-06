@@ -11,6 +11,10 @@ import org.incava.ijdk.text.LocationRange;
  * @todo fix the names.
  */
 public class FileDiffDelete extends FileDiff {
+    public FileDiffDelete(String message, LocationRange fromLoc, LocationRange toLoc) {
+        super(Type.DELETED, message, fromLoc, toLoc);
+    }
+    
     public FileDiffDelete(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
         super(Type.DELETED, message, firstStart, firstEnd, secondStart, secondEnd);
     }

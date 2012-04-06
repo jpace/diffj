@@ -8,6 +8,10 @@ import org.incava.ijdk.text.LocationRange;
  * Code added.
  */
 public class FileDiffCodeAdded extends FileDiffAdd {
+    public FileDiffCodeAdded(String message, LocationRange fromLoc, LocationRange toLoc) {
+        super(message, fromLoc, toLoc);
+    }
+
     public FileDiffCodeAdded(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
         super(message, firstStart, firstEnd, secondStart, secondEnd);
     }

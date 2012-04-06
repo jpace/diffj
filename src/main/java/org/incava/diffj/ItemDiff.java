@@ -108,9 +108,9 @@ public class ItemDiff extends DiffComparator {
         }
     }
 
-    protected FileDiff replaceReference(String aName, FileDiff ref, Location aEndLoc, Location bEndLoc) {
-        String   newMsg  = MessageFormat.format(CODE_CHANGED, aName);
-        FileDiff newDiff = new FileDiffChange(newMsg, ref.getFirstLocation().getStart(), aEndLoc, ref.getSecondLocation().getStart(), bEndLoc);
+    protected FileDiff replaceReference(String name, FileDiff ref, LocationRange fromLocRg, LocationRange toLocRg) {
+        String   newMsg  = MessageFormat.format(CODE_CHANGED, name);
+        FileDiff newDiff = new FileDiffChange(newMsg, ref.getFirstLocation().getStart(), fromLocRg.getEnd(), ref.getSecondLocation().getStart(), toLocRg.getEnd());
         
         getFileDiffs().remove(ref);
         
@@ -119,28 +119,42 @@ public class ItemDiff extends DiffComparator {
         return newDiff;
     }
 
-    protected FileDiff addReference(String aName, String msg, 
-                                    Location aStLoc, Location aEndLoc,
-                                    Location bStLoc, Location bEndLoc) {
-        // This assumes that a and b have the same name. Wouldn't they?
-        String str = MessageFormat.format(msg, aName);
+    protected FileDiff addReference(String name, String msg, LocationRange fromLocRg, LocationRange toLocRg) {
+        String str = MessageFormat.format(msg, name);
 
         FileDiff ref = null;
 
         if (msg == CODE_ADDED) {
             // this will show as add when highlighted, as change when not.
-            ref = new FileDiffCodeAdded(str, aStLoc, aEndLoc, bStLoc, bEndLoc);
+            ref = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
         }
         else if (msg == CODE_REMOVED) {
-            ref = new FileDiffCodeDeleted(str, aStLoc, aEndLoc, bStLoc, bEndLoc);
+            ref = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
         }
         else {
-            ref = new FileDiffChange(str, aStLoc, aEndLoc, bStLoc, bEndLoc);
+            ref = new FileDiffChange(str, fromLocRg, toLocRg);
         }                    
 
         add(ref);
 
         return ref;
+    }
+
+    protected LocationRange getLocationRange(List<Token> tokenList, Integer start, Integer end) {
+        Token startTk, endTk;
+        if (end == Difference.NONE) {
+            startTk = getStart(tokenList, start);
+            endTk = startTk;
+        }
+        else {
+            startTk = tokenList.get(start);
+            endTk = tokenList.get(end);
+        }
+        return new LocationRange(FileDiff.toBeginLocation(startTk), FileDiff.toEndLocation(endTk));
+    }
+    
+    protected boolean isOnSameLine(FileDiff ref, LocationRange loc) {
+        return ref != null && ref.getFirstLocation().getStart().getLine() == loc.getStart().getLine();
     }
 
     protected FileDiff processDifference(Difference diff, String fromName, List<Token> fromList, List<Token> toList, FileDiff prevRef) {
@@ -149,56 +163,21 @@ public class ItemDiff extends DiffComparator {
         int addStart = diff.getAddedStart();
         int addEnd   = diff.getAddedEnd();
 
-        tr.Ace.log("diff", diff);
-
-        String msg    = null;
-        Token  fromStart = null;
-        Token  fromEnd   = null;
-        Token  toStart = null;
-        Token  toEnd   = null;
-
-        if (delEnd == Difference.NONE) {
-            if (addEnd == Difference.NONE) {
-                // WTF?
-                return null;
-            }
-            else {
-                fromStart = getStart(fromList, delStart);
-                fromEnd   = fromStart;
-                toStart = toList.get(addStart);
-                toEnd   = toList.get(addEnd);
-                msg    = CODE_ADDED;
-            }
-        }
-        else if (addEnd == Difference.NONE) {
-            fromStart = fromList.get(delStart);
-            fromEnd   = fromList.get(delEnd);
-            toStart = getStart(toList, addStart);
-            toEnd   = toStart;
-            msg    = CODE_REMOVED;
-        }
-        else {
-            fromStart = fromList.get(delStart);
-            fromEnd   = fromList.get(delEnd);
-            toStart = toList.get(addStart);
-            toEnd   = toList.get(addEnd);
-            msg    = CODE_CHANGED;
+        if (delEnd == Difference.NONE && addEnd == Difference.NONE) {
+            // WTF?
+            return null;
         }
 
-        tr.Ace.log("msg", msg);
+        LocationRange fromLocRg = getLocationRange(fromList, delStart, delEnd);
+        LocationRange toLocRg = getLocationRange(toList, addStart, addEnd);
+
+        String msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);        
             
-        Location fromStLoc  = FileDiff.toBeginLocation(fromStart);
-        Location fromEndLoc = FileDiff.toEndLocation(fromEnd);
-        Location toStLoc  = FileDiff.toBeginLocation(toStart);
-        Location toEndLoc = FileDiff.toEndLocation(toEnd);
-
-        tr.Ace.log("prevRef", prevRef);
-
-        if (prevRef != null && prevRef.getFirstLocation().getStart().getLine() == fromStLoc.getLine()) {
-            return replaceReference(fromName, prevRef, fromEndLoc, toEndLoc);
+        if (isOnSameLine(prevRef, fromLocRg)) {
+            return replaceReference(fromName, prevRef, fromLocRg, toLocRg);
         }
         else {
-            return addReference(fromName, msg, fromStLoc, fromEndLoc, toStLoc, toEndLoc);
+            return addReference(fromName, msg, fromLocRg, toLocRg);
         }
     }
 

@@ -69,6 +69,21 @@ public class FileDiff implements Comparable<FileDiff> {
     }
 
     /**
+     * Creates a reference from a message and begin and end positions.
+     *
+     * @param type        What type this reference is.
+     * @param message     The message applying to this reference.
+     * @param fromLoc     The location range in the from-file.
+     * @param toLoc       The location range in the to-file.
+     */
+    public FileDiff(Type type, String message, LocationRange fromLoc, LocationRange toLoc) {
+        this.type           = type;
+        this.message        = message;
+        this.firstLocation  = fromLoc;
+        this.secondLocation = toLoc;
+    }
+
+    /**
      * Creates a reference from a message and two tokens, one in each file.
      *
      * @param type    What type this reference is.     
