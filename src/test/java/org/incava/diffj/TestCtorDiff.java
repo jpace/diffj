@@ -378,7 +378,7 @@ public class TestCtorDiff extends AbstractTestItemDiff {
                  makeCodeChangedRef(CtorDiff.CODE_CHANGED, "Test()", loc(2, 23), loc(2, 23), loc(4, 18), loc(4, 18)));
     }
     
-    public void xtestCodeInsertedSameLine() {
+    public void testCodeInsertedSameLine() {
         evaluate(new Lines("class Test {",
                            "    Test() { int i = -1; }",
                            "",

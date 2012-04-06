@@ -21,8 +21,8 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
   end
 
   def compare from_coid, to_coid
-    info "from_coid: #{from_coid}; #{from_coid.class}".green
-    info "to_coid: #{to_coid}; #{to_coid.class}".green
+    info "from_coid: #{from_coid}; #{from_coid.class}"
+    info "to_coid: #{to_coid}; #{to_coid.class}"
 
     from_decls = declarations_of_class_type from_coid
     to_decls = declarations_of_class_type to_coid
@@ -49,7 +49,6 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
         end
       end
     end
-    info "matches: #{matches}".yellow    
     matches
   end
 

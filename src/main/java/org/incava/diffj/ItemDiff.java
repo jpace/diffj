@@ -34,7 +34,7 @@ public class ItemDiff extends DiffComparator {
     public static final String CODE_ADDED = "code added in {0}";
     public static final String CODE_REMOVED = "code removed in {0}";
 
-    class TokenComparator extends DefaultComparator<Token> {
+    public static class TokenComparator extends DefaultComparator<Token> {
         public int doCompare(Token xt, Token yt) {
             int cmp = xt.kind < yt.kind ? -1 : (xt.kind > yt.kind ? 1 : 0);
             if (cmp == 0) {
@@ -120,22 +120,31 @@ public class ItemDiff extends DiffComparator {
     }
 
     protected FileDiff addReference(String name, String msg, LocationRange fromLocRg, LocationRange toLocRg) {
+        tr.Ace.setVerbose(true);
+
+        tr.Ace.yellow("msg", msg);
+
         String str = MessageFormat.format(msg, name);
 
         FileDiff ref = null;
 
-        if (msg == CODE_ADDED) {
+        if (msg.equals(CODE_ADDED)) {
             // this will show as add when highlighted, as change when not.
             ref = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
+            tr.Ace.yellow("ref", ref);
         }
-        else if (msg == CODE_REMOVED) {
+        else if (msg.equals(CODE_REMOVED)) {
             ref = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
+            tr.Ace.blue("ref", ref);
         }
         else {
             ref = new FileDiffChange(str, fromLocRg, toLocRg);
+            tr.Ace.green("ref", ref);
         }                    
 
         add(ref);
+
+        tr.Ace.setVerbose(false);
 
         return ref;
     }
@@ -158,6 +167,8 @@ public class ItemDiff extends DiffComparator {
     }
 
     protected FileDiff processDifference(Difference diff, String fromName, List<Token> fromList, List<Token> toList, FileDiff prevRef) {
+        tr.Ace.setVerbose(true);
+
         int delStart = diff.getDeletedStart();
         int delEnd   = diff.getDeletedEnd();
         int addStart = diff.getAddedStart();
@@ -172,13 +183,11 @@ public class ItemDiff extends DiffComparator {
         LocationRange toLocRg = getLocationRange(toList, addStart, addEnd);
 
         String msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);        
-            
-        if (isOnSameLine(prevRef, fromLocRg)) {
-            return replaceReference(fromName, prevRef, fromLocRg, toLocRg);
-        }
-        else {
-            return addReference(fromName, msg, fromLocRg, toLocRg);
-        }
+        tr.Ace.onGreen("msg", msg);
+
+        prevRef = isOnSameLine(prevRef, fromLocRg) ? replaceReference(fromName, prevRef, fromLocRg, toLocRg) : addReference(fromName, msg, fromLocRg, toLocRg);
+        tr.Ace.yellow("prevRef", prevRef);
+        return prevRef;
     }
 
     protected void compareCode(String fromName, List<Token> fromList, String toName, List<Token> toList) {
