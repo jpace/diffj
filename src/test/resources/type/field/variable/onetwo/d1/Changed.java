@@ -1,0 +1,3 @@
+class Changed {
+    int idx;
+}

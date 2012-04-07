@@ -49,9 +49,15 @@ module DiffJ
         changed(fromType, toType, VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
       end
       
-      # compareVariableInits(fromVarDecl, toVarDecl)
+      # $$$ compareVariableInits(fromVarDecl, toVarDecl)
     end
 
+    def processAddDelVariable name, msg, fromVarDecl, toVarDecl
+      fromTk = FieldUtil.getName(fromVarDecl);
+      toTk = FieldUtil.getName(toVarDecl);
+      changed(fromTk, toTk, msg, name);
+    end
+    
     def compare_variables from, to
       fromVarDecls = SimpleNodeUtil.snatchChildren(from, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
       toVarDecls = SimpleNodeUtil.snatchChildren(to, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
