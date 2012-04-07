@@ -6,6 +6,7 @@ require 'riel'
 require 'java'
 require 'diffj/ast/typeitemdecl'
 require 'diffj/ast/type'
+require 'diffj/ast/ctor'
 
 include Java
 
@@ -26,7 +27,9 @@ class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
   def do_compare from, to
     differ = CtorDiff.new filediffs
     differ.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
-    differ.compare from, to
+    # differ.compare from, to
+    ctorcmp = DiffJ::CtorComparator.new filediffs
+    ctorcmp.compare_xxx from, to
   end
 
   def get_name ctordecl
