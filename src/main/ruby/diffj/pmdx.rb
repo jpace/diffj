@@ -14,5 +14,8 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
   def parent
     SimpleNodeUtil.getParent self
   end
-end
 
+  def to_string
+    SimpleNodeUtil.toString self
+  end
+end
