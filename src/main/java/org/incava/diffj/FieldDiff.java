@@ -42,7 +42,19 @@ public class FieldDiff extends ItemDiff {
         compareModifiers((SimpleNode)from.jjtGetParent(), (SimpleNode)to.jjtGetParent(), VALID_MODIFIERS);
     }
 
-    protected void compareVariables(ASTVariableDeclarator from, ASTVariableDeclarator to) {
+    protected void compareInitCode(String fromName, ASTVariableInitializer fromInit, String toName, ASTVariableInitializer toInit) {
+        List<Token> aCode = SimpleNodeUtil.getChildrenSerially(fromInit);
+        List<Token> bCode = SimpleNodeUtil.getChildrenSerially(toInit);
+        
+        // It is logically impossible for this to execute where "to"
+        // represents the from-file, and "from" the to-file, since "from.name"
+        // would have matched "to.name" in the first loop of
+        // compareVariableLists
+        
+        compareCode(fromName, aCode, toName, bCode);
+    }
+
+    protected void compareVariableInits(ASTVariableDeclarator from, ASTVariableDeclarator to) {
         ASTVariableInitializer fromInit = (ASTVariableInitializer)SimpleNodeUtil.findChild(from, "net.sourceforge.pmd.ast.ASTVariableInitializer");
         ASTVariableInitializer toInit = (ASTVariableInitializer)SimpleNodeUtil.findChild(to, "net.sourceforge.pmd.ast.ASTVariableInitializer");
         
@@ -55,18 +67,10 @@ public class FieldDiff extends ItemDiff {
             changed(fromInit, to, INITIALIZER_REMOVED);
         }
         else {
-            List<Token> aCode = SimpleNodeUtil.getChildrenSerially(fromInit);
-            List<Token> bCode = SimpleNodeUtil.getChildrenSerially(toInit);
-
-            // It is logically impossible for this to execute where "to"
-            // represents the from-file, and "from" the to-file, since "from.name"
-            // would have matched "to.name" in the first loop of
-            // compareVariableLists
-
             String fromName = FieldUtil.getName(from).image;
             String toName = FieldUtil.getName(to).image;
-            
-            compareCode(fromName, aCode, toName, bCode);
+
+            compareInitCode(fromName, fromInit, toName, toInit);
         }
     }
 
@@ -81,10 +85,34 @@ public class FieldDiff extends ItemDiff {
         return namesToVD;
     }
 
-    protected void compareVariables(ASTFieldDeclaration from, ASTFieldDeclaration to) {
-        ASTType fromType = (ASTType)SimpleNodeUtil.findChild(from, "net.sourceforge.pmd.ast.ASTType");
-        ASTType toType = (ASTType)SimpleNodeUtil.findChild(to, "net.sourceforge.pmd.ast.ASTType");        
+    protected void compareVariableTypes(String name, ASTFieldDeclaration fromFieldDecl, ASTVariableDeclarator fromVarDecl, ASTFieldDeclaration toFieldDecl, ASTVariableDeclarator toVarDecl) {
+        ASTType fromType = (ASTType)SimpleNodeUtil.findChild(fromFieldDecl, "net.sourceforge.pmd.ast.ASTType");
+        ASTType toType = (ASTType)SimpleNodeUtil.findChild(toFieldDecl, "net.sourceforge.pmd.ast.ASTType");
 
+        String fromTypeStr = SimpleNodeUtil.toString(fromType);
+        String toTypeStr = SimpleNodeUtil.toString(toType);
+
+        if (!fromTypeStr.equals(toTypeStr)) {
+            changed(fromType, toType, VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
+        }
+
+        compareVariableInits(fromVarDecl, toVarDecl);
+    }
+
+    protected void processChangedVariable(ASTVariableDeclarator fromVarDecl, ASTVariableDeclarator toVarDecl) {
+        Token fromTk = FieldUtil.getName(fromVarDecl);
+        Token toTk = FieldUtil.getName(toVarDecl);
+        changed(fromTk, toTk, VARIABLE_CHANGED);
+        compareVariableInits(fromVarDecl, toVarDecl);
+    }
+
+    protected void processAddDelVariable(String name, String msg, ASTVariableDeclarator fromVarDecl, ASTVariableDeclarator toVarDecl) {
+        Token fromTk = FieldUtil.getName(fromVarDecl);
+        Token toTk = FieldUtil.getName(toVarDecl);
+        changed(fromTk, toTk, msg, name);
+    }
+
+    protected void compareVariables(ASTFieldDeclaration from, ASTFieldDeclaration to) {
         List<ASTVariableDeclarator> fromVarDecls = SimpleNodeUtil.snatchChildren(from, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
         List<ASTVariableDeclarator> toVarDecls = SimpleNodeUtil.snatchChildren(to, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
 
@@ -99,35 +127,17 @@ public class FieldDiff extends ItemDiff {
             ASTVariableDeclarator fromVarDecl = fromNamesToVD.get(name);
             ASTVariableDeclarator toVarDecl = toNamesToVD.get(name);
 
-            if (fromVarDecl == null || toVarDecl == null) {
-                if (fromVarDecls.size() == 1 && toVarDecls.size() == 1) {
-                    Token fromTk = FieldUtil.getName(fromVarDecls.get(0));
-                    Token toTk = FieldUtil.getName(toVarDecls.get(0));
-                    changed(fromTk, toTk, VARIABLE_CHANGED);
-                    compareVariables(fromVarDecls.get(0), toVarDecls.get(0));
-                }
-                else if (fromVarDecl == null) {
-                    Token fromTk = FieldUtil.getName(fromVarDecls.get(0));
-                    Token toTk = FieldUtil.getName(toVarDecl);
-                    changed(fromTk, toTk, VARIABLE_ADDED, name);
-                }
-                else {
-                    Token fromTk = FieldUtil.getName(fromVarDecl);
-                    Token toTk = FieldUtil.getName(toVarDecls.get(0));
-                    changed(fromTk, toTk, VARIABLE_REMOVED, name);
-                }
+            if (fromVarDecl != null && toVarDecl != null) {
+                compareVariableTypes(name, from, fromVarDecl, to, toVarDecl);
+            }
+            else if (fromVarDecls.size() == 1 && toVarDecls.size() == 1) {
+                processChangedVariable(fromVarDecls.get(0), toVarDecls.get(0));
+            }
+            else if (fromVarDecl == null) {
+                processAddDelVariable(name, VARIABLE_ADDED, fromVarDecls.get(0), toVarDecl);
             }
             else {
-                // types changed?
-
-                String fromTypeStr = SimpleNodeUtil.toString(fromType);
-                String toTypeStr = SimpleNodeUtil.toString(toType);
-
-                if (!fromTypeStr.equals(toTypeStr)) {
-                    changed(fromType, toType, VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
-                }
-
-                compareVariables(fromVarDecl, toVarDecl);
+                processAddDelVariable(name, VARIABLE_REMOVED, fromVarDecl, toVarDecls.get(0));
             }
         }
     }
