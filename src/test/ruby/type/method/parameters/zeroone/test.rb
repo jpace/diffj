@@ -6,7 +6,7 @@ require 'type/method/parameters/tc'
 module DiffJ::Type::Method::Parameters
   class ZeroOneTestCase < TestCase
     def test_added
-      run_test 'Added', added_change("i", loc(2, 15), loc(2, 15), loc(2, 16), loc(2, 20))
+      run_test 'Added', added_change("i", loc(2, 15), loc(2, 16), loc(2, 20), loc(2, 20))
     end
 
     def test_removed

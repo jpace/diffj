@@ -164,67 +164,6 @@ module DiffJ
       }
     end
 
-    def convert_arguments_orig args
-      info "args: #{args.inspect}".red
-
-      # should be 2, for from and to, or 4 for from_start, from_end, to_start, to_end
-      tokens = Array.new
-      msg = nil
-      params = nil
-
-      simple_node_from = nil
-      simple_node_to = nil
-
-      args.each_with_index do |arg, idx|
-        info "arg: #{arg}".red
-        info "arg.class: #{arg.class}".red, 10
-
-        if arg.class == String || arg.class == Fixnum
-          if msg
-            (params ||= Array.new) << arg
-          else
-            msg = arg
-          end
-        elsif arg.java_class.to_s == "net.sourceforge.pmd.ast.Token"
-          tokens << arg
-          if idx == 0
-            tokens << arg
-          end
-        else
-          info "arg: #{arg}"
-          # simple_node = arg.java_class.is_a? ::Java::net.sourceforge.pmd.ast.SimpleNode
-          simple_node = arg.is_a? ::Java::net.sourceforge.pmd.ast.SimpleNode
-          if simple_node
-            firsttoken = arg.getFirstToken()
-            info "firsttoken: #{firsttoken}".on_magenta
-
-            tokens << firsttoken
-
-            lasttoken = arg.getLastToken()
-            info "lasttoken: #{lasttoken}".on_magenta
-
-            tokens << lasttoken
-            
-            if simple_node_from
-              simple_node_to = arg              
-            else
-              simple_node_from = arg
-            end
-          end
-        end
-      end
-
-      info "tokens: #{tokens}".on_blue
-      info "msg: #{msg}".on_blue
-      info "params: #{params}".on_blue
-
-      { :simple_nodes => { :from => simple_node_from, :to => simple_node_to },
-        :msg => msg,
-        :params => params,
-        :tokens => tokens
-      }
-    end
-
     def get_parameters
     end
 
@@ -300,6 +239,8 @@ module DiffJ
             end
           end
         end
+      elsif ast_elements.size == 4
+        @tokens = ast_elements
       end
 
       info "@tokens: #{@tokens}".yellow
@@ -348,6 +289,70 @@ module DiffJ
   end
 
   class Remove < Delta
+    def initialize args
+      info "args: #{args.class}".on_red
+      info "args: #{args.inspect}".on_red
+
+      arglist = args.dup
+
+      tokens = Hash.new
+      simple_nodes = Hash.new
+
+      ast_elements = Array.new
+
+      @tokens = Array.new
+      @msg = nil
+      @params = []
+
+      arglist.each_with_index do |arg, idx|
+        info "arg: #{arg}"
+        if arg.class == String
+          @msg = arg
+          @params = arglist[idx + 1 .. -1]
+          ast_elements = arglist[0 ... idx]
+          break
+        end
+      end
+
+      info "@tokens: #{@tokens}".yellow
+      info "@msg: #{@msg}".yellow
+      info "@params: #{@params}".yellow
+      info "ast_elements: #{ast_elements}".yellow
+
+      if ast_elements.size == 2
+        ast_elements.each_with_index do |elmt, idx|
+          if elmt.kind_of? Java::net.sourceforge.pmd.ast.Token
+            @tokens << elmt
+            if idx == 0
+              @params << elmt.image
+            end
+          else
+            @tokens << elmt.getFirstToken()
+            @tokens << elmt.getLastToken()
+            if idx == 0
+              @params << SimpleNodeUtil.toString(elmt)
+            end
+          end
+        end
+      elsif ast_elements.size == 4
+        @tokens = ast_elements
+      end
+
+      info "@tokens: #{@tokens}".yellow
+      info "@params: #{@params}".yellow
+
+      str = MessageFormat.format @msg, *(@params)
+      info "str: #{str}".yellow
+
+      fdcls = get_filediff_cls
+      
+      if @tokens.length == 2
+        @filediff = fdcls.new str, @tokens[0], @tokens[1]
+      else
+        @filediff = fdcls.new str, @tokens[0], @tokens[1], @tokens[2], @tokens[3]
+      end
+    end
+
     def get_parameters conv_args
       if sn = conv_args[:simple_nodes][:from]
         nodes_to_parameters sn, nil
@@ -362,6 +367,83 @@ module DiffJ
   end
 
   class Change < Delta
+    def initialize args
+      info "args: #{args.class}".on_red
+      info "args: #{args.inspect}".on_red
+
+      arglist = args.dup
+
+      tokens = Hash.new
+      simple_nodes = Hash.new
+
+      ast_elements = Array.new
+
+      @tokens = Array.new
+      @msg = nil
+      @params = nil
+
+      arglist.each_with_index do |arg, idx|
+        info "arg: #{arg}"
+        if arg.class == String
+          @msg = arg
+          @params = arglist[idx + 1 .. -1]
+          ast_elements = arglist[0 ... idx]
+          break
+        end
+      end
+
+      info "@tokens: #{@tokens}".yellow
+      info "@msg: #{@msg}".yellow
+      info "@params: #{@params}".yellow
+      info "ast_elements: #{ast_elements}".yellow
+
+      if ast_elements.size == 4
+        @tokens = ast_elements
+      else
+        ast_classes = ast_elements.collect { |ast| ast.class.to_s.sub(%r{.*::}, '').sub(%r{AST\w+}, 'SimpleNode').downcase }.join('_')
+        info "ast_classes: #{ast_classes}".cyan
+
+        meth = "process_#{ast_classes}".to_sym
+        method(meth).call(*ast_elements)
+      end
+
+      info "@tokens: #{@tokens}".yellow
+      info "@params: #{@params}".yellow
+
+      str = MessageFormat.format @msg, *(@params)
+      info "str: #{str}".yellow
+
+      fdcls = get_filediff_cls
+      
+      if @tokens.length == 2
+        @filediff = fdcls.new str, @tokens[0], @tokens[1]
+      else
+        @filediff = fdcls.new str, @tokens[0], @tokens[1], @tokens[2], @tokens[3]
+      end
+    end
+
+    def process_token_simplenode from_tk, to_sn
+      @tokens.concat [ from_tk, from_tk, to_sn.getFirstToken(), to_sn.getLastToken() ]
+    end
+
+    def process_simplenode_token from_sn, to_tk
+      @tokens.concat [ from_sn.getFirstToken(), from_sn.getLastToken(), to_tk, to_tk  ]
+    end
+
+    def process_token_token from_tk, to_tk
+      @tokens.concat [ from_tk, to_tk ]
+      if @params.empty?
+        @params = tokens_to_parameters from_tk, to_tk
+      end      
+    end
+
+    def process_simplenode_simplenode from_sn, to_sn
+      @tokens.concat [ from_sn.getFirstToken(), from_sn.getLastToken(), to_sn.getFirstToken(), to_sn.getLastToken() ]
+      if @params.empty?
+        @params = nodes_to_parameters from_sn, to_sn
+      end
+    end
+
     def get_parameters conv_args
       if snfrom = conv_args[:simple_nodes][:from]
         snto = conv_args[:simple_nodes][:to]
