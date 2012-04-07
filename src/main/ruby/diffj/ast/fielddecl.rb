@@ -23,13 +23,13 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
     FieldUtil.getMatchScore from_field, to_field
   end
 
-  def do_compare from, to
+  def do_compare_old from, to
     differ = FieldDiff.new filediffs
     differ.compareAccess SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
     differ.compare from, to
   end
 
-  def do_compare_new from, to
+  def do_compare from, to
     differ = DiffJ::FieldComparator.new filediffs
     differ.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
     differ.compare_xxx from, to

@@ -1,0 +1,3 @@
+class Changed {
+    float fl;
+}

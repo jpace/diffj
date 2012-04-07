@@ -38,6 +38,36 @@ module DiffJ
       names_to_vd
     end
 
+    def compareInitCode from_name, from_init, to_name, to_init
+      from_code = SimpleNodeUtil.getChildrenSerially from_init
+      to_code = SimpleNodeUtil.getChildrenSerially to_init
+        
+      # It is logically impossible for this to execute where "to"
+      # represents the from-file, and "from" the to-file, since "from.name"
+      #  would have matched "to.name" in the first loop of       
+      # compareVariableLists
+      
+      compare_code from_name, from_code, to_name, to_code
+    end
+
+    def compareVariableInits from, to
+      from_init = SimpleNodeUtil.findChild(from, "net.sourceforge.pmd.ast.ASTVariableInitializer");
+      to_init = SimpleNodeUtil.findChild(to, "net.sourceforge.pmd.ast.ASTVariableInitializer");
+      
+      if from_init.nil?
+        if to_init
+          changed from, to_init, INITIALIZER_ADDED
+        end
+      elsif to_init.nil?
+        changed(from_init, to, INITIALIZER_REMOVED);
+      else
+        from_name = FieldUtil.getName(from).image;
+        to_name = FieldUtil.getName(to).image;
+
+        compareInitCode(from_name, from_init, to_name, to_init);
+      end
+    end
+
     def compareVariableTypes name, fromFieldDecl, fromVarDecl, toFieldDecl, toVarDecl
       fromType = SimpleNodeUtil.findChild(fromFieldDecl, "net.sourceforge.pmd.ast.ASTType");
       toType = SimpleNodeUtil.findChild(toFieldDecl, "net.sourceforge.pmd.ast.ASTType");
@@ -49,13 +79,20 @@ module DiffJ
         changed(fromType, toType, VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
       end
       
-      # $$$ compareVariableInits(fromVarDecl, toVarDecl)
+      compareVariableInits(fromVarDecl, toVarDecl)
     end
 
     def processAddDelVariable name, msg, fromVarDecl, toVarDecl
       fromTk = FieldUtil.getName(fromVarDecl);
       toTk = FieldUtil.getName(toVarDecl);
       changed(fromTk, toTk, msg, name);
+    end
+
+    def processChangedVariable fromVarDecl, toVarDecl
+      fromTk = FieldUtil.getName(fromVarDecl);
+      toTk = FieldUtil.getName(toVarDecl);
+      changed fromTk, toTk, VARIABLE_CHANGED
+      # compareVariableInits(fromVarDecl, toVarDecl);
     end
     
     def compare_variables from, to

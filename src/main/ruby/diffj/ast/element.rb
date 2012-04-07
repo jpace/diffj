@@ -22,6 +22,12 @@ module DiffJ
     def initialize args
       ast_elements = Array.new
 
+      info "args: #{args}".green
+      args.each do |arg|
+        info "arg: #{arg}".green
+        info "arg.class: #{arg.class}".green
+      end
+
       @tokens = Array.new
       @msg = nil
       @params = nil
@@ -46,6 +52,12 @@ module DiffJ
       str = MessageFormat.format @msg, *(@params)
       
       fdcls = get_filediff_cls
+
+      info "tokens: #{@tokens.inspect}"
+      @tokens.each do |tk|
+        info "tk: #{tk}"
+        info "tk.class: #{tk.class}"
+      end
       
       if @tokens.length == 2
         @filediff = fdcls.new str, @tokens[0], @tokens[1]
@@ -65,7 +77,7 @@ module DiffJ
     def process_token_token from_tk, to_tk
       @tokens.concat [ from_tk, to_tk ]
       if @params.empty?
-        @tokens = tokens_to_parameters from_tk, to_tk
+        @params = tokens_to_parameters from_tk, to_tk
       end      
     end
 
@@ -91,8 +103,6 @@ module DiffJ
     end
 
     def nodes_to_parameters from, to
-      stack "from: #{from}; to: #{to}"
-      
       params = java.util.ArrayList.new
       if from
         params.add SimpleNodeUtil.toString(from)
