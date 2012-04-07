@@ -39,7 +39,7 @@ public class FieldDiff extends ItemDiff {
     }
 
     protected void compareModifiers(ASTFieldDeclaration from, ASTFieldDeclaration to) {
-        compareModifiers((SimpleNode)from.jjtGetParent(), (SimpleNode)to.jjtGetParent(), VALID_MODIFIERS);
+        compareModifiers(SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to), VALID_MODIFIERS);
     }
 
     protected void compareInitCode(String fromName, ASTVariableInitializer fromInit, String toName, ASTVariableInitializer toInit) {

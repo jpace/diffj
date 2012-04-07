@@ -43,10 +43,10 @@ public class FunctionDiff extends ItemDiff {
     }
 
     protected void compareReturnTypes(SimpleNode fromNode, SimpleNode toNode) {
-        SimpleNode fromRetType    = (SimpleNode)fromNode.jjtGetChild(0);
-        SimpleNode toRetType    = (SimpleNode)toNode.jjtGetChild(0);
+        SimpleNode fromRetType    = SimpleNodeUtil.findChild(fromNode);
+        SimpleNode toRetType      = SimpleNodeUtil.findChild(toNode);
         String     fromRetTypeStr = SimpleNodeUtil.toString(fromRetType);
-        String     toRetTypeStr = SimpleNodeUtil.toString(toRetType);
+        String     toRetTypeStr   = SimpleNodeUtil.toString(toRetType);
 
         if (!fromRetTypeStr.equals(toRetTypeStr)) {
             changed(fromRetType, toRetType, RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
