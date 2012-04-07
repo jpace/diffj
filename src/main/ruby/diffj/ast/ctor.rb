@@ -15,41 +15,41 @@ module DiffJ
   class CtorComparator < FunctionComparator
     include Loggable
 
-    def ctor_compare_parameters_xxx from, to
+    def compare_parameters from, to
       from_formal_params = CtorUtil.getParameters from
       to_formal_params = CtorUtil.getParameters to
       
-      function_compare_parameters_xxx from_formal_params, to_formal_params
+      super from_formal_params, to_formal_params
     end
 
-    def ctor_compare_throws_xxx from, to
+    def compare_throws from, to
       from_name_list = CtorUtil.getThrowsList from
       to_name_list = CtorUtil.getThrowsList to
 
-      function_compare_throws_xxx from, from_name_list, to, to_name_list
+      super from, from_name_list, to, to_name_list
     end
     
-    def ctor_get_code_serially_xxx ctor
+    def get_code_serially ctor
       # removes all tokens up to the first left brace. This is because ctors
       # don't have their own blocks, unlike methods.
         
-      children = SimpleNodeUtil.getChildrenSerially ctor
+      children =  ctor.get_children_serially
         
-      it = children.iterator();
-      while it.hasNext()
-        tk = it.next();
+      it = children.iterator
+      while it.hasNext
+        tk = it.next
         if tk.kind == ::Java::net.sourceforge.pmd.ast.JavaParserConstants::LBRACE
           break
         else
-          it.remove()
+          it.remove
         end
       end
       children
     end
 
-    def ctor_compare_bodies_xxx from, to
-      from_code = ctor_get_code_serially_xxx from
-      to_code = ctor_get_code_serially_xxx to
+    def compare_bodies from, to
+      from_code = get_code_serially from
+      to_code = get_code_serially to
         
       from_name = CtorUtil.getFullName from
       to_name = CtorUtil.getFullName to
@@ -57,13 +57,13 @@ module DiffJ
       compare_code from_name, from_code, to_name, to_code
     end
 
-    def compare_xxx from, to
+    def compare from, to
       info "from: #{from}".on_red
       info "to  : #{to}".on_red
 
-      ctor_compare_parameters_xxx from, to
-      ctor_compare_throws_xxx from, to
-      ctor_compare_bodies_xxx from, to
+      compare_parameters from, to
+      compare_throws from, to
+      compare_bodies from, to
     end
   end
 end

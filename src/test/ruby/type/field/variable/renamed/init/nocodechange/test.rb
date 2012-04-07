@@ -1,10 +1,10 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'type/field/variable/renamed/tc'
+require 'type/field/variable/renamed/init/tc'
 
-module DiffJ::Type::Field::Variable::Renamed
-  class InitTestCase < TestCase
+module DiffJ::Type::Field::Variable::Renamed::Init
+  class NoCodeChangeTestCase < TestCase
     def test_unchanged
       run_test 'Unchanged'
     end

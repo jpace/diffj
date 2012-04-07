@@ -10,7 +10,6 @@ require 'diffj/ast/ctor'
 
 include Java
 
-import org.incava.diffj.CtorDiff
 import org.incava.pmdx.CtorUtil
 
 class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
@@ -25,11 +24,9 @@ class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def do_compare from, to
-    differ = CtorDiff.new filediffs
-    differ.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
-    # differ.compare from, to
     ctorcmp = DiffJ::CtorComparator.new filediffs
-    ctorcmp.compare_xxx from, to
+    ctorcmp.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
+    ctorcmp.compare from, to
   end
 
   def get_name ctordecl

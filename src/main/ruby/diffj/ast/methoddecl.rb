@@ -28,7 +28,7 @@ class DiffJ::MethodDeclComparator < DiffJ::TypeItemDeclComparator
   def do_compare from, to
     differ = DiffJ::MethodComparator.new filediffs
     differ.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
-    differ.compare_xxx from, to
+    differ.compare from, to
   end
 
   def get_name methdecl

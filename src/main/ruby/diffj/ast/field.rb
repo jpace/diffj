@@ -8,17 +8,16 @@ require 'diffj/ast/item'
 
 include Java
 
-import org.incava.pmdx.ThrowsUtil
 import org.incava.pmdx.FieldUtil
 
 module DiffJ
   class FieldComparator < ItemComparator
-    VARIABLE_REMOVED = "variable removed: {0}";
-    VARIABLE_ADDED = "variable added: {0}";
-    VARIABLE_CHANGED = "variable changed from {0} to {1}";
-    VARIABLE_TYPE_CHANGED = "variable type for {0} changed from {1} to {2}";
-    INITIALIZER_REMOVED = "initializer removed";
-    INITIALIZER_ADDED = "initializer added";
+    VARIABLE_REMOVED = "variable removed: {0}"
+    VARIABLE_ADDED = "variable added: {0}"
+    VARIABLE_CHANGED = "variable changed from {0} to {1}"
+    VARIABLE_TYPE_CHANGED = "variable type for {0} changed from {1} to {2}"
+    INITIALIZER_REMOVED = "initializer removed"
+    INITIALIZER_ADDED = "initializer added"
 
     VALID_MODIFIERS = [
                        ::Java::net.sourceforge.pmd.ast.JavaParserConstants::FINAL,
@@ -32,97 +31,96 @@ module DiffJ
     def make_vd_map vds
       names_to_vd = java.util.HashMap.new
       vds.each do |vd|
-        name = FieldUtil.getName(vd).image;
+        name = FieldUtil.getName(vd).image
         names_to_vd.put(name, vd)
       end
       names_to_vd
     end
 
-    def compareInitCode from_name, from_init, to_name, to_init
-      from_code = SimpleNodeUtil.getChildrenSerially from_init
+    def compare_init_code from_name, from_init, to_name, to_init
+      from_code =  from_init.get_children_serially
       to_code = SimpleNodeUtil.getChildrenSerially to_init
         
-      # It is logically impossible for this to execute where "to"
-      # represents the from-file, and "from" the to-file, since "from.name"
-      #  would have matched "to.name" in the first loop of       
-      # compareVariableLists
+      # It is logically impossible for this to execute where "to" represents the
+      # from-file, and "from" the to-file, since "from.name" would have matched
+      # "to.name" in the first loop of compareVariableLists
       
       compare_code from_name, from_code, to_name, to_code
     end
 
-    def compareVariableInits from, to
-      from_init = SimpleNodeUtil.findChild(from, "net.sourceforge.pmd.ast.ASTVariableInitializer");
-      to_init = SimpleNodeUtil.findChild(to, "net.sourceforge.pmd.ast.ASTVariableInitializer");
+    def compare_variable_inits from, to
+      from_init = SimpleNodeUtil.findChild from, "net.sourceforge.pmd.ast.ASTVariableInitializer"
+      to_init = SimpleNodeUtil.findChild to, "net.sourceforge.pmd.ast.ASTVariableInitializer"
       
       if from_init.nil?
         if to_init
           changed from, to_init, INITIALIZER_ADDED
         end
       elsif to_init.nil?
-        changed(from_init, to, INITIALIZER_REMOVED);
+        changed from_init, to, INITIALIZER_REMOVED
       else
-        from_name = FieldUtil.getName(from).image;
-        to_name = FieldUtil.getName(to).image;
+        from_name = FieldUtil.getName(from).image
+        to_name = FieldUtil.getName(to).image
 
-        compareInitCode(from_name, from_init, to_name, to_init);
+        compare_init_code from_name, from_init, to_name, to_init
       end
     end
 
-    def compareVariableTypes name, fromFieldDecl, fromVarDecl, toFieldDecl, toVarDecl
-      fromType = SimpleNodeUtil.findChild(fromFieldDecl, "net.sourceforge.pmd.ast.ASTType");
-      toType = SimpleNodeUtil.findChild(toFieldDecl, "net.sourceforge.pmd.ast.ASTType");
+    def compare_variable_types name, from_field_decl, from_var_decl, to_field_decl, to_var_decl
+      from_type = SimpleNodeUtil.findChild(from_field_decl, "net.sourceforge.pmd.ast.ASTType")
+      to_type = SimpleNodeUtil.findChild(to_field_decl, "net.sourceforge.pmd.ast.ASTType")
 
-      fromTypeStr = SimpleNodeUtil.toString(fromType);
-      toTypeStr = SimpleNodeUtil.toString(toType);
+      from_type_str = SimpleNodeUtil.toString from_type
+      to_type_str = SimpleNodeUtil.toString to_type
 
-      if fromTypeStr != toTypeStr
-        changed(fromType, toType, VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
+      if from_type_str != to_type_str
+        changed from_type, to_type, VARIABLE_TYPE_CHANGED, name, from_type_str, to_type_str
       end
       
-      compareVariableInits(fromVarDecl, toVarDecl)
+      compare_variable_inits from_var_decl, to_var_decl
     end
 
-    def processAddDelVariable name, msg, fromVarDecl, toVarDecl
-      fromTk = FieldUtil.getName(fromVarDecl);
-      toTk = FieldUtil.getName(toVarDecl);
-      changed(fromTk, toTk, msg, name);
+    def process_add_del_variable name, msg, from_var_decl, to_var_decl
+      from_tk = FieldUtil.getName from_var_decl
+      to_tk = FieldUtil.getName to_var_decl
+      changed from_tk, to_tk, msg, name
     end
 
-    def processChangedVariable fromVarDecl, toVarDecl
-      fromTk = FieldUtil.getName(fromVarDecl);
-      toTk = FieldUtil.getName(toVarDecl);
-      changed fromTk, toTk, VARIABLE_CHANGED
-      # compareVariableInits(fromVarDecl, toVarDecl);
+    def process_changed_variable from_var_decl, to_var_decl
+      from_tk = FieldUtil.getName from_var_decl
+      to_tk = FieldUtil.getName to_var_decl
+      changed from_tk, to_tk, VARIABLE_CHANGED
+      compare_variable_inits from_var_decl, to_var_decl
     end
     
     def compare_variables from, to
-      fromVarDecls = SimpleNodeUtil.snatchChildren(from, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
-      toVarDecls = SimpleNodeUtil.snatchChildren(to, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+      from_var_decls = SimpleNodeUtil.snatchChildren(from, "net.sourceforge.pmd.ast.ASTVariableDeclarator")
+      to_var_decls = SimpleNodeUtil.snatchChildren(to, "net.sourceforge.pmd.ast.ASTVariableDeclarator")
 
-      fromNamesToVD = make_vd_map(fromVarDecls);
-      toNamesToVD = make_vd_map(toVarDecls);
+      from_names_to_vd = make_vd_map from_var_decls
+      to_names_to_vd = make_vd_map to_var_decls
 
-      names = java.util.TreeSet.new();
-      names.addAll(fromNamesToVD.keySet());
-      names.addAll(toNamesToVD.keySet());
+      names = java.util.TreeSet.new
+      names.addAll(from_names_to_vd.keySet())
+      names.addAll(to_names_to_vd.keySet())
 
       names.each do |name|
-        fromVarDecl = fromNamesToVD.get(name);
-        toVarDecl = toNamesToVD.get(name);
+        from_var_decl = from_names_to_vd.get(name)
+        to_var_decl = to_names_to_vd.get(name)
 
-        if fromVarDecl && toVarDecl
-          compareVariableTypes(name, from, fromVarDecl, to, toVarDecl)
-        elsif fromVarDecls.size() == 1 && toVarDecls.size() == 1
-          processChangedVariable(fromVarDecls.get(0), toVarDecls.get(0));
-        elsif fromVarDecl.nil?
-          processAddDelVariable(name, VARIABLE_ADDED, fromVarDecls.get(0), toVarDecl);
+        if from_var_decl && to_var_decl
+          compare_variable_types name, from, from_var_decl, to, to_var_decl
+        elsif from_var_decls.size == 1 && to_var_decls.size == 1
+          process_changed_variable from_var_decls.get(0), to_var_decls.get(0)
+        elsif from_var_decl.nil?
+          process_add_del_variable name, VARIABLE_ADDED, from_var_decls.get(0), to_var_decl
         else
-          processAddDelVariable(name, VARIABLE_REMOVED, fromVarDecl, toVarDecls.get(0));
+          process_add_del_variable name, VARIABLE_REMOVED, from_var_decl, to_var_decls.get(0)
         end
       end
     end
 
-    def compare_xxx from, to
+    def compare from, to
       compare_modifiers from, to
       compare_variables from, to
     end

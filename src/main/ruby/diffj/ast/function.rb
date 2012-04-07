@@ -27,7 +27,7 @@ module DiffJ
     THROWS_ADDED = "throws added: {0}"
     THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}"
     
-    def compare_return_types_xxx from, to
+    def compare_return_types from, to
       from_ret_type     = from.jjtGetChild(0)
       to_ret_type       = to.jjtGetChild(0)
       from_ret_type_str = SimpleNodeUtil.toString from_ret_type
@@ -38,11 +38,11 @@ module DiffJ
       end
     end
 
-    def function_get_child_names_xxx name_list
+    def get_child_names name_list
       SimpleNodeUtil.snatchChildren name_list, "net.sourceforge.pmd.ast.ASTName"
     end
 
-    def function_compare_each_parameter_xxx from_formal_params, from_params, to_formal_params, to_params, size
+    def compare_each_parameter from_formal_params, from_params, to_formal_params, to_params, size
       (0 ... size).each do |idx|
         from_param = from_params.get idx
         param_match = ParameterUtil.getMatch from_params, idx, to_params
@@ -52,15 +52,15 @@ module DiffJ
         if param_match[0] == idx && param_match[1] == idx
           Log.info "exact match"
         elsif param_match[0] == idx
-          function_mark_parameter_name_changed_xxx from_formal_param, to_formal_params, idx
+          mark_parameter_name_changed from_formal_param, to_formal_params, idx
         elsif param_match[1] == idx
-          function_mark_parameter_type_changed_xxx from_param, to_formal_params, idx
+          mark_parameter_type_changed from_param, to_formal_params, idx
         elsif param_match[0] >= 0
-          function_check_for_reorder_xxx from_formal_param, idx, to_formal_params, param_match[0]
+          check_for_reorder from_formal_param, idx, to_formal_params, param_match[0]
         elsif param_match[1] >= 0
-          function_mark_reordered_xxx from_formal_param, idx, to_formal_params, param_match[1]
+          mark_reordered from_formal_param, idx, to_formal_params, param_match[1]
         else
-          function_mark_removed_xxx from_formal_param, to_formal_params
+          mark_removed from_formal_param, to_formal_params
         end
       end
 
@@ -73,7 +73,7 @@ module DiffJ
       end
     end
 
-    def function_check_for_reorder_xxx from_param, from_idx, to_formal_params, to_idx
+    def check_for_reorder from_param, from_idx, to_formal_params, to_idx
       from_name_tk = ParameterUtil.getParameterName from_param
       to_name_tk = ParameterUtil.getParameterName to_formal_params, to_idx
       if from_name_tk.image == to_name_tk.image
@@ -84,44 +84,44 @@ module DiffJ
     end
 
     # $$$ @untested
-    def function_mark_reordered_xxx from_param, from_idx, to_params, to_idx
+    def mark_reordered from_param, from_idx, to_params, to_idx
       from_name_tk = ParameterUtil.getParameterName from_param
       to_param = ParameterUtil.getParameter(to_params, to_idx)
       changed from_param, to_param, PARAMETER_REORDERED, from_name_tk.image, from_idx, to_idx
     end
 
-    def function_mark_removed_xxx from_param, to_params
+    def mark_removed from_param, to_params
       from_name_tk = ParameterUtil.getParameterName from_param
       changed from_param, to_params, PARAMETER_REMOVED, from_name_tk.image
     end
 
-    def function_mark_parameter_type_changed_xxx from_param, to_formal_params, idx
+    def mark_parameter_type_changed from_param, to_formal_params, idx
       to_param = ParameterUtil.getParameter to_formal_params, idx
       to_type = ParameterUtil.getParameterType to_param
       changed from_param.getParameter(), to_param, PARAMETER_TYPE_CHANGED, from_param.getType(), to_type
     end
 
-    def function_mark_parameter_name_changed_xxx from_param, to_formal_params, idx
+    def mark_parameter_name_changed from_param, to_formal_params, idx
       from_name_tk = ParameterUtil.getParameterName from_param
       to_name_tk = ParameterUtil.getParameterName to_formal_params, idx
       changed from_name_tk, to_name_tk, PARAMETER_NAME_CHANGED, from_name_tk.image, to_name_tk.image
     end
 
-    def function_mark_parameters_added_xxx from_formal_params, to_formal_params
+    def mark_parameters_added from_formal_params, to_formal_params
       names = ParameterUtil.getParameterNames to_formal_params
       names.each do |name|
         changed from_formal_params, name, PARAMETER_ADDED, name.image
       end
     end
 
-    def function_mark_parameters_removed_xxx from_formal_params, to_formal_params
+    def mark_parameters_removed from_formal_params, to_formal_params
       names = ParameterUtil.getParameterNames from_formal_params
       names.each do |name|
         changed name, to_formal_params, PARAMETER_REMOVED, name.image
       end
     end
     
-    def function_compare_parameters_xxx from_params, to_params
+    def compare_parameters from_params, to_params
       from_param_list = ParameterUtil.getParameterList from_params
       to_param_list = ParameterUtil.getParameterList to_params
         
@@ -133,34 +133,34 @@ module DiffJ
 
       if from_size > 0
         if to_size > 0
-          function_compare_each_parameter_xxx from_params, from_param_list, to_params, to_param_list, from_size
+          compare_each_parameter from_params, from_param_list, to_params, to_param_list, from_size
         else
-          function_mark_parameters_removed_xxx from_params, to_params
+          mark_parameters_removed from_params, to_params
         end
       elsif to_size > 0
-        function_mark_parameters_added_xxx from_params, to_params
+        mark_parameters_added from_params, to_params
       end
     end
 
-    def function_change_throws_xxx from_node, to_node, msg, name
+    def change_throws from_node, to_node, msg, name
       changed from_node, to_node, msg, SimpleNodeUtil.toString(name)
     end
 
-    def function_add_all_throws_xxx from_node, to_name_list
-      names = function_get_child_names_xxx to_name_list
+    def add_all_throws from_node, to_name_list
+      names = get_child_names to_name_list
       names.each do |name|
-        function_change_throws_xxx from_node, name, THROWS_ADDED, name
+        change_throws from_node, name, THROWS_ADDED, name
       end
     end
 
-    def function_remove_all_throws_xxx from_name_list, to_node
-      names = function_get_child_names_xxx from_name_list
+    def remove_all_throws from_name_list, to_node
+      names = get_child_names from_name_list
       names.each do |name|
-        function_change_throws_xxx name, to_node, THROWS_REMOVED, name
+        change_throws name, to_node, THROWS_REMOVED, name
       end
     end
 
-    def function_get_match_xxx from_names, from_idx, to_names
+    def get_match from_names, from_idx, to_names
       from_name_str = SimpleNodeUtil.toString(from_names.get(from_idx))
 
       (0 ... to_names.size).each do |to_idx|
@@ -174,19 +174,19 @@ module DiffJ
       nil
     end
 
-    def function_compare_each_throw_xxx from_name_list, to_name_list
-      from_names = function_get_child_names_xxx from_name_list
-      to_names = function_get_child_names_xxx to_name_list
+    def compare_each_throw from_name_list, to_name_list
+      from_names = get_child_names from_name_list
+      to_names = get_child_names to_name_list
 
       (0 ... from_names.size()).each do |from_idx|
         # save a reference to the name here, in case it gets removed
         # from the array in getMatch.
         from_name = from_names.get from_idx
         
-        throws_match = function_get_match_xxx from_names, from_idx, to_names
+        throws_match = get_match from_names, from_idx, to_names
 
         if throws_match.nil?
-          function_change_throws_xxx from_name, to_name_list, THROWS_REMOVED, from_name
+          change_throws from_name, to_name_list, THROWS_REMOVED, from_name
         elsif throws_match == from_idx
           next
         elsif throws_match
@@ -199,20 +199,20 @@ module DiffJ
       (0 ... to_names.size()).each do |to_idx|
         if to_names.get(to_idx)
           to_name = ThrowsUtil.getNameNode to_name_list, to_idx
-          function_change_throws_xxx from_name_list, to_name, THROWS_ADDED, to_name
+          change_throws from_name_list, to_name, THROWS_ADDED, to_name
         end
       end
     end
 
-    def function_compare_throws_xxx from_node, from_name_list, to_node, to_name_list
+    def compare_throws from_node, from_name_list, to_node, to_name_list
       if from_name_list.nil?
         if to_name_list
-          function_add_all_throws_xxx from_node, to_name_list
+          add_all_throws from_node, to_name_list
         end
       elsif to_name_list.nil?
-        function_remove_all_throws_xxx from_name_list, to_node
+        remove_all_throws from_name_list, to_node
       else
-        function_compare_each_throw_xxx from_name_list, to_name_list
+        compare_each_throw from_name_list, to_name_list
       end
     end
   end
