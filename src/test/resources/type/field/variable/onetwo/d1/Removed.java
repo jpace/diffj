@@ -1,0 +1,3 @@
+class Removed {
+    String firstName;
+}

@@ -5,7 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/ast/typeitemdecl'
-require 'diffj/ast/type'
+require 'diffj/ast/field'
 
 include Java
 
@@ -27,6 +27,12 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
     differ = FieldDiff.new filediffs
     differ.compareAccess SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
     differ.compare from, to
+  end
+
+  def do_compare_xxx from, to
+    differ = DiffJ::FieldComparator.new filediffs
+    differ.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
+    differ.compare_xxx from, to
   end
 
   def get_name fielddecl
