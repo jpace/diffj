@@ -8,10 +8,6 @@ require 'diffj/ast/item'
 
 include Java
 
-import org.incava.diffj.MethodDiff
-
-module DiffJ; end
-
 class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
   include Loggable
 
@@ -69,8 +65,8 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
         end
       end
 
-      from_unproc.reject! { |fp| from_proc.include?(fp) }
-      to_unproc.reject! { |fp| to_proc.include?(fp) }
+      from_unproc.reject! { |fp| from_proc.include? fp }
+      to_unproc.reject! { |fp| to_proc.include? fp }
     end
   end
 

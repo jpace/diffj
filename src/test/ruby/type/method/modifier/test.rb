@@ -2,18 +2,16 @@
 # -*- ruby -*-
 
 require 'type/method/tc'
-
-import org.incava.diffj.MethodDiff
-import org.incava.diffj.ItemDiff
+require 'diffj/ast/item'
 
 module DiffJ::Type::Method
   class ModifierTestCase < TestCase
     def added_msg_fmt
-      ItemDiff::MODIFIER_ADDED
+      DiffJ::ItemComparator::MODIFIER_ADDED
     end  
 
     def removed_msg_fmt
-      ItemDiff::MODIFIER_REMOVED
+      DiffJ::ItemComparator::MODIFIER_REMOVED
     end
 
     def test_added

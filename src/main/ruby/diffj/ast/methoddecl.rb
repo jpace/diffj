@@ -10,7 +10,6 @@ require 'diffj/ast/method'
 
 include Java
 
-import org.incava.diffj.MethodDiff
 import org.incava.pmdx.MethodUtil
 
 module DiffJ; end

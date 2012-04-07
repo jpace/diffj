@@ -2,14 +2,12 @@
 # -*- ruby -*-
 
 require 'type/method/tc'
-
-import org.incava.diffj.MethodDiff
-import org.incava.diffj.ItemDiff
+require 'diffj/ast/method'
 
 module DiffJ::Type::Method
   class ReturnTypeTestCase < TestCase
     def changed_msg_fmt
-      MethodDiff::RETURN_TYPE_CHANGED
+      DiffJ::MethodComparator::RETURN_TYPE_CHANGED
     end  
 
     def test_changed

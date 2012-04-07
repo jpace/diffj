@@ -4,8 +4,6 @@
 require 'type/ctor/tc'
 require 'diffj/ast/item'
 
-import org.incava.diffj.ItemDiff
-
 module DiffJ::Type::Ctor
   class AccessTestCase < TestCase
     def added_msg_fmt

@@ -5,8 +5,6 @@ require 'type/typetestcase'
 
 include Java
 
-import org.incava.diffj.ItemDiff
-
 class DiffJTypeSemicolonTestCase < DiffJTypeTestCase
   def subdir
     'semicolon'

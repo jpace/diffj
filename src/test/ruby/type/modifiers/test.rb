@@ -2,10 +2,9 @@
 # -*- ruby -*-
 
 require 'type/typetestcase'
+require 'diffj/ast/item'
 
 include Java
-
-import org.incava.diffj.ItemDiff
 
 class DiffJ::TypeClsModifiersTestCase < DiffJTypeTestCase
   def subdir
@@ -13,11 +12,11 @@ class DiffJ::TypeClsModifiersTestCase < DiffJTypeTestCase
   end
 
   def added_msg_fmt
-    ItemDiff::MODIFIER_ADDED
+    DiffJ::ItemComparator::MODIFIER_ADDED
   end  
 
   def removed_msg_fmt
-    ItemDiff::MODIFIER_REMOVED
+    DiffJ::ItemComparator::MODIFIER_REMOVED
   end
 
   def test_added

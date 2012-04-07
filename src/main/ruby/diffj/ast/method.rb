@@ -9,11 +9,7 @@ require 'diffj/ast/function'
 
 include Java
 
-import org.incava.analysis.FileDiff
-import org.incava.diffj.ItemDiff
-import org.incava.ijdk.text.LocationRange
 import org.incava.pmdx.MethodUtil
-import org.incava.pmdx.ParameterUtil
 
 module DiffJ
   class MethodComparator < FunctionComparator
