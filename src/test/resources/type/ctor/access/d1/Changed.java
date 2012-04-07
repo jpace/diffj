@@ -1,0 +1,4 @@
+class Changed {
+    private Changed() {
+    }
+}

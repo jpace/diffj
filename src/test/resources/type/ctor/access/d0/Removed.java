@@ -1,0 +1,4 @@
+class Removed {
+    public Removed() {
+    }
+}

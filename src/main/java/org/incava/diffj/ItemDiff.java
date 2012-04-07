@@ -169,6 +169,8 @@ public class ItemDiff extends DiffComparator {
     protected FileDiff processDifference(Difference diff, String fromName, List<Token> fromList, List<Token> toList, FileDiff prevRef) {
         tr.Ace.setVerbose(true);
 
+        tr.Ace.green("diff", diff);
+
         int delStart = diff.getDeletedStart();
         int delEnd   = diff.getDeletedEnd();
         int addStart = diff.getAddedStart();

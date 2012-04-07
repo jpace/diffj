@@ -1,0 +1,4 @@
+class Added {
+    protected Added() {
+    }
+}

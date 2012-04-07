@@ -1,10 +1,12 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'type/method/tc'
+require 'type/ctor/tc'
 require 'diffj/ast/item'
 
-module DiffJ::Type::Method
+import org.incava.diffj.ItemDiff
+
+module DiffJ::Type::Ctor
   class AccessTestCase < TestCase
     def added_msg_fmt
       DiffJ::ItemComparator::ACCESS_ADDED
@@ -19,7 +21,7 @@ module DiffJ::Type::Method
     end
 
     def test_added
-      run_test 'Added', added_change("protected", loc(2, 5), loc(2, 8), loc(2, 5), loc(2, 13))
+      run_test 'Added', added_change("protected", loc(2, 5), loc(2, 9), loc(2, 5), loc(2, 13))
     end
 
     def test_changed
@@ -27,7 +29,7 @@ module DiffJ::Type::Method
     end
 
     def test_removed
-      run_test 'Removed', removed_change("public", loc(2, 5), loc(2, 5), loc(2, 8))
+      run_test 'Removed', removed_change("public", loc(2, 5), loc(2, 5), loc(2, 11))
     end
   end
 end
