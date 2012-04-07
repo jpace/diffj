@@ -11,7 +11,7 @@ include Java
 import org.incava.pmdx.ThrowsUtil
 
 module DiffJ
-  module FunctionComparator # < ItemComparator
+  class FunctionComparator < ItemComparator
     RETURN_TYPE_CHANGED = "return type changed from {0} to {1}"
 
     PARAMETER_REMOVED = "parameter removed: {0}"

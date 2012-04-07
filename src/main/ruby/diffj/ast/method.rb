@@ -17,8 +17,8 @@ import org.incava.pmdx.MethodUtil
 import org.incava.pmdx.ParameterUtil
 
 module DiffJ
-  class MethodComparator < MethodDiff
-    include Loggable, FunctionComparator
+  class MethodComparator < FunctionComparator # < MethodDiff
+    include Loggable
 
     METHOD_BLOCK_ADDED = "method block added"
     METHOD_BLOCK_REMOVED = "method block removed"
