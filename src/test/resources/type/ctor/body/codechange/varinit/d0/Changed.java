@@ -12,19 +12,3 @@
 /* Nor wet her fingers in her sauce deep. */ ;
 /* Well could she carry a morsel, and well keep, */ }
 /* That no droppe ne fell upon her breast. */ }
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* */ class/* */
-Changed/* */{ /* */Changed/* */ (/* */ )/* */  {/* */double/* */d/* */=/* */3/* */;/* */}/* */ 
-/* */ }/* */ 

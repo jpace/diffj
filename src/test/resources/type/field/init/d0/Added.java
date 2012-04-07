@@ -1,0 +1,1 @@
+class Added{int i;}

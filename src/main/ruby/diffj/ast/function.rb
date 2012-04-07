@@ -9,6 +9,7 @@ require 'diffj/ast/item'
 include Java
 
 import org.incava.pmdx.ThrowsUtil
+import org.incava.pmdx.ParameterUtil
 
 module DiffJ
   class FunctionComparator < ItemComparator

@@ -14,7 +14,7 @@ module DiffJ::Type::Ctor::Body::CodeChange
     end
 
     def test_changed
-      run_test 'Changed', changed("Changed()", loc(29, 77), loc(29, 77), loc(6, 1), loc(6, 2))
+      run_test 'Changed', changed("Changed()", loc(11, 47), loc(11, 47), loc(6, 1), loc(6, 2))
     end
 
     def test_unchanged

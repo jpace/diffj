@@ -10,6 +10,8 @@ include Java
 
 import org.incava.pmdx.ItemUtil
 import org.incava.pmdx.SimpleNodeUtil
+import org.incava.ijdk.text.LocationRange
+import org.incava.analysis.FileDiff
 
 module DiffJ
   class ItemComparator < ElementComparator

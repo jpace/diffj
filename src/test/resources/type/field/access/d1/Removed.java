@@ -1,0 +1,3 @@
+class Removed {
+    int removed;
+}
