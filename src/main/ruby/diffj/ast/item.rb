@@ -78,7 +78,7 @@ module DiffJ
       end
     end
 
-    def item_get_start_xxx token_list, start
+    def get_start token_list, start
       sttoken = org.incava.ijdk.util.ListExt.get token_list, start
       if sttoken.nil? && list.size() > 0
         sttoken = org.incava.ijdk.util.ListExt.get token_list, -1
@@ -87,15 +87,15 @@ module DiffJ
       sttoken
     end
 
-    def item_get_message add_end, del_end
+    def get_message add_end, del_end
       del_end == org.incava.ijdk.util.diff.Difference::NONE ? CODE_ADDED : (add_end == org.incava.ijdk.util.diff.Difference::NONE ? CODE_REMOVED : CODE_CHANGED)
     end
 
-    def item_get_location_range_xxx token_list, startidx, endidx
+    def get_location_range token_list, startidx, endidx
       starttk = nil
       endtk = nil
       if endidx == org.incava.ijdk.util.diff.Difference::NONE
-        starttk = item_get_start_xxx token_list, startidx
+        starttk = get_start token_list, startidx
         endtk = starttk
       else
         starttk = token_list.get startidx
@@ -104,11 +104,11 @@ module DiffJ
      LocationRange.new FileDiff.toBeginLocation(starttk), FileDiff.toEndLocation(endtk)
     end
 
-    def item_on_same_line? ref, locrg
+    def on_same_line? ref, locrg
       ref && ref.getFirstLocation().getStart().getLine() == locrg.getStart().getLine()
     end
 
-    def item_replace_reference_xxx name, ref, from_loc_rg, to_loc_rg
+    def replace_reference name, ref, from_loc_rg, to_loc_rg
       new_msg  = java.text.MessageFormat.format CODE_CHANGED, name
       new_diff = org.incava.analysis.FileDiffChange.new(new_msg, ref.getFirstLocation().getStart(), from_loc_rg.getEnd(), ref.getSecondLocation().getStart(), to_loc_rg.getEnd())
       getFileDiffs().remove(ref)
@@ -116,7 +116,7 @@ module DiffJ
       new_diff
     end
 
-    def item_add_reference_xxx name, msg, from_loc_rg, to_loc_rg
+    def add_reference name, msg, from_loc_rg, to_loc_rg
       str = java.text.MessageFormat.format msg, name
       ref = case msg
             when CODE_ADDED
@@ -131,7 +131,7 @@ module DiffJ
       ref
     end
     
-    def item_process_difference_xxx diff, from_name, from_list, to_list, prev_ref
+    def process_difference diff, from_name, from_list, to_list, prev_ref
       del_start = diff.getDeletedStart()
       del_end   = diff.getDeletedEnd()
       add_start = diff.getAddedStart()
@@ -142,25 +142,25 @@ module DiffJ
         return nil
       end
 
-      from_loc_rg = item_get_location_range_xxx from_list, del_start, del_end
-      to_loc_rg = item_get_location_range_xxx to_list, add_start, add_end
+      from_loc_rg = get_location_range from_list, del_start, del_end
+      to_loc_rg = get_location_range to_list, add_start, add_end
 
-      msg = item_get_message add_end, del_end
+      msg = get_message add_end, del_end
       info "msg: #{msg}".on_green
             
       # $$$ this is untested:
-      if item_on_same_line? prev_ref, from_loc_rg
+      if on_same_line? prev_ref, from_loc_rg
         info "self: #{self}".yellow
-        item_replace_reference_xxx from_name, prev_ref, from_loc_rg, to_loc_rg
+        replace_reference from_name, prev_ref, from_loc_rg, to_loc_rg
       else
         info "self: #{self}".blue
-        ref = item_add_reference_xxx from_name, msg, from_loc_rg, to_loc_rg
+        ref = add_reference from_name, msg, from_loc_rg, to_loc_rg
         info "ref: #{ref}".blue
         ref
       end
     end
 
-    def item_compare_code_xxx from_name, from_list, to_name, to_list
+    def compare_code from_name, from_list, to_name, to_list
       info "self: #{self}".on_cyan
       tc = org.incava.diffj.ItemDiff::TokenComparator.new
       d = org.incava.ijdk.util.diff.Diff.new from_list, to_list, tc
@@ -170,7 +170,7 @@ module DiffJ
       
       difflist.each do |diff|
         info "diff: #{diff}".red
-        ref = item_process_difference_xxx diff, from_name, from_list, to_list, ref
+        ref = process_difference diff, from_name, from_list, to_list, ref
         return if ref.nil?
       end
     end

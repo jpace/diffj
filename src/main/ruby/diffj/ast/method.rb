@@ -32,19 +32,10 @@ module DiffJ
     
     def initialize diffs
       super
-
-      # fake superclass, for now:
-      @itemcomp = ItemComparator.new diffs
     end
 
-    def compare_access_xxx from, to
-      info "from: #{from}"
-      info "to  : #{to}"
-      @itemcomp.compare_access from, to
-    end
-
-    def compare_modifiers_xxx from, to
-      @itemcomp.compare_modifiers from.parent, to.parent, VALID_MODIFIERS
+    def compare_modifiers from, to
+      super from.parent, to.parent, VALID_MODIFIERS
     end
 
     def method_compare_parameters_xxx from, to
@@ -88,14 +79,14 @@ module DiffJ
       from_code = from_block.get_children_serially
       to_code = to_block.get_children_serially
 
-      item_compare_code_xxx from_name, from_code, to_name, to_code
+      compare_code from_name, from_code, to_name, to_code
     end
 
     def compare_xxx from, to
       info "from: #{from}".on_red
       info "to  : #{to}".on_red
 
-      compare_modifiers_xxx from, to
+      compare_modifiers from, to
       compare_return_types_xxx from, to
       method_compare_parameters_xxx from, to
 
