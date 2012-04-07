@@ -30,7 +30,7 @@ module DiffJ
           rescue DiffJException => de
             raise de
           rescue java.lang.Throwable => e
-            raise DiffJException.new(e)
+            raise DiffJException.new e
           end
         end
 
@@ -46,7 +46,7 @@ module DiffJ
       attr_reader :srcver
 
       def initialize file, label, contents, srcver
-        super(label || file.path, srcver)
+        super label || file.path, srcver
         info "file: #{file}".bold
         @file = file
         @label = label
@@ -54,17 +54,17 @@ module DiffJ
         @srcver = srcver
 
         begin
-          isStdin = file.nil? || file.getName() == "-"
+          isStdin = file.nil? || file.getName == "-"
           @contents = contents
           unless @contents
             reader = isStdin ? java.io.FileReader.new(java.io.FileDescriptor.in) : java.io.FileReader.new(file)
             @contents = org.incava.ijdk.io.ReaderExt.readAsString(reader, java.util.EnumSet.of(org.incava.ijdk.io.ReadOptionType::ADD_EOLNS))
           end
-          @label = label || (isStdin ? "-" : file.getPath())
+          @label = label || (isStdin ? "-" : file.getPath)
         rescue java.io.FileNotFoundException => e
-          raise DiffJException.new "Error opening file '" + file.getAbsolutePath() + "': " + e.getMessage(), e
+          raise DiffJException.new "Error opening file '" + file.getAbsolutePath + "': " + e.getMessage, e
         rescue java.io.IOException => e
-          raise DiffJException.new "I/O error with file '" + file.getAbsolutePath() + "': " + e.getMessage(), e
+          raise DiffJException.new "I/O error with file '" + file.getAbsolutePath + "': " + e.getMessage, e
         end
       end
 
@@ -92,10 +92,10 @@ module DiffJ
 
         case @srcver
         when "1.3"
-          parser.setJDK13()
+          parser.setJDK13
         when "1.5", "1.6"
           # no setJDK16 yet in PMD
-          parser.setJDK15()
+          parser.setJDK15
         when "1.4"
           # currently the default in PMD
         else
@@ -109,7 +109,7 @@ module DiffJ
       def compile
          begin
            parser = get_parser
-           parser.CompilationUnit()
+           parser.CompilationUnit
          rescue TokenMgrError => tme
            raise DiffJException.new("Error tokenizing " + @label + ": " + tme.message)
          rescue ParseException => pe
@@ -125,7 +125,7 @@ module DiffJ
         
         report.reset label, contents, to_file.label, to_file.contents
         
-        cud = ::DiffJ::CompUnitDiff.new report
+        cud = ::DiffJ::CompUnitComparator.new report
         cud.compare from_comp_unit, to_comp_unit
       end
     end
@@ -134,7 +134,7 @@ module DiffJ
       include Loggable
 
       def initialize file, srcver, recurse
-        super(file.path, srcver)
+        super file.path, srcver
         info "file: #{file}"
         @recurse = recurse
       end

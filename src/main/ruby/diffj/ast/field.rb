@@ -29,17 +29,17 @@ module DiffJ
     end
 
     def make_vd_map vds
-      names_to_vd = java.util.HashMap.new
+      names_to_vd = Hash.new
       vds.each do |vd|
         name = FieldUtil.getName(vd).image
-        names_to_vd.put(name, vd)
+        names_to_vd[name] = vd
       end
       names_to_vd
     end
 
     def compare_init_code from_name, from_init, to_name, to_init
       from_code =  from_init.get_children_serially
-      to_code = SimpleNodeUtil.getChildrenSerially to_init
+      to_code = to_init.get_children_serially
         
       # It is logically impossible for this to execute where "to" represents the
       # from-file, and "from" the to-file, since "from.name" would have matched
@@ -94,19 +94,17 @@ module DiffJ
     end
     
     def compare_variables from, to
-      from_var_decls = SimpleNodeUtil.snatchChildren(from, "net.sourceforge.pmd.ast.ASTVariableDeclarator")
-      to_var_decls = SimpleNodeUtil.snatchChildren(to, "net.sourceforge.pmd.ast.ASTVariableDeclarator")
+      from_var_decls = SimpleNodeUtil.snatchChildren from, "net.sourceforge.pmd.ast.ASTVariableDeclarator"
+      to_var_decls = SimpleNodeUtil.snatchChildren to, "net.sourceforge.pmd.ast.ASTVariableDeclarator"
 
       from_names_to_vd = make_vd_map from_var_decls
       to_names_to_vd = make_vd_map to_var_decls
 
-      names = java.util.TreeSet.new
-      names.addAll(from_names_to_vd.keySet())
-      names.addAll(to_names_to_vd.keySet())
+      names = from_names_to_vd.keys + to_names_to_vd.keys
 
       names.each do |name|
-        from_var_decl = from_names_to_vd.get(name)
-        to_var_decl = to_names_to_vd.get(name)
+        from_var_decl = from_names_to_vd[name]
+        to_var_decl = to_names_to_vd[name]
 
         if from_var_decl && to_var_decl
           compare_variable_types name, from, from_var_decl, to, to_var_decl

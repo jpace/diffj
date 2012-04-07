@@ -11,7 +11,7 @@ require 'diffj/ast/types'
 include Java
 
 module DiffJ
-  class CompUnitDiff
+  class CompUnitComparator
     def initialize report
       @filediffs = report.differences
     end
