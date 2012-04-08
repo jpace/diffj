@@ -12,8 +12,6 @@ require 'diffj/ast/innertypedecl'
 
 include Java
 
-import org.incava.pmdx.SimpleNodeUtil
-
 module DiffJ
   class TypeComparator < ItemComparator
     include Loggable
@@ -70,13 +68,10 @@ module DiffJ
 
     def get_ext_imp_map coid, ext_imp_class_name
       map = Hash.new
-      list = org.incava.pmdx.SimpleNodeUtil.findChild coid, ext_imp_class_name
-      
-      if list
-        types = java.util.ArrayList.new
-        org.incava.pmdx.SimpleNodeUtil.fetchChildren types, list, "net.sourceforge.pmd.ast.ASTClassOrInterfaceType"
+      if list = coid.find_child(ext_imp_class_name)
+        types = list.snatch_children "net.sourceforge.pmd.ast.ASTClassOrInterfaceType"
         types.each do |type|
-          map[org.incava.pmdx.SimpleNodeUtil.toString(type)] = type
+          map[type.to_string] = type
         end
       end
       map
@@ -137,8 +132,8 @@ module DiffJ
         changed from_coid, to_coid, TYPE_CHANGED_FROM_INTERFACE_TO_CLASS
       end
         
-      from_parent = org.incava.pmdx.SimpleNodeUtil.getParent from_coid
-      to_parent = org.incava.pmdx.SimpleNodeUtil.getParent to_coid
+      from_parent = from_coid.parent
+      to_parent = to_coid.parent
       
       compare_access from_parent, to_parent
       compare_modifiers from_parent, to_parent, VALID_TYPE_MODIFIERS

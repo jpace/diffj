@@ -36,7 +36,7 @@ module DiffJ
     end
 
     def get_child_names name_list
-      org.incava.pmdx.SimpleNodeUtil.snatchChildren name_list, "net.sourceforge.pmd.ast.ASTName"
+      name_list.snatch_children "net.sourceforge.pmd.ast.ASTName"
     end
 
     def compare_each_parameter from_formal_params, from_params, to_formal_params, to_params, size

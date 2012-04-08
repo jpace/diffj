@@ -49,8 +49,8 @@ module DiffJ
     end
 
     def compare_variable_inits from, to
-      from_init = org.incava.pmdx.SimpleNodeUtil.findChild from, "net.sourceforge.pmd.ast.ASTVariableInitializer"
-      to_init = org.incava.pmdx.SimpleNodeUtil.findChild to, "net.sourceforge.pmd.ast.ASTVariableInitializer"
+      from_init = from.find_child "net.sourceforge.pmd.ast.ASTVariableInitializer"
+      to_init = to.find_child "net.sourceforge.pmd.ast.ASTVariableInitializer"
       
       if from_init.nil?
         if to_init
@@ -67,8 +67,8 @@ module DiffJ
     end
 
     def compare_variable_types name, from_field_decl, from_var_decl, to_field_decl, to_var_decl
-      from_type = org.incava.pmdx.SimpleNodeUtil.findChild(from_field_decl, "net.sourceforge.pmd.ast.ASTType")
-      to_type = org.incava.pmdx.SimpleNodeUtil.findChild(to_field_decl, "net.sourceforge.pmd.ast.ASTType")
+      from_type = from_field_decl.find_child "net.sourceforge.pmd.ast.ASTType"
+      to_type = to_field_decl.find_child "net.sourceforge.pmd.ast.ASTType"
 
       from_type_str = from_type.to_string
       to_type_str = to_type.to_string
@@ -94,8 +94,8 @@ module DiffJ
     end
     
     def compare_variables from, to
-      from_var_decls = org.incava.pmdx.SimpleNodeUtil.snatchChildren from, "net.sourceforge.pmd.ast.ASTVariableDeclarator"
-      to_var_decls = org.incava.pmdx.SimpleNodeUtil.snatchChildren to, "net.sourceforge.pmd.ast.ASTVariableDeclarator"
+      from_var_decls = from.snatch_children "net.sourceforge.pmd.ast.ASTVariableDeclarator"
+      to_var_decls = to.snatch_children "net.sourceforge.pmd.ast.ASTVariableDeclarator"
 
       from_names_to_vd = make_vd_map from_var_decls
       to_names_to_vd = make_vd_map to_var_decls

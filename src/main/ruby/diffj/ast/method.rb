@@ -47,7 +47,7 @@ module DiffJ
     end
 
     def get_block node
-      org.incava.pmdx.SimpleNodeUtil.findChild node, "net.sourceforge.pmd.ast.ASTBlock"
+      node.find_child "net.sourceforge.pmd.ast.ASTBlock"
     end
     
     def compare_bodies from, to

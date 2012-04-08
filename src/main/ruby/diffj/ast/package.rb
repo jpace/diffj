@@ -21,16 +21,12 @@ module DiffJ
       info "diffs: #{diffs}"
     end
 
-    def find_name_node from
-      org.incava.pmdx.SimpleNodeUtil.findChild from, "net.sourceforge.pmd.ast.ASTName"
+    def find_name_node parent
+      parent.find_child "net.sourceforge.pmd.ast.ASTName"
     end
 
-    def find_first_child from
-      org.incava.pmdx.SimpleNodeUtil.findChild from
-    end
-
-    def node_to_string node
-      org.incava.pmdx.SimpleNodeUtil.toString node
+    def find_first_child parent
+      parent.find_child
     end
 
     def find_package cu
@@ -42,9 +38,9 @@ module DiffJ
       info "bnode: #{bnode}".cyan
 
       aname = find_name_node anode
-      astr  = node_to_string aname
+      astr  = aname.to_string
       bname = find_name_node bnode
-      bstr  = node_to_string bname
+      bstr  = bname.to_string
 
       if astr != bstr
         changed aname, bname, PACKAGE_RENAMED

@@ -30,7 +30,7 @@ module DiffJ
 
     def get_modifier_map node
       bykind = Hash.new
-      tokens = org.incava.pmdx.SimpleNodeUtil.getLeadingTokens node
+      tokens = node.leading_tokens
       tokens.each do |tk|
         bykind[tk.kind] = tk
       end
@@ -38,8 +38,8 @@ module DiffJ
     end
 
     def compare_modifiers from_node, to_node, modifier_types
-      from_modifiers = org.incava.pmdx.SimpleNodeUtil.getLeadingTokens from_node
-      to_modifiers = org.incava.pmdx.SimpleNodeUtil.getLeadingTokens to_node
+      from_modifiers = from_node.leading_tokens 
+      to_modifiers = to_node.leading_tokens 
 
       from_kind_to_token = get_modifier_map from_node
       to_kind_to_token = get_modifier_map to_node

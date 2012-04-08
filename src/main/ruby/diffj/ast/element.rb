@@ -7,12 +7,6 @@ require 'java'
 
 include Java
 
-import java.text.MessageFormat
-import org.incava.analysis.FileDiffAdd
-import org.incava.analysis.FileDiffChange
-import org.incava.analysis.FileDiffDelete
-import org.incava.pmdx.SimpleNodeUtil
-
 module DiffJ
   class Delta
     include Loggable
@@ -127,10 +121,10 @@ module DiffJ
     def nodes_to_parameters from, to
       params = java.util.ArrayList.new
       if from
-        params.add org.incava.pmdx.SimpleNodeUtil.toString(from)
+        params.add from.to_string
       end
       if to
-        params.add org.incava.pmdx.SimpleNodeUtil.toString(to)
+        params.add to.to_string
       end
       params.toArray
     end
