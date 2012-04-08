@@ -11,8 +11,6 @@ require 'diffj/pmdx'
 
 include Java
 
-import org.incava.pmdx.MethodUtil
-
 module DiffJ; end
 
 class DiffJ::MethodDeclComparator < DiffJ::TypeItemDeclComparator
@@ -22,8 +20,8 @@ class DiffJ::MethodDeclComparator < DiffJ::TypeItemDeclComparator
     super diffs, "net.sourceforge.pmd.ast.ASTMethodDeclaration"
   end
 
-  def get_score amd, bmd
-    org.incava.pmdx.MethodUtil.getMatchScore amd, bmd
+  def get_score from, to
+    from.match_score to
   end
 
   def do_compare from, to
@@ -33,7 +31,7 @@ class DiffJ::MethodDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_name methdecl
-    org.incava.pmdx.MethodUtil.getFullName methdecl
+    methdecl.fullname
   end
 
   def get_added_message methdecl

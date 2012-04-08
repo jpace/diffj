@@ -33,15 +33,15 @@ module DiffJ
     end
 
     def compare_parameters from, to
-      from_params = org.incava.pmdx.MethodUtil.getParameters from
-      to_params = org.incava.pmdx.MethodUtil.getParameters to
+      from_params = from.parameters
+      to_params = to.parameters
       
       super from_params, to_params
     end
 
     def compare_throws from, to
-      from_list = org.incava.pmdx.MethodUtil.getThrowsList from
-      to_list = org.incava.pmdx.MethodUtil.getThrowsList to
+      from_list = from.throws_list
+      to_list = to.throws_list
 
       super from, from_list, to, to_list
     end
@@ -61,8 +61,8 @@ module DiffJ
       elsif to_block.nil?
         changed from, to, METHOD_BLOCK_REMOVED
       else
-        from_name = org.incava.pmdx.MethodUtil.getFullName from
-        to_name = org.incava.pmdx.MethodUtil.getFullName to
+        from_name = from.fullname
+        to_name = to.fullname
             
         compare_blocks from_name, from_block, to_name, to_block
       end
