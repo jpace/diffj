@@ -10,7 +10,6 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffs;
-import org.incava.pmdx.Parameter;
 import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.ThrowsUtil;
@@ -129,16 +128,12 @@ public class FunctionDiff extends ItemDiff {
      * Compares each parameter. Assumes that the lists are the same size.
      */
     protected void compareEachParameter(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, int size) {
-        List<Parameter> fromParams = ParameterUtil.getParameterList(fromFormalParams);
-        List<Parameter> toParams = ParameterUtil.getParameterList(toFormalParams);
+        List<ASTFormalParameter> fromFormalParamList = ParameterUtil.getParameters(fromFormalParams);
+        List<ASTFormalParameter> toFormalParamList = ParameterUtil.getParameters(toFormalParams);
 
         for (int idx = 0; idx < size; ++idx) {
-            Parameter fromParam = fromParams.get(idx);
-            ASTFormalParameter fromPrm = fromParam.getParameter();
-
-            int[] paramMatch = ParameterUtil.getMatch(fromParams, idx, toParams);
-
-            ASTFormalParameter fromFormalParam = ParameterUtil.getParameter(fromFormalParams, idx);
+            ASTFormalParameter fromFormalParam = fromFormalParamList.get(idx);
+            int[] paramMatch = ParameterUtil.getMatch(fromFormalParamList, idx, toFormalParamList);
 
             if (paramMatch[0] == idx && paramMatch[1] == idx) {
                 continue;
@@ -147,7 +142,7 @@ public class FunctionDiff extends ItemDiff {
                 markParameterNameChanged(fromFormalParam, toFormalParams, idx);
             }
             else if (paramMatch[1] == idx) {
-                markParameterTypeChanged(fromPrm, toFormalParams, idx);
+                markParameterTypeChanged(fromFormalParam, toFormalParams, idx);
             }
             else if (paramMatch[0] >= 0) {
                 checkForReorder(fromFormalParam, idx, toFormalParams, paramMatch[0]);
@@ -160,9 +155,9 @@ public class FunctionDiff extends ItemDiff {
             }
         }
 
-        Iterator<Parameter> toIt = toParams.iterator();
+        Iterator<ASTFormalParameter> toIt = toFormalParamList.iterator();
         for (int toIdx = 0; toIt.hasNext(); ++toIdx) {
-            Parameter toParam = toIt.next();
+            ASTFormalParameter toParam = toIt.next();
             if (toParam != null) {
                 ASTFormalParameter toFormalParam = ParameterUtil.getParameter(toFormalParams, toIdx);
                 Token toName = ParameterUtil.getParameterName(toFormalParam);
