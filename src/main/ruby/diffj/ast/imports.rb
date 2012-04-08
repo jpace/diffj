@@ -25,7 +25,7 @@ module DiffJ
 
     def get_imports compunit
       # this returns C-style arrays
-      CompilationUnitUtil.getImports compunit
+      org.incava.pmdx.CompilationUnitUtil.getImports compunit
     end
 
     def import_to_string imp
@@ -45,7 +45,7 @@ module DiffJ
 
     def first_type_token cu
       # this too is a C-style array
-      types = CompilationUnitUtil.getTypeDeclarations cu
+      types = org.incava.pmdx.CompilationUnitUtil.getTypeDeclarations cu
       t = types.length > 0 ? types[0].first_token : null
       # if there are no types (ie. the file has only a package and/or import
       # statements), then just point to the first token in the compilation unit.      

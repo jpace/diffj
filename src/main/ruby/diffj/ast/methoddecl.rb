@@ -7,6 +7,7 @@ require 'java'
 require 'diffj/ast/typeitemdecl'
 require 'diffj/ast/type'
 require 'diffj/ast/method'
+require 'diffj/pmdx'
 
 include Java
 
@@ -22,17 +23,17 @@ class DiffJ::MethodDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_score amd, bmd
-    MethodUtil.getMatchScore amd, bmd
+    org.incava.pmdx.MethodUtil.getMatchScore amd, bmd
   end
 
   def do_compare from, to
     differ = DiffJ::MethodComparator.new filediffs
-    differ.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
+    differ.compare_access from.parent, to.parent
     differ.compare from, to
   end
 
   def get_name methdecl
-    MethodUtil.getFullName methdecl
+    org.incava.pmdx.MethodUtil.getFullName methdecl
   end
 
   def get_added_message methdecl

@@ -31,7 +31,7 @@ module DiffJ
     def make_vd_map vds
       names_to_vd = Hash.new
       vds.each do |vd|
-        name = FieldUtil.getName(vd).image
+        name = org.incava.pmdx.FieldUtil.getName(vd).image
         names_to_vd[name] = vd
       end
       names_to_vd
@@ -49,8 +49,8 @@ module DiffJ
     end
 
     def compare_variable_inits from, to
-      from_init = SimpleNodeUtil.findChild from, "net.sourceforge.pmd.ast.ASTVariableInitializer"
-      to_init = SimpleNodeUtil.findChild to, "net.sourceforge.pmd.ast.ASTVariableInitializer"
+      from_init = org.incava.pmdx.SimpleNodeUtil.findChild from, "net.sourceforge.pmd.ast.ASTVariableInitializer"
+      to_init = org.incava.pmdx.SimpleNodeUtil.findChild to, "net.sourceforge.pmd.ast.ASTVariableInitializer"
       
       if from_init.nil?
         if to_init
@@ -59,19 +59,19 @@ module DiffJ
       elsif to_init.nil?
         changed from_init, to, INITIALIZER_REMOVED
       else
-        from_name = FieldUtil.getName(from).image
-        to_name = FieldUtil.getName(to).image
+        from_name = org.incava.pmdx.FieldUtil.getName(from).image
+        to_name = org.incava.pmdx.FieldUtil.getName(to).image
 
         compare_init_code from_name, from_init, to_name, to_init
       end
     end
 
     def compare_variable_types name, from_field_decl, from_var_decl, to_field_decl, to_var_decl
-      from_type = SimpleNodeUtil.findChild(from_field_decl, "net.sourceforge.pmd.ast.ASTType")
-      to_type = SimpleNodeUtil.findChild(to_field_decl, "net.sourceforge.pmd.ast.ASTType")
+      from_type = org.incava.pmdx.SimpleNodeUtil.findChild(from_field_decl, "net.sourceforge.pmd.ast.ASTType")
+      to_type = org.incava.pmdx.SimpleNodeUtil.findChild(to_field_decl, "net.sourceforge.pmd.ast.ASTType")
 
-      from_type_str = SimpleNodeUtil.toString from_type
-      to_type_str = SimpleNodeUtil.toString to_type
+      from_type_str = from_type.to_string
+      to_type_str = to_type.to_string
 
       if from_type_str != to_type_str
         changed from_type, to_type, VARIABLE_TYPE_CHANGED, name, from_type_str, to_type_str
@@ -81,21 +81,21 @@ module DiffJ
     end
 
     def process_add_del_variable name, msg, from_var_decl, to_var_decl
-      from_tk = FieldUtil.getName from_var_decl
-      to_tk = FieldUtil.getName to_var_decl
+      from_tk = org.incava.pmdx.FieldUtil.getName from_var_decl
+      to_tk = org.incava.pmdx.FieldUtil.getName to_var_decl
       changed from_tk, to_tk, msg, name
     end
 
     def process_changed_variable from_var_decl, to_var_decl
-      from_tk = FieldUtil.getName from_var_decl
-      to_tk = FieldUtil.getName to_var_decl
+      from_tk = org.incava.pmdx.FieldUtil.getName from_var_decl
+      to_tk = org.incava.pmdx.FieldUtil.getName to_var_decl
       changed from_tk, to_tk, VARIABLE_CHANGED
       compare_variable_inits from_var_decl, to_var_decl
     end
     
     def compare_variables from, to
-      from_var_decls = SimpleNodeUtil.snatchChildren from, "net.sourceforge.pmd.ast.ASTVariableDeclarator"
-      to_var_decls = SimpleNodeUtil.snatchChildren to, "net.sourceforge.pmd.ast.ASTVariableDeclarator"
+      from_var_decls = org.incava.pmdx.SimpleNodeUtil.snatchChildren from, "net.sourceforge.pmd.ast.ASTVariableDeclarator"
+      to_var_decls = org.incava.pmdx.SimpleNodeUtil.snatchChildren to, "net.sourceforge.pmd.ast.ASTVariableDeclarator"
 
       from_names_to_vd = make_vd_map from_var_decls
       to_names_to_vd = make_vd_map to_var_decls

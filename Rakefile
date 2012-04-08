@@ -1,6 +1,8 @@
 require 'rubygems'
+require 'rake'
 require 'fileutils'
 require 'java'
+require 'rake/testtask'
 
 puts "CLASSPATH: #{$CLASSPATH}"
 puts "CLASSPATH.class: #{$CLASSPATH.class}"
@@ -77,4 +79,39 @@ task :tests do
   tests.each do |test|
     sh "jruby -Isrc/main/ruby -Isrc/test/ruby #{test}"
   end
+end
+
+class DiffJRakeTestTask < Rake::TestTask
+  def initialize name, filter = name
+    super('test:' + name) do |t|
+      t.libs << "src/main/ruby"
+      t.libs << "src/test/ruby"
+      t.libs << "build/libs/diffj-1.2.1.jar"
+      t.libs << "libs/jruby-complete-1.6.3.jar"
+      t.libs << "libs/pmd-4.2.5.jar" # this gets mushed into diffj-1.2.1.jar, but for future builds it won't.
+      t.pattern = "src/test/ruby/**/#{filter}/**/test*.rb"
+      t.warning = true
+      t.verbose = true
+    end
+  end
+end
+
+DiffJRakeTestTask.new('imports')
+DiffJRakeTestTask.new('ctor')
+DiffJRakeTestTask.new('field')
+DiffJRakeTestTask.new('method')
+DiffJRakeTestTask.new('type')
+DiffJRakeTestTask.new('types')
+
+DiffJRakeTestTask.new('method/body/zeroone')
+
+Rake::TestTask.new("test:all") do |t|
+  t.libs << "src/main/ruby"
+  t.libs << "src/test/ruby"
+  t.libs << "build/libs/diffj-1.2.1.jar"
+  t.libs << "libs/jruby-complete-1.6.3.jar"
+  t.libs << "libs/pmd-4.2.5.jar" # this gets mushed into diffj-1.2.1.jar, but for future builds it won't.
+  t.pattern = "src/test/ruby/**/test*.rb"
+  t.warning = true
+  t.verbose = true
 end

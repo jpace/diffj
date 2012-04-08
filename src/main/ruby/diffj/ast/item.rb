@@ -8,11 +8,6 @@ require 'diffj/ast/element'
 
 include Java
 
-import org.incava.pmdx.ItemUtil
-import org.incava.pmdx.SimpleNodeUtil
-import org.incava.ijdk.text.LocationRange
-import org.incava.analysis.FileDiff
-
 module DiffJ
   class ItemComparator < ElementComparator
     include Loggable
@@ -35,7 +30,7 @@ module DiffJ
 
     def get_modifier_map node
       bykind = Hash.new
-      tokens = SimpleNodeUtil.getLeadingTokens node
+      tokens = org.incava.pmdx.SimpleNodeUtil.getLeadingTokens node
       tokens.each do |tk|
         bykind[tk.kind] = tk
       end
@@ -43,8 +38,8 @@ module DiffJ
     end
 
     def compare_modifiers from_node, to_node, modifier_types
-      from_modifiers = SimpleNodeUtil.getLeadingTokens from_node
-      to_modifiers = SimpleNodeUtil.getLeadingTokens to_node
+      from_modifiers = org.incava.pmdx.SimpleNodeUtil.getLeadingTokens from_node
+      to_modifiers = org.incava.pmdx.SimpleNodeUtil.getLeadingTokens to_node
 
       from_kind_to_token = get_modifier_map from_node
       to_kind_to_token = get_modifier_map to_node
@@ -64,8 +59,8 @@ module DiffJ
     end
 
     def compare_access from_node, to_node
-      from_access = ItemUtil.getAccess from_node
-      to_access = ItemUtil.getAccess to_node
+      from_access = org.incava.pmdx.ItemUtil.getAccess from_node
+      to_access = org.incava.pmdx.ItemUtil.getAccess to_node
 
       if from_access
         if to_access
@@ -103,7 +98,7 @@ module DiffJ
         starttk = token_list.get startidx
         endtk = token_list.get endidx
       end
-     LocationRange.new FileDiff.toBeginLocation(starttk), FileDiff.toEndLocation(endtk)
+     org.incava.ijdk.text.LocationRange.new org.incava.analysis.FileDiff.toBeginLocation(starttk), org.incava.analysis.FileDiff.toEndLocation(endtk)
     end
 
     def on_same_line? ref, locrg

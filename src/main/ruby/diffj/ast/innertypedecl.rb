@@ -20,7 +20,7 @@ class DiffJ::InnerTypeComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_score from_ctor, to_ctor
-    ClassUtil.getMatchScore from_ctor, to_ctor
+    org.incava.pmdx.ClassUtil.getMatchScore from_ctor, to_ctor
   end
 
   def do_compare from, to
@@ -30,7 +30,7 @@ class DiffJ::InnerTypeComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_name coid
-    ClassUtil.getName(coid).image
+    org.incava.pmdx.ClassUtil.getName(coid).image
   end
 
   def get_added_message coid

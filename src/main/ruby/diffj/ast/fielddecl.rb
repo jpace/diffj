@@ -20,27 +20,27 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_score from_field, to_field
-    FieldUtil.getMatchScore from_field, to_field
+    org.incava.pmdx.FieldUtil.getMatchScore from_field, to_field
   end
 
   if false
     # old one:
     def do_compare from, to
-      differ = FieldDiff.new filediffs
-      differ.compareAccess SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
+      differ = org.incava.diffj.FieldDiff.new filediffs
+      differ.compareAccess from.parent, to.parent
       differ.compare from, to
     end
   else
     # new one
     def do_compare from, to
       differ = DiffJ::FieldComparator.new filediffs
-      differ.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
+      differ.compare_access from.parent, to.parent
       differ.compare from, to
     end
   end
 
   def get_name fielddecl
-    FieldUtil.getNames fielddecl
+    org.incava.pmdx.FieldUtil.getNames fielddecl
   end
 
   def get_added_message fielddecl

@@ -29,7 +29,7 @@ module DiffJ
     def make_td_map types
       names_to_tds = Hash.new
       types.to_a.each do |type|
-        tk = TypeDeclarationUtil.getName(type)
+        tk = org.incava.pmdx.TypeDeclarationUtil.getName(type)
         if tk
           names_to_tds[tk.image] = type
         end
@@ -41,8 +41,8 @@ module DiffJ
       info "cua: #{cua}"
       info "cub: #{cub}"
 
-      a_types = CompilationUnitUtil.getTypeDeclarations cua
-      b_types = CompilationUnitUtil.getTypeDeclarations cub
+      a_types = org.incava.pmdx.CompilationUnitUtil.getTypeDeclarations cua
+      b_types = org.incava.pmdx.CompilationUnitUtil.getTypeDeclarations cub
       
       a_names_to_tds = make_td_map a_types
       b_names_to_tds = make_td_map b_types
@@ -56,10 +56,10 @@ module DiffJ
         btd = b_names_to_tds[name]
 
         if atd.nil?
-          b_name = TypeDeclarationUtil.getName btd
+          b_name = org.incava.pmdx.TypeDeclarationUtil.getName btd
           added cua, btd, TYPE_DECLARATION_ADDED, b_name.image
         elsif btd.nil?
-          a_name = TypeDeclarationUtil.getName atd
+          a_name = org.incava.pmdx.TypeDeclarationUtil.getName atd
           deleted atd, cub, TYPE_DECLARATION_REMOVED, a_name.image
         else
           differ = TypeComparator.new filediffs

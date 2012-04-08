@@ -2,10 +2,9 @@
 # -*- ruby -*-
 
 require 'type/typetestcase'
+require 'diffj/ast/type'
 
 include Java
-
-import org.incava.diffj.TypeDiff
 
 module DiffJ::Type
   class DeclarationsTestCase < DiffJTypeTestCase
@@ -15,15 +14,15 @@ module DiffJ::Type
     end
     
     def added_msg_fmt
-      ::TypeDiff::IMPLEMENTED_TYPE_ADDED
+      DiffJ::TypeComparator::IMPLEMENTED_TYPE_ADDED
     end  
 
     def changed_msg_fmt
-      ::TypeDiff::IMPLEMENTED_TYPE_CHANGED
+      DiffJ::TypeComparator::IMPLEMENTED_TYPE_CHANGED
     end
 
     def removed_msg_fmt
-      ::TypeDiff::IMPLEMENTED_TYPE_REMOVED
+      DiffJ::TypeComparator::IMPLEMENTED_TYPE_REMOVED
     end
 
     def test_added

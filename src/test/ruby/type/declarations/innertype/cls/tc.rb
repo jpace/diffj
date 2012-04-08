@@ -2,15 +2,14 @@
 # -*- ruby -*-
 
 require 'type/declarations/innertype/tc'
+require 'diffj/ast/type'
 
 include Java
-
-import org.incava.diffj.TypeDiff
 
 module DiffJ::Type::Declarations::InnerType::Cls
   class TestCase < DiffJ::Type::Declarations::InnerType::TestCase
     def added_msg_fmt
-      TypeDiff::INNER_CLASS_ADDED
+      DiffJ::TypeComparator::INNER_CLASS_ADDED
     end  
 
     def changed_msg_fmt
@@ -18,7 +17,7 @@ module DiffJ::Type::Declarations::InnerType::Cls
     end
 
     def removed_msg_fmt
-      TypeDiff::INNER_CLASS_REMOVED
+      DiffJ::TypeComparator::INNER_CLASS_REMOVED
     end
   end
 end

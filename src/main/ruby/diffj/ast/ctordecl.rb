@@ -10,8 +10,6 @@ require 'diffj/ast/ctor'
 
 include Java
 
-import org.incava.pmdx.CtorUtil
-
 class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
   include Loggable
 
@@ -20,17 +18,17 @@ class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_score from_ctor, to_ctor
-    CtorUtil.getMatchScore from_ctor, to_ctor
+    org.incava.pmdx.CtorUtil.getMatchScore from_ctor, to_ctor
   end
 
   def do_compare from, to
     ctorcmp = DiffJ::CtorComparator.new filediffs
-    ctorcmp.compare_access SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to)
+    ctorcmp.compare_access from.parent, to.parent
     ctorcmp.compare from, to
   end
 
   def get_name ctordecl
-    CtorUtil.getFullName ctordecl
+    org.incava.pmdx.CtorUtil.getFullName ctordecl
   end
 
   def get_added_message ctordecl

@@ -2,10 +2,9 @@
 # -*- ruby -*-
 
 require 'type/typetestcase'
+require 'diffj/ast/types'
 
 include Java
-
-import org.incava.diffj.TypesDiff
 
 class DiffJ::TypeChangeClsToIfaceTestCase < DiffJTypeTestCase
   def subdir
@@ -13,7 +12,8 @@ class DiffJ::TypeChangeClsToIfaceTestCase < DiffJTypeTestCase
   end
 
   def type_cls_to_iface from_start, from_end, to_start, to_end
-    make_fdiff_change TypesDiff::TYPE_CHANGED_FROM_CLASS_TO_INTERFACE, from_start, from_end, to_start, to_end
+    msg =  DiffJ::TypesComparator::TYPE_CHANGED_FROM_CLASS_TO_INTERFACE
+    make_fdiff_change msg, from_start, from_end, to_start, to_end
   end
 
   def test_changed

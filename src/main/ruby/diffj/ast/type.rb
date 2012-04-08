@@ -70,13 +70,13 @@ module DiffJ
 
     def get_ext_imp_map coid, ext_imp_class_name
       map = Hash.new
-      list = SimpleNodeUtil.findChild coid, ext_imp_class_name
+      list = org.incava.pmdx.SimpleNodeUtil.findChild coid, ext_imp_class_name
       
       if list
         types = java.util.ArrayList.new
-        SimpleNodeUtil.fetchChildren types, list, "net.sourceforge.pmd.ast.ASTClassOrInterfaceType"
+        org.incava.pmdx.SimpleNodeUtil.fetchChildren types, list, "net.sourceforge.pmd.ast.ASTClassOrInterfaceType"
         types.each do |type|
-          map[SimpleNodeUtil.toString(type)] = type
+          map[org.incava.pmdx.SimpleNodeUtil.toString(type)] = type
         end
       end
       map
@@ -137,8 +137,8 @@ module DiffJ
         changed from_coid, to_coid, TYPE_CHANGED_FROM_INTERFACE_TO_CLASS
       end
         
-      from_parent = SimpleNodeUtil.getParent from_coid
-      to_parent = SimpleNodeUtil.getParent to_coid
+      from_parent = org.incava.pmdx.SimpleNodeUtil.getParent from_coid
+      to_parent = org.incava.pmdx.SimpleNodeUtil.getParent to_coid
       
       compare_access from_parent, to_parent
       compare_modifiers from_parent, to_parent, VALID_TYPE_MODIFIERS
@@ -152,8 +152,8 @@ module DiffJ
       info "to_td: #{to_td}; #{to_td.class}".magenta
 
       # class or interface declaration:
-      from_type = TypeDeclarationUtil.getType from_td
-      to_type = TypeDeclarationUtil.getType to_td
+      from_type = org.incava.pmdx.TypeDeclarationUtil.getType from_td
+      to_type = org.incava.pmdx.TypeDeclarationUtil.getType to_td
 
       if from_type && to_type
         compare_coids from_type, to_type

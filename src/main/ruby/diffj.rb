@@ -24,7 +24,7 @@ module DiffJ
     attr_reader :report
     
     def initialize brief, context, highlight, recurse, from_label, fromver, to_label, tover
-      @report = brief ? BriefReport.new(java.lang.System.out) : DetailedReport.new(java.lang.System.out, context, highlight)
+      @report = brief ? BriefReport.new(java.lang.System.out) : org.incava.analysis.DetailedReport.new(java.lang.System.out, context, highlight)
       @recurse = recurse
       @from_label = from_label
       @fromver = fromver

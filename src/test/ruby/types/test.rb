@@ -2,36 +2,25 @@
 # -*- ruby -*-
 
 require 'diffjtestcase'
+require 'diffj/ast/types'
 
 include Java
-
-import org.incava.diffj.TypesDiff
 
 class DiffJ::TypesTestCase < DiffJ::TestCase
   def subdir
     'types'
   end
 
-  # def get_from_and_to_filenames dirname, basename
-  #   fnames = %w{ d0 d1 }.collect { |subdir| TESTBED_DIR + '/' + dirname + '/' + subdir + '/' + basename + '.java' }
-
-  #   fromname, toname = *fnames
-  #   info "fromname: #{fromname}"
-  #   info "toname: #{toname}"
-
-  #   [ fromname, toname ]
-  # end
-
   def run_types_test basename, *expected_fdiffs
     run_fdiff_test expected_fdiffs, subdir, basename
   end
 
   def added_msg_fmt
-    TypesDiff::TYPE_DECLARATION_ADDED
+    DiffJ::TypesComparator::TYPE_DECLARATION_ADDED
   end
 
   def removed_msg_fmt
-    TypesDiff::TYPE_DECLARATION_REMOVED
+    DiffJ::TypesComparator::TYPE_DECLARATION_REMOVED
   end
 
   def removed name, from_start, from_end, to_start, to_end

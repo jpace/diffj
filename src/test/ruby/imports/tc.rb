@@ -6,8 +6,6 @@ require 'diffj/ast/imports'
 
 include Java
 
-import org.incava.diffj.ImportsDiff
-
 module DiffJ::Imports
   class TestCase < DiffJ::TestCase
     def subdir

@@ -9,22 +9,20 @@ require 'diffj/ast/function'
 
 include Java
 
-import org.incava.pmdx.CtorUtil
-
 module DiffJ
   class CtorComparator < FunctionComparator
     include Loggable
 
     def compare_parameters from, to
-      from_formal_params = CtorUtil.getParameters from
-      to_formal_params = CtorUtil.getParameters to
+      from_formal_params = org.incava.pmdx.CtorUtil.getParameters from
+      to_formal_params = org.incava.pmdx.CtorUtil.getParameters to
       
       super from_formal_params, to_formal_params
     end
 
     def compare_throws from, to
-      from_name_list = CtorUtil.getThrowsList from
-      to_name_list = CtorUtil.getThrowsList to
+      from_name_list = org.incava.pmdx.CtorUtil.getThrowsList from
+      to_name_list = org.incava.pmdx.CtorUtil.getThrowsList to
 
       super from, from_name_list, to, to_name_list
     end
@@ -51,8 +49,8 @@ module DiffJ
       from_code = get_code_serially from
       to_code = get_code_serially to
         
-      from_name = CtorUtil.getFullName from
-      to_name = CtorUtil.getFullName to
+      from_name = org.incava.pmdx.CtorUtil.getFullName from
+      to_name = org.incava.pmdx.CtorUtil.getFullName to
 
       compare_code from_name, from_code, to_name, to_code
     end

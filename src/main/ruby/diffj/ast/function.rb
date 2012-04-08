@@ -8,9 +8,6 @@ require 'diffj/ast/item'
 
 include Java
 
-import org.incava.pmdx.ThrowsUtil
-import org.incava.pmdx.ParameterUtil
-
 module DiffJ
   class FunctionComparator < ItemComparator
     RETURN_TYPE_CHANGED = "return type changed from {0} to {1}"
@@ -30,8 +27,8 @@ module DiffJ
     def compare_return_types from, to
       from_ret_type     = from.jjtGetChild(0)
       to_ret_type       = to.jjtGetChild(0)
-      from_ret_type_str = SimpleNodeUtil.toString from_ret_type
-      to_ret_type_str   = SimpleNodeUtil.toString to_ret_type
+      from_ret_type_str = from_ret_type.to_string
+      to_ret_type_str   = to_ret_type.to_string
 
       if from_ret_type_str != to_ret_type_str
         changed from_ret_type, to_ret_type, RETURN_TYPE_CHANGED, from_ret_type_str, to_ret_type_str
@@ -39,15 +36,15 @@ module DiffJ
     end
 
     def get_child_names name_list
-      SimpleNodeUtil.snatchChildren name_list, "net.sourceforge.pmd.ast.ASTName"
+      org.incava.pmdx.SimpleNodeUtil.snatchChildren name_list, "net.sourceforge.pmd.ast.ASTName"
     end
 
     def compare_each_parameter from_formal_params, from_params, to_formal_params, to_params, size
       (0 ... size).each do |idx|
         from_param = from_params.get idx
-        param_match = ParameterUtil.getMatch from_params, idx, to_params
+        param_match = org.incava.pmdx.ParameterUtil.getMatch from_params, idx, to_params
 
-        from_formal_param = ParameterUtil.getParameter from_formal_params, idx
+        from_formal_param = org.incava.pmdx.ParameterUtil.getParameter from_formal_params, idx
 
         if param_match[0] == idx && param_match[1] == idx
           Log.info "exact match"
@@ -66,16 +63,16 @@ module DiffJ
 
       to_params.each_with_index do |to_param, to_idx|
         if to_param
-          to_formal_param = ParameterUtil.getParameter to_formal_params, to_idx
-          to_name = ParameterUtil.getParameterName to_formal_param
+          to_formal_param = org.incava.pmdx.ParameterUtil.getParameter to_formal_params, to_idx
+          to_name = org.incava.pmdx.ParameterUtil.getParameterName to_formal_param
           changed from_formal_params, to_formal_param, PARAMETER_ADDED, to_name.image
         end
       end
     end
 
     def check_for_reorder from_param, from_idx, to_formal_params, to_idx
-      from_name_tk = ParameterUtil.getParameterName from_param
-      to_name_tk = ParameterUtil.getParameterName to_formal_params, to_idx
+      from_name_tk = org.incava.pmdx.ParameterUtil.getParameterName from_param
+      to_name_tk = org.incava.pmdx.ParameterUtil.getParameterName to_formal_params, to_idx
       if from_name_tk.image == to_name_tk.image
         changed from_name_tk, to_name_tk, PARAMETER_REORDERED, from_name_tk.image, from_idx, to_idx
       else
@@ -85,48 +82,48 @@ module DiffJ
 
     # $$$ @untested
     def mark_reordered from_param, from_idx, to_params, to_idx
-      from_name_tk = ParameterUtil.getParameterName from_param
-      to_param = ParameterUtil.getParameter(to_params, to_idx)
+      from_name_tk = org.incava.pmdx.ParameterUtil.getParameterName from_param
+      to_param = org.incava.pmdx.ParameterUtil.getParameter(to_params, to_idx)
       changed from_param, to_param, PARAMETER_REORDERED, from_name_tk.image, from_idx, to_idx
     end
 
     def mark_removed from_param, to_params
-      from_name_tk = ParameterUtil.getParameterName from_param
+      from_name_tk = org.incava.pmdx.ParameterUtil.getParameterName from_param
       changed from_param, to_params, PARAMETER_REMOVED, from_name_tk.image
     end
 
     def mark_parameter_type_changed from_param, to_formal_params, idx
-      to_param = ParameterUtil.getParameter to_formal_params, idx
-      to_type = ParameterUtil.getParameterType to_param
+      to_param = org.incava.pmdx.ParameterUtil.getParameter to_formal_params, idx
+      to_type = org.incava.pmdx.ParameterUtil.getParameterType to_param
       changed from_param.getParameter(), to_param, PARAMETER_TYPE_CHANGED, from_param.getType(), to_type
     end
 
     def mark_parameter_name_changed from_param, to_formal_params, idx
-      from_name_tk = ParameterUtil.getParameterName from_param
-      to_name_tk = ParameterUtil.getParameterName to_formal_params, idx
+      from_name_tk = org.incava.pmdx.ParameterUtil.getParameterName from_param
+      to_name_tk = org.incava.pmdx.ParameterUtil.getParameterName to_formal_params, idx
       changed from_name_tk, to_name_tk, PARAMETER_NAME_CHANGED, from_name_tk.image, to_name_tk.image
     end
 
     def mark_parameters_added from_formal_params, to_formal_params
-      names = ParameterUtil.getParameterNames to_formal_params
+      names = org.incava.pmdx.ParameterUtil.getParameterNames to_formal_params
       names.each do |name|
         changed from_formal_params, name, PARAMETER_ADDED, name.image
       end
     end
 
     def mark_parameters_removed from_formal_params, to_formal_params
-      names = ParameterUtil.getParameterNames from_formal_params
+      names = org.incava.pmdx.ParameterUtil.getParameterNames from_formal_params
       names.each do |name|
         changed name, to_formal_params, PARAMETER_REMOVED, name.image
       end
     end
     
     def compare_parameters from_params, to_params
-      from_param_list = ParameterUtil.getParameterList from_params
-      to_param_list = ParameterUtil.getParameterList to_params
+      from_param_list = org.incava.pmdx.ParameterUtil.getParameterList from_params
+      to_param_list = org.incava.pmdx.ParameterUtil.getParameterList to_params
         
-      from_param_types = ParameterUtil.getParameterTypes from_params
-      to_param_types = ParameterUtil.getParameterTypes to_params
+      from_param_types = org.incava.pmdx.ParameterUtil.getParameterTypes from_params
+      to_param_types = org.incava.pmdx.ParameterUtil.getParameterTypes to_params
 
       from_size = from_param_types.size
       to_size = to_param_types.size
@@ -143,7 +140,7 @@ module DiffJ
     end
 
     def change_throws from_node, to_node, msg, name
-      changed from_node, to_node, msg, SimpleNodeUtil.toString(name)
+      changed from_node, to_node, msg, name.to_string
     end
 
     def add_all_throws from_node, to_name_list
@@ -161,11 +158,11 @@ module DiffJ
     end
 
     def get_match from_names, from_idx, to_names
-      from_name_str = SimpleNodeUtil.toString(from_names.get(from_idx))
+      from_name_str = from_names.get(from_idx).to_string
 
       (0 ... to_names.size).each do |to_idx|
         to_name = to_names.get(to_idx)
-        if to_name && SimpleNodeUtil.toString(to_name) == from_name_str
+        if to_name && to_name.to_string == from_name_str
           from_names.set(from_idx, nil)
           to_names.set(to_idx, nil) # mark as consumed
           return to_idx
@@ -190,15 +187,15 @@ module DiffJ
         elsif throws_match == from_idx
           next
         elsif throws_match
-          to_name = ThrowsUtil.getNameNode to_name_list, throws_match
-          from_name_str = SimpleNodeUtil.toString from_name
+          to_name = org.incava.pmdx.ThrowsUtil.getNameNode to_name_list, throws_match
+          from_name_str = from_name.to_string
           changed from_name, to_name, THROWS_REORDERED, from_name_str, from_idx, throws_match
         end
       end
 
       (0 ... to_names.size()).each do |to_idx|
         if to_names.get(to_idx)
-          to_name = ThrowsUtil.getNameNode to_name_list, to_idx
+          to_name = org.incava.pmdx.ThrowsUtil.getNameNode to_name_list, to_idx
           change_throws from_name_list, to_name, THROWS_ADDED, to_name
         end
       end

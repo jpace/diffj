@@ -32,24 +32,46 @@ module DiffJ
       @msg = nil
       @params = nil
 
+      info "params: #{@params} #{@params.class}".on_blue      
+
       args.each_with_index do |arg, idx|
         if arg.class == String
           @msg = arg
           @params = args[idx + 1 .. -1]
           ast_elements = args[0 ... idx]
+          info "params: #{@params} #{@params.class}".blue
           break
         end
       end
 
       if ast_elements.size == 4
         @tokens = ast_elements
+        info "params: #{@params} #{@params.class}".magenta
       else
         ast_classes = ast_elements.collect { |ast| ast.class.to_s.sub(%r{.*::}, '').sub(%r{AST\w+}, 'SimpleNode').downcase }.join('_')
         meth = "process_#{ast_classes}".to_sym
         method(meth).call(*ast_elements)
+        info "params: #{@params} #{@params.class}".bold
       end
 
-      str = MessageFormat.format @msg, *(@params)
+      info "params: #{@params} #{@params.class}".yellow
+
+      params = @params
+      info "params: #{params} #{params.class}".on_green
+      info "params: #{@params} #{@params.class}".on_blue
+
+      parmary = java.util.ArrayList.new
+      @params.each do |parm|
+        parmary << parm
+      end
+
+      mf = java.text.MessageFormat.new @msg
+      # fmtmeth = mf.java_method :format, [ :
+      # info "fmtmeth: #{fmtmeth}".on_yellow
+      sb = mf.format parmary.toArray, java.lang.StringBuffer.new, java.text.FieldPosition.new(0)
+      info "sb: #{sb}".yellow
+
+      str = sb.toString
       
       fdcls = get_filediff_cls
 
@@ -105,10 +127,10 @@ module DiffJ
     def nodes_to_parameters from, to
       params = java.util.ArrayList.new
       if from
-        params.add SimpleNodeUtil.toString(from)
+        params.add org.incava.pmdx.SimpleNodeUtil.toString(from)
       end
       if to
-        params.add SimpleNodeUtil.toString(to)
+        params.add org.incava.pmdx.SimpleNodeUtil.toString(to)
       end
       params.toArray
     end
@@ -124,7 +146,7 @@ module DiffJ
     end
 
     def get_filediff_cls
-      FileDiffAdd
+      org.incava.analysis.FileDiffAdd
     end
   end
 
@@ -138,13 +160,13 @@ module DiffJ
     end
 
     def get_filediff_cls
-      FileDiffDelete
+      org.incava.analysis.FileDiffDelete
     end
   end
 
   class Change < Delta
     def get_filediff_cls
-      FileDiffChange
+      org.incava.analysis.FileDiffChange
     end
   end
 

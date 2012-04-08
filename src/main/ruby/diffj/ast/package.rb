@@ -8,9 +8,6 @@ require 'diffj/ast/element'
 
 include Java
 
-import org.incava.pmdx.CompilationUnitUtil
-import org.incava.pmdx.SimpleNodeUtil
-
 module DiffJ
   class PackageComparator < ElementComparator
     include Loggable
@@ -25,19 +22,19 @@ module DiffJ
     end
 
     def find_name_node from
-      SimpleNodeUtil.findChild from, "net.sourceforge.pmd.ast.ASTName"
+      org.incava.pmdx.SimpleNodeUtil.findChild from, "net.sourceforge.pmd.ast.ASTName"
     end
 
     def find_first_child from
-      SimpleNodeUtil.findChild from
+      org.incava.pmdx.SimpleNodeUtil.findChild from
     end
 
     def node_to_string node
-      SimpleNodeUtil.toString node
+      org.incava.pmdx.SimpleNodeUtil.toString node
     end
 
     def find_package cu
-      CompilationUnitUtil.getPackage cu
+      org.incava.pmdx.CompilationUnitUtil.getPackage cu
     end
 
     def compare_names anode, bnode

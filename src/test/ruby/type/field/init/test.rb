@@ -2,21 +2,20 @@
 # -*- ruby -*-
 
 require 'type/field/tc'
-
-import org.incava.diffj.FieldDiff
+require 'diffj/ast/field'
 
 module DiffJ::Type::Field
   class InitTestCase < TestCase
     def added_msg_fmt
-      FieldDiff::INITIALIZER_ADDED
+      DiffJ::FieldComparator::INITIALIZER_ADDED
     end  
 
     def changed_msg_fmt
-      FieldDiff::CODE_CHANGED
+      DiffJ::FieldComparator::CODE_CHANGED
     end  
 
     def removed_msg_fmt
-      FieldDiff::INITIALIZER_REMOVED
+      DiffJ::FieldComparator::INITIALIZER_REMOVED
     end
 
     def test_unchanged

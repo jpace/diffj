@@ -9,8 +9,6 @@ require 'diffj/ast/function'
 
 include Java
 
-import org.incava.pmdx.MethodUtil
-
 module DiffJ
   class MethodComparator < FunctionComparator
     include Loggable
@@ -35,21 +33,21 @@ module DiffJ
     end
 
     def compare_parameters from, to
-      from_params = MethodUtil.getParameters from
-      to_params = MethodUtil.getParameters to
+      from_params = org.incava.pmdx.MethodUtil.getParameters from
+      to_params = org.incava.pmdx.MethodUtil.getParameters to
       
       super from_params, to_params
     end
 
     def compare_throws from, to
-      from_list = MethodUtil.getThrowsList from
-      to_list = MethodUtil.getThrowsList to
+      from_list = org.incava.pmdx.MethodUtil.getThrowsList from
+      to_list = org.incava.pmdx.MethodUtil.getThrowsList to
 
       super from, from_list, to, to_list
     end
 
     def get_block node
-      SimpleNodeUtil.findChild node, "net.sourceforge.pmd.ast.ASTBlock"
+      org.incava.pmdx.SimpleNodeUtil.findChild node, "net.sourceforge.pmd.ast.ASTBlock"
     end
     
     def compare_bodies from, to
@@ -63,8 +61,8 @@ module DiffJ
       elsif to_block.nil?
         changed from, to, METHOD_BLOCK_REMOVED
       else
-        from_name = MethodUtil.getFullName from
-        to_name = MethodUtil.getFullName to
+        from_name = org.incava.pmdx.MethodUtil.getFullName from
+        to_name = org.incava.pmdx.MethodUtil.getFullName to
             
         compare_blocks from_name, from_block, to_name, to_block
       end
