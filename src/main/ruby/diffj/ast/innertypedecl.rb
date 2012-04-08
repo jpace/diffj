@@ -9,8 +9,6 @@ require 'diffj/ast/type'
 
 include Java
 
-import org.incava.pmdx.ClassUtil
-
 class DiffJ::InnerTypeComparator < DiffJ::TypeItemDeclComparator
   include Loggable
 
@@ -19,18 +17,18 @@ class DiffJ::InnerTypeComparator < DiffJ::TypeItemDeclComparator
     @typecomp = typecomp
   end
 
-  def get_score from_ctor, to_ctor
-    org.incava.pmdx.ClassUtil.getMatchScore from_ctor, to_ctor
+  def get_score from_coid, to_coid
+    from_coid.match_score to_coid
   end
 
   def do_compare from, to
-    info "from: #{from}; #{from.class}".yellow
-    info "to: #{to}; #{to.class}".yellow
+    info "from: #{from}; #{from.class}"
+    info "to: #{to}; #{to.class}"
     @typecomp.compare_coids from, to
   end
 
   def get_name coid
-    org.incava.pmdx.ClassUtil.getName(coid).image
+    coid.namestr
   end
 
   def get_added_message coid
