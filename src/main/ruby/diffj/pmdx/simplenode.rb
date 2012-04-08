@@ -6,29 +6,100 @@ require 'java'
 import org.incava.pmdx.SimpleNodeUtil
 
 class Java::net.sourceforge.pmd.ast::SimpleNode
-  def get_children_serially
-    puts "self: #{self}"
-    org.incava.pmdx.SimpleNodeUtil.getChildrenSerially self
+  def get_children_serially children = java.util.ArrayList.new
+    t = Java::net.sourceforge.pmd.ast.Token.new
+    t.next = first_token
+        
+    n_children = jjt_get_num_children
+    (0 ... n_children).each do |ord|
+      n = jjt_get_child ord
+      while true
+        t = t.next
+        if t == n.first_token
+          break
+        end
+        children.add t
+      end
+      n.get_children_serially children
+
+      t = n.last_token
+    end
+
+    while t != get_last_token
+      t = t.next
+      children.add t
+    end
+    children
   end
 
   def parent
-    org.incava.pmdx.SimpleNodeUtil.getParent self
+    jjt_get_parent
   end
 
   def to_string
-    org.incava.pmdx.SimpleNodeUtil.toString self
+    tk = first_token
+    last = last_token
+    str = tk.image
+    while tk != last
+      tk = tk.next
+      str << tk.image
+    end
+    str
   end
 
   def leading_tokens
-    org.incava.pmdx.SimpleNodeUtil.getLeadingTokens self
+    list = java.util.ArrayList.new
+    return list if jjt_get_num_children == 0
+    
+    n = jjt_get_child 0
+
+    t = Java::net.sourceforge.pmd.ast.Token.new
+    t.next = first_token
+            
+    while true
+      t = t.next
+      if t == n.first_token
+        break
+      else
+        list.add t 
+      end
+    end
+
+    list
   end
 
-  def find_child clsname = nil
-    org.incava.pmdx.SimpleNodeUtil.findChild self, clsname
+  def find_child clsname = nil, index = 0
+    return nil if index && index < 0
+
+    n_children = jjt_get_num_children
+    return nil if index >= n_children
+
+    n_found = -1
+    (0 ... n_children).each do |idx|
+      if child = get_child_of_type(clsname, idx)
+        n_found += 1
+        return child if n_found == index
+      end
+    end
+          
+    nil
+  end
+
+  def get_child_of_type clsname, idx
+    child = jjt_get_child idx
+    clsname.nil? || child.getClass().getName() == clsname ? child : nil
   end
 
   def snatch_children clsname
-    org.incava.pmdx.SimpleNodeUtil.snatchChildren self, clsname
+    list = java.util.ArrayList.new
+    n_children = jjt_get_num_children
+    (0 ... n_children).each do |idx|
+      child = jjt_get_child idx
+      if clsname.nil? || child.getClass().getName() == clsname
+        list.add child
+      end
+    end
+    list
   end
 
 end

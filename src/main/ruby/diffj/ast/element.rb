@@ -16,43 +16,28 @@ module DiffJ
     def initialize args
       ast_elements = Array.new
 
-      info "args: #{args}".green
-      args.each do |arg|
-        info "arg: #{arg}".green
-        info "arg.class: #{arg.class}".green
-      end
-
       @tokens = Array.new
       @msg = nil
       @params = nil
-
-      info "params: #{@params} #{@params.class}".on_blue      
 
       args.each_with_index do |arg, idx|
         if arg.class == String
           @msg = arg
           @params = args[idx + 1 .. -1]
           ast_elements = args[0 ... idx]
-          info "params: #{@params} #{@params.class}".blue
           break
         end
       end
 
       if ast_elements.size == 4
         @tokens = ast_elements
-        info "params: #{@params} #{@params.class}".magenta
       else
         ast_classes = ast_elements.collect { |ast| ast.class.to_s.sub(%r{.*::}, '').sub(%r{AST\w+}, 'SimpleNode').downcase }.join('_')
         meth = "process_#{ast_classes}".to_sym
         method(meth).call(*ast_elements)
-        info "params: #{@params} #{@params.class}".bold
       end
 
-      info "params: #{@params} #{@params.class}".yellow
-
       params = @params
-      info "params: #{params} #{params.class}".on_green
-      info "params: #{@params} #{@params.class}".on_blue
 
       parmary = java.util.ArrayList.new
       @params.each do |parm|
@@ -60,21 +45,10 @@ module DiffJ
       end
 
       mf = java.text.MessageFormat.new @msg
-      # fmtmeth = mf.java_method :format, [ :
-      # info "fmtmeth: #{fmtmeth}".on_yellow
       sb = mf.format parmary.toArray, java.lang.StringBuffer.new, java.text.FieldPosition.new(0)
-      info "sb: #{sb}".yellow
-
       str = sb.toString
-      
       fdcls = get_filediff_cls
 
-      info "tokens: #{@tokens.inspect}"
-      @tokens.each do |tk|
-        info "tk: #{tk}"
-        info "tk.class: #{tk.class}"
-      end
-      
       if @tokens.length == 2
         @filediff = fdcls.new str, @tokens[0], @tokens[1]
       else
