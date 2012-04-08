@@ -7,7 +7,7 @@ module DiffJ
   module AST
     module Function
       def to_full_name tk, params
-        types = org.incava.pmdx.ParameterUtil.getParameterTypes(params)
+        types = params.get_parameter_types
         ary = Array.new
         types.each do |type|
           ary << type

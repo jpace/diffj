@@ -25,8 +25,8 @@ module DiffJ
     THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}"
     
     def compare_return_types from, to
-      from_ret_type     = from.jjtGetChild(0)
-      to_ret_type       = to.jjtGetChild(0)
+      from_ret_type     = from.jjt_get_child 0
+      to_ret_type       = to.jjt_get_child 0
       from_ret_type_str = from_ret_type.to_string
       to_ret_type_str   = to_ret_type.to_string
 
@@ -44,7 +44,7 @@ module DiffJ
         from_param = from_params.get idx
         param_match = org.incava.pmdx.ParameterUtil.getMatch from_params, idx, to_params
 
-        from_formal_param = org.incava.pmdx.ParameterUtil.getParameter from_formal_params, idx
+        from_formal_param = from_formal_params.get_parameter idx
 
         if param_match[0] == idx && param_match[1] == idx
           Log.info "exact match"
@@ -94,8 +94,8 @@ module DiffJ
 
     def mark_parameter_type_changed from_param, to_formal_params, idx
       to_param = to_formal_params.get_parameter idx
-      to_type = org.incava.pmdx.ParameterUtil.getParameterType to_param
-      changed from_param.getParameter(), to_param, PARAMETER_TYPE_CHANGED, from_param.getType(), to_type
+      to_type = to_param.typestr
+      changed from_param, to_param, PARAMETER_TYPE_CHANGED, from_param.typestr, to_type
     end
 
     def mark_parameter_name_changed from_param, to_formal_params, idx
@@ -119,11 +119,11 @@ module DiffJ
     end
     
     def compare_parameters from_params, to_params
-      from_param_list = org.incava.pmdx.ParameterUtil.getParameterList from_params
-      to_param_list = org.incava.pmdx.ParameterUtil.getParameterList to_params
+      from_param_list = org.incava.pmdx.ParameterUtil.getParameters from_params
+      to_param_list = org.incava.pmdx.ParameterUtil.getParameters to_params
         
-      from_param_types = org.incava.pmdx.ParameterUtil.getParameterTypes from_params
-      to_param_types = org.incava.pmdx.ParameterUtil.getParameterTypes to_params
+      from_param_types = from_params.get_parameter_types
+      to_param_types = to_params.get_parameter_types
 
       from_size = from_param_types.size
       to_size = to_param_types.size
