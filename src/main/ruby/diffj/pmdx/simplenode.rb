@@ -3,8 +3,6 @@
 
 require 'java'
 
-import org.incava.pmdx.SimpleNodeUtil
-
 class Java::net.sourceforge.pmd.ast::SimpleNode
   def get_children_serially children = java.util.ArrayList.new
     t = Java::net.sourceforge.pmd.ast.Token.new
@@ -102,4 +100,45 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     list
   end
 
+  def children getNodes = true, getTokens = true
+    list = java.util.ArrayList.new
+        
+    t = Java::net.sourceforge.pmd.ast.Token.new
+    t.next = getFirstToken()
+        
+    nChildren = jjtGetNumChildren();
+    (0 ... nChildren).each do |idx|
+      n = jjtGetChild(idx);
+      while true
+        t = t.next
+        if t == n.getFirstToken()
+          break
+        end
+        if getTokens
+          list.add(t);
+        end
+      end
+      if getNodes
+        list.add(n);
+      end
+      t = n.getLastToken();
+    end
+
+    while t != getLastToken
+      t = t.next;
+      if getTokens
+        list.add(t)
+      end
+    end
+
+    list
+  end
+
+  def find_token token_type
+    child_tokens = children false, true
+    child_tokens.each do |tk|
+      return tk if tk.kind == token_type
+    end
+    nil
+  end
 end

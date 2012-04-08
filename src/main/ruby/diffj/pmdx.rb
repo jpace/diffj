@@ -2,4 +2,4 @@
 # -*- ruby -*-
 
 require 'diffj/pmdx/simplenode'
-# require 'diffj/pmdx/ctor'
+require 'diffj/pmdx/ctor'

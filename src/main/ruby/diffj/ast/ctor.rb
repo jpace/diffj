@@ -14,15 +14,15 @@ module DiffJ
     include Loggable
 
     def compare_parameters from, to
-      from_formal_params = org.incava.pmdx.CtorUtil.getParameters from
-      to_formal_params = org.incava.pmdx.CtorUtil.getParameters to
+      from_formal_params = from.parameters
+      to_formal_params = to.parameters
       
       super from_formal_params, to_formal_params
     end
 
     def compare_throws from, to
-      from_name_list = org.incava.pmdx.CtorUtil.getThrowsList from
-      to_name_list = org.incava.pmdx.CtorUtil.getThrowsList to
+      from_name_list = from.throws_list
+      to_name_list = to.throws_list
 
       super from, from_name_list, to, to_name_list
     end
@@ -49,8 +49,8 @@ module DiffJ
       from_code = get_code_serially from
       to_code = get_code_serially to
         
-      from_name = org.incava.pmdx.CtorUtil.getFullName from
-      to_name = org.incava.pmdx.CtorUtil.getFullName to
+      from_name = from.fullname
+      to_name = to.fullname
 
       compare_code from_name, from_code, to_name, to_code
     end

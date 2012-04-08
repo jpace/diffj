@@ -18,7 +18,7 @@ class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_score from_ctor, to_ctor
-    org.incava.pmdx.CtorUtil.getMatchScore from_ctor, to_ctor
+    from_ctor.match_score to_ctor
   end
 
   def do_compare from, to
@@ -28,7 +28,7 @@ class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_name ctordecl
-    org.incava.pmdx.CtorUtil.getFullName ctordecl
+    ctordecl.fullname
   end
 
   def get_added_message ctordecl
