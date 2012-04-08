@@ -24,6 +24,16 @@ class Java::net.sourceforge.pmd.ast::ASTMethodDeclaration
   end
 
   def match_score to
-    org.incava.pmdx.MethodUtil.getMatchScore self, to
+    from_name = name.image
+    to_name = to.name.image
+
+    if from_name != to_name
+      return 0
+    end
+
+    from_params = parameters
+    to_params = to.parameters
+    
+    org.incava.pmdx.ParameterUtil.getMatchScore from_params, to_params
   end
 end

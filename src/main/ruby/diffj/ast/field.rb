@@ -8,8 +8,6 @@ require 'diffj/ast/item'
 
 include Java
 
-import org.incava.pmdx.FieldUtil
-
 module DiffJ
   class FieldComparator < ItemComparator
     VARIABLE_REMOVED = "variable removed: {0}"
@@ -31,8 +29,7 @@ module DiffJ
     def make_vd_map vds
       names_to_vd = Hash.new
       vds.each do |vd|
-        name = org.incava.pmdx.FieldUtil.getName(vd).image
-        names_to_vd[name] = vd
+        names_to_vd[vd.namestr] = vd
       end
       names_to_vd
     end
@@ -59,8 +56,8 @@ module DiffJ
       elsif to_init.nil?
         changed from_init, to, INITIALIZER_REMOVED
       else
-        from_name = org.incava.pmdx.FieldUtil.getName(from).image
-        to_name = org.incava.pmdx.FieldUtil.getName(to).image
+        from_name = from.namestr
+        to_name = to.namestr
 
         compare_init_code from_name, from_init, to_name, to_init
       end
@@ -81,14 +78,14 @@ module DiffJ
     end
 
     def process_add_del_variable name, msg, from_var_decl, to_var_decl
-      from_tk = org.incava.pmdx.FieldUtil.getName from_var_decl
-      to_tk = org.incava.pmdx.FieldUtil.getName to_var_decl
+      from_tk = from_var_decl.nametk
+      to_tk = to_var_decl.nametk
       changed from_tk, to_tk, msg, name
     end
 
     def process_changed_variable from_var_decl, to_var_decl
-      from_tk = org.incava.pmdx.FieldUtil.getName from_var_decl
-      to_tk = org.incava.pmdx.FieldUtil.getName to_var_decl
+      from_tk = from_var_decl.nametk
+      to_tk = to_var_decl.nametk
       changed from_tk, to_tk, VARIABLE_CHANGED
       compare_variable_inits from_var_decl, to_var_decl
     end

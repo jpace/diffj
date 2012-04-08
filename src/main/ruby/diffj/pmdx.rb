@@ -4,3 +4,5 @@
 require 'diffj/pmdx/simplenode'
 require 'diffj/pmdx/ctor'
 require 'diffj/pmdx/method'
+require 'diffj/pmdx/field'
+require 'diffj/pmdx/variable'

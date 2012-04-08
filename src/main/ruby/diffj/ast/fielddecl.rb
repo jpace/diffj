@@ -10,7 +10,6 @@ require 'diffj/ast/field'
 include Java
 
 import org.incava.diffj.FieldDiff
-import org.incava.pmdx.FieldUtil
 
 class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   include Loggable
@@ -20,7 +19,7 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_score from_field, to_field
-    org.incava.pmdx.FieldUtil.getMatchScore from_field, to_field
+    from_field.match_score to_field
   end
 
   if false
@@ -40,7 +39,7 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   end
 
   def get_name fielddecl
-    org.incava.pmdx.FieldUtil.getNames fielddecl
+    fielddecl.names
   end
 
   def get_added_message fielddecl
