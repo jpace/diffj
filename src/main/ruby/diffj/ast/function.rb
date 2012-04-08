@@ -63,16 +63,16 @@ module DiffJ
 
       to_params.each_with_index do |to_param, to_idx|
         if to_param
-          to_formal_param = org.incava.pmdx.ParameterUtil.getParameter to_formal_params, to_idx
-          to_name = org.incava.pmdx.ParameterUtil.getParameterName to_formal_param
+          to_formal_param = to_formal_params.get_parameter to_idx
+          to_name = to_formal_param && to_formal_param.nametk
           changed from_formal_params, to_formal_param, PARAMETER_ADDED, to_name.image
         end
       end
     end
 
     def check_for_reorder from_param, from_idx, to_formal_params, to_idx
-      from_name_tk = org.incava.pmdx.ParameterUtil.getParameterName from_param
-      to_name_tk = org.incava.pmdx.ParameterUtil.getParameterName to_formal_params, to_idx
+      from_name_tk = from_param && from_param.nametk
+      to_name_tk = to_formal_params.get_parameter_nametk to_idx
       if from_name_tk.image == to_name_tk.image
         changed from_name_tk, to_name_tk, PARAMETER_REORDERED, from_name_tk.image, from_idx, to_idx
       else
@@ -82,37 +82,37 @@ module DiffJ
 
     # $$$ @untested
     def mark_reordered from_param, from_idx, to_params, to_idx
-      from_name_tk = org.incava.pmdx.ParameterUtil.getParameterName from_param
-      to_param = org.incava.pmdx.ParameterUtil.getParameter(to_params, to_idx)
+      from_name_tk = from_param.nametk
+      to_param = to_params.get_parameter to_idx
       changed from_param, to_param, PARAMETER_REORDERED, from_name_tk.image, from_idx, to_idx
     end
 
     def mark_removed from_param, to_params
-      from_name_tk = org.incava.pmdx.ParameterUtil.getParameterName from_param
+      from_name_tk = from_param.nametk
       changed from_param, to_params, PARAMETER_REMOVED, from_name_tk.image
     end
 
     def mark_parameter_type_changed from_param, to_formal_params, idx
-      to_param = org.incava.pmdx.ParameterUtil.getParameter to_formal_params, idx
+      to_param = to_formal_params.get_parameter idx
       to_type = org.incava.pmdx.ParameterUtil.getParameterType to_param
       changed from_param.getParameter(), to_param, PARAMETER_TYPE_CHANGED, from_param.getType(), to_type
     end
 
     def mark_parameter_name_changed from_param, to_formal_params, idx
-      from_name_tk = org.incava.pmdx.ParameterUtil.getParameterName from_param
-      to_name_tk = org.incava.pmdx.ParameterUtil.getParameterName to_formal_params, idx
+      from_name_tk = from_param.nametk
+      to_name_tk = to_formal_params.get_parameter_nametk idx
       changed from_name_tk, to_name_tk, PARAMETER_NAME_CHANGED, from_name_tk.image, to_name_tk.image
     end
 
     def mark_parameters_added from_formal_params, to_formal_params
-      names = org.incava.pmdx.ParameterUtil.getParameterNames to_formal_params
+      names = to_formal_params.get_parameter_names 
       names.each do |name|
         changed from_formal_params, name, PARAMETER_ADDED, name.image
       end
     end
 
     def mark_parameters_removed from_formal_params, to_formal_params
-      names = org.incava.pmdx.ParameterUtil.getParameterNames from_formal_params
+      names = from_formal_params.get_parameter_names 
       names.each do |name|
         changed name, to_formal_params, PARAMETER_REMOVED, name.image
       end

@@ -34,6 +34,6 @@ class Java::net.sourceforge.pmd.ast::ASTMethodDeclaration
     from_params = parameters
     to_params = to.parameters
     
-    org.incava.pmdx.ParameterUtil.getMatchScore from_params, to_params
+    from_params.match_score to_params
   end
 end
