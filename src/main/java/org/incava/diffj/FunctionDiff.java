@@ -67,10 +67,10 @@ public class FunctionDiff extends ItemDiff {
         }
     }
 
-    protected void markParameterTypeChanged(Parameter fromParam, ASTFormalParameters toFormalParams, int idx) {
+    protected void markParameterTypeChanged(ASTFormalParameter fromParam, ASTFormalParameters toFormalParams, int idx) {
         ASTFormalParameter toParam = ParameterUtil.getParameter(toFormalParams, idx);
         String toType = ParameterUtil.getParameterType(toParam);
-        changed(fromParam.getParameter(), toParam, PARAMETER_TYPE_CHANGED, fromParam.getType(), toType);
+        changed(fromParam, toParam, PARAMETER_TYPE_CHANGED, ParameterUtil.getParameterType(fromParam), toType);
     }
 
     protected void markParameterNameChanged(ASTFormalParameter fromParam, ASTFormalParameters toFormalParams, int idx) {
@@ -104,9 +104,6 @@ public class FunctionDiff extends ItemDiff {
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
         tr.Ace.setVerbose(true);
 
-        List<Parameter> fromParams = ParameterUtil.getParameterList(fromFormalParams);
-        List<Parameter> toParams = ParameterUtil.getParameterList(toFormalParams);
-        
         List<String> fromParamTypes = ParameterUtil.getParameterTypes(fromFormalParams);
         List<String> toParamTypes = ParameterUtil.getParameterTypes(toFormalParams);
 
@@ -115,7 +112,7 @@ public class FunctionDiff extends ItemDiff {
 
         if (fromSize > 0) {
             if (toSize > 0) {
-                compareEachParameter(fromFormalParams, fromParams, toFormalParams, toParams, fromSize);
+                compareEachParameter(fromFormalParams, toFormalParams, fromSize);
             }
             else {
                 markParametersRemoved(fromFormalParams, toFormalParams);
@@ -131,9 +128,13 @@ public class FunctionDiff extends ItemDiff {
     /**
      * Compares each parameter. Assumes that the lists are the same size.
      */
-    protected void compareEachParameter(ASTFormalParameters fromFormalParams, List<Parameter> fromParams, ASTFormalParameters toFormalParams, List<Parameter> toParams, int size) {
+    protected void compareEachParameter(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, int size) {
+        List<Parameter> fromParams = ParameterUtil.getParameterList(fromFormalParams);
+        List<Parameter> toParams = ParameterUtil.getParameterList(toFormalParams);
+
         for (int idx = 0; idx < size; ++idx) {
             Parameter fromParam = fromParams.get(idx);
+            ASTFormalParameter fromPrm = fromParam.getParameter();
 
             int[] paramMatch = ParameterUtil.getMatch(fromParams, idx, toParams);
 
@@ -146,7 +147,7 @@ public class FunctionDiff extends ItemDiff {
                 markParameterNameChanged(fromFormalParam, toFormalParams, idx);
             }
             else if (paramMatch[1] == idx) {
-                markParameterTypeChanged(fromParam, toFormalParams, idx);
+                markParameterTypeChanged(fromPrm, toFormalParams, idx);
             }
             else if (paramMatch[0] >= 0) {
                 checkForReorder(fromFormalParam, idx, toFormalParams, paramMatch[0]);
