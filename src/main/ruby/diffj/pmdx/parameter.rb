@@ -19,20 +19,20 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
 
   def get_parameter_names
     fps = parameters
-    names = java.util.ArrayList.new
+    names = Array.new
     fps.each do |fp|
-      names.add fp.nametk
+      names << fp.nametk
     end
     names
   end
 
   def get_parameter_types
-    types = java.util.ArrayList.new
+    types = Array.new
     nParams = jjt_get_num_children
     (0 ... nParams).each do |idx|
       param = jjt_get_child idx
       type  = param.typestr
-      types.add type
+      types << type
     end
     types
   end
@@ -40,22 +40,22 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   def get_list_match from_list, from_index, to_list
     from_size = from_list.size
     to_size = to_list.size
-    from_str = from_index < from_size ? from_list.get(from_index) : nil
-    to_str = from_index < to_size ? to_list.get(from_index) : nil
+    from_str = from_list[from_index]
+    to_str = to_list[from_index]
         
     return -1 if from_str.nil?
     
     if from_str == to_str
-      from_list.set from_index, nil
-      to_list.set from_index, nil
+      from_list[from_index] = nil
+      to_list[from_index] = nil
       return from_index
     end
     
     (0 ... to_size).each do |to_idx|
-      to_str = to_list.get to_idx
+      to_str = to_list[to_idx]
       if from_str == to_str
-        from_list.set(from_index, nil)
-        to_list.set(to_idx, nil)
+        from_list[from_index] = nil
+        to_list[to_idx] = nil
         return to_idx
       end
     end

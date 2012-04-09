@@ -44,6 +44,7 @@ module DiffJ
         parmary << parm
       end
 
+      # hoops-jumping because of method signature clashes:
       mf = java.text.MessageFormat.new @msg
       sb = mf.format parmary.toArray, java.lang.StringBuffer.new, java.text.FieldPosition.new(0)
       str = sb.toString
@@ -82,25 +83,17 @@ module DiffJ
     end
 
     def tokens_to_parameters from, to
-      params = java.util.ArrayList.new
-      if from
-        params.add from.image
-      end
-      if to
-        params.add to.image
-      end
-      params.toArray
+      params = Array.new
+      params << from.image if from
+      params << to.image if to
+      params
     end
 
     def nodes_to_parameters from, to
-      params = java.util.ArrayList.new
-      if from
-        params.add from.to_string
-      end
-      if to
-        params.add to.to_string
-      end
-      params.toArray
+      params = Array.new
+      params << from.to_string if from
+      params << to.to_string if to
+      params
     end
   end
 
