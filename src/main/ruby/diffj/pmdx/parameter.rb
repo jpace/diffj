@@ -29,40 +29,53 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   def get_parameter_types
     types = java.util.ArrayList.new
     nParams = jjt_get_num_children
-    Log.info "nParams: #{nParams}".on_blue
     (0 ... nParams).each do |idx|
-      param = jjtGetChild(idx);
+      param = jjt_get_child idx
       type  = param.typestr
-      Log.info "type: #{type}".on_blue
       types.add type
     end
-    Log.info "types: #{types}".on_blue
     types
   end
 
-  def get_list_match fromList, fromIndex, toList
-    fromSize = fromList.size();
-    toSize = toList.size();
-    fromStr = fromIndex < fromSize ? fromList.get(fromIndex) : nil
-    toStr = fromIndex < toSize ? toList.get(fromIndex) : nil
+  def get_list_match from_list, from_index, to_list
+    from_size = from_list.size
+    to_size = to_list.size
+    from_str = from_index < from_size ? from_list.get(from_index) : nil
+    to_str = from_index < to_size ? to_list.get(from_index) : nil
         
-    return -1 if fromStr.nil?
+    return -1 if from_str.nil?
     
-    if fromStr == toStr
-      fromList.set(fromIndex, nil)
-      toList.set(fromIndex, nil)
-      return fromIndex
+    if from_str == to_str
+      from_list.set from_index, nil
+      to_list.set from_index, nil
+      return from_index
     end
     
-    (0 ... toSize).each do |toIdx|
-      toStr = toList.get(toIdx);
-      if fromStr == toStr
-        fromList.set(fromIndex, nil)
-        toList.set(toIdx, nil)
-        return toIdx
+    (0 ... to_size).each do |to_idx|
+      to_str = to_list.get to_idx
+      if from_str == to_str
+        from_list.set(from_index, nil)
+        to_list.set(to_idx, nil)
+        return to_idx
       end
     end
     -1
+  end
+
+  def count_matches x_param_types, y_param_types
+    exact_matches = 0
+    misordered_matches = 0
+    
+    (0 ... x_param_types.size).each do |idx|
+      param_match = get_list_match x_param_types, idx, y_param_types
+      if param_match == idx
+        exact_matches += 1
+      elsif param_match >= 0
+        misordered_matches += 1
+      end
+    end
+
+    [ exact_matches, misordered_matches ]
   end
 
   def match_score to
@@ -77,31 +90,17 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
     from_param_types = get_parameter_types
     to_param_types = to.get_parameter_types
     
-    from_size = from_param_types.size
-    to_size = to_param_types.size
+    match_counts = count_matches from_param_types, to_param_types
 
-    exact_matches = 0
-    misordered_matches = 0
+    exact_matches = match_counts[0]
+    misordered_matches = match_counts[1]
 
-    (0 ... from_size).each do |from_idx|
-      param_match = get_list_match from_param_types, from_idx, to_param_types
-      if param_match == from_idx
-        exact_matches += 1
-      elsif param_match >= 0
-        misordered_matches += 1
-      end
-    end
+    match_counts = count_matches to_param_types, from_param_types
 
-    (0 ... to_size).each do |to_idx|
-      param_match = get_list_match to_param_types, to_idx, from_param_types
-      if param_match == to_idx
-        exact_matches += 1
-      elsif param_match >= 0
-        misordered_matches += 1
-      end
-    end
+    exact_matches += match_counts[0]
+    misordered_matches += match_counts[1]
 
-    num_params = [ from_size, to_size ].max
+    num_params = [ from_param_types.size, to_param_types.size ].max
     match = exact_matches.to_f / num_params
     match += misordered_matches.to_f / (2 * num_params)
 
