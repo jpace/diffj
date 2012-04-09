@@ -40,8 +40,8 @@ module DiffJ
     end
 
     def clear_from_lists from_parameters, from_idx, to_parameters, to_idx
-      from_parameters.set from_idx, nil
-      to_parameters.set to_idx, nil
+      from_parameters[from_idx] = nil
+      to_parameters[to_idx] = nil
     end
 
     def get_exact_match fromParameters, to
@@ -66,8 +66,7 @@ module DiffJ
 
       # make sure there isn't an exact match for this somewhere else in
       # from_parameters
-      to = to_formal_params.get best_match
-
+      to = to_formal_params[best_match]
       from_match = get_exact_match from_formal_params, to
       
       if from_match >= 0
@@ -86,27 +85,27 @@ module DiffJ
       return from && from.namestr == to.namestr
     end
 
-    def get_param_matches fromFormalParams, fromIdx, toFormalParams
-      typeAndNameMatch = [ -1, -1 ]
-      fp = fromFormalParams.get(fromIdx)
+    def get_param_matches from_formal_params, from_idx, to_formal_params
+      type_and_name_match = [ -1, -1 ]
+      fp = from_formal_params[from_idx]
 
-      (0 ... toFormalParams.size()).each do |toIdx|
-        tp = toFormalParams.get(toIdx)
+      (0 ... to_formal_params.size).each do |to_idx|
+        tp = to_formal_params[to_idx]
         next unless tp
 
         if are_types_equal? fp, tp
-          typeAndNameMatch[0] = toIdx
+          type_and_name_match[0] = to_idx
         end
 
         if are_names_equal? fp, tp
-          typeAndNameMatch[1] = toIdx
+          type_and_name_match[1] = to_idx
         end
 
-        if typeAndNameMatch[0] == toIdx && typeAndNameMatch[1] == toIdx
+        if type_and_name_match[0] == to_idx && type_and_name_match[1] == to_idx
           break
         end
       end
-      typeAndNameMatch
+      type_and_name_match
     end
 
     def compare_each_parameter from_formal_params, to_formal_params, size
@@ -114,7 +113,7 @@ module DiffJ
       to_param_list = to_formal_params.parameters
 
       (0 ... size).each do |idx|
-        from_param = from_param_list.get idx
+        from_param = from_param_list[idx]
         param_match = get_match from_param_list, idx, to_param_list
         info "param_match: #{param_match}".on_green
 
@@ -229,13 +228,13 @@ module DiffJ
     end
 
     def get_throws_match from_names, from_idx, to_names
-      from_name_str = from_names.get(from_idx).to_string
+      from_name_str = from_names[from_idx].to_string
 
       (0 ... to_names.size).each do |to_idx|
-        to_name = to_names.get(to_idx)
+        to_name = to_names[to_idx]
         if to_name && to_name.to_string == from_name_str
-          from_names.set(from_idx, nil)
-          to_names.set(to_idx, nil) # mark as consumed
+          from_names[from_idx] = nil
+          to_names[to_idx] = nil # mark as consumed
           return to_idx
         end
       end
@@ -246,10 +245,10 @@ module DiffJ
       from_names = get_child_names from_name_list
       to_names = get_child_names to_name_list
 
-      (0 ... from_names.size()).each do |from_idx|
+      (0 ... from_names.size).each do |from_idx|
         # save a reference to the name here, in case it gets removed
         # from the array in getMatch.
-        from_name = from_names.get from_idx
+        from_name = from_names[from_idx]
         
         throws_match = get_throws_match from_names, from_idx, to_names
 
@@ -264,8 +263,8 @@ module DiffJ
         end
       end
 
-      (0 ... to_names.size()).each do |to_idx|
-        if to_names.get(to_idx)
+      (0 ... to_names.size).each do |to_idx|
+        if to_names[to_idx]
           to_name = org.incava.pmdx.ThrowsUtil.getNameNode to_name_list, to_idx
           change_throws from_name_list, to_name, THROWS_ADDED, to_name
         end

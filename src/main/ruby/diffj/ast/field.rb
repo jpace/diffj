@@ -106,11 +106,11 @@ module DiffJ
         if from_var_decl && to_var_decl
           compare_variable_types name, from, from_var_decl, to, to_var_decl
         elsif from_var_decls.size == 1 && to_var_decls.size == 1
-          process_changed_variable from_var_decls.get(0), to_var_decls.get(0)
+          process_changed_variable from_var_decls[0], to_var_decls[0]
         elsif from_var_decl.nil?
-          process_add_del_variable name, VARIABLE_ADDED, from_var_decls.get(0), to_var_decl
+          process_add_del_variable name, VARIABLE_ADDED, from_var_decls[0], to_var_decl
         else
-          process_add_del_variable name, VARIABLE_REMOVED, from_var_decl, to_var_decls.get(0)
+          process_add_del_variable name, VARIABLE_REMOVED, from_var_decl, to_var_decls[0]
         end
       end
     end

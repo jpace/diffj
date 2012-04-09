@@ -89,45 +89,45 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
   end
 
   def snatch_children clsname
-    list = java.util.ArrayList.new
+    list = Array.new
     n_children = jjt_get_num_children
     (0 ... n_children).each do |idx|
       child = jjt_get_child idx
       if clsname.nil? || child.getClass().getName() == clsname
-        list.add child
+        list << child
       end
     end
     list
   end
 
-  def children getNodes = true, getTokens = true
+  def children get_nodes = true, get_tokens = true
     list = java.util.ArrayList.new
         
     t = Java::net.sourceforge.pmd.ast.Token.new
-    t.next = getFirstToken()
+    t.next = first_token
         
-    nChildren = jjtGetNumChildren();
-    (0 ... nChildren).each do |idx|
-      n = jjtGetChild(idx);
+    n_children = jjt_get_num_children
+    (0 ... n_children).each do |idx|
+      n = jjt_get_child idx
       while true
         t = t.next
-        if t == n.getFirstToken()
+        if t == n.first_token
           break
         end
-        if getTokens
-          list.add(t);
+        if get_tokens
+          list.add t
         end
       end
-      if getNodes
-        list.add(n);
+      if get_nodes
+        list.add n
       end
-      t = n.getLastToken();
+      t = n.last_token
     end
 
-    while t != getLastToken
-      t = t.next;
-      if getTokens
-        list.add(t)
+    while t != last_token
+      t = t.next
+      if get_tokens
+        list.add t
       end
     end
 
