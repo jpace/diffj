@@ -31,18 +31,10 @@ module DiffJ
       # removes all tokens up to the first left brace. This is because ctors
       # don't have their own blocks, unlike methods.
         
-      children =  ctor.get_children_serially
-        
-      it = children.iterator
-      while it.hasNext
-        tk = it.next
-        if tk.kind == ::Java::net.sourceforge.pmd.ast.JavaParserConstants::LBRACE
-          break
-        else
-          it.remove
-        end
-      end
-      children
+      code = ctor.get_children_serially
+      first_lbrace = code.index { |tk| tk.kind == ::Java::net.sourceforge.pmd.ast.JavaParserConstants::LBRACE }
+
+      code[first_lbrace .. -1]
     end
 
     def compare_bodies from, to

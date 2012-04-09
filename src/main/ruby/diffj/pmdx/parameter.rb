@@ -5,7 +5,7 @@ require 'java'
 
 class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   def parameters
-    snatch_children "net.sourceforge.pmd.ast.ASTFormalParameter"
+    find_children "net.sourceforge.pmd.ast.ASTFormalParameter"
   end
 
   def get_parameter index
@@ -18,28 +18,16 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   end
 
   def get_parameter_names
-    fps = parameters
-    names = Array.new
-    fps.each do |fp|
-      names << fp.nametk
-    end
-    names
+    parameters.collect { |p| p.nametk }
   end
 
   def get_parameter_types
-    types = Array.new
-    nParams = jjt_get_num_children
-    (0 ... nParams).each do |idx|
-      param = jjt_get_child idx
-      type  = param.typestr
-      types << type
-    end
-    types
+    childnodes.collect { |node| node.typestr }
   end
 
   def get_list_match from_list, from_index, to_list
-    from_size = from_list.size
     to_size = to_list.size
+
     from_str = from_list[from_index]
     to_str = to_list[from_index]
         
@@ -51,8 +39,7 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
       return from_index
     end
     
-    (0 ... to_size).each do |to_idx|
-      to_str = to_list[to_idx]
+    to_list.each_with_index do |to_str, to_idx|
       if from_str == to_str
         from_list[from_index] = nil
         to_list[to_idx] = nil
@@ -79,7 +66,7 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   end
 
   def match_score to
-    return 1.0 if jjt_get_num_children == 0 && to.jjt_get_num_children == 0
+    return 1.0 if size == 0 && to.size == 0
     
     # (int[], double, String) <=> (int[], double, String) ==> 100% (3 of 3)
     # (int[], double, String) <=> (double, int[], String) ==> 80% (3 of 3 - 10% * misordered)
@@ -110,8 +97,7 @@ end
 
 class Java::net.sourceforge.pmd.ast::ASTFormalParameter
   def nametk
-    vid = jjt_get_child 1
-    vid.first_token
+    self[1].token(0)
   end
 
   def namestr
@@ -123,20 +109,20 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameter
     # including brackets, for arrays
     str = ""
     type = find_child "net.sourceforge.pmd.ast.ASTType"
-    ttk = type.first_token
+    ttk = type.token 0
         
     while true
       str << ttk.image
-      if ttk == type.last_token
+      if ttk == type.token(-1)
         break
       else
         ttk = ttk.next
       end
     end
             
-    vid = jjt_get_child 1
-    vtk = vid.first_token
-    while vtk != vid.last_token
+    vid = self[1]
+    vtk = vid.token 0
+    while vtk != vid.token(-1)
       vtk = vtk.next;
       str << vtk.image
     end

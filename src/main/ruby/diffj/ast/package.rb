@@ -29,10 +29,6 @@ module DiffJ
       parent.find_child
     end
 
-    def find_package cu
-      org.incava.pmdx.CompilationUnitUtil.getPackage cu
-    end
-
     def compare_names anode, bnode
       info "anode: #{anode}".cyan
       info "bnode: #{bnode}".cyan
@@ -51,8 +47,8 @@ module DiffJ
       info "cua: #{cua}"
       info "cub: #{cub}"
 
-      apkg = find_package cua
-      bpkg = find_package cub
+      apkg = cua.package
+      bpkg = cub.package
 
       info "apkg: #{apkg}"
       info "bpkg: #{bpkg}"

@@ -26,7 +26,7 @@ module DiffJ
           Log.info "other_elmt: #{other_elmt}"
           
           begin
-            ::DiffJ::IO::Factory.new.create_file(java.io.File.new(dir, other_elmt.getName()), nil, other_elmt.source_version)
+            ::DiffJ::IO::Factory.new.create_file(java.io.File.new(dir, other_elmt.name), nil, other_elmt.source_version)
           rescue DiffJException => de
             raise de
           rescue java.lang.Throwable => e
@@ -54,17 +54,17 @@ module DiffJ
         @srcver = srcver
 
         begin
-          isStdin = file.nil? || file.getName == "-"
+          is_stdin = file.nil? || file.name == "-"
           @contents = contents
           unless @contents
-            reader = isStdin ? java.io.FileReader.new(java.io.FileDescriptor.in) : java.io.FileReader.new(file)
+            reader = is_stdin ? java.io.FileReader.new(java.io.FileDescriptor.in) : java.io.FileReader.new(file)
             @contents = org.incava.ijdk.io.ReaderExt.readAsString(reader, java.util.EnumSet.of(org.incava.ijdk.io.ReadOptionType::ADD_EOLNS))
           end
-          @label = label || (isStdin ? "-" : file.getPath)
+          @label = label || (is_stdin ? "-" : file.getPath)
         rescue java.io.FileNotFoundException => e
-          raise DiffJException.new "Error opening file '" + file.getAbsolutePath + "': " + e.getMessage, e
+          raise DiffJException.new "Error opening file '" + file.absolute_path + "': " + e.message, e
         rescue java.io.IOException => e
-          raise DiffJException.new "I/O error with file '" + file.getAbsolutePath + "': " + e.getMessage, e
+          raise DiffJException.new "I/O error with file '" + file.absolute_path + "': " + e.message, e
         end
       end
 

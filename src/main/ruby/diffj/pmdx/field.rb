@@ -6,15 +6,11 @@ require 'set'
 
 class Java::net.sourceforge.pmd.ast::ASTFieldDeclaration
   def variable_declarators
-    snatch_children "net.sourceforge.pmd.ast.ASTVariableDeclarator"
+    find_children "net.sourceforge.pmd.ast.ASTVariableDeclarator"
   end
 
   def name_list
-    names = Array.new
-    variable_declarators.each do |vd|
-      names << vd.name.image
-    end
-    names
+    variable_declarators.collect { |vd| vd.name.image }
   end
 
   def names

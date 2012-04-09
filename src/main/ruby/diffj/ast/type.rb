@@ -69,7 +69,7 @@ module DiffJ
     def get_ext_imp_map coid, ext_imp_class_name
       map = Hash.new
       if list = coid.find_child(ext_imp_class_name)
-        types = list.snatch_children "net.sourceforge.pmd.ast.ASTClassOrInterfaceType"
+        types = list.find_children "net.sourceforge.pmd.ast.ASTClassOrInterfaceType"
         types.each do |type|
           map[type.to_string] = type
         end

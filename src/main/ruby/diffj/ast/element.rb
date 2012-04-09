@@ -58,11 +58,11 @@ module DiffJ
     end    
 
     def process_token_simplenode from_tk, to_sn
-      @tokens.concat [ from_tk, from_tk, to_sn.getFirstToken(), to_sn.getLastToken() ]
+      @tokens.concat [ from_tk, from_tk, to_sn.first_token, to_sn.last_token ]
     end
 
     def process_simplenode_token from_sn, to_tk
-      @tokens.concat [ from_sn.getFirstToken(), from_sn.getLastToken(), to_tk, to_tk  ]
+      @tokens.concat [ from_sn.first_token, from_sn.last_token, to_tk, to_tk  ]
     end
 
     def process_token_token from_tk, to_tk
@@ -73,7 +73,7 @@ module DiffJ
     end
 
     def process_simplenode_simplenode from_sn, to_sn
-      @tokens.concat [ from_sn.getFirstToken(), from_sn.getLastToken(), to_sn.getFirstToken(), to_sn.getLastToken() ]
+      @tokens.concat [ from_sn.first_token, from_sn.last_token, to_sn.first_token, to_sn.last_token ]
       if @params.empty?
         @params = nodes_to_parameters from_sn, to_sn
       end
@@ -83,17 +83,11 @@ module DiffJ
     end
 
     def tokens_to_parameters from, to
-      params = Array.new
-      params << from.image if from
-      params << to.image if to
-      params
+      [ from, to ].compact.collect { |p| p.image }
     end
 
     def nodes_to_parameters from, to
-      params = Array.new
-      params << from.to_string if from
-      params << to.to_string if to
-      params
+      [ from, to ].compact.collect { |p| p.to_string }
     end
   end
 

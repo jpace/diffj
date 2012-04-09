@@ -27,10 +27,8 @@ class Java::net.sourceforge.pmd.ast::ASTMethodDeclaration
     from_name = name.image
     to_name = to.name.image
 
-    if from_name != to_name
-      return 0
-    end
-
+    return 0 if from_name != to_name
+    
     from_params = parameters
     to_params = to.parameters
     

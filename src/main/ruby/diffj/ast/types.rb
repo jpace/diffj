@@ -9,7 +9,6 @@ require 'diffj/ast/type'
 
 include Java
 
-import org.incava.pmdx.CompilationUnitUtil
 import org.incava.pmdx.TypeDeclarationUtil
 
 module DiffJ
@@ -41,8 +40,8 @@ module DiffJ
       info "cua: #{cua}"
       info "cub: #{cub}"
 
-      a_types = org.incava.pmdx.CompilationUnitUtil.getTypeDeclarations cua
-      b_types = org.incava.pmdx.CompilationUnitUtil.getTypeDeclarations cub
+      a_types = cua.type_declarations
+      b_types = cub.type_declarations
       
       a_names_to_tds = make_td_map a_types
       b_names_to_tds = make_td_map b_types

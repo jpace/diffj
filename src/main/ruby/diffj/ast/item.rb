@@ -95,8 +95,8 @@ module DiffJ
         starttk = get_start token_list, startidx
         endtk = starttk
       else
-        starttk = token_list.get startidx
-        endtk = token_list.get endidx
+        starttk = token_list[startidx]
+        endtk = token_list[endidx]
       end
      org.incava.ijdk.text.LocationRange.new org.incava.analysis.FileDiff.toBeginLocation(starttk), org.incava.analysis.FileDiff.toEndLocation(endtk)
     end

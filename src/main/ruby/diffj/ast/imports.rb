@@ -8,8 +8,6 @@ require 'diffj/ast/element'
 
 include Java
 
-import org.incava.pmdx.CompilationUnitUtil
-
 module DiffJ
   class ImportsComparator < ElementComparator
     include Loggable
@@ -23,17 +21,13 @@ module DiffJ
       super diffs
     end
 
-    def get_imports compunit
-      # this returns C-style arrays
-      org.incava.pmdx.CompilationUnitUtil.getImports compunit
-    end
-
     def import_to_string imp
+      # skip the first token (which is "import")
       str = ""
-      tk  = imp.first_token.next
+      tk  = imp.token(0).next
       
       while tk
-        if tk == imp.last_token
+        if tk == imp.token(-1)
           break
         else
           str << tk.image
@@ -45,19 +39,19 @@ module DiffJ
 
     def first_type_token cu
       # this too is a C-style array
-      types = org.incava.pmdx.CompilationUnitUtil.getTypeDeclarations cu
-      t = types.length > 0 ? types[0].first_token : null
+      types = cu.type_declarations
+      t = types.length > 0 ? types[0].token(0) : nil
       # if there are no types (ie. the file has only a package and/or import
       # statements), then just point to the first token in the compilation unit.      
       t || cu.first_token
     end
 
     def first_token imports
-      imports[0].getFirstToken()
+      imports[0].token 0
     end
     
     def last_token imports
-      imports[imports.length - 1].last_token
+      imports[-1].token -1
     end
 
     def mark_import_section_added cua, bimports
@@ -105,28 +99,16 @@ module DiffJ
       end
     end
 
-    def compare cua, cub
-      info "#######################################################".yellow
-
-      aimports = get_imports cua
-      aimports.to_a.each do |aimp|
-        info "aimp: #{aimp}"
-      end
-
-      bimports = get_imports cub
-      bimports.to_a.each do |bimp|
-        info "bimp: #{bimp}"
-      end
-
-      aimps = aimports.to_a
-      bimps = bimports.to_a
+    def compare from, to
+      aimports = from.imports
+      bimports = to.imports
       
-      if aimps.empty?
-        if !bimps.empty?
-          mark_import_section_added cua, bimports
+      if aimports.empty?
+        if !bimports.empty?
+          mark_import_section_added from, bimports
         end
-      elsif bimps.empty?
-        mark_import_section_removed aimports, cub
+      elsif bimports.empty?
+        mark_import_section_removed aimports, to
       else
         compare_import_blocks aimports, bimports
       end

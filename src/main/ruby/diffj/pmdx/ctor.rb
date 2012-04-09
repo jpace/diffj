@@ -18,7 +18,7 @@ class Java::net.sourceforge.pmd.ast::ASTConstructorDeclaration
   end
 
   def fullname
-    name_tk = find_token Java::net.sourceforge.pmd.ast.JavaParserConstants::IDENTIFIER
-    to_full_name name_tk, parameters
+    nametk = find_token Java::net.sourceforge.pmd.ast.JavaParserConstants::IDENTIFIER
+    to_full_name nametk, parameters
   end
 end

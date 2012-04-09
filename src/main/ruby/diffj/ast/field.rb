@@ -91,8 +91,8 @@ module DiffJ
     end
     
     def compare_variables from, to
-      from_var_decls = from.snatch_children "net.sourceforge.pmd.ast.ASTVariableDeclarator"
-      to_var_decls = to.snatch_children "net.sourceforge.pmd.ast.ASTVariableDeclarator"
+      from_var_decls = from.find_children "net.sourceforge.pmd.ast.ASTVariableDeclarator"
+      to_var_decls = to.find_children "net.sourceforge.pmd.ast.ASTVariableDeclarator"
 
       from_names_to_vd = make_vd_map from_var_decls
       to_names_to_vd = make_vd_map to_var_decls

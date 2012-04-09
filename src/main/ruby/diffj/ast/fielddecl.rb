@@ -26,7 +26,7 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
     # old one:
     def do_compare from, to
       differ = org.incava.diffj.FieldDiff.new filediffs
-      differ.compareAccess from.parent, to.parent
+      differ.compare_access from.parent, to.parent
       differ.compare from, to
     end
   else

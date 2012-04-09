@@ -25,8 +25,8 @@ module DiffJ
     THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}"
     
     def compare_return_types from, to
-      from_ret_type     = from.jjt_get_child 0
-      to_ret_type       = to.jjt_get_child 0
+      from_ret_type     = from[0]
+      to_ret_type       = to[0]
       from_ret_type_str = from_ret_type.to_string
       to_ret_type_str   = to_ret_type.to_string
 
@@ -36,7 +36,7 @@ module DiffJ
     end
 
     def get_child_names name_list
-      name_list.snatch_children "net.sourceforge.pmd.ast.ASTName"
+      name_list.find_children "net.sourceforge.pmd.ast.ASTName"
     end
 
     def clear_from_lists from_parameters, from_idx, to_parameters, to_idx
@@ -44,8 +44,8 @@ module DiffJ
       to_parameters[to_idx] = nil
     end
 
-    def get_exact_match fromParameters, to
-      fromParameters.each_with_index do |from, idx|
+    def get_exact_match from_parameters, to
+      from_parameters.each_with_index do |from, idx|
         return idx if are_types_equal?(from, to) && are_names_equal?(from, to)
       end
       -1
