@@ -11,9 +11,10 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     n_children = jjt_get_num_children
     (0 ... n_children).each do |ord|
       n = jjt_get_child ord
+      ntk = n.first_token
       while true
         t = t.next
-        if t == n.first_token
+        if t == ntk
           break
         end
         children << t
@@ -22,7 +23,8 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
       t = n.last_token
     end
 
-    while t != get_last_token
+    lasttk = token(-1)
+    while t != lasttk
       t = t.next
       children << t
     end
@@ -62,19 +64,12 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     ary = Array.new
     return ary if jjt_get_num_children == 0
     
-    n = jjt_get_child 0
+    n = self[0]
     
     t = Java::net.sourceforge.pmd.ast.Token.new
     t.next = first_token
-            
-    while true
-      t = t.next
-      if t == n.first_token
-        return ary
-      else
-        ary << t 
-      end
-    end
+
+    return preceding_tokens(first_token, n)
   end
 
   def matches_class? node, clsname
@@ -101,7 +96,29 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     end
   end
 
-  def children get_nodes = true, get_tokens = true
+  def preceding_tokens fromtk, node = self
+    ary = Array.new
+    ntk = node.token(0)
+
+    tk = fromtk
+
+    while tk != ntk
+      ary << tk
+      tk = tk.next
+    end
+    ary
+  end
+
+  # def trailing_tokens fromtk, node = self
+  #   lasttk = node[-1]
+  #   tk = fromtk
+  #   while tk != lasttk
+  #     ary << t
+  #     t = t.next
+  #   end
+  # end
+
+  def all_children
     ary = Array.new
     
     t = Java::net.sourceforge.pmd.ast.Token.new
@@ -110,26 +127,21 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     n_children = jjt_get_num_children
     (0 ... n_children).each do |idx|
       n = jjt_get_child idx
+      ntk = n.token(0)
       while true
         t = t.next
-        if t == n.first_token
+        if t == ntk
           break
         end
-        if get_tokens
-          ary << t
-        end
+        ary << t
       end
-      if get_nodes
-        ary << n
-      end
-      t = n.last_token
+      ary << n
+      t = n.token(-1)
     end
 
     while t != last_token
       t = t.next
-      if get_tokens
-        ary << t
-      end
+      ary << t
     end
 
     ary
@@ -144,9 +156,37 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     ary
   end    
 
+  def childtokens
+    ary = Array.new
+    
+    t = Java::net.sourceforge.pmd.ast.Token.new
+    t.next = first_token
+    
+    n_children = jjt_get_num_children
+    (0 ... n_children).each do |idx|
+      n = jjt_get_child idx
+      # ary.concat preceding_tokens(
+      ntk = n.token(0)
+      while true
+        t = t.next
+        if t == ntk
+          break
+        end
+        ary << t
+      end
+      t = n.token(-1)
+    end
+
+    while t != last_token
+      t = t.next
+      ary << t
+    end
+
+    ary
+  end
+
   def find_token token_type
-    child_tokens = children false, true
-    child_tokens.each do |tk|
+    childtokens.each do |tk|
       return tk if tk.kind == token_type
     end
     nil

@@ -58,11 +58,11 @@ module DiffJ
     end    
 
     def process_token_simplenode from_tk, to_sn
-      @tokens.concat [ from_tk, from_tk, to_sn.first_token, to_sn.last_token ]
+      @tokens.concat [ from_tk, from_tk, to_sn.token(0), to_sn.token(-1) ]
     end
 
     def process_simplenode_token from_sn, to_tk
-      @tokens.concat [ from_sn.first_token, from_sn.last_token, to_tk, to_tk  ]
+      @tokens.concat [ from_sn.token(0), from_sn.token(-1), to_tk, to_tk  ]
     end
 
     def process_token_token from_tk, to_tk
@@ -73,7 +73,7 @@ module DiffJ
     end
 
     def process_simplenode_simplenode from_sn, to_sn
-      @tokens.concat [ from_sn.first_token, from_sn.last_token, to_sn.first_token, to_sn.last_token ]
+      @tokens.concat [ from_sn.token(0), from_sn.token(-1), to_sn.token(0), to_sn.token(-1) ]
       if @params.empty?
         @params = nodes_to_parameters from_sn, to_sn
       end

@@ -50,10 +50,10 @@ module DiffJ
 
         if from_mod
           if to_mod.nil?
-            changed from_mod, to_node.first_token, MODIFIER_REMOVED, from_mod.image
+            changed from_mod, to_node.token(0), MODIFIER_REMOVED, from_mod.image
           end
         elsif to_mod
-          changed from_node.first_token, to_mod, MODIFIER_ADDED, to_mod.image
+          changed from_node.token(0), to_mod, MODIFIER_ADDED, to_mod.image
         end
       end
     end
@@ -68,10 +68,10 @@ module DiffJ
             changed from_access, to_access, ACCESS_CHANGED, from_access.image, to_access.image
           end
         else
-          changed from_access, to_node.first_token, ACCESS_REMOVED, from_access.image
+          changed from_access, to_node.token(0), ACCESS_REMOVED, from_access.image
         end
       elsif to_access
-        changed from_node.first_token, to_access, ACCESS_ADDED, to_access.image
+        changed from_node.token(0), to_access, ACCESS_ADDED, to_access.image
       end
     end
 

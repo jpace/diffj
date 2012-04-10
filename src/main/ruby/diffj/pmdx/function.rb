@@ -16,7 +16,7 @@ module DiffJ
       end
       
       def throws_list
-        kids = children
+        kids = all_children
         kids.each_with_index do |child, idx|
           return kids[idx + 1] if is_throws_token?(child) && idx + 1 < kids.size
         end

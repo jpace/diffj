@@ -43,28 +43,20 @@ module DiffJ
       t = types.length > 0 ? types[0].token(0) : nil
       # if there are no types (ie. the file has only a package and/or import
       # statements), then just point to the first token in the compilation unit.      
-      t || cu.first_token
-    end
-
-    def first_token imports
-      imports[0].token 0
-    end
-    
-    def last_token imports
-      imports[-1].token -1
+      t || cu.token(0)
     end
 
     def mark_import_section_added cua, bimports
       a0 = first_type_token cua
       a1 = a0
-      b0 = first_token bimports
-      b1 = last_token bimports
+      b0 = bimports[0].token 0
+      b1 = bimports[-1].token(-1)
       added a0, a1, b0, b1, IMPORT_SECTION_ADDED
     end
     
     def mark_import_section_removed aimports, cub
-      a0 = first_token aimports
-      a1 = last_token aimports
+      a0 = aimports[0].token 0
+      a1 = aimports[-1].token(-1)
       b0 = first_type_token cub
       b1 = b0
       deleted a0, a1, b0, b1, IMPORT_SECTION_REMOVED
