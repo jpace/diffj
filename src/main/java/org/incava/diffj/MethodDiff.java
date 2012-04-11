@@ -90,8 +90,8 @@ public class MethodDiff extends FunctionDiff {
     // }
 
     protected void compareBlocks(String fromName, ASTBlock fromBlock, String toName, ASTBlock toBlock) {
-        List<Token> from = SimpleNodeUtil.getChildrenSerially(fromBlock);
-        List<Token> to = SimpleNodeUtil.getChildrenSerially(toBlock);
+        List<Token> from = SimpleNodeUtil.getChildTokens(fromBlock);
+        List<Token> to = SimpleNodeUtil.getChildTokens(toBlock);
 
         compareCode(fromName, from, toName, to);
     }

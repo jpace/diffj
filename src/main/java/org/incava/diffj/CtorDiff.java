@@ -43,7 +43,7 @@ public class CtorDiff extends FunctionDiff {
         // removes all tokens up to the first left brace. This is because ctors
         // don't have their own blocks, unlike methods.
         
-        List<Token> children = SimpleNodeUtil.getChildrenSerially(ctor);
+        List<Token> children = SimpleNodeUtil.getChildTokens(ctor);
         
         Iterator<Token> it = children.iterator();
         while (it.hasNext()) {

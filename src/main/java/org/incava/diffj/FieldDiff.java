@@ -43,8 +43,8 @@ public class FieldDiff extends ItemDiff {
     }
 
     protected void compareInitCode(String fromName, ASTVariableInitializer fromInit, String toName, ASTVariableInitializer toInit) {
-        List<Token> aCode = SimpleNodeUtil.getChildrenSerially(fromInit);
-        List<Token> bCode = SimpleNodeUtil.getChildrenSerially(toInit);
+        List<Token> aCode = SimpleNodeUtil.getChildTokens(fromInit);
+        List<Token> bCode = SimpleNodeUtil.getChildTokens(toInit);
         
         // It is logically impossible for this to execute where "to"
         // represents the from-file, and "from" the to-file, since "from.name"

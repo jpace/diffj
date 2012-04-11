@@ -22,7 +22,7 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   end
 
   def get_parameter_types
-    childnodes.collect { |node| node.typestr }
+    nodes.collect { |node| node.typestr }
   end
 
   def get_list_match from_list, from_index, to_list

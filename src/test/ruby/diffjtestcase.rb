@@ -105,7 +105,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
     assert_differences_match expected_fdiffs, actual_fdiffs
   end
 
-  def assert_equal exp, act, msg
+  def assert_equal exp, act, msg = nil
     begin
       super
     rescue => e

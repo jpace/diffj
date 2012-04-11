@@ -35,8 +35,8 @@ module DiffJ
     end
 
     def compare_init_code from_name, from_init, to_name, to_init
-      from_code =  from_init.get_children_serially
-      to_code = to_init.get_children_serially
+      from_code =  from_init.get_child_tokens
+      to_code = to_init.get_child_tokens
         
       # It is logically impossible for this to execute where "to" represents the
       # from-file, and "from" the to-file, since "from.name" would have matched

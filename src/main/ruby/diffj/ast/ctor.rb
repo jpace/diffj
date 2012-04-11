@@ -27,19 +27,19 @@ module DiffJ
       super from, from_name_list, to, to_name_list
     end
     
-    def get_code_serially ctor
+    def get_code ctor
       # removes all tokens up to the first left brace. This is because ctors
       # don't have their own blocks, unlike methods.
         
-      code = ctor.get_children_serially
+      code = ctor.get_child_tokens
       first_lbrace = code.index { |tk| tk.kind == ::Java::net.sourceforge.pmd.ast.JavaParserConstants::LBRACE }
 
       code[first_lbrace .. -1]
     end
 
     def compare_bodies from, to
-      from_code = get_code_serially from
-      to_code = get_code_serially to
+      from_code = get_code from
+      to_code = get_code to
         
       from_name = from.fullname
       to_name = to.fullname

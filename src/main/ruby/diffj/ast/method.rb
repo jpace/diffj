@@ -69,8 +69,8 @@ module DiffJ
     end
 
     def compare_blocks from_name, from_block, to_name, to_block
-      from_code = from_block.get_children_serially
-      to_code = to_block.get_children_serially
+      from_code = from_block.get_child_tokens
+      to_code = to_block.get_child_tokens
 
       compare_code from_name, from_code, to_name, to_code
     end
