@@ -105,5 +105,6 @@ DiffJRakeTestTask.new('types')
 
 DiffJRakeTestTask.new('method/body/zeroone')
 DiffJRakeTestTask.new('method/parameters/zeroone')
+DiffJRakeTestTask.new('method/throws/zeroone')
 
 DiffJRakeTestTask.new('all', '*')

@@ -147,8 +147,8 @@ module DiffJ
       info "to_td: #{to_td}; #{to_td.class}".magenta
 
       # class or interface declaration:
-      from_type = org.incava.pmdx.TypeDeclarationUtil.getType from_td
-      to_type = org.incava.pmdx.TypeDeclarationUtil.getType to_td
+      from_type = from_td.type_node
+      to_type = to_td.type_node
 
       if from_type && to_type
         compare_coids from_type, to_type

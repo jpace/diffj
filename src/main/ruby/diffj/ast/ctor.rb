@@ -48,9 +48,9 @@ module DiffJ
     end
 
     def compare from, to
-      info "from: #{from}".on_red
-      info "to  : #{to}".on_red
-
+      info "from: #{from}"
+      info "to  : #{to}"
+      
       compare_parameters from, to
       compare_throws from, to
       compare_bodies from, to

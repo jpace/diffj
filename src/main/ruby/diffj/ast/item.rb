@@ -59,8 +59,8 @@ module DiffJ
     end
 
     def compare_access from_node, to_node
-      from_access = org.incava.pmdx.ItemUtil.getAccess from_node
-      to_access = org.incava.pmdx.ItemUtil.getAccess to_node
+      from_access = from_node.accesstk
+      to_access = to_node.accesstk
 
       if from_access
         if to_access
@@ -77,7 +77,7 @@ module DiffJ
 
     def get_start token_list, start
       sttoken = org.incava.ijdk.util.ListExt.get token_list, start
-      if sttoken.nil? && list.size() > 0
+      if sttoken.nil? && token_list.size > 0
         sttoken = org.incava.ijdk.util.ListExt.get token_list, -1
         sttoken = sttoken.next
       end
@@ -108,7 +108,7 @@ module DiffJ
     def replace_reference name, ref, from_loc_rg, to_loc_rg
       new_msg  = java.text.MessageFormat.format CODE_CHANGED, name
       new_diff = org.incava.analysis.FileDiffChange.new(new_msg, ref.getFirstLocation().getStart(), from_loc_rg.getEnd(), ref.getSecondLocation().getStart(), to_loc_rg.getEnd())
-      getFileDiffs().remove(ref)
+      filediffs.remove(ref)
       add(new_diff)
       new_diff
     end

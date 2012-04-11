@@ -257,7 +257,7 @@ module DiffJ
         elsif throws_match == from_idx
           next
         elsif throws_match
-          to_name = org.incava.pmdx.ThrowsUtil.getNameNode to_name_list, throws_match
+          to_name = to_name_list.name_node throws_match
           from_name_str = from_name.to_string
           changed from_name, to_name, THROWS_REORDERED, from_name_str, from_idx, throws_match
         end
@@ -265,7 +265,7 @@ module DiffJ
 
       (0 ... to_names.size).each do |to_idx|
         if to_names[to_idx]
-          to_name = org.incava.pmdx.ThrowsUtil.getNameNode to_name_list, to_idx
+          to_name = to_name_list.name_node to_idx
           change_throws from_name_list, to_name, THROWS_ADDED, to_name
         end
       end

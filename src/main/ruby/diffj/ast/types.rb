@@ -9,8 +9,6 @@ require 'diffj/ast/type'
 
 include Java
 
-import org.incava.pmdx.TypeDeclarationUtil
-
 module DiffJ
   class TypesComparator < ElementComparator
     include Loggable
@@ -28,7 +26,7 @@ module DiffJ
     def make_td_map types
       names_to_tds = Hash.new
       types.to_a.each do |type|
-        tk = org.incava.pmdx.TypeDeclarationUtil.getName(type)
+        tk = type.nametk
         if tk
           names_to_tds[tk.image] = type
         end
@@ -36,33 +34,33 @@ module DiffJ
       return names_to_tds
     end
 
-    def compare cua, cub
-      info "cua: #{cua}"
-      info "cub: #{cub}"
+    def compare from_cu, to_cu
+      info "from_cu: #{from_cu}"
+      info "to_cu: #{to_cu}"
 
-      a_types = cua.type_declarations
-      b_types = cub.type_declarations
+      from_types = from_cu.type_declarations
+      to_types = to_cu.type_declarations
       
-      a_names_to_tds = make_td_map a_types
-      b_names_to_tds = make_td_map b_types
+      from_names_to_tds = make_td_map from_types
+      to_names_to_tds = make_td_map to_types
       
-      names = a_names_to_tds.keys + b_names_to_tds.keys
+      names = from_names_to_tds.keys + to_names_to_tds.keys
 
       info "names: #{names}"
 
       names.each do |name|
-        atd = a_names_to_tds[name]
-        btd = b_names_to_tds[name]
+        fromtd = from_names_to_tds[name]
+        totd = to_names_to_tds[name]
 
-        if atd.nil?
-          b_name = org.incava.pmdx.TypeDeclarationUtil.getName btd
-          added cua, btd, TYPE_DECLARATION_ADDED, b_name.image
-        elsif btd.nil?
-          a_name = org.incava.pmdx.TypeDeclarationUtil.getName atd
-          deleted atd, cub, TYPE_DECLARATION_REMOVED, a_name.image
+        if fromtd.nil?
+          to_name = totd.nametk
+          added from_cu, totd, TYPE_DECLARATION_ADDED, to_name.image
+        elsif totd.nil?
+          from_name = fromtd.nametk
+          deleted fromtd, to_cu, TYPE_DECLARATION_REMOVED, from_name.image
         else
           differ = TypeComparator.new filediffs
-          differ.compare atd, btd
+          differ.compare fromtd, totd
         end
       end
     end

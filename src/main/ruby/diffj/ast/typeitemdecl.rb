@@ -71,17 +71,11 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
   end
 
   def get_declarations_of_class decls
-    decllist = Array.new
-    decls.each do |decl|
-      if dec = org.incava.pmdx.TypeDeclarationUtil.getDeclaration(decl, @clsname)
-        decllist << dec
-      end
-    end
-    decllist
+    decls.collect { |decl| decl.declaration(@clsname) }.compact
   end
 
   def declarations_of_class_type coid
-    decls = org.incava.pmdx.TypeDeclarationUtil.getDeclarations coid
+    decls = coid.declarations
     get_declarations_of_class decls
   end
 

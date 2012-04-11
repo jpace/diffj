@@ -2,8 +2,11 @@
 # -*- ruby -*-
 
 require 'java'
+require 'diffj/pmdx/item'
 
 class Java::net.sourceforge.pmd.ast::SimpleNode
+  include Loggable, DiffJ::AST::Item
+  
   def get_children_serially children = Array.new
     t = Java::net.sourceforge.pmd.ast.Token.new
     t.next = first_token
@@ -66,10 +69,7 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     
     n = self[0]
     
-    t = Java::net.sourceforge.pmd.ast.Token.new
-    t.next = first_token
-
-    return preceding_tokens(first_token, n)
+    return preceding_tokens token(0), n
   end
 
   def matches_class? node, clsname
@@ -109,39 +109,52 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     ary
   end
 
-  # def trailing_tokens fromtk, node = self
-  #   lasttk = node[-1]
-  #   tk = fromtk
-  #   while tk != lasttk
-  #     ary << t
-  #     t = t.next
-  #   end
-  # end
+  # returns the first token matching the criteria
+  def leading_token criteria
+    return nil if length == 0
+    
+    # stop at the first token of a subnode:
+    ntk = self[0].token(0)
+    
+    tk = token(0)
+    while tk && ntk != tk
+      return tk if tk.kind == criteria[:token_type]
+      tk = tk.next
+    end
+    nil
+  end
 
   def all_children
-    ary = Array.new
-    
-    t = Java::net.sourceforge.pmd.ast.Token.new
-    t.next = first_token
+    ary = Array.new    
+    tk = token(0)
+
+    lasttk = token(-1)
     
     n_children = jjt_get_num_children
     (0 ... n_children).each do |idx|
       n = jjt_get_child idx
       ntk = n.token(0)
-      while true
-        t = t.next
-        if t == ntk
-          break
-        end
-        ary << t
+
+      while tk != ntk
+        ary << tk
+        tk = tk.next
       end
       ary << n
-      t = n.token(-1)
+
+      # first token of the next node:
+      nexttk = n.token(-1)
+
+      if nexttk == lasttk
+        tk = tk.next
+        break
+      else
+        tk = nexttk.next
+      end
     end
 
-    while t != last_token
-      t = t.next
-      ary << t
+    while tk && tk != lasttk
+      ary << tk
+      tk = tk.next
     end
 
     ary
@@ -165,7 +178,6 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     n_children = jjt_get_num_children
     (0 ... n_children).each do |idx|
       n = jjt_get_child idx
-      # ary.concat preceding_tokens(
       ntk = n.token(0)
       while true
         t = t.next
