@@ -20,13 +20,13 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
     info "from_coid: #{from_coid}; #{from_coid.class}"
     info "to_coid: #{to_coid}; #{to_coid.class}"
 
-    from_decls = declarations_of_class_type from_coid
-    to_decls = declarations_of_class_type to_coid
+    fromdecls = declarations_of_class_type from_coid
+    todecls = declarations_of_class_type to_coid
 
-    matches = get_type_matches from_decls, to_decls
+    matches = get_type_matches fromdecls, todecls
 
-    from_unproc = from_decls.dup
-    to_unproc = to_decls.dup
+    from_unproc = fromdecls.dup
+    to_unproc = todecls.dup
 
     compare_matches matches, from_unproc, to_unproc
 
@@ -34,39 +34,39 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
     add_added from_coid, to_unproc
   end
 
-  def get_type_matches amds, bmds
+  def get_type_matches frommds, tomds
     matches = Hash.new { |h, k| h[k] = Array.new }
     
-    amds.each do |amd|
-      bmds.each do |bmd|
-        score = get_score amd, bmd
+    frommds.each do |frommd|
+      tomds.each do |tomd|
+        score = get_score frommd, tomd
         if score > 0.0
-          matches[score] << [ amd, bmd ]
+          matches[score] << [ frommd, tomd ]
         end
       end
     end
     matches
   end
 
-  def compare_matches matches, from_unproc, to_unproc
+  def compare_matches matches, fromunproc, tounproc
     matches.sort.reverse.each do |score, decls|
-      from_proc = Array.new
-      to_proc = Array.new
+      fromproc = Array.new
+      toproc = Array.new
 
       decls.each do |decl|
-        amd = decl[0]
-        bmd = decl[1]
+        frommd = decl[0]
+        tomd = decl[1]
 
-        if from_unproc.include?(amd) && to_unproc.include?(bmd)
-          do_compare amd, bmd
+        if fromunproc.include?(frommd) && tounproc.include?(tomd)
+          do_compare frommd, tomd
           
-          from_proc << amd
-          to_proc << bmd
+          fromproc << frommd
+          toproc << tomd
         end
       end
 
-      from_unproc.reject! { |fp| from_proc.include? fp }
-      to_unproc.reject! { |fp| to_proc.include? fp }
+      fromunproc.reject! { |fp| fromproc.include? fp }
+      tounproc.reject! { |fp| toproc.include? fp }
     end
   end
 
@@ -75,8 +75,7 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
   end
 
   def declarations_of_class_type coid
-    decls = coid.declarations
-    get_declarations_of_class decls
+    get_declarations_of_class coid.declarations
   end
 
   def get_score amd, bmd
@@ -85,15 +84,13 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
 
   def add_added from_coid, to
     to.each do |t|
-      name = get_name t
-      added from_coid, t, get_added_message(t), name
+      added from_coid, t, get_added_message(t), get_name(t)
     end
   end
 
   def add_removed from, to_coid
     from.each do |f|
-      name = get_name f
-      deleted f, to_coid, get_removed_message(f), name
+      deleted f, to_coid, get_removed_message(f), get_name(f)
     end
   end
 end

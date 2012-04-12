@@ -35,6 +35,10 @@ class Java::net.sourceforge.pmd.ast::ASTTypeDeclaration
     subnode && subnode.token(0).next
   end
 
+  def namestr
+    (tk = nametk) ? tk.image : nil
+  end
+
   def type_node
     find_child "net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration"
   end

@@ -35,11 +35,11 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
   end
 
   def [] idx
-    jjt_get_child idx
+    node idx
   end
 
   def node idx
-    jjt_get_child idx
+    idx < size && jjt_get_child(idx)
   end
 
   def size
@@ -58,9 +58,10 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
 
   def leading_tokens
     return Array.new if jjt_get_num_children == 0
-    get_token_range first_token, self[0].token(0)
+    get_token_range first_token, node(0).token(0)
   end
 
+  # returns the tokens from from to to inclusive.
   def get_token_range from = first_token, to = last_token
     tokens = Array.new
     tk = from
@@ -106,39 +107,31 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     nil
   end
 
-  # returns a flattened list of both nodes and tokens
-  def nodes_and_tokens
-    ary = Array.new
-
-    tk = first_token
-    nds = nodes
-    nds.each_with_index do |node, nidx|
-      while tk && tk != node.first_token
-        ary << tk
+  def all_children
+    # as confusing as this implementation is, it's clearer than any alternatives.
+    list = Array.new
+    
+    tk = Java::net.sourceforge.pmd.ast::Token.new
+    tk.next = first_token
+        
+    (0 ... size).each do |nidx|
+      subnode = node(nidx)
+      while true
         tk = tk.next
+        if tk == subnode.first_token
+          break
+        end
+        list << tk
       end
-
-      ary << node
-
-      tk = node.last_token
-      if tk && nidx < nds.length - 1
-        tk = tk.next
-      end
-    end
-
-    if tk != last_token
-      while tk
-        ary << tk
-        break if tk == last_token
-        tk = tk.next
-      end
+      list << subnode
+      tk = subnode.last_token
     end
     
-    ary
-  end
-
-  def all_children
-    return nodes_and_tokens if true
+    while tk != last_token
+      tk = tk.next
+      list << tk
+    end
+    list
   end
 
   def nodes

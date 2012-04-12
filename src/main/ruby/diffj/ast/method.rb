@@ -24,26 +24,16 @@ module DiffJ
                        ::Java::net.sourceforge.pmd.ast.JavaParserConstants::STRICTFP
                       ]
     
-    def initialize diffs
-      super
-    end
-
     def compare_modifiers from, to
       super from.parent, to.parent, VALID_MODIFIERS
     end
 
     def compare_parameters from, to
-      from_params = from.parameters
-      to_params = to.parameters
-      
-      super from_params, to_params
+      super from.parameters, to.parameters
     end
 
     def compare_throws from, to
-      from_list = from.throws_list
-      to_list = to.throws_list
-
-      super from, from_list, to, to_list
+      super from, from.throws_list, to, to.throws_list
     end
 
     def get_block node
@@ -51,28 +41,25 @@ module DiffJ
     end
     
     def compare_bodies from, to
-      from_block = get_block from
-      to_block = get_block to
+      fromblock = get_block from
+      toblock = get_block to
 
-      if from_block.nil?
-        if to_block
+      if fromblock.nil?
+        if toblock
           changed from, to, METHOD_BLOCK_ADDED
         end
-      elsif to_block.nil?
+      elsif toblock.nil?
         changed from, to, METHOD_BLOCK_REMOVED
       else
-        from_name = from.fullname
-        to_name = to.fullname
-            
-        compare_blocks from_name, from_block, to_name, to_block
+        compare_blocks from.fullname, fromblock, to.fullname, toblock
       end
     end
 
-    def compare_blocks from_name, from_block, to_name, to_block
-      from_code = from_block.get_child_tokens
-      to_code = to_block.get_child_tokens
+    def compare_blocks fromname, fromblock, toname, toblock
+      fromcode = fromblock.get_child_tokens
+      tocode = toblock.get_child_tokens
 
-      compare_code from_name, from_code, to_name, to_code
+      compare_code fromname, fromcode, toname, tocode
     end
 
     def compare from, to

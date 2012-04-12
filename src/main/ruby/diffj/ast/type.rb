@@ -54,10 +54,6 @@ module DiffJ
                             ::Java::net.sourceforge.pmd.ast.JavaParserConstants.STRICTFP
                            ]
 
-    def initialize diffs
-      super diffs
-    end
-
     def compare_extends from_type, to_type
       compare_imp_ext from_type, to_type, EXTENDED_TYPE_MSGS, "net.sourceforge.pmd.ast.ASTExtendsList"
     end
@@ -147,11 +143,11 @@ module DiffJ
       info "to_td: #{to_td}; #{to_td.class}".magenta
 
       # class or interface declaration:
-      from_type = from_td.type_node
-      to_type = to_td.type_node
+      fromtype = from_td.type_node
+      totype = to_td.type_node
 
-      if from_type && to_type
-        compare_coids from_type, to_type
+      if fromtype && totype
+        compare_coids fromtype, totype
       end
     end
   end

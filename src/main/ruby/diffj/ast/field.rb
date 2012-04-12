@@ -34,59 +34,60 @@ module DiffJ
       names_to_vd
     end
 
-    def compare_init_code from_name, from_init, to_name, to_init
-      from_code =  from_init.get_child_tokens
-      to_code = to_init.get_child_tokens
+    def compare_init_code fromname, frominit, toname, toinit
+      fromcode =  frominit.get_child_tokens
+      tocode = toinit.get_child_tokens
         
       # It is logically impossible for this to execute where "to" represents the
       # from-file, and "from" the to-file, since "from.name" would have matched
       # "to.name" in the first loop of compareVariableLists
       
-      compare_code from_name, from_code, to_name, to_code
+      compare_code fromname, fromcode, toname, tocode
+    end
+
+    def find_var_init node
+      node.find_child "net.sourceforge.pmd.ast.ASTVariableInitializer"
     end
 
     def compare_variable_inits from, to
-      from_init = from.find_child "net.sourceforge.pmd.ast.ASTVariableInitializer"
-      to_init = to.find_child "net.sourceforge.pmd.ast.ASTVariableInitializer"
+      frominit = find_var_init from
+      toinit = find_var_init to
       
-      if from_init.nil?
-        if to_init
-          changed from, to_init, INITIALIZER_ADDED
+      if frominit.nil?
+        if toinit
+          changed from, toinit, INITIALIZER_ADDED
         end
-      elsif to_init.nil?
-        changed from_init, to, INITIALIZER_REMOVED
+      elsif toinit.nil?
+        changed frominit, to, INITIALIZER_REMOVED
       else
-        from_name = from.namestr
-        to_name = to.namestr
-
-        compare_init_code from_name, from_init, to_name, to_init
+        compare_init_code from.namestr, frominit, to.namestr, toinit
       end
     end
 
+    def find_type node
+      node.find_child "net.sourceforge.pmd.ast.ASTType"
+    end
+
     def compare_variable_types name, from_field_decl, from_var_decl, to_field_decl, to_var_decl
-      from_type = from_field_decl.find_child "net.sourceforge.pmd.ast.ASTType"
-      to_type = to_field_decl.find_child "net.sourceforge.pmd.ast.ASTType"
+      fromtype = find_type from_field_decl
+      totype = find_type to_field_decl
 
-      from_type_str = from_type.to_string
-      to_type_str = to_type.to_string
+      fromtypestr = fromtype.to_string
+      totypestr = totype.to_string
 
-      if from_type_str != to_type_str
-        changed from_type, to_type, VARIABLE_TYPE_CHANGED, name, from_type_str, to_type_str
+      if fromtypestr != totypestr
+        changed fromtype, totype, VARIABLE_TYPE_CHANGED, name, fromtypestr, totypestr
       end
       
       compare_variable_inits from_var_decl, to_var_decl
     end
 
-    def process_add_del_variable name, msg, from_var_decl, to_var_decl
-      from_tk = from_var_decl.nametk
-      to_tk = to_var_decl.nametk
-      changed from_tk, to_tk, msg, name
+    def process_add_del_variable name, msg, fromvardecl, tovardecl
+      changed fromvardecl.nametk, tovardecl.nametk, msg, name
     end
 
     def process_changed_variable from_var_decl, to_var_decl
-      from_tk = from_var_decl.nametk
-      to_tk = to_var_decl.nametk
-      changed from_tk, to_tk, VARIABLE_CHANGED
+      changed from_var_decl.nametk, to_var_decl.nametk, VARIABLE_CHANGED
       compare_variable_inits from_var_decl, to_var_decl
     end
     

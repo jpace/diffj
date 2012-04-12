@@ -16,10 +16,6 @@ module DiffJ
     IMPORT_ADDED = "import added: {0}"
     IMPORT_SECTION_REMOVED = "import section removed"
     IMPORT_SECTION_ADDED = "import section added"
-    
-    def initialize diffs
-      super diffs
-    end
 
     def import_to_string imp
       # skip the first token (which is "import")
@@ -46,20 +42,14 @@ module DiffJ
       t || cu.token(0)
     end
 
-    def mark_import_section_added cua, bimports
-      a0 = first_type_token cua
-      a1 = a0
-      b0 = bimports[0].token 0
-      b1 = bimports[-1].token(-1)
-      added a0, a1, b0, b1, IMPORT_SECTION_ADDED
+    def mark_import_section_added from, toimports
+      fromtk = first_type_token from
+      added fromtk, fromtk, toimports[0].token(0), toimports[-1].token(-1), IMPORT_SECTION_ADDED
     end
     
-    def mark_import_section_removed aimports, cub
-      a0 = aimports[0].token 0
-      a1 = aimports[-1].token(-1)
-      b0 = first_type_token cub
-      b1 = b0
-      deleted a0, a1, b0, b1, IMPORT_SECTION_REMOVED
+    def mark_import_section_removed fromimports, to
+      totk = first_type_token to
+      deleted fromimports[0].token(0), fromimports[-1].token(-1), totk, totk, IMPORT_SECTION_REMOVED
     end
 
     def make_import_map imports
@@ -71,38 +61,38 @@ module DiffJ
       name_to_imp
     end
 
-    def compare_import_blocks aimports, bimports
-      a_names_to_imps = make_import_map aimports
-      b_names_to_imps = make_import_map bimports
-      info "a_names_to_imps: #{a_names_to_imps}".yellow
-      info "b_names_to_imps: #{b_names_to_imps}".yellow
+    def compare_import_blocks fromimports, toimports
+      from_names_to_imps = make_import_map fromimports
+      to_names_to_imps = make_import_map toimports
+      info "from_names_to_imps: #{from_names_to_imps}"
+      info "to_names_to_imps: #{to_names_to_imps}"
 
-      names = a_names_to_imps.keys + b_names_to_imps.keys
+      names = from_names_to_imps.keys + to_names_to_imps.keys
 
       names.each do |name|
-        aimp = a_names_to_imps[name]
-        bimp = b_names_to_imps[name]
+        fromimp = from_names_to_imps[name]
+        toimp = to_names_to_imps[name]
             
-        if aimp.nil?
-          added aimports[0], bimp, IMPORT_ADDED, name
-        elsif bimp.nil?
-          deleted aimp, bimports[0], IMPORT_REMOVED, name
+        if fromimp.nil?
+          added fromimports[0], toimp, IMPORT_ADDED, name
+        elsif toimp.nil?
+          deleted fromimp, toimports[0], IMPORT_REMOVED, name
         end
       end
     end
 
     def compare from, to
-      aimports = from.imports
-      bimports = to.imports
+      fromimports = from.imports
+      toimports = to.imports
       
-      if aimports.empty?
-        if !bimports.empty?
-          mark_import_section_added from, bimports
+      if fromimports.empty?
+        if !toimports.empty?
+          mark_import_section_added from, toimports
         end
-      elsif bimports.empty?
-        mark_import_section_removed aimports, to
+      elsif toimports.empty?
+        mark_import_section_removed fromimports, to
       else
-        compare_import_blocks aimports, bimports
+        compare_import_blocks fromimports, toimports
       end
     end
   end

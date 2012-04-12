@@ -16,11 +16,6 @@ module DiffJ
     PACKAGE_ADDED = "package added: {0}"
     PACKAGE_RENAMED = "package renamed from {0} to {1}"
 
-    def initialize diffs
-      super diffs
-      info "diffs: #{diffs}"
-    end
-
     def find_name_node parent
       parent.find_child "net.sourceforge.pmd.ast.ASTName"
     end
@@ -29,42 +24,40 @@ module DiffJ
       parent.find_child
     end
 
-    def compare_names anode, bnode
-      info "anode: #{anode}".cyan
-      info "bnode: #{bnode}".cyan
+    def compare_names fromnode, tonode
+      info "fromnode: #{fromnode}".cyan
+      info "tonode: #{tonode}".cyan
 
-      aname = find_name_node anode
-      astr  = aname.to_string
-      bname = find_name_node bnode
-      bstr  = bname.to_string
+      fromname = find_name_node fromnode
+      toname = find_name_node tonode
 
-      if astr != bstr
-        changed aname, bname, PACKAGE_RENAMED
+      if fromname.to_string != toname.to_string
+        changed fromname, toname, PACKAGE_RENAMED
       end
     end
 
-    def compare cua, cub
-      info "cua: #{cua}"
-      info "cub: #{cub}"
+    def compare fromcu, tocu
+      info "fromcu: #{fromcu}"
+      info "tocu: #{tocu}"
 
-      apkg = cua.package
-      bpkg = cub.package
+      frompkg = fromcu.package
+      topkg = tocu.package
 
-      info "apkg: #{apkg}"
-      info "bpkg: #{bpkg}"
+      info "frompkg: #{frompkg}"
+      info "topkg: #{topkg}"
 
-      if apkg
-        if bpkg
-          compare_names apkg, bpkg
+      if frompkg
+        if topkg
+          compare_names frompkg, topkg
         else
-          aname = find_name_node apkg
-          bpos = find_first_child(cub) || cub
-          deleted aname, bpos, PACKAGE_REMOVED
+          fromname = find_name_node frompkg
+          topos = find_first_child(tocu) || tocu
+          deleted fromname, topos, PACKAGE_REMOVED
         end
-      elsif bpkg
-        bname = find_name_node bpkg
-        apos = find_first_child(cua) || cua
-        added apos, bname, PACKAGE_ADDED
+      elsif topkg
+        toname = find_name_node topkg
+        frompos = find_first_child(fromcu) || fromcu
+        added frompos, toname, PACKAGE_ADDED
       end
     end
   end

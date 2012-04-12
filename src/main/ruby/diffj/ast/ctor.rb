@@ -14,17 +14,11 @@ module DiffJ
     include Loggable
 
     def compare_parameters from, to
-      from_formal_params = from.parameters
-      to_formal_params = to.parameters
-      
-      super from_formal_params, to_formal_params
+      super from.parameters, to.parameters
     end
 
     def compare_throws from, to
-      from_name_list = from.throws_list
-      to_name_list = to.throws_list
-
-      super from, from_name_list, to, to_name_list
+      super from, from.throws_list, to, to.throws_list
     end
     
     def get_code ctor
@@ -41,10 +35,7 @@ module DiffJ
       from_code = get_code from
       to_code = get_code to
         
-      from_name = from.fullname
-      to_name = to.fullname
-
-      compare_code from_name, from_code, to_name, to_code
+      compare_code from.fullname, from_code, to.fullname, to_code
     end
 
     def compare from, to

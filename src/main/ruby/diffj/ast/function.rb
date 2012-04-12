@@ -25,79 +25,78 @@ module DiffJ
     THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}"
     
     def compare_return_types from, to
-      from_ret_type     = from[0]
-      to_ret_type       = to[0]
-      from_ret_type_str = from_ret_type.to_string
-      to_ret_type_str   = to_ret_type.to_string
+      fromrettype    = from[0]
+      torettype      = to[0]
+      fromrettypestr = fromrettype.to_string
+      torettypestr   = torettype.to_string
 
-      if from_ret_type_str != to_ret_type_str
-        changed from_ret_type, to_ret_type, RETURN_TYPE_CHANGED, from_ret_type_str, to_ret_type_str
+      if fromrettypestr != torettypestr
+        changed fromrettype, torettype, RETURN_TYPE_CHANGED, fromrettypestr, torettypestr
       end
     end
 
-    def get_child_names name_list
-      name_list.find_children "net.sourceforge.pmd.ast.ASTName"
+    def get_child_names namelist
+      namelist.find_children "net.sourceforge.pmd.ast.ASTName"
     end
 
-    def clear_from_lists from_parameters, from_idx, to_parameters, to_idx
-      from_parameters[from_idx] = nil
-      to_parameters[to_idx] = nil
+    def clear_from_lists fromparameters, fromidx, toparameters, toidx
+      fromparameters[fromidx] = nil
+      toparameters[toidx] = nil
     end
 
-    def get_exact_match from_parameters, to
-      from_parameters.each_with_index do |from, idx|
-        return idx if are_types_equal?(from, to) && are_names_equal?(from, to)
+    def get_exact_match fromparameters, to
+      fromparameters.index do |from|
+        types_equal?(from, to) && names_equal?(from, to)
       end
-      -1
     end
 
-    def get_match from_formal_params, from_idx, to_formal_params
-      no_match = [ -1, -1 ]
+    def get_match fromformalparams, fromidx, toformalparams
+      nomatch = [ nil, nil ]
       
-      type_and_name_match = get_param_matches from_formal_params, from_idx, to_formal_params
-      if type_and_name_match[0] >= 0 && type_and_name_match[0] == type_and_name_match[1]
-        clear_from_lists from_formal_params, from_idx, to_formal_params, type_and_name_match[1]
+      type_and_name_match = get_param_matches fromformalparams, fromidx, toformalparams
+      if type_and_name_match[0] && type_and_name_match[0] == type_and_name_match[1]
+        clear_from_lists fromformalparams, fromidx, toformalparams, type_and_name_match[1]
         return type_and_name_match
       end
 
-      best_match = type_and_name_match[0] >= 0 ? type_and_name_match[0] : type_and_name_match[1]
+      bestmatch = type_and_name_match[0] || type_and_name_match[1]
         
-      return no_match if best_match < 0
+      return nomatch unless bestmatch
 
       # make sure there isn't an exact match for this somewhere else in
       # from_parameters
-      to = to_formal_params[best_match]
-      from_match = get_exact_match from_formal_params, to
+      to = toformalparams[bestmatch]
+      frommatch = get_exact_match fromformalparams, to
       
-      if from_match >= 0
-        no_match
+      if frommatch
+        nomatch
       else
-        clear_from_lists from_formal_params, from_idx, to_formal_params, best_match
+        clear_from_lists fromformalparams, fromidx, toformalparams, bestmatch
         type_and_name_match
       end
     end
 
-    def are_types_equal? from, to
+    def types_equal? from, to
       return from && from.typestr == to.typestr
     end
 
-    def are_names_equal? from, to
+    def names_equal? from, to
       return from && from.namestr == to.namestr
     end
 
     def get_param_matches from_formal_params, from_idx, to_formal_params
-      type_and_name_match = [ -1, -1 ]
+      type_and_name_match = [ nil, nil ]
       fp = from_formal_params[from_idx]
 
       (0 ... to_formal_params.size).each do |to_idx|
         tp = to_formal_params[to_idx]
         next unless tp
 
-        if are_types_equal? fp, tp
+        if types_equal? fp, tp
           type_and_name_match[0] = to_idx
         end
 
-        if are_names_equal? fp, tp
+        if names_equal? fp, tp
           type_and_name_match[1] = to_idx
         end
 
@@ -125,9 +124,9 @@ module DiffJ
           mark_parameter_name_changed from_formal_param, to_formal_params, idx
         elsif param_match[1] == idx
           mark_parameter_type_changed from_param, to_formal_params, idx
-        elsif param_match[0] >= 0
+        elsif param_match[0]
           check_for_reorder from_formal_param, idx, to_formal_params, param_match[0]
-        elsif param_match[1] >= 0
+        elsif param_match[1]
           mark_reordered from_formal_param, idx, to_formal_params, param_match[1]
         else
           mark_removed from_formal_param, to_formal_params
@@ -209,33 +208,33 @@ module DiffJ
       end
     end
 
-    def change_throws from_node, to_node, msg, name
-      changed from_node, to_node, msg, name.to_string
+    def change_throws fromnode, tonode, msg, name
+      changed fromnode, tonode, msg, name.to_string
     end
 
-    def add_all_throws from_node, to_name_list
-      names = get_child_names to_name_list
+    def add_all_throws fromnode, tonamelist
+      names = get_child_names tonamelist
       names.each do |name|
-        change_throws from_node, name, THROWS_ADDED, name
+        change_throws fromnode, name, THROWS_ADDED, name
       end
     end
 
-    def remove_all_throws from_name_list, to_node
-      names = get_child_names from_name_list
+    def remove_all_throws fromnamelist, tonode
+      names = get_child_names fromnamelist
       names.each do |name|
-        change_throws name, to_node, THROWS_REMOVED, name
+        change_throws name, tonode, THROWS_REMOVED, name
       end
     end
 
-    def get_throws_match from_names, from_idx, to_names
-      from_name_str = from_names[from_idx].to_string
+    def get_throws_match fromnames, fromidx, tonames
+      fromnamestr = fromnames[fromidx].to_string
 
-      (0 ... to_names.size).each do |to_idx|
-        to_name = to_names[to_idx]
-        if to_name && to_name.to_string == from_name_str
-          from_names[from_idx] = nil
-          to_names[to_idx] = nil # mark as consumed
-          return to_idx
+      (0 ... tonames.size).each do |toidx|
+        toname = tonames[toidx]
+        if toname && toname.to_string == fromnamestr
+          fromnames[fromidx] = nil
+          tonames[toidx] = nil # mark as consumed
+          return toidx
         end
       end
       nil

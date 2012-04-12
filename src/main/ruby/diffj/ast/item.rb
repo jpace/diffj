@@ -45,15 +45,15 @@ module DiffJ
       to_kind_to_token = get_modifier_map to_node
 
       modifier_types.each do |modkind|
-        from_mod = from_kind_to_token[modkind]
-        to_mod = to_kind_to_token[modkind]
+        frommod = from_kind_to_token[modkind]
+        tomod = to_kind_to_token[modkind]
 
-        if from_mod
-          if to_mod.nil?
-            changed from_mod, to_node.token(0), MODIFIER_REMOVED, from_mod.image
+        if frommod
+          if tomod.nil?
+            changed frommod, to_node.token(0), MODIFIER_REMOVED, frommod.image
           end
-        elsif to_mod
-          changed from_node.token(0), to_mod, MODIFIER_ADDED, to_mod.image
+        elsif tomod
+          changed from_node.token(0), tomod, MODIFIER_ADDED, tomod.image
         end
       end
     end
@@ -84,19 +84,19 @@ module DiffJ
       sttoken
     end
 
-    def get_message add_end, del_end
-      del_end == org.incava.ijdk.util.diff.Difference::NONE ? CODE_ADDED : (add_end == org.incava.ijdk.util.diff.Difference::NONE ? CODE_REMOVED : CODE_CHANGED)
+    def get_message addend, delend
+      delend == org.incava.ijdk.util.diff.Difference::NONE ? CODE_ADDED : (addend == org.incava.ijdk.util.diff.Difference::NONE ? CODE_REMOVED : CODE_CHANGED)
     end
 
-    def get_location_range token_list, startidx, endidx
+    def get_location_range tokenlist, startidx, endidx
       starttk = nil
       endtk = nil
       if endidx == org.incava.ijdk.util.diff.Difference::NONE
-        starttk = get_start token_list, startidx
+        starttk = get_start tokenlist, startidx
         endtk = starttk
       else
-        starttk = token_list[startidx]
-        endtk = token_list[endidx]
+        starttk = tokenlist[startidx]
+        endtk = tokenlist[endidx]
       end
      org.incava.ijdk.text.LocationRange.new org.incava.analysis.FileDiff.toBeginLocation(starttk), org.incava.analysis.FileDiff.toEndLocation(endtk)
     end
@@ -105,53 +105,56 @@ module DiffJ
       ref && ref.getFirstLocation().getStart().getLine() == locrg.getStart().getLine()
     end
 
-    def replace_reference name, ref, from_loc_rg, to_loc_rg
-      new_msg  = java.text.MessageFormat.format CODE_CHANGED, name
-      new_diff = org.incava.analysis.FileDiffChange.new(new_msg, ref.getFirstLocation().getStart(), from_loc_rg.getEnd(), ref.getSecondLocation().getStart(), to_loc_rg.getEnd())
-      filediffs.remove(ref)
-      add(new_diff)
-      new_diff
+    def replace_reference name, ref, fromlocrg, tolocrg
+      newmsg  = java.text.MessageFormat.format CODE_CHANGED, name
+      newdiff = org.incava.analysis.FileDiffChange.new(newmsg, ref.getFirstLocation().getStart(), fromlocrg.getEnd(), ref.getSecondLocation().getStart(), tolocrg.getEnd())
+      filediffs.remove ref
+      add newdiff
+      newdiff
     end
 
-    def add_reference name, msg, from_loc_rg, to_loc_rg
+    def add_reference name, msg, fromlocrg, tolocrg
       str = java.text.MessageFormat.format msg, name
       ref = case msg
             when CODE_ADDED
               # this will show as add when highlighted, as change when not.
-              org.incava.analysis.FileDiffCodeAdded.new str, from_loc_rg, to_loc_rg
+              org.incava.analysis.FileDiffCodeAdded.new str, fromlocrg, tolocrg
             when CODE_REMOVED
-              org.incava.analysis.FileDiffCodeDeleted.new str, from_loc_rg, to_loc_rg
+              org.incava.analysis.FileDiffCodeDeleted.new str, fromlocrg, tolocrg
             else
-              org.incava.analysis.FileDiffChange.new str, from_loc_rg, to_loc_rg
+              org.incava.analysis.FileDiffChange.new str, fromlocrg, tolocrg
             end
       add ref
       ref
     end
+
+    def is_diff? diff
+      diff != org.incava.ijdk.util.diff.Difference::NONE
+    end
     
     def process_difference diff, from_name, from_list, to_list, prev_ref
-      del_start = diff.getDeletedStart()
-      del_end   = diff.getDeletedEnd()
-      add_start = diff.getAddedStart()
-      add_end   = diff.getAddedEnd()
+      delstart = diff.getDeletedStart()
+      delend   = diff.getDeletedEnd()
+      addstart = diff.getAddedStart()
+      addend   = diff.getAddedEnd()
       
-      if del_end == org.incava.ijdk.util.diff.Difference::NONE && add_end == org.incava.ijdk.util.diff.Difference::NONE
-        # WTF?
-        return nil
-      end
+      # I have this guard here, but I don't know that it's ever been hit
+      # return nil unless is_diff?(delend) && is_diff?(addend)
+      return nil if !is_diff?(delend) && !is_diff?(addend)
+      
+      fromlocrg = get_location_range from_list, delstart, delend
+      tolocrg = get_location_range to_list, addstart, addend
 
-      from_loc_rg = get_location_range from_list, del_start, del_end
-      to_loc_rg = get_location_range to_list, add_start, add_end
-
-      msg = get_message add_end, del_end
+      msg = get_message addend, delend
       info "msg: #{msg}".on_green
             
       # $$$ this is untested:
-      if on_same_line? prev_ref, from_loc_rg
+      if on_same_line? prev_ref, fromlocrg
         info "self: #{self}".yellow
-        replace_reference from_name, prev_ref, from_loc_rg, to_loc_rg
+        replace_reference from_name, prev_ref, fromlocrg, tolocrg
       else
         info "self: #{self}".blue
-        ref = add_reference from_name, msg, from_loc_rg, to_loc_rg
+        ref = add_reference from_name, msg, fromlocrg, tolocrg
         info "ref: #{ref}".blue
         ref
       end

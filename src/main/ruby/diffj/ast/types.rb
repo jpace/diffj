@@ -19,10 +19,6 @@ module DiffJ
     TYPE_DECLARATION_ADDED = "type declaration added: {0}"
     TYPE_DECLARATION_REMOVED = "type declaration removed: {0}"
     
-    def initialize diffs
-      super diffs
-    end
-
     def make_td_map types
       names_to_tds = Hash.new
       types.to_a.each do |type|
@@ -31,7 +27,7 @@ module DiffJ
           names_to_tds[tk.image] = type
         end
       end
-      return names_to_tds
+      names_to_tds
     end
 
     def compare from_cu, to_cu
@@ -53,11 +49,9 @@ module DiffJ
         totd = to_names_to_tds[name]
 
         if fromtd.nil?
-          to_name = totd.nametk
-          added from_cu, totd, TYPE_DECLARATION_ADDED, to_name.image
+          added from_cu, totd, TYPE_DECLARATION_ADDED, totd.namestr
         elsif totd.nil?
-          from_name = fromtd.nametk
-          deleted fromtd, to_cu, TYPE_DECLARATION_REMOVED, from_name.image
+          deleted fromtd, to_cu, TYPE_DECLARATION_REMOVED, fromtd.namestr
         else
           differ = TypeComparator.new filediffs
           differ.compare fromtd, totd
