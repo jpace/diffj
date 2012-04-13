@@ -19,6 +19,20 @@ module DiffJ
     end
   end
 
+  class ParamMatchData
+    attr_accessor :type
+    attr_accessor :name
+
+    def initialize
+      @type = nil
+      @name = nil
+    end
+
+    def exact_match? idx
+      @name == idx && @type == idx
+    end
+  end
+
   class ParamLists
     include ParamDiff, Loggable
 
@@ -36,29 +50,30 @@ module DiffJ
     end
 
     def get_param_matches fromidx
-      type_and_name_match = [ nil, nil ]
+      # a little tribute here:
+      pmd = ParamMatchData.new
+
       fp = @from[fromidx]
 
       (0 ... @to.size).each do |toidx|
         tp = @to[toidx]
         next unless tp
 
+        typematched = false
         if types_equal? fp, tp
-          type_and_name_match[0] = toidx
+          pmd.type = toidx
+          typematched = true
         end
 
         if names_equal? fp, tp
-          type_and_name_match[1] = toidx
-        end
-
-        if type_and_name_match[0] == toidx && type_and_name_match[1] == toidx
-          break
+          pmd.name = toidx
+          if typematched
+            # got an exact match:
+            return pmd
+          end
         end
       end
-
-      info "type_and_name_match: #{type_and_name_match}".yellow
-
-      type_and_name_match
+      pmd
     end
     
     # returns whether there is a matching element in the from list
@@ -70,15 +85,15 @@ module DiffJ
     end
     
     def process_match fromidx
-      nomatch = [ nil, nil ]
+      nomatch = ParamMatchData.new
       
-      type_and_name_match = get_param_matches fromidx
-      if type_and_name_match[0] && type_and_name_match[0] == type_and_name_match[1]
-        clear_from_lists fromidx, type_and_name_match[1]
-        return type_and_name_match
+      pmd = get_param_matches fromidx
+      if pmd.type && pmd.type == pmd.name
+        clear_from_lists fromidx, pmd.name
+        return pmd
       end
 
-      bestmatch = type_and_name_match[0] || type_and_name_match[1]
+      bestmatch = pmd.type || pmd.name
         
       # make sure there isn't an exact match for this somewhere else in
       # from_parameters
@@ -86,7 +101,7 @@ module DiffJ
         nomatch
       else
         clear_from_lists fromidx, bestmatch
-        type_and_name_match
+        pmd
       end
     end
   end
@@ -110,10 +125,10 @@ module DiffJ
     THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}"
     
     def compare_return_types from, to
-      fromrettype    = from[0]
-      torettype      = to[0]
+      fromrettype = from[0]
+      torettype = to[0]
       fromrettypestr = fromrettype.to_string
-      torettypestr   = torettype.to_string
+      torettypestr = torettype.to_string
 
       if fromrettypestr != torettypestr
         changed fromrettype, torettype, RETURN_TYPE_CHANGED, fromrettypestr, torettypestr
@@ -134,21 +149,21 @@ module DiffJ
         # save this, since process_match might clear it from the list:
         from_param = paramlists.from[idx]
         
-        param_match = paramlists.process_match idx
+        pmd = paramlists.process_match idx
 
         # exact match:
-        next if param_match[0] == idx && param_match[1] == idx
+        next if pmd.exact_match?(idx)
 
         from_formal_param = from_formal_params.get_parameter idx
 
-        if param_match[0] == idx
+        if pmd.type == idx
           mark_parameter_name_changed from_formal_param, to_formal_params, idx
-        elsif param_match[1] == idx
+        elsif pmd.name == idx
           mark_parameter_type_changed from_param, to_formal_params, idx
-        elsif param_match[0]
-          check_for_reorder from_formal_param, idx, to_formal_params, param_match[0]
-        elsif param_match[1]
-          mark_reordered_and_type_changed from_formal_param, idx, to_formal_params, param_match[1]
+        elsif pmd.type
+          check_for_reorder from_formal_param, idx, to_formal_params, pmd.type
+        elsif pmd.name
+          mark_reordered_and_type_changed from_formal_param, idx, to_formal_params, pmd.name
         else
           mark_removed from_formal_param, to_formal_params
         end
@@ -178,32 +193,32 @@ module DiffJ
       changed from_param, toparam, PARAMETER_REORDERED_AND_TYPE_CHANGED, from_param.namestr, fromidx, toidx, from_param.typestr, toparam.typestr
     end
 
-    def mark_removed from_param, to_params
-      changed from_param, to_params, PARAMETER_REMOVED, from_param.namestr
+    def mark_removed fromparam, toparams
+      changed fromparam, toparams, PARAMETER_REMOVED, fromparam.namestr
     end
 
-    def mark_parameter_type_changed from_param, to_formal_params, idx
-      to_param = to_formal_params.get_parameter idx
-      changed from_param, to_param, PARAMETER_TYPE_CHANGED, from_param.typestr, to_param.typestr
+    def mark_parameter_type_changed fromparam, toformalparams, idx
+      toparam = toformalparams.get_parameter idx
+      changed fromparam, toparam, PARAMETER_TYPE_CHANGED, fromparam.typestr, toparam.typestr
     end
 
-    def mark_parameter_name_changed from_param, to_formal_params, idx
-      fromnametk = from_param.nametk
-      tonametk = to_formal_params.get_parameter_nametk idx
+    def mark_parameter_name_changed fromparam, toformalparams, idx
+      fromnametk = fromparam.nametk
+      tonametk = toformalparams.get_parameter_nametk idx
       changed fromnametk, tonametk, PARAMETER_NAME_CHANGED, fromnametk.image, tonametk.image
     end
 
-    def mark_parameters_added from_formal_params, to_formal_params
-      names = to_formal_params.get_parameter_names 
+    def mark_parameters_added fromformalparams, toformalparams
+      names = toformalparams.get_parameter_names 
       names.each do |name|
-        changed from_formal_params, name, PARAMETER_ADDED, name.image
+        changed fromformalparams, name, PARAMETER_ADDED, name.image
       end
     end
 
-    def mark_parameters_removed from_formal_params, to_formal_params
-      names = from_formal_params.get_parameter_names 
+    def mark_parameters_removed fromformalparams, toformalparams
+      names = fromformalparams.get_parameter_names 
       names.each do |name|
-        changed name, to_formal_params, PARAMETER_REMOVED, name.image
+        changed name, toformalparams, PARAMETER_REMOVED, name.image
       end
     end
     
