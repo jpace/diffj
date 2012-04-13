@@ -9,7 +9,91 @@ require 'diffj/ast/item'
 include Java
 
 module DiffJ
+  module ParamDiff
+    def types_equal? from, to
+      return from && from.typestr == to.typestr
+    end
+
+    def names_equal? from, to
+      return from && from.namestr == to.namestr
+    end
+  end
+
+  class ParamLists
+    include ParamDiff, Loggable
+
+    attr_reader :from
+    attr_reader :to
+    
+    def initialize from, to
+      @from = from
+      @to = to
+    end
+
+    def clear_from_lists fromidx, toidx
+      @from[fromidx] = nil
+      @to[toidx] = nil
+    end
+
+    def get_param_matches fromidx
+      type_and_name_match = [ nil, nil ]
+      fp = @from[fromidx]
+
+      (0 ... @to.size).each do |toidx|
+        tp = @to[toidx]
+        next unless tp
+
+        if types_equal? fp, tp
+          type_and_name_match[0] = toidx
+        end
+
+        if names_equal? fp, tp
+          type_and_name_match[1] = toidx
+        end
+
+        if type_and_name_match[0] == toidx && type_and_name_match[1] == toidx
+          break
+        end
+      end
+
+      info "type_and_name_match: #{type_and_name_match}".yellow
+
+      type_and_name_match
+    end
+    
+    # returns whether there is a matching element in the from list
+    def has_from_match? toidx
+      to = @to[toidx]
+      @from.index do |from|
+        types_equal?(from, to) && names_equal?(from, to)
+      end
+    end
+    
+    def process_match fromidx
+      nomatch = [ nil, nil ]
+      
+      type_and_name_match = get_param_matches fromidx
+      if type_and_name_match[0] && type_and_name_match[0] == type_and_name_match[1]
+        clear_from_lists fromidx, type_and_name_match[1]
+        return type_and_name_match
+      end
+
+      bestmatch = type_and_name_match[0] || type_and_name_match[1]
+        
+      # make sure there isn't an exact match for this somewhere else in
+      # from_parameters
+      if !bestmatch || has_from_match?(bestmatch)
+        nomatch
+      else
+        clear_from_lists fromidx, bestmatch
+        type_and_name_match
+      end
+    end
+  end
+
   class FunctionComparator < ItemComparator
+    include ParamDiff
+
     RETURN_TYPE_CHANGED = "return type changed from {0} to {1}"
 
     PARAMETER_REMOVED = "parameter removed: {0}"
@@ -19,6 +103,7 @@ module DiffJ
     PARAMETER_TYPE_CHANGED = "parameter type changed from {0} to {1}"
     PARAMETER_NAME_CHANGED = "parameter name changed from {0} to {1}"
     PARAMETER_REORDERED_AND_RENAMED = "parameter {0} reordered from argument {1} to {2} and renamed {3}"
+    PARAMETER_REORDERED_AND_TYPE_CHANGED = "parameter {0} reordered from argument {1} to {2} and changed type from {3} to {4}"
 
     THROWS_REMOVED = "throws removed: {0}"
     THROWS_ADDED = "throws added: {0}"
@@ -39,136 +124,73 @@ module DiffJ
       namelist.find_children "net.sourceforge.pmd.ast.ASTName"
     end
 
-    def clear_from_lists fromparameters, fromidx, toparameters, toidx
-      fromparameters[fromidx] = nil
-      toparameters[toidx] = nil
-    end
-
-    def get_exact_match fromparameters, to
-      fromparameters.index do |from|
-        types_equal?(from, to) && names_equal?(from, to)
-      end
-    end
-
-    def get_match fromformalparams, fromidx, toformalparams
-      nomatch = [ nil, nil ]
-      
-      type_and_name_match = get_param_matches fromformalparams, fromidx, toformalparams
-      if type_and_name_match[0] && type_and_name_match[0] == type_and_name_match[1]
-        clear_from_lists fromformalparams, fromidx, toformalparams, type_and_name_match[1]
-        return type_and_name_match
-      end
-
-      bestmatch = type_and_name_match[0] || type_and_name_match[1]
-        
-      # make sure there isn't an exact match for this somewhere else in
-      # from_parameters
-      if !bestmatch || get_exact_match(fromformalparams, toformalparams[bestmatch])
-        nomatch
-      else
-        clear_from_lists fromformalparams, fromidx, toformalparams, bestmatch
-        type_and_name_match
-      end
-    end
-
-    def types_equal? from, to
-      return from && from.typestr == to.typestr
-    end
-
-    def names_equal? from, to
-      return from && from.namestr == to.namestr
-    end
-
-    def get_param_matches from_formal_params, from_idx, to_formal_params
-      type_and_name_match = [ nil, nil ]
-      fp = from_formal_params[from_idx]
-
-      (0 ... to_formal_params.size).each do |to_idx|
-        tp = to_formal_params[to_idx]
-        next unless tp
-
-        if types_equal? fp, tp
-          type_and_name_match[0] = to_idx
-        end
-
-        if names_equal? fp, tp
-          type_and_name_match[1] = to_idx
-        end
-
-        if type_and_name_match[0] == to_idx && type_and_name_match[1] == to_idx
-          break
-        end
-      end
-      type_and_name_match
-    end
-
     def compare_each_parameter from_formal_params, to_formal_params, size
       from_param_list = from_formal_params.parameters
       to_param_list = to_formal_params.parameters
 
+      paramlists = ParamLists.new from_param_list, to_param_list
+
       (0 ... size).each do |idx|
-        from_param = from_param_list[idx]
-        param_match = get_match from_param_list, idx, to_param_list
-        info "param_match: #{param_match}"
+        # save this, since process_match might clear it from the list:
+        from_param = paramlists.from[idx]
+        
+        param_match = paramlists.process_match idx
+
+        # exact match:
+        next if param_match[0] == idx && param_match[1] == idx
 
         from_formal_param = from_formal_params.get_parameter idx
 
-        if param_match[0] == idx && param_match[1] == idx
-          Log.info "exact match"
-        elsif param_match[0] == idx
+        if param_match[0] == idx
           mark_parameter_name_changed from_formal_param, to_formal_params, idx
         elsif param_match[1] == idx
           mark_parameter_type_changed from_param, to_formal_params, idx
         elsif param_match[0]
           check_for_reorder from_formal_param, idx, to_formal_params, param_match[0]
         elsif param_match[1]
-          mark_reordered from_formal_param, idx, to_formal_params, param_match[1]
+          mark_reordered_and_type_changed from_formal_param, idx, to_formal_params, param_match[1]
         else
           mark_removed from_formal_param, to_formal_params
         end
       end
 
-      to_param_list.each_with_index do |to_param, to_idx|
-        if to_param
-          to_formal_param = to_formal_params.get_parameter to_idx
-          to_name = to_formal_param && to_formal_param.nametk
-          changed from_formal_params, to_formal_param, PARAMETER_ADDED, to_name.image
-        end
+      paramlists.to.each_with_index do |toparam, toidx|
+        next unless toparam
+        
+        to_formal_param = to_formal_params.get_parameter toidx
+        toname = to_formal_param.namestr
+        changed from_formal_params, to_formal_param, PARAMETER_ADDED, toname
       end
     end
 
     def check_for_reorder from_param, from_idx, to_formal_params, to_idx
-      from_name_tk = from_param && from_param.nametk
-      to_name_tk = to_formal_params.get_parameter_nametk to_idx
-      if from_name_tk.image == to_name_tk.image
-        changed from_name_tk, to_name_tk, PARAMETER_REORDERED, from_name_tk.image, from_idx, to_idx
+      fromnametk = from_param && from_param.nametk
+      tonametk = to_formal_params.get_parameter_nametk to_idx
+      if fromnametk.image == tonametk.image
+        changed fromnametk, tonametk, PARAMETER_REORDERED, fromnametk.image, from_idx, to_idx
       else
-        changed from_name_tk, to_name_tk, PARAMETER_REORDERED_AND_RENAMED, from_name_tk.image, from_idx, to_idx, to_name_tk.image
+        changed fromnametk, tonametk, PARAMETER_REORDERED_AND_RENAMED, fromnametk.image, from_idx, to_idx, tonametk.image
       end
     end
 
-    # $$$ @untested
-    def mark_reordered from_param, from_idx, to_params, to_idx
-      from_name_tk = from_param.nametk
-      to_param = to_params.get_parameter to_idx
-      changed from_param, to_param, PARAMETER_REORDERED, from_name_tk.image, from_idx, to_idx
+    def mark_reordered_and_type_changed from_param, fromidx, to_params, toidx
+      toparam = to_params.get_parameter toidx
+      changed from_param, toparam, PARAMETER_REORDERED_AND_TYPE_CHANGED, from_param.namestr, fromidx, toidx, from_param.typestr, toparam.typestr
     end
 
     def mark_removed from_param, to_params
-      from_name_tk = from_param.nametk
-      changed from_param, to_params, PARAMETER_REMOVED, from_name_tk.image
+      changed from_param, to_params, PARAMETER_REMOVED, from_param.namestr
     end
 
     def mark_parameter_type_changed from_param, to_formal_params, idx
       to_param = to_formal_params.get_parameter idx
-      to_type = to_param.typestr
-      changed from_param, to_param, PARAMETER_TYPE_CHANGED, from_param.typestr, to_type
+      changed from_param, to_param, PARAMETER_TYPE_CHANGED, from_param.typestr, to_param.typestr
     end
 
     def mark_parameter_name_changed from_param, to_formal_params, idx
-      from_name_tk = from_param.nametk
-      to_name_tk = to_formal_params.get_parameter_nametk idx
-      changed from_name_tk, to_name_tk, PARAMETER_NAME_CHANGED, from_name_tk.image, to_name_tk.image
+      fromnametk = from_param.nametk
+      tonametk = to_formal_params.get_parameter_nametk idx
+      changed fromnametk, tonametk, PARAMETER_NAME_CHANGED, fromnametk.image, tonametk.image
     end
 
     def mark_parameters_added from_formal_params, to_formal_params
@@ -189,16 +211,16 @@ module DiffJ
       from_param_types = from_params.get_parameter_types
       to_param_types = to_params.get_parameter_types
 
-      from_size = from_param_types.size
-      to_size = to_param_types.size
+      fromsize = from_param_types.size
+      tosize = to_param_types.size
 
-      if from_size > 0
-        if to_size > 0
-          compare_each_parameter from_params, to_params, from_size
+      if fromsize > 0
+        if tosize > 0
+          compare_each_parameter from_params, to_params, fromsize
         else
           mark_parameters_removed from_params, to_params
         end
-      elsif to_size > 0
+      elsif tosize > 0
         mark_parameters_added from_params, to_params
       end
     end
@@ -221,7 +243,7 @@ module DiffJ
       end
     end
 
-    def get_throws_match fromnames, fromidx, tonames
+    def process_throws_match fromnames, fromidx, tonames
       fromnamestr = fromnames[fromidx].to_string
 
       (0 ... tonames.size).each do |toidx|
@@ -236,31 +258,31 @@ module DiffJ
     end
 
     def compare_each_throw from_name_list, to_name_list
-      from_names = get_child_names from_name_list
-      to_names = get_child_names to_name_list
+      fromnames = get_child_names from_name_list
+      tonames = get_child_names to_name_list
 
-      (0 ... from_names.size).each do |from_idx|
+      (0 ... fromnames.size).each do |fromidx|
         # save a reference to the name here, in case it gets removed
         # from the array in getMatch.
-        from_name = from_names[from_idx]
+        fromname = fromnames[fromidx]
         
-        throws_match = get_throws_match from_names, from_idx, to_names
+        throws_match = process_throws_match fromnames, fromidx, tonames
 
         if throws_match.nil?
-          change_throws from_name, to_name_list, THROWS_REMOVED, from_name
-        elsif throws_match == from_idx
+          change_throws fromname, to_name_list, THROWS_REMOVED, fromname
+        elsif throws_match == fromidx
           next
         elsif throws_match
-          to_name = to_name_list.name_node throws_match
-          from_name_str = from_name.to_string
-          changed from_name, to_name, THROWS_REORDERED, from_name_str, from_idx, throws_match
+          toname = to_name_list.name_node throws_match
+          fromnamestr = fromname.to_string
+          changed fromname, toname, THROWS_REORDERED, fromnamestr, fromidx, throws_match
         end
       end
 
-      (0 ... to_names.size).each do |to_idx|
-        if to_names[to_idx]
-          to_name = to_name_list.name_node to_idx
-          change_throws from_name_list, to_name, THROWS_ADDED, to_name
+      (0 ... tonames.size).each do |toidx|
+        if tonames[toidx]
+          toname = to_name_list.name_node toidx
+          change_throws from_name_list, toname, THROWS_ADDED, toname
         end
       end
     end

@@ -1,10 +1,10 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'type/method/parameters/tc'
+require 'type/method/parameters/reorder/tc'
 
-module DiffJ::Type::Method::Parameters
-  class ReorderRenameTestCase < TestCase
+module DiffJ::Type::Method::Parameters::Reorder
+  class RenameTestCase < TestCase
     def changed_msg_fmt
       DiffJ::FunctionComparator::PARAMETER_REORDERED_AND_RENAMED
     end  
