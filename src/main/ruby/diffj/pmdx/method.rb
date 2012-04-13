@@ -24,14 +24,7 @@ class Java::net.sourceforge.pmd.ast::ASTMethodDeclaration
   end
 
   def match_score to
-    from_name = name.image
-    to_name = to.name.image
-
-    return 0 if from_name != to_name
-    
-    from_params = parameters
-    to_params = to.parameters
-    
-    from_params.match_score to_params
+    return 0 if name.image != to.name.image
+    parameters.match_score to.parameters
   end
 end

@@ -61,14 +61,9 @@ module DiffJ
 
       bestmatch = type_and_name_match[0] || type_and_name_match[1]
         
-      return nomatch unless bestmatch
-
       # make sure there isn't an exact match for this somewhere else in
       # from_parameters
-      to = toformalparams[bestmatch]
-      frommatch = get_exact_match fromformalparams, to
-      
-      if frommatch
+      if !bestmatch || get_exact_match(fromformalparams, toformalparams[bestmatch])
         nomatch
       else
         clear_from_lists fromformalparams, fromidx, toformalparams, bestmatch
@@ -114,7 +109,7 @@ module DiffJ
       (0 ... size).each do |idx|
         from_param = from_param_list[idx]
         param_match = get_match from_param_list, idx, to_param_list
-        info "param_match: #{param_match}".on_green
+        info "param_match: #{param_match}"
 
         from_formal_param = from_formal_params.get_parameter idx
 

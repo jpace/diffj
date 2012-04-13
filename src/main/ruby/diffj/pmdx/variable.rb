@@ -10,8 +10,7 @@ class Java::net.sourceforge.pmd.ast::ASTVariableDeclarator
   end
 
   def namestr
-    vid = find_child "net.sourceforge.pmd.ast.ASTVariableDeclaratorId"
-    vid.token(0).image
+    nametk.image
   end
 
   def nametk

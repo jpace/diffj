@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'java'
-require 'set'
 
 class Java::net.sourceforge.pmd.ast::ASTFieldDeclaration
   def variable_declarators

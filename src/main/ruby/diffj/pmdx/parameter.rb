@@ -113,11 +113,8 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameter
         
     while true
       str << ttk.image
-      if ttk == type.token(-1)
-        break
-      else
-        ttk = ttk.next
-      end
+      break if ttk == type.token(-1)
+      ttk = ttk.next
     end
             
     vid = self[1]

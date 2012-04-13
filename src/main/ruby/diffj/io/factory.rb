@@ -39,15 +39,11 @@ module DiffJ
       end
 
       def verify_exists file, label
-        if file && file.exists
-          true
-        else
-          no_such_file file, label
-          false
-        end
+        (file && file.exists) || no_such_file(file, label)
       end
 
       def no_such_file file, label
+        info "file: #{file}; #{label}".red
         raise DiffJException.new(name(file, label) + " does not exist")
       end
 

@@ -36,7 +36,7 @@ class Java::net.sourceforge.pmd.ast::ASTTypeDeclaration
   end
 
   def namestr
-    (tk = nametk) ? tk.image : nil
+    (tk = nametk) && tk.image
   end
 
   def type_node

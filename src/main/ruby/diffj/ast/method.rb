@@ -63,8 +63,8 @@ module DiffJ
     end
 
     def compare from, to
-      info "from: #{from}".on_red
-      info "to  : #{to}".on_red
+      info "from: #{from}"
+      info "to  : #{to}"
 
       compare_modifiers from, to
       compare_return_types from, to
