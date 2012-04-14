@@ -1,7 +1,5 @@
 package org.incava.analysis;
 
-import java.util.Collection;
-import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -14,7 +12,6 @@ public class FileDiffs extends TreeSet<FileDiff> {
     private boolean added;
 
     public FileDiffs() {
-        // differences = new TreeSet<FileDiff>();
         added = false;
     }
 

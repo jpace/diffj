@@ -12,7 +12,8 @@ module DiffJ
   module FDiff
     module ClassMethods
       def to_begin_location tk
-        tk && DiffJ::IO::Location.new(tk.beginLine, tk.beginColumn)
+        DiffJ::IO::Location.beginning tk
+        # tk && DiffJ::IO::Location.new(tk.beginLine, tk.beginColumn)
       end
     
       def to_end_location tk
@@ -51,6 +52,12 @@ module DiffJ
           locs
         end
       end
+
+      def create ctor, args
+        msg = args.shift
+        locs = convert_to_locations args
+        send ctor, msg, *locs
+      end
     end
   end
 
@@ -60,11 +67,8 @@ module DiffJ
 
     class << self
       alias_method :old_new, :new
-      
       def new *args
-        msg = args.shift
-        locs = convert_to_locations args
-        old_new msg, *locs
+        create :old_new, args
       end
     end
 
@@ -84,11 +88,8 @@ module DiffJ
 
     class << self
       alias_method :old_new, :new
-      
       def new *args
-        msg = args.shift
-        locs = convert_to_locations args
-        old_new msg, *locs
+        create :old_new, args
       end
     end
 
@@ -108,11 +109,8 @@ module DiffJ
 
     class << self
       alias_method :old_new, :new
-      
       def new *args
-        msg = args.shift
-        locs = convert_to_locations args
-        old_new msg, *locs
+        create :old_new, args
       end
     end
 

@@ -11,9 +11,22 @@ module DiffJ
   module IO
     # location within a file (line and column)
     class Location < org.incava.ijdk.text.Location
+      include Loggable      
+
+      class << self
+        def beginning tk
+          tk && new(tk.beginLine, tk.beginColumn)
+        end
+    
+        def ending tk
+          tk && new(tk.endLine, tk.endColumn)
+        end
+      end
+    end
+
+    class LocationRange < org.incava.ijdk.text.LocationRange
       include Loggable
-      
-      
+
     end
   end
 end

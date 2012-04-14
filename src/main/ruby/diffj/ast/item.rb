@@ -98,7 +98,11 @@ module DiffJ
         starttk = tokenlist[startidx]
         endtk = tokenlist[endidx]
       end
-     org.incava.ijdk.text.LocationRange.new org.incava.analysis.FileDiff.toBeginLocation(starttk), org.incava.analysis.FileDiff.toEndLocation(endtk)
+
+      from = DiffJ::IO::Location.beginning starttk
+      to = DiffJ::IO::Location.ending endtk
+
+      DiffJ::IO::LocationRange.new from, to
     end
 
     def on_same_line? ref, locrg

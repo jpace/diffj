@@ -160,7 +160,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def make_fdiff_delete msgvals, from_start, from_end, to_start, to_end
-    make_fdiff org.incava.analysis.FileDiffDelete, msgvals, from_start, from_end, to_start, to_end
+    DiffJ::FDiffDelete.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
   end
 
   def make_fdiff_change msgvals, from_start, from_end, to_start, to_end
