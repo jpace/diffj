@@ -30,12 +30,11 @@ public class FileDiffDelete extends FileDiff {
         super(Type.DELETED, message, a0, a1, b0, b1);
     }
 
-    public void print(DiffContextWriter dw, StringBuilder sb) {
+    public void printContext(DiffContextWriter dw, StringBuilder sb) {
         dw.printFrom(sb, this);
-        sb.append(DiffContextWriter.EOLN);
     }
 
-    public void print(DiffNoContextWriter dw, StringBuilder sb) {
+    public void printNoContext(DiffNoContextWriter dw, StringBuilder sb) {
         dw.printFrom(sb, this);
     }
 }

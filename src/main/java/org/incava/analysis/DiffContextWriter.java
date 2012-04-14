@@ -14,11 +14,11 @@ public class DiffContextWriter extends DiffWriter {
         super(fromContents, toContents);
     }
 
-    protected void printFrom(StringBuilder sb, FileDiff ref) {
+    public void printFrom(StringBuilder sb, FileDiff ref) {
         printLines(sb, true, ref, ref.getFirstLocation(), fromContents);
     }
 
-    protected void printTo(StringBuilder sb, FileDiff ref) {
+    public void printTo(StringBuilder sb, FileDiff ref) {
         printLines(sb, false, ref, ref.getSecondLocation(), toContents);
     }
 
@@ -55,6 +55,7 @@ public class DiffContextWriter extends DiffWriter {
     }
 
     protected void printLines(StringBuilder sb, FileDiff ref) {
-        ref.print(this, sb);
+        ref.printContext(this, sb);
+        sb.append(DiffContextWriter.EOLN);
     }
 }

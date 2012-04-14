@@ -28,20 +28,16 @@ public class FileDiffChange extends FileDiff {
         super(Type.CHANGED, message, a0, a1, b0, b1);
     }
 
-    public void print(DiffContextWriter dw, StringBuilder sb) {
+    public void printContext(DiffContextWriter dw, StringBuilder sb) {
         dw.printFrom(sb, this);
-        sb.append(DiffContextWriter.EOLN);
-        
+        sb.append(DiffWriter.EOLN);
         dw.printTo(sb, this);
-        sb.append(DiffContextWriter.EOLN);
     }
 
-    public void print(DiffNoContextWriter dw, StringBuilder sb) {
+    public void printNoContext(DiffNoContextWriter dw, StringBuilder sb) {
         dw.printFrom(sb, this);
-
         sb.append("---");
-        sb.append(DiffNoContextWriter.EOLN);
-        
+        sb.append(DiffWriter.EOLN);        
         dw.printTo(sb, this);
     }
 }

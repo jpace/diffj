@@ -63,4 +63,10 @@ public abstract class DiffWriter {
     }
 
     protected abstract void printLines(StringBuilder sb, FileDiff ref);
+
+    public void printFrom(StringBuilder sb, FileDiff ref) {
+    }
+
+    public void printTo(StringBuilder sb, FileDiff ref) {
+    }
 }

@@ -177,10 +177,10 @@ public class FileDiff implements Comparable<FileDiff> {
         return secondLocation;
     }
 
-    public void print(DiffContextWriter dw, StringBuilder sb) {
+    public void printContext(DiffContextWriter dw, StringBuilder sb) {
     }
 
-    public void print(DiffNoContextWriter dw, StringBuilder sb) {
+    public void printNoContext(DiffNoContextWriter dw, StringBuilder sb) {
     }
 
     public String getMessage() {

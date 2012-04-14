@@ -27,12 +27,10 @@ public class FileDiffCodeAdded extends FileDiffAdd {
         super(message, a0, a1, b0, b1);
     }
 
-    public void print(DiffNoContextWriter dw, StringBuilder sb) {
+    public void printNoContext(DiffNoContextWriter dw, StringBuilder sb) {
         dw.printFrom(sb, this);
-
         sb.append("---");
-        sb.append(DiffNoContextWriter.EOLN);
-        
+        sb.append(DiffWriter.EOLN);        
         dw.printTo(sb, this);
     }
 }
