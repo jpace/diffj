@@ -112,6 +112,10 @@ public class DetailedReport extends Report {
         toFileRdr = new StringReader(toContents);
     }
 
+    protected List<String> readReader(Reader rdr) {
+        return ReaderExt.readLines(rdr, EnumSet.noneOf(ReadOptionType.class));
+    }
+
     /**
      * Writes all differences, and clears the list.
      */
@@ -123,11 +127,11 @@ public class DetailedReport extends Report {
                 Collection<FileDiff> diffs = getDifferences();
 
                 if (fromContents == null) {
-                    fromContents = ReaderExt.readLines(fromFileRdr, EnumSet.noneOf(ReadOptionType.class));
+                    fromContents = readReader(fromFileRdr);
                 }
 
                 if (toContents == null) {
-                    toContents = ReaderExt.readLines(toFileRdr, EnumSet.noneOf(ReadOptionType.class));
+                    toContents = readReader(toFileRdr);
                 }
 
                 DiffWriter dw = (showContext ? (highlight ? 
