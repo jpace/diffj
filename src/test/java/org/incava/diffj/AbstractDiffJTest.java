@@ -146,12 +146,12 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
         }
     }
 
-    public Report makeReport(StringWriter output) {
-        return new BriefReport(output);
+    public Report makeReport(StringWriter writer) {
+        return new BriefReport(writer);
     }
 
-    public Report makeDetailedReport(StringWriter output) {
-        return new DetailedReport(output, showContext(), highlight());
+    public Report makeDetailedReport(StringWriter writer) {
+        return new DetailedReport(writer, showContext(), highlight());
     }
 
     public Report getReport() {

@@ -2,8 +2,6 @@ package org.incava.analysis;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.Set;
@@ -56,63 +54,6 @@ public abstract class Report {
         this.writer = writer;
         hadDifferences = false;
         differences = new FileDiffs();
-    }
-
-    /**
-     * Creates a report for the given output stream.
-     *
-     * @param os The output stream associated with this report.
-     */
-    public Report(OutputStream os) {
-        this(new OutputStreamWriter(os));
-    }
-
-    /**
-     * Creates a report for the given writer, and a string source.
-     *
-     * @param writer The writer associated with this report.
-     * @param fromSource The from-source code to which this report applies.
-     * @param toSource The to-source code to which this report applies.
-     */
-    public Report(Writer writer, String fromSource, String toSource) {
-        this(writer);
-        reset(fromSource, toSource);
-    }
-
-    /**
-     * Creates a report for the given writer, and a file source.
-     *
-     * @param writer The writer associated with this report.
-     * @param fromFile The from-file, containing source code, to which this report applies.
-     * @param toFile The to-file, containing source code, to which this report applies.
-     */
-    public Report(Writer writer, File fromFile, File toFile) {
-        this(writer);
-        resetFiles(fromFile, toFile);
-    }
-
-    /**
-     * Creates a report for the given output stream, and string source.
-     *
-     * @param os The output stream associated with this report.
-     * @param fromSource The from-source code to which this report applies.
-     * @param toSource The to-source code to which this report applies.
-     */
-    public Report(OutputStream os, String fromSource, String toSource) {
-        this(os);
-        reset(fromSource, toSource);
-    }
-
-    /**
-     * Creates a report for the given output stream, and file.
-     *
-     * @param os The output stream associated with this report.
-     * @param fromFile The from-file, containing source code, to which this report applies.
-     * @param toFile The to-file, containing source code, to which this report applies.
-     */
-    public Report(OutputStream os, File fromFile, File toFile) {
-        this(os);
-        resetFiles(fromFile, toFile);
     }
     
     /**

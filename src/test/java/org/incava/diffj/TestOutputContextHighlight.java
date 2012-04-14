@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.io.StringWriter;
 import org.incava.analysis.DetailedReport;
 import org.incava.analysis.Report;
 import org.incava.ijdk.util.ANSI;

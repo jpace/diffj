@@ -1,10 +1,8 @@
 package org.incava.analysis;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
-import java.util.*;
+import java.util.Collection;
 
 /**
  * Reports differences briefly, vaguely a la "diff --brief".
@@ -12,26 +10,6 @@ import java.util.*;
 public class BriefReport extends Report {
     public BriefReport(Writer writer) {
         super(writer);
-    }
-
-    public BriefReport(OutputStream os) {
-        super(os);
-    }
-
-    public BriefReport(Writer writer, String fromSource, String toSource) {
-        super(writer, fromSource, toSource);
-    }
-
-    public BriefReport(Writer writer, File fromFile, File toFile) {
-        super(writer, fromFile, toFile);
-    }
-
-    public BriefReport(OutputStream os, String fromSource, String toSource) {
-        super(os, fromSource, toSource);
-    }
-
-    public BriefReport(OutputStream os, File fromFile, File toFile) {
-        super(os, fromFile, toFile);
     }
 
     /**

@@ -174,7 +174,7 @@ public abstract class AbstractTestOutputContext extends AbstractTestOutput {
                  new FileDiff[0]);
     }
 
-    public Report makeReport(StringWriter output) {
-        return makeDetailedReport(output);
+    public Report makeReport(StringWriter writer) {
+        return makeDetailedReport(writer);
     }
 }

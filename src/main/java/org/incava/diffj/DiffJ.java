@@ -1,6 +1,8 @@
 package org.incava.diffj;
 
 import java.io.File;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 import org.incava.analysis.BriefReport;
@@ -31,7 +33,8 @@ public class DiffJ {
         tr.Ace.setVerbose(true);
         // tr.Ace.stack("this", this, 15);
 
-        this.report = briefOutput ? new BriefReport(System.out) : new DetailedReport(System.out, contextOutput, highlightOutput);
+        Writer writer = new OutputStreamWriter(System.out);
+        this.report = briefOutput ? new BriefReport(writer) : new DetailedReport(writer, contextOutput, highlightOutput);
         this.recurseDirectories = recurseDirectories;
         this.fromLabel = fromLabel;
         this.toLabel = toLabel;
