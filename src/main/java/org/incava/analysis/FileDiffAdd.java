@@ -13,19 +13,19 @@ public class FileDiffAdd extends FileDiff {
         super(Type.ADDED, message, fromLoc, toLoc);
     }
 
-    public FileDiffAdd(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
-        super(Type.ADDED, message, firstStart, firstEnd, secondStart, secondEnd);
+    public FileDiffAdd(String message, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        super(Type.ADDED, message, fromStart, fromEnd, toStart, toEnd);
     }
 
-    public FileDiffAdd(String message, Token a, Token b) {
-        super(Type.ADDED, message, a, b);
+    public FileDiffAdd(String message, Token from, Token to) {
+        super(Type.ADDED, message, from, to);
     }
 
     /**
      * Creates a reference from a message and two beginning and ending tokens.
      */
-    public FileDiffAdd(String message, Token a0, Token a1, Token b0, Token b1) {
-        super(Type.ADDED, message, a0, a1, b0, b1);
+    public FileDiffAdd(String message, Token fromStart, Token fromEnd, Token toStart, Token toEnd) {
+        super(Type.ADDED, message, fromStart, fromEnd, toStart, toEnd);
     }
 
     public void printContext(DiffWriter dw, StringBuilder sb) {

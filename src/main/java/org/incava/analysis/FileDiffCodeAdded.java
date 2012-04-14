@@ -12,19 +12,19 @@ public class FileDiffCodeAdded extends FileDiffAdd {
         super(message, fromLoc, toLoc);
     }
 
-    public FileDiffCodeAdded(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
-        super(message, firstStart, firstEnd, secondStart, secondEnd);
+    public FileDiffCodeAdded(String message, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        super(message, fromStart, fromEnd, toStart, toEnd);
     }
 
-    public FileDiffCodeAdded(String message, Token a, Token b) {
-        super(message, a, b);
+    public FileDiffCodeAdded(String message, Token from, Token to) {
+        super(message, from, to);
     }
 
     /**
      * Creates a reference from a message and two beginning and ending tokens.
      */
-    public FileDiffCodeAdded(String message, Token a0, Token a1, Token b0, Token b1) {
-        super(message, a0, a1, b0, b1);
+    public FileDiffCodeAdded(String message, Token fromStart, Token fromEnd, Token toStart, Token toEnd) {
+        super(message, fromStart, fromEnd, toStart, toEnd);
     }
 
     public void printNoContext(DiffWriter dw, StringBuilder sb) {

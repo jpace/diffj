@@ -15,19 +15,19 @@ public class FileDiffDelete extends FileDiff {
         super(Type.DELETED, message, fromLoc, toLoc);
     }
     
-    public FileDiffDelete(String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
-        super(Type.DELETED, message, firstStart, firstEnd, secondStart, secondEnd);
+    public FileDiffDelete(String message, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        super(Type.DELETED, message, fromStart, fromEnd, toStart, toEnd);
     }
 
-    public FileDiffDelete(String message, Token a, Token b) {
-        super(Type.DELETED, message, a, b);
+    public FileDiffDelete(String message, Token from, Token to) {
+        super(Type.DELETED, message, from, to);
     }
 
     /**
      * Creates a reference from a message and two beginning and ending tokens.
      */
-    public FileDiffDelete(String message, Token a0, Token a1, Token b0, Token b1) {
-        super(Type.DELETED, message, a0, a1, b0, b1);
+    public FileDiffDelete(String message, Token fromStart, Token fromEnd, Token toStart, Token toEnd) {
+        super(Type.DELETED, message, fromStart, fromEnd, toStart, toEnd);
     }
 
     public void printContext(DiffWriter dw, StringBuilder sb) {

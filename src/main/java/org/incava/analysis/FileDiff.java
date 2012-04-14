@@ -28,6 +28,14 @@ public abstract class FileDiff implements Comparable<FileDiff> {
     public static Location toBeginLocation(Token t) {
         return t == null ? null : new Location(t.beginLine, t.beginColumn);
     }
+
+    public static LocationRange toLocationRange(Token from, Token to) {
+        return new LocationRange(toBeginLocation(from), toEndLocation(to));
+    }
+
+    public static LocationRange toLocationRange(Location from, Location to) {
+        return from == null ? null : new LocationRange(from, to);
+    }
     
     public static Location toEndLocation(Token t) {
         return t == null ? null : new Location(t.endLine, t.endColumn);
@@ -62,10 +70,7 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * @param secondEnd   In the to-file, where the reference ends.
      */
     public FileDiff(Type type, String message, Location firstStart, Location firstEnd, Location secondStart, Location secondEnd) {
-        this.type           = type;
-        this.message        = message;
-        this.firstLocation  = new LocationRange(firstStart, firstEnd);
-        this.secondLocation = secondStart == null ? null : new LocationRange(secondStart, secondEnd);
+        this(type, message, new LocationRange(firstStart, firstEnd), secondStart == null ? null : new LocationRange(secondStart, secondEnd));
     }
 
     /**
@@ -88,18 +93,18 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      *
      * @param type    What type this reference is.     
      * @param message The message applying to this reference.
-     * @param a       The token in the first file.
-     * @param b       The token in the second file.
+     * @param from    The token in the first file.
+     * @param to       The token in the second file.
      */
-    public FileDiff(Type type, String message, Token a, Token b) {
-        this(type, message, toBeginLocation(a), toEndLocation(a), toBeginLocation(b), toEndLocation(b));
+    public FileDiff(Type type, String message, Token from, Token to) {
+        this(type, message, toLocationRange(from, from), toLocationRange(to, to));
     }
 
     /**
      * Creates a reference from a message and two beginning and ending tokens.
      */
-    public FileDiff(Type type, String message, Token a0, Token a1, Token b0, Token b1) {
-        this(type, message, toBeginLocation(a0), toEndLocation(a1), toBeginLocation(b0), toEndLocation(b1));
+    public FileDiff(Type type, String message, Token fromStart, Token fromEnd, Token toStart, Token toEnd) {
+        this(type, message, toLocationRange(fromStart, fromEnd), toLocationRange(toStart, toEnd));
     }
 
     /**
@@ -163,6 +168,7 @@ public abstract class FileDiff implements Comparable<FileDiff> {
         return sb.toString();
     }
 
+    // returns "1" (if same line) or "1,3" (multiple lines)
     public String toLineString(LocationRange lr) {
         int fromLine = lr.getStart().getLine();
         int endLine = lr.getEnd().getLine();
@@ -174,7 +180,7 @@ public abstract class FileDiff implements Comparable<FileDiff> {
         return sb.toString();
     }
 
-    // returns "1" or "1,3"
+    // returns 1a,8, 3,14c4,10 ...
     public String toDiffSummaryString() {
         StringBuilder sb = new StringBuilder();
         sb.append(toLineString(getFirstLocation()));
@@ -213,17 +219,15 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * Returns "x:y".
      */
     public static String toString(Location loc) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(loc == null ? "null" : loc.toString());
-        return sb.toString();
+        return loc == null ? "null" : loc.toString();
     }
 
     /**
      * Returns "x:y .. x:y".
      */
-    public static String toString(Location a, Location b) {
+    public static String toString(Location from, Location to) {
         StringBuilder sb = new StringBuilder();
-        sb.append(toString(a)).append(" .. ").append(toString(b));
+        sb.append(toString(from)).append(" .. ").append(toString(to));
         return sb.toString();
     }
 
@@ -231,8 +235,6 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * Returns "x:y .. x:y".
      */
     public static String toString(LocationRange lr) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(toString(lr.getStart())).append(" .. ").append(toString(lr.getEnd()));
-        return sb.toString();
+        return toString(lr.getStart(), lr.getEnd());
     }
 }
