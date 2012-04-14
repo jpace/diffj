@@ -55,14 +55,19 @@ module DiffJ
       def create ctor, args
         msg = args.shift
         locs = convert_to_locations args
+        Log.info "msg: #{msg}".on_red
+        Log.info "locs: #{locs.inspect}".on_red
         send ctor, msg, *locs
       end
+    end
+
+    def self.included base
+      base.extend ClassMethods
     end
   end
 
   class FDiffAdd < org.incava.analysis.FileDiffAdd
     include Loggable, FDiff
-    extend FDiff::ClassMethods
 
     class << self
       alias_method :old_new, :new
@@ -83,7 +88,6 @@ module DiffJ
 
   class FDiffChange < org.incava.analysis.FileDiffChange
     include Loggable, FDiff
-    extend FDiff::ClassMethods
 
     class << self
       alias_method :old_new, :new
@@ -104,7 +108,6 @@ module DiffJ
 
   class FDiffDelete < org.incava.analysis.FileDiffDelete
     include Loggable, FDiff
-    extend FDiff::ClassMethods
 
     class << self
       alias_method :old_new, :new
@@ -125,7 +128,26 @@ module DiffJ
 
   class FDiffCodeAdded < org.incava.analysis.FileDiffAdd
     include Loggable, FDiff
-    extend FDiff::ClassMethods
+
+    class << self
+      alias_method :old_new, :new
+      def new *args
+        create :old_new, args
+      end
+    end
+
+    def initialize msg, from_loc_start, from_loc_end, to_loc_start, to_loc_end
+      info "msg: #{msg}".cyan
+      info "from_loc_start: #{from_loc_start}".cyan
+      info "from_loc_end: #{from_loc_end}".cyan
+      info "to_loc_start: #{to_loc_start}".cyan
+      info "to_loc_end: #{to_loc_end}".cyan
+      super
+    end
+  end
+
+  class FDiffCodeDeleted < org.incava.analysis.FileDiffDelete
+    include Loggable, FDiff
 
     class << self
       alias_method :old_new, :new

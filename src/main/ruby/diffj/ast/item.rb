@@ -120,15 +120,17 @@ module DiffJ
 
     def add_reference name, msg, fromlocrg, tolocrg
       str = java.text.MessageFormat.format msg, name
-      ref = case msg
-            when CODE_ADDED
-              # this will show as add when highlighted, as change when not.
-              org.incava.analysis.FileDiffCodeAdded.new str, fromlocrg, tolocrg
-            when CODE_REMOVED
-              org.incava.analysis.FileDiffCodeDeleted.new str, fromlocrg, tolocrg
-            else
-              DiffJ::FDiffChange.new str, :locranges => [ fromlocrg, tolocrg ]
-            end
+      fdiffcls = case msg
+                 when CODE_ADDED
+                   # this will show as add when highlighted, as change when not.
+                   DiffJ::FDiffCodeAdded
+                 when CODE_REMOVED
+                   DiffJ::FDiffCodeDeleted
+                 else
+                   DiffJ::FDiffChange
+                 end
+      
+      ref = fdiffcls.new str, :locranges => [ fromlocrg, tolocrg ]
       add ref
       ref
     end
