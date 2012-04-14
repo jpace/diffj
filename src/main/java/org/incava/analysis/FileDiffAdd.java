@@ -28,11 +28,11 @@ public class FileDiffAdd extends FileDiff {
         super(Type.ADDED, message, a0, a1, b0, b1);
     }
 
-    public void printContext(DiffContextWriter dw, StringBuilder sb) {
+    public void printContext(DiffWriter dw, StringBuilder sb) {
         dw.printTo(sb, this);
     }
 
-    public void printNoContext(DiffNoContextWriter dw, StringBuilder sb) {
+    public void printNoContext(DiffWriter dw, StringBuilder sb) {
         dw.printTo(sb, this);
     }
 }

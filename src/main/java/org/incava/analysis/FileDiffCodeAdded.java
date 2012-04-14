@@ -27,7 +27,7 @@ public class FileDiffCodeAdded extends FileDiffAdd {
         super(message, a0, a1, b0, b1);
     }
 
-    public void printNoContext(DiffNoContextWriter dw, StringBuilder sb) {
+    public void printNoContext(DiffWriter dw, StringBuilder sb) {
         dw.printFrom(sb, this);
         sb.append("---");
         sb.append(DiffWriter.EOLN);        
