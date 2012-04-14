@@ -6,6 +6,7 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj'
+require 'diffj/io/location'
 
 include Java
 
@@ -133,7 +134,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def loc x, y
-    org.incava.ijdk.text.Location.new x, y
+    DiffJ::IO::Location.new x, y
   end
 
   def loctext loc, text
@@ -152,19 +153,19 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def make_fdiff type, msgvals, from_start, from_end, to_start, to_end
-    type.new get_message(msgvals), from_start, from_end, to_start, to_end
+    type.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
   end
 
   def make_fdiff_add msgvals, from_start, from_end, to_start, to_end
-    DiffJ::FDiffAdd.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
+    make_fdiff DiffJ::FDiffAdd, msgvals, from_start, from_end, to_start, to_end
   end
 
   def make_fdiff_delete msgvals, from_start, from_end, to_start, to_end
-    DiffJ::FDiffDelete.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
+    make_fdiff DiffJ::FDiffDelete, msgvals, from_start, from_end, to_start, to_end
   end
 
   def make_fdiff_change msgvals, from_start, from_end, to_start, to_end
-    DiffJ::FDiffChange.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
+    make_fdiff DiffJ::FDiffChange, msgvals, from_start, from_end, to_start, to_end
   end
 
   def subdir
@@ -206,18 +207,11 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def removed_change what, *args
-    from_start = from_end = to_start = to_end = nil
     from_start, from_end, to_start, to_end = if args.size == 3
                                                [ args[0], loctext(args[0], what), args[1], args[2] ]
                                              else
                                                args
-                                             end
-    
-    info "from_start: #{from_start}".cyan
-    info "from_end: #{from_end}".cyan
-    info "to_start: #{to_start}".cyan
-    info "to_end: #{to_end}".cyan
-
+                                             end    
     make_fdiff_change format(removed_msg_fmt, what), from_start, from_end, to_start, to_end
   end
 
@@ -234,18 +228,12 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def create_fdiff_args msg_fmt, args
-    info "args: #{args}".red
-
     params = args.dup
     msgargs = Array.new
     while params[0].kind_of?(String) || params[0].kind_of?(Integer)
       msgargs << params.shift
     end
     msg = format(msg_fmt, *msgargs)
-
-    info "msgargs: #{msgargs}".yellow
-    info "params: #{params}".yellow
-
     from_start, from_end, to_start, to_end = if params.length == 4
                                                params
                                              else

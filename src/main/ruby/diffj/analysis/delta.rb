@@ -51,11 +51,7 @@ module DiffJ
       str = sb.toString
       fdcls = get_filediff_cls
 
-      if @tokens.length == 2
-        @filediff = fdcls.new str, @tokens[0], @tokens[1]
-      else
-        @filediff = fdcls.new str, @tokens[0], @tokens[1], @tokens[2], @tokens[3]
-      end
+      @filediff = fdcls.new str, :tokens => @tokens
     end    
 
     def process_token_simplenode from_tk, to_sn
