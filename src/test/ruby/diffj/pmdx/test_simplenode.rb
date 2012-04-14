@@ -13,8 +13,6 @@ include Java
 class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
   include Loggable
   
-  TESTBED_DIR = '/proj/org/incava/diffj/src/test/resources'
-
   def dump_node node, indent = "", recurse = true
     info "#{indent}#{node.inspect}"
     
