@@ -12,16 +12,16 @@ public class DiffNoContextWriter extends DiffWriter {
         super(fromContents, toContents);
     }
 
-    public void printFrom(StringBuilder sb, FileDiff ref) {
-        printLines(sb, ref.getFirstLocation(), "<", fromContents);
+    public void printFrom(StringBuilder sb, FileDiff fdiff) {
+        printLines(sb, fdiff.getFirstLocation(), "<", fromContents);
     }
 
-    public void printTo(StringBuilder sb, FileDiff ref) {
-        printLines(sb, ref.getSecondLocation(), ">", toContents);
+    public void printTo(StringBuilder sb, FileDiff fdiff) {
+        printLines(sb, fdiff.getSecondLocation(), ">", toContents);
     }
 
-    protected void printLines(StringBuilder sb, FileDiff ref) {
-        ref.printNoContext(this, sb);
+    protected void printLines(StringBuilder sb, FileDiff fdiff) {
+        fdiff.printNoContext(this, sb);
         sb.append(EOLN);
     }
 

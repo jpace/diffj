@@ -129,8 +129,8 @@ public class DetailedReport extends Report {
             try {
                 tr.Ace.stack("flushing differences");
                 Collection<FileDiff> diffs = getDifferences();
-                for (FileDiff ref : diffs) {
-                    String str = toString(ref);
+                for (FileDiff fdiff : diffs) {
+                    String str = toString(fdiff);
                     writer.write(str);
                 }
                 writer.flush();
@@ -148,7 +148,7 @@ public class DetailedReport extends Report {
      * Returns a string representing the given reference, consistent with the
      * format of the Report subclass.
      */
-    protected String toString(FileDiff ref) {
+    protected String toString(FileDiff fdiff) {
         StringBuilder sb = new StringBuilder();
 
         if (fromContents == null) {
@@ -159,21 +159,12 @@ public class DetailedReport extends Report {
             toContents = ReaderExt.readLines(toFileRdr, EnumSet.noneOf(ReadOptionType.class));
         }
 
-        DiffWriter dw = null;
-
-        if (showContext) {
-            if (highlight) {
-                dw = new DiffContextHighlightWriter(fromContents, toContents);
-            }
-            else {
-                dw = new DiffContextWriter(fromContents, toContents);
-            }
-        }
-        else {
-            dw = new DiffNoContextWriter(fromContents, toContents);
-        }
-
-        return dw.getDifference(ref);
+        DiffWriter dw = (showContext ? (highlight ? 
+                                        new DiffContextHighlightWriter(fromContents, toContents) :
+                                        new DiffContextWriter(fromContents, toContents)) :
+                         new DiffNoContextWriter(fromContents, toContents));
+        
+        return dw.getDifference(fdiff);
     }
 
     // public void printFileNames() {
@@ -181,13 +172,13 @@ public class DetailedReport extends Report {
 
     //     if (fromFileName != null && toFileName != null) {
     //         String lnsep = System.getProperty("line.separator");
-    //         StringBuffer buf = new StringBuffer();
-    //         buf.append("===================================================================").append(lnsep);
-    //         buf.append("--- " + fromFileName).append(lnsep);
-    //         buf.append("+++ " + fromFileName).append(lnsep);
+    //         StringBuilder sb = new StringBuilder();
+    //         sb.append("===================================================================").append(lnsep);
+    //         sb.append("--- " + fromFileName).append(lnsep);
+    //         sb.append("+++ " + fromFileName).append(lnsep);
             
     //         try {
-    //             writer.write(buf.toString());
+    //             writer.write(sb.toString());
     //         }
     //         catch (IOException ioe) {
     //         }

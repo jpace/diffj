@@ -159,14 +159,14 @@ public abstract class Report {
         // extend this for unified (file name per line)
         
         if (fromFileName != null && toFileName != null) {
-            StringBuffer buf = new StringBuffer();
-            buf.append(fromFileName);
-            buf.append(" <=> ");
-            buf.append(toFileName);
-            buf.append(System.getProperty("line.separator"));
+            StringBuilder sb = new StringBuilder();
+            sb.append(fromFileName);
+            sb.append(" <=> ");
+            sb.append(toFileName);
+            sb.append(System.getProperty("line.separator"));
             
             try {
-                writer.write(buf.toString());
+                writer.write(sb.toString());
             }
             catch (IOException ioe) {
             }
@@ -180,7 +180,7 @@ public abstract class Report {
      * Returns a string representing the given reference, consistent with the
      * format of the Report subclass.
      */
-    protected abstract String toString(FileDiff ref);
+    protected abstract String toString(FileDiff fdiff);
 
     /**
      * Sends the given string to the writer associated with this Report.

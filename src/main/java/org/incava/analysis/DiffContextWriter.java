@@ -14,12 +14,12 @@ public class DiffContextWriter extends DiffWriter {
         super(fromContents, toContents);
     }
 
-    public void printFrom(StringBuilder sb, FileDiff ref) {
-        printLines(sb, true, ref, ref.getFirstLocation(), fromContents);
+    public void printFrom(StringBuilder sb, FileDiff fdiff) {
+        printLines(sb, true, fdiff, fdiff.getFirstLocation(), fromContents);
     }
 
-    public void printTo(StringBuilder sb, FileDiff ref) {
-        printLines(sb, false, ref, ref.getSecondLocation(), toContents);
+    public void printTo(StringBuilder sb, FileDiff fdiff) {
+        printLines(sb, false, fdiff, fdiff.getSecondLocation(), toContents);
     }
 
     protected String getLine(List<String> lines, int lidx, int fromLine, int fromColumn, int toLine, int toColumn, boolean isDelete) {
@@ -28,7 +28,7 @@ public class DiffContextWriter extends DiffWriter {
         return sb.toString();
     }
 
-    protected void printLines(StringBuilder sb, boolean isDelete, FileDiff ref, LocationRange loc, List<String> lines) {
+    protected void printLines(StringBuilder sb, boolean isDelete, FileDiff fdiff, LocationRange loc, List<String> lines) {
         int fromLine = loc.getStart().getLine();
         int fromColumn = loc.getStart().getColumn();
         int toLine = loc.getEnd().getLine();
@@ -54,8 +54,8 @@ public class DiffContextWriter extends DiffWriter {
         }
     }
 
-    protected void printLines(StringBuilder sb, FileDiff ref) {
-        ref.printContext(this, sb);
+    protected void printLines(StringBuilder sb, FileDiff fdiff) {
+        fdiff.printContext(this, sb);
         sb.append(DiffContextWriter.EOLN);
     }
 }

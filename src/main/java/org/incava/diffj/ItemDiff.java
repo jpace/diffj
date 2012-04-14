@@ -108,11 +108,11 @@ public class ItemDiff extends DiffComparator {
         }
     }
 
-    protected FileDiff replaceReference(String name, FileDiff ref, LocationRange fromLocRg, LocationRange toLocRg) {
+    protected FileDiff replaceReference(String name, FileDiff fdiff, LocationRange fromLocRg, LocationRange toLocRg) {
         String   newMsg  = MessageFormat.format(CODE_CHANGED, name);
-        FileDiff newDiff = new FileDiffChange(newMsg, ref.getFirstLocation().getStart(), fromLocRg.getEnd(), ref.getSecondLocation().getStart(), toLocRg.getEnd());
+        FileDiff newDiff = new FileDiffChange(newMsg, fdiff.getFirstLocation().getStart(), fromLocRg.getEnd(), fdiff.getSecondLocation().getStart(), toLocRg.getEnd());
         
-        getFileDiffs().remove(ref);
+        getFileDiffs().remove(fdiff);
         
         add(newDiff);
         
@@ -126,27 +126,27 @@ public class ItemDiff extends DiffComparator {
 
         String str = MessageFormat.format(msg, name);
 
-        FileDiff ref = null;
+        FileDiff fdiff = null;
 
         if (msg.equals(CODE_ADDED)) {
             // this will show as add when highlighted, as change when not.
-            ref = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
-            tr.Ace.yellow("ref", ref);
+            fdiff = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
+            tr.Ace.yellow("fdiff", fdiff);
         }
         else if (msg.equals(CODE_REMOVED)) {
-            ref = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
-            tr.Ace.blue("ref", ref);
+            fdiff = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
+            tr.Ace.blue("fdiff", fdiff);
         }
         else {
-            ref = new FileDiffChange(str, fromLocRg, toLocRg);
-            tr.Ace.green("ref", ref);
+            fdiff = new FileDiffChange(str, fromLocRg, toLocRg);
+            tr.Ace.green("fdiff", fdiff);
         }                    
 
-        add(ref);
+        add(fdiff);
 
         tr.Ace.setVerbose(false);
 
-        return ref;
+        return fdiff;
     }
 
     protected LocationRange getLocationRange(List<Token> tokenList, Integer start, Integer end) {
@@ -162,11 +162,11 @@ public class ItemDiff extends DiffComparator {
         return new LocationRange(FileDiff.toBeginLocation(startTk), FileDiff.toEndLocation(endTk));
     }
     
-    protected boolean isOnSameLine(FileDiff ref, LocationRange loc) {
-        return ref != null && ref.getFirstLocation().getStart().getLine() == loc.getStart().getLine();
+    protected boolean isOnSameLine(FileDiff fdiff, LocationRange loc) {
+        return fdiff != null && fdiff.getFirstLocation().getStart().getLine() == loc.getStart().getLine();
     }
 
-    protected FileDiff processDifference(Difference diff, String fromName, List<Token> fromList, List<Token> toList, FileDiff prevRef) {
+    protected FileDiff processDifference(Difference diff, String fromName, List<Token> fromList, List<Token> toList, FileDiff prevFdiff) {
         tr.Ace.setVerbose(true);
 
         tr.Ace.green("diff", diff);
@@ -187,20 +187,23 @@ public class ItemDiff extends DiffComparator {
         String msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);        
         tr.Ace.onGreen("msg", msg);
 
-        prevRef = isOnSameLine(prevRef, fromLocRg) ? replaceReference(fromName, prevRef, fromLocRg, toLocRg) : addReference(fromName, msg, fromLocRg, toLocRg);
-        tr.Ace.yellow("prevRef", prevRef);
-        return prevRef;
+        prevFdiff = isOnSameLine(prevFdiff, fromLocRg) ? 
+            replaceReference(fromName, prevFdiff, fromLocRg, toLocRg) : 
+            addReference(fromName, msg, fromLocRg, toLocRg);
+        
+        tr.Ace.yellow("prevFdiff", prevFdiff);
+        return prevFdiff;
     }
 
     protected void compareCode(String fromName, List<Token> fromList, String toName, List<Token> toList) {
         Diff<Token> d = new Diff<Token>(fromList, toList, new TokenComparator());
         
-        FileDiff ref = null;
+        FileDiff fdiff = null;
         List<Difference> diffList = d.diff();
 
         for (Difference diff : diffList) {
-            ref = processDifference(diff, fromName, fromList, toList, ref);
-            if (ref == null) {
+            fdiff = processDifference(diff, fromName, fromList, toList, fdiff);
+            if (fdiff == null) {
                 return;
             }
         }

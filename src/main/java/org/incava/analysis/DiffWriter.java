@@ -32,41 +32,41 @@ public abstract class DiffWriter {
     }
 
     public String toString(int x, int y) {
-        StringBuffer buf = new StringBuffer();
-        buf.append(x);
+        StringBuilder sb = new StringBuilder();
+        sb.append(x);
         if (x != y) {
-            buf.append(",").append(y);
+            sb.append(",").append(y);
         }
-        return buf.toString();
+        return sb.toString();
     }
 
     /**
      * Returns a string representing the given reference, consistent with the
      * format of the Report subclass.
      */
-    public String getDifference(FileDiff ref) {
+    public String getDifference(FileDiff fdiff) {
         StringBuilder sb = new StringBuilder();
 
-        printDiffSummary(sb, ref);
-        printLines(sb, ref);
+        printDiffSummary(sb, fdiff);
+        printLines(sb, fdiff);
         
         return sb.toString();
     }
 
-    protected void printDiffSummary(StringBuilder sb, FileDiff ref) {
-        sb.append(toString(ref.getFirstLocation().getStart().getLine(),  ref.getFirstLocation().getEnd().getLine()));
-        sb.append(ref.getType());
-        sb.append(toString(ref.getSecondLocation().getStart().getLine(), ref.getSecondLocation().getEnd().getLine()));
+    protected void printDiffSummary(StringBuilder sb, FileDiff fdiff) {
+        sb.append(toString(fdiff.getFirstLocation().getStart().getLine(),  fdiff.getFirstLocation().getEnd().getLine()));
+        sb.append(fdiff.getType());
+        sb.append(toString(fdiff.getSecondLocation().getStart().getLine(), fdiff.getSecondLocation().getEnd().getLine()));
         sb.append(' ');
-        sb.append(ref.getMessage());
+        sb.append(fdiff.getMessage());
         sb.append(EOLN);
     }
 
-    protected abstract void printLines(StringBuilder sb, FileDiff ref);
+    protected abstract void printLines(StringBuilder sb, FileDiff fdiff);
 
-    public void printFrom(StringBuilder sb, FileDiff ref) {
+    public void printFrom(StringBuilder sb, FileDiff fdiff) {
     }
 
-    public void printTo(StringBuilder sb, FileDiff ref) {
+    public void printTo(StringBuilder sb, FileDiff fdiff) {
     }
 }

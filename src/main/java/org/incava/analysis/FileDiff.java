@@ -8,7 +8,7 @@ import org.incava.ijdk.text.LocationRange;
 /**
  * A message, associated with a file by a starting and ending position.
  */
-public class FileDiff implements Comparable<FileDiff> {
+public abstract class FileDiff implements Comparable<FileDiff> {
     public enum Type {
         ADDED("a"),
         DELETED("d"),
@@ -139,8 +139,8 @@ public class FileDiff implements Comparable<FileDiff> {
      */
     public boolean equals(Object obj) {
         if (obj instanceof FileDiff) {
-            FileDiff ref = (FileDiff)obj;
-            return compareTo(ref) == 0;
+            FileDiff fdiff = (FileDiff)obj;
+            return compareTo(fdiff) == 0;
         }
         else {
             return false;
@@ -177,11 +177,9 @@ public class FileDiff implements Comparable<FileDiff> {
         return secondLocation;
     }
 
-    public void printContext(DiffWriter dw, StringBuilder sb) {
-    }
+    public abstract void printContext(DiffWriter dw, StringBuilder sb);
 
-    public void printNoContext(DiffWriter dw, StringBuilder sb) {
-    }
+    public abstract void printNoContext(DiffWriter dw, StringBuilder sb);
 
     public String getMessage() {
         return message;

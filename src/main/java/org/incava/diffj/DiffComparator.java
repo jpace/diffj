@@ -38,9 +38,9 @@ public class DiffComparator {
 
     // -------------------------------------------------------
 
-    protected void add(FileDiff ref) {
-        tr.Ace.stack("ref: " + ref);
-        fileDiffs.add(ref);
+    protected void add(FileDiff fdiff) {
+        tr.Ace.stack("fdiff: " + fdiff);
+        fileDiffs.add(fdiff);
     }
 
     protected Object[] toParameters(Token a, Token b) {

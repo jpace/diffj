@@ -37,14 +37,14 @@ public class BriefReport extends Report {
     /**
      * Returns the given difference, in brief format.
      */
-    protected String toString(FileDiff ref) {
+    protected String toString(FileDiff fdiff) {
         StringBuilder sb = new StringBuilder();
         
-        sb.append(toString(ref.getFirstLocation().getStart().getLine(),  ref.getFirstLocation().getEnd().getLine()));
-        sb.append(ref.getType());
-        sb.append(toString(ref.getSecondLocation().getStart().getLine(), ref.getSecondLocation().getEnd().getLine()));
+        sb.append(toString(fdiff.getFirstLocation().getStart().getLine(),  fdiff.getFirstLocation().getEnd().getLine()));
+        sb.append(fdiff.getType());
+        sb.append(toString(fdiff.getSecondLocation().getStart().getLine(), fdiff.getSecondLocation().getEnd().getLine()));
         sb.append(": ");
-        sb.append(ref.getMessage());
+        sb.append(fdiff.getMessage());
         sb.append(EOLN);
         
         return sb.toString();
@@ -68,8 +68,8 @@ public class BriefReport extends Report {
         try {
             Collection<FileDiff> diffs = getDifferences();
             String lastStr = null;
-            for (FileDiff ref : diffs) {
-                String str = toString(ref);
+            for (FileDiff fdiff : diffs) {
+                String str = toString(fdiff);
                 if (!str.equals(lastStr)) {
                     writer.write(str);
                     lastStr = str;
