@@ -115,13 +115,7 @@ public abstract class Report {
             fromFileName = null;
             toFileName = null;
         }
-    }
-    
-    /**
-     * Returns a string representing the given reference, consistent with the
-     * format of the Report subclass.
-     */
-    protected abstract String toString(FileDiff fdiff);
+    }    
 
     /**
      * Sends the given string to the writer associated with this Report.

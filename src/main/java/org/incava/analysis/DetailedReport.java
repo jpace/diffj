@@ -121,8 +121,23 @@ public class DetailedReport extends Report {
             try {
                 tr.Ace.stack("flushing differences");
                 Collection<FileDiff> diffs = getDifferences();
+
+                if (fromContents == null) {
+                    fromContents = ReaderExt.readLines(fromFileRdr, EnumSet.noneOf(ReadOptionType.class));
+                }
+
+                if (toContents == null) {
+                    toContents = ReaderExt.readLines(toFileRdr, EnumSet.noneOf(ReadOptionType.class));
+                }
+
+                DiffWriter dw = (showContext ? (highlight ? 
+                                                new DiffContextHighlightWriter(fromContents, toContents) :
+                                                new DiffContextWriter(fromContents, toContents)) :
+                                 new DiffNoContextWriter(fromContents, toContents));
+                
                 for (FileDiff fdiff : diffs) {
-                    String str = toString(fdiff);
+                    // String str = toString(fdiff);
+                    String str = dw.getDifference(fdiff);
                     writer.write(str);
                 }
                 writer.flush();
@@ -134,29 +149,6 @@ public class DetailedReport extends Report {
             }
         }
         clear();
-    }
-
-    /**
-     * Returns a string representing the given reference, consistent with the
-     * format of the Report subclass.
-     */
-    protected String toString(FileDiff fdiff) {
-        StringBuilder sb = new StringBuilder();
-
-        if (fromContents == null) {
-            fromContents = ReaderExt.readLines(fromFileRdr, EnumSet.noneOf(ReadOptionType.class));
-        }
-
-        if (toContents == null) {
-            toContents = ReaderExt.readLines(toFileRdr, EnumSet.noneOf(ReadOptionType.class));
-        }
-
-        DiffWriter dw = (showContext ? (highlight ? 
-                                        new DiffContextHighlightWriter(fromContents, toContents) :
-                                        new DiffContextWriter(fromContents, toContents)) :
-                         new DiffNoContextWriter(fromContents, toContents));
-        
-        return dw.getDifference(fdiff);
     }
 
     // public void printFileNames() {
