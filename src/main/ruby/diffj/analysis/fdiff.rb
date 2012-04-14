@@ -33,6 +33,7 @@ module DiffJ
               locs = Array.new
               locs << to_begin_location(tks[0])
               locs << to_end_location(tks[0])
+
               locs << to_begin_location(tks[1])
               locs << to_end_location(tks[1])
               locs
@@ -41,6 +42,7 @@ module DiffJ
               locs = Array.new
               locs << to_begin_location(tks[0])
               locs << to_end_location(tks[1])
+              
               locs << to_begin_location(tks[2])
               locs << to_end_location(tks[3])
               locs

@@ -111,7 +111,7 @@ module DiffJ
 
     def replace_reference name, ref, fromlocrg, tolocrg
       newmsg  = java.text.MessageFormat.format CODE_CHANGED, name
-      locs = [ ref.getFirstLocation().getStart(), fromlocrg.getEnd(), ref.getSecondLocation().getStart(), tolocrg.getEnd() ]
+      locs = [ ref.first_location.getStart(), fromlocrg.getEnd(), ref.second_location.getStart(), tolocrg.getEnd() ]
       newdiff = DiffJ::FDiffChange.new newmsg, :locations => locs
       filediffs.remove ref
       add newdiff
