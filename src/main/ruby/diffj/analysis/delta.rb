@@ -102,7 +102,7 @@ module DiffJ
     end
 
     def get_filediff_cls
-      org.incava.analysis.FileDiffAdd
+      DiffJ::FDiffAdd
     end
   end
 
@@ -116,7 +116,7 @@ module DiffJ
     end
 
     def get_filediff_cls
-      org.incava.analysis.FileDiffDelete
+      DiffJ::FDiffDelete
     end
   end
 

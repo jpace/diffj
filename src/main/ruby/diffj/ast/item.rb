@@ -107,7 +107,8 @@ module DiffJ
 
     def replace_reference name, ref, fromlocrg, tolocrg
       newmsg  = java.text.MessageFormat.format CODE_CHANGED, name
-      newdiff = org.incava.analysis.FileDiffChange.new(newmsg, ref.getFirstLocation().getStart(), fromlocrg.getEnd(), ref.getSecondLocation().getStart(), tolocrg.getEnd())
+      locs = [ ref.getFirstLocation().getStart(), fromlocrg.getEnd(), ref.getSecondLocation().getStart(), tolocrg.getEnd() ]
+      newdiff = DiffJ::FDiffChange.new newmsg, :locations => locs
       filediffs.remove ref
       add newdiff
       newdiff
@@ -122,7 +123,7 @@ module DiffJ
             when CODE_REMOVED
               org.incava.analysis.FileDiffCodeDeleted.new str, fromlocrg, tolocrg
             else
-              org.incava.analysis.FileDiffChange.new str, fromlocrg, tolocrg
+              DiffJ::FDiffChange.new str, :locranges => [ fromlocrg, tolocrg ]
             end
       add ref
       ref

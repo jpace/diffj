@@ -147,13 +147,16 @@ class DiffJ::TestCase < Test::Unit::TestCase
     java.text.MessageFormat.format msg, *values
   end
 
+  def get_message msgvals
+    msgvals.kind_of?(Array) && msgvals.length > 1 ? format(msgvals[0], *(msgvals[1 .. -1])) : msgvals
+  end
+
   def make_fdiff type, msgvals, from_start, from_end, to_start, to_end
-    msg = msgvals.kind_of?(Array) && msgvals.length > 1 ? format(msgvals[0], *(msgvals[1 .. -1])) : msgvals
-    type.new(msg, from_start, from_end, to_start, to_end)
+    type.new get_message(msgvals), from_start, from_end, to_start, to_end
   end
 
   def make_fdiff_add msgvals, from_start, from_end, to_start, to_end
-    make_fdiff org.incava.analysis.FileDiffAdd, msgvals, from_start, from_end, to_start, to_end
+    DiffJ::FDiffAdd.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
   end
 
   def make_fdiff_delete msgvals, from_start, from_end, to_start, to_end
@@ -161,7 +164,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def make_fdiff_change msgvals, from_start, from_end, to_start, to_end
-    make_fdiff org.incava.analysis.FileDiffChange, msgvals, from_start, from_end, to_start, to_end
+    DiffJ::FDiffChange.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
   end
 
   def subdir
