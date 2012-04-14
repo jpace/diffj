@@ -17,10 +17,7 @@ public class BriefReport extends Report {
      */
     protected String toString(FileDiff fdiff) {
         StringBuilder sb = new StringBuilder();
-        
-        sb.append(toString(fdiff.getFirstLocation().getStart().getLine(),  fdiff.getFirstLocation().getEnd().getLine()));
-        sb.append(fdiff.getType());
-        sb.append(toString(fdiff.getSecondLocation().getStart().getLine(), fdiff.getSecondLocation().getEnd().getLine()));
+        sb.append(fdiff.toDiffSummaryString());
         sb.append(": ");
         sb.append(fdiff.getMessage());
         sb.append(EOLN);

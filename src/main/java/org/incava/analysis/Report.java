@@ -137,15 +137,6 @@ public abstract class Report {
         }
     }
 
-    protected String toString(int x, int y) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(x);
-        if (x != y) {
-            sb.append(",").append(y);
-        }
-        return sb.toString();
-    }
-
     /**
      * Clears the list of differences.
      */

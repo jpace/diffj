@@ -163,6 +163,26 @@ public abstract class FileDiff implements Comparable<FileDiff> {
         return sb.toString();
     }
 
+    public String toLineString(LocationRange lr) {
+        int fromLine = lr.getStart().getLine();
+        int endLine = lr.getEnd().getLine();
+        StringBuilder sb = new StringBuilder();
+        sb.append(fromLine);
+        if (fromLine != endLine) {
+            sb.append(",").append(endLine);
+        }
+        return sb.toString();
+    }
+
+    // returns "1" or "1,3"
+    public String toDiffSummaryString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(toLineString(getFirstLocation()));
+        sb.append(getType());
+        sb.append(toLineString(getSecondLocation()));
+        return sb.toString();
+    }
+
     /**
      * Returns the location in the first file.
      */

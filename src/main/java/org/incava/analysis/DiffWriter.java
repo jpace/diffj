@@ -31,15 +31,6 @@ public abstract class DiffWriter {
         this.toContents = toContents;
     }
 
-    public String toString(int x, int y) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(x);
-        if (x != y) {
-            sb.append(",").append(y);
-        }
-        return sb.toString();
-    }
-
     /**
      * Returns a string representing the given reference, consistent with the
      * format of the Report subclass.
@@ -54,9 +45,7 @@ public abstract class DiffWriter {
     }
 
     protected void printDiffSummary(StringBuilder sb, FileDiff fdiff) {
-        sb.append(toString(fdiff.getFirstLocation().getStart().getLine(),  fdiff.getFirstLocation().getEnd().getLine()));
-        sb.append(fdiff.getType());
-        sb.append(toString(fdiff.getSecondLocation().getStart().getLine(), fdiff.getSecondLocation().getEnd().getLine()));
+        sb.append(fdiff.toDiffSummaryString());
         sb.append(' ');
         sb.append(fdiff.getMessage());
         sb.append(EOLN);
