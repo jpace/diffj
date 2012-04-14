@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/io/location'
 
 include Java
 
@@ -13,7 +14,7 @@ module DiffJ
 
     class << self
       def to_begin_location tk
-        tk && org.incava.ijdk.text.Location.new(tk.beginLine, tk.beginColumn)
+        tk && DiffJ::IO::Location.new(tk.beginLine, tk.beginColumn)
       end
     
       def to_end_location tk
