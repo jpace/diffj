@@ -13,7 +13,7 @@ public class TestOutputNoContext extends AbstractTestOutput {
 
     public boolean showContext() {
         return false;
-    }
+    }        
 
     public void testImportAdded() {
         String[] output = doImportAddedTest();

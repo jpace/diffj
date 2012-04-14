@@ -15,6 +15,7 @@ import org.incava.test.AbstractTestCaseExt;
 
 public class AbstractDiffJTest extends AbstractTestCaseExt {
     public static final FileDiff[] NO_CHANGES = new FileDiff[0];
+    
     private Report report;
     
     public AbstractDiffJTest(String name) {
@@ -27,6 +28,10 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
 
     public boolean showContext() {
         return false;
+    }
+
+    public boolean highlight() {
+        return true;
     }
 
     public Location loc(int line, int column) {
@@ -47,7 +52,7 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
         evaluate(fromLines,
                  toLines,
                  Java.SOURCE_1_5, // source
-                 makeDetailedReport(writer, showContext()),
+                 makeDetailedReport(writer),
                  (FileDiff[])null);         // no code expectation comparisons
         
         tr.Ace.setVerbose(true);
@@ -146,11 +151,7 @@ public class AbstractDiffJTest extends AbstractTestCaseExt {
     }
 
     public Report makeDetailedReport(StringWriter output) {
-        return new DetailedReport(output, true, true);
-    }
-
-    public Report makeDetailedReport(StringWriter output, boolean showContext) {
-        return new DetailedReport(output, showContext, true);
+        return new DetailedReport(output, showContext(), highlight());
     }
 
     public Report getReport() {

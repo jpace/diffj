@@ -117,7 +117,7 @@ public class TestImportsDiff extends AbstractDiffJTest {
                            ""),
 
                  Java.SOURCE_1_3,
-                 makeDetailedReport(writer, false),
+                 makeDetailedReport(writer),
                  new FileDiffAdd(ImportsDiff.IMPORT_SECTION_ADDED, loc(1, 1), loc(1, 7), loc(3, 1), loc(4, 23)));
         
         tr.Ace.setVerbose(true);

@@ -126,6 +126,16 @@ module DiffJ
       info "to_loc_end: #{to_loc_end}".cyan
       super
     end
+
+    def printContext dw, sb
+      info "#######################################################".on_red
+      dw.printFrom sb, self
+    end
+
+    def printNoContext dw, sb
+      info "#######################################################".on_red
+      dw.printFrom sb, self
+    end
   end
 
   class FDiffCodeAdded < org.incava.analysis.FileDiffAdd

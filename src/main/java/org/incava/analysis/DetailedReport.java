@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
@@ -65,10 +66,7 @@ public class DetailedReport extends Report {
     }
 
     public DetailedReport(OutputStream os, boolean showContext, boolean highlight) {
-        super(os);
-
-        this.showContext = showContext;
-        this.highlight = highlight;
+        this(new OutputStreamWriter(os), showContext, highlight);
     }
     
     /**

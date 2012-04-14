@@ -1,9 +1,11 @@
 package org.incava.diffj;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.Report;
 
 public abstract class AbstractTestOutputContext extends AbstractTestOutput {
     public AbstractTestOutputContext(String name) {
@@ -170,5 +172,9 @@ public abstract class AbstractTestOutputContext extends AbstractTestOutput {
                            "}\n"),
 
                  new FileDiff[0]);
+    }
+
+    public Report makeReport(StringWriter output) {
+        return makeDetailedReport(output);
     }
 }

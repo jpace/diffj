@@ -10,6 +10,10 @@ public class TestOutputContextHighlight extends AbstractTestOutputContext {
         super(name);
     }
 
+    public boolean highlight() {
+        return true;
+    }
+
     public String adorn(String str, boolean isDelete) {
         StringBuilder sb = new StringBuilder();
         sb.append(isDelete ? ANSI.RED : ANSI.YELLOW);
@@ -17,17 +21,5 @@ public class TestOutputContextHighlight extends AbstractTestOutputContext {
         sb.append(ANSI.RESET);
 
         return sb.toString();
-    }
-
-    public Report makeDetailedReport(StringWriter output) {
-        return new DetailedReport(output, true, true);
-    }
-
-    public Report makeDetailedReport(StringWriter output, boolean showContext) {
-        return new DetailedReport(output, showContext, true);
-    }
-
-    public Report makeReport(StringWriter output) {
-        return new DetailedReport(output, true, true);
     }
 }
