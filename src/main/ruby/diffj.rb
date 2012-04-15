@@ -5,7 +5,8 @@ require 'rubygems'
 require 'java'
 require 'riel'
 require 'diffj/io'
-require 'diffj/analysis/report'
+require 'diffj/analysis/short_report'
+require 'diffj/analysis/long_report'
 
 include Java
 
@@ -26,7 +27,7 @@ module DiffJ
     
     def initialize brief, context, highlight, recurse, from_label, fromver, to_label, tover
       writer = java.io.OutputStreamWriter.new java.lang.System.out
-      @report = brief ? BriefReport.new(writer) : DiffJ::Analysis::LongReport.new(writer, context, highlight)
+      @report = brief ? DiffJ::Analysis::ShortReport.new(writer) : DiffJ::Analysis::LongReport.new(writer, context, highlight)
       @recurse = recurse
       @from_label = from_label
       @fromver = fromver

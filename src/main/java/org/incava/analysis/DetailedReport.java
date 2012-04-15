@@ -38,13 +38,13 @@ public class DetailedReport extends Report {
      * The from-contents, separated by new lines, which are included at the end
      * of each string.
      */
-    private List<String> fromContents;
+    protected List<String> fromContents;
 
     /**
      * The to-contents, separated by new lines, which are included at the end
      * of each string.
      */
-    private List<String> toContents;
+    protected List<String> toContents;
 
     /**
      * Whether to highlight.

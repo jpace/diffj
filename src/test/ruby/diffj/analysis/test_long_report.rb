@@ -6,14 +6,15 @@ require 'rubygems'
 require 'riel'
 require 'diffj'
 require 'diffj/analysis/tc_report'
+require 'diffj/analysis/long_report'
 
 include Java
 
 java_import org.incava.analysis.DetailedReport
 
-class DiffJ::DetailedReportTestCase < DiffJ::ReportTestCase
+class DiffJ::LongReportTestCase < DiffJ::ReportTestCase
   def create_report sw, show_context, highlight
-    DetailedReport.new sw, show_context, highlight
+    DiffJ::Analysis::LongReport.new sw, show_context, highlight
   end
     
   def test_no_context

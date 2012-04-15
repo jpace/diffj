@@ -9,7 +9,6 @@ require 'diffj'
 
 include Java
 
-java_import org.incava.analysis.DetailedReport
 java_import org.incava.analysis.FileDiffAdd
 java_import org.incava.analysis.FileDiffChange
 java_import org.incava.analysis.FileDiffDelete
@@ -27,7 +26,6 @@ class DiffJ::ReportTestCase < Test::Unit::TestCase
   end
 
   def create_report sw, show_context, highlight
-    DetailedReport.new sw, show_context, highlight
   end
   
   def run_report show_context, highlight
@@ -53,6 +51,13 @@ class DiffJ::ReportTestCase < Test::Unit::TestCase
     tocont   << "line two"
     tocont   << "line four"
     tocont   << "a change applied to line five."
+
+    # it looks like JRuby has a limit of three method parameters for lookup,
+    # so we do it ourself here:
+    method_params = [ java.lang.String, java.lang.String, java.lang.String, java.lang.String ]
+    # rpt.java_send :reset, method_params, "-", fromcont.join("\n"), "-", tocont.join("\n")
+
+    info "rpt: #{rpt}; #{rpt.class}".on_magenta
 
     rpt.reset "-", fromcont.join("\n"), "-", tocont.join("\n")
 

@@ -6,15 +6,15 @@ require 'rubygems'
 require 'riel'
 require 'diffj'
 require 'diffj/analysis/tc_report'
+require 'diffj/analysis/short_report'
 
 include Java
 
 java_import org.incava.analysis.BriefReport
 
-class DiffJ::BriefReportTestCase < DiffJ::ReportTestCase
-
+class DiffJ::ShortReportTestCase < DiffJ::ReportTestCase
   def create_report sw, show_context, highlight
-    BriefReport.new sw
+    DiffJ::Analysis::ShortReport.new sw
   end    
   
   def test_all

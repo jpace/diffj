@@ -41,31 +41,13 @@ public abstract class Report {
     private FileDiffs differences;
 
     /**
-     * Whether any differences were stored in this report.
-     */
-    private boolean hadDifferences;
-
-    /**
      * Creates a report for the given writer.
      *
      * @param writer The writer associated with this report.
      */
     public Report(Writer writer) {
         this.writer = writer;
-        hadDifferences = false;
         differences = new FileDiffs();
-    }
-    
-    /**
-     * Associates the given file with the list of differences, including that are
-     * adding to this report later, i.e., prior to <code>flush</code>.
-     *
-     * @param fromFile The from-file, containing source code, to which this report applies.
-     * @param toFile The to-file, containing source code, to which this report applies.
-     */
-    public void resetFiles(File fromFile, File toFile) {
-        this.fromFileName = fromFile.getPath();
-        this.toFileName   = toFile.getPath();
     }
 
     /**
@@ -120,20 +102,6 @@ public abstract class Report {
     }    
 
     /**
-     * Sends the given string to the writer associated with this Report.
-     *
-     * @param str The string to be written.
-     */
-    protected void write(String str) {
-        tr.Ace.log("writing '" + str + "'");
-        try {
-            writer.write(str);
-        }
-        catch (IOException ioe) {
-        }
-    }
-
-    /**
      * Clears the list of differences.
      */
     protected void clear() {
@@ -142,14 +110,21 @@ public abstract class Report {
         tr.Ace.yellow("differences", differences);
     }
 
-    /**
-     * Returns whether there are or were (meaning already flushed) differences.
-     */
-    public boolean hadDifferences() {
-        return hadDifferences;
-    }
-
     public boolean hasDifferences() {
         return !differences.isEmpty();
+    }
+
+    //$$$ @todo: remove all these methods, which are just to let JRuby
+    //subclasses get at the private/protected fields here.
+    public String getFromFileName() {
+        return fromFileName;
+    }
+    
+    public String getToFileName() {
+        return toFileName;
+    }
+
+    public Writer getWriter() {
+        return writer;
     }
 }
