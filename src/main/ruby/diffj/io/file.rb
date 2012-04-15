@@ -126,7 +126,9 @@ module DiffJ
         # it looks like JRuby has a limit of three method parameters for lookup,
         # so we do it ourself here:
         method_params = [ java.lang.String, java.lang.String, java.lang.String, java.lang.String ]
-        report.java_send :reset, method_params, label, contents, to_file.label, to_file.contents
+        # report.java_send :reset, method_params, label, contents, to_file.label, to_file.contents
+
+        report.reset label, contents, to_file.label, to_file.contents
 
         cud = ::DiffJ::CompUnitComparator.new report
         cud.compare from_comp_unit, to_comp_unit

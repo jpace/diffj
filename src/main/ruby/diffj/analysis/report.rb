@@ -7,58 +7,58 @@ require 'java'
 
 include Java
 
-java_import org.incava.analysis.Report
-
 module DiffJ
   module Analysis
-    # Reports differences in long form.
-    class Rpt < org.incava.analysis.Report
+    # Reports differences form.
+    class Report
       include Loggable
       
       def initialize writer
-        super writer
+        # super writer
         @writer = writer
-
-        info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".on_green
+        @differences = org.incava.analysis.FileDiffs.new
       end
 
-      # this is for the Report superclass, when we've detached from Java:
-      def report_flush
-        info ""
-
-        if hasDifferences()
-          print_file_names
-          write_differences
-        end
-        clear()
+      def get_differences
+        @differences
       end
 
+      def differences
+        @differences
+      end
+
+      def clear
+        info "differences: #{differences}".yellow
+        @differences.clear
+        info "differences: #{differences}".yellow
+      end
+
+      def has_differences?
+        !@differences.isEmpty
+      end
+      
       def flush
-        info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".on_green
-        if hasDifferences()
+        if has_differences?
           print_file_names
           write_differences
         end
-        clear()
+        clear
       end
 
       def print_file_names
         # only print file names once per report.
         # extend this for unified (file name per line)
 
-        info "@from_file_name: #{@from_file_name}".yellow
-        info "@to_file_name: #{@to_file_name}".yellow
-
         return if @from_file_name.nil? || @to_file_name.nil?
         
-        sb = java.lang.StringBuilder.new
-        sb.append @from_file_name
-        sb.append " <=> "
-        sb.append @to_file_name
-        sb.append java.lang.System.getProperty("line.separator")
+        str = ""
+        str << @from_file_name
+        str << " <=> "
+        str << @to_file_name
+        str << java.lang.System.getProperty("line.separator")
         
         begin
-          @writer.write sb.toString()
+          @writer.write str
         rescue java.io.IOException => ioe
           # nothing
         end
