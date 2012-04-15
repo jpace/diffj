@@ -116,43 +116,35 @@ public class DetailedReport extends Report {
         return ReaderExt.readLines(rdr, EnumSet.noneOf(ReadOptionType.class));
     }
 
-    /**
-     * Writes all differences, and clears the list.
-     */
-    public void flush() {
-        if (hasDifferences()) {
-            printFileNames();
-            try {
-                tr.Ace.stack("flushing differences");
-                Collection<FileDiff> diffs = getDifferences();
+    public void writeDifferences() {
+        try {
+            tr.Ace.stack("flushing differences");
+            Collection<FileDiff> diffs = getDifferences();
 
-                if (fromContents == null) {
-                    fromContents = readReader(fromFileRdr);
-                }
-
-                if (toContents == null) {
-                    toContents = readReader(toFileRdr);
-                }
-
-                DiffWriter dw = (showContext ? (highlight ? 
-                                                new DiffContextHighlightWriter(fromContents, toContents) :
-                                                new DiffContextWriter(fromContents, toContents)) :
-                                 new DiffNoContextWriter(fromContents, toContents));
-                
-                for (FileDiff fdiff : diffs) {
-                    // String str = toString(fdiff);
-                    String str = dw.getDifference(fdiff);
-                    writer.write(str);
-                }
-                writer.flush();
-                
-                // we can't close STDOUT:
-                // writer.close();
+            if (fromContents == null) {
+                fromContents = readReader(fromFileRdr);
             }
-            catch (IOException ioe) {
+
+            if (toContents == null) {
+                toContents = readReader(toFileRdr);
             }
+
+            DiffWriter dw = (showContext ? (highlight ? 
+                                            new DiffContextHighlightWriter(fromContents, toContents) :
+                                            new DiffContextWriter(fromContents, toContents)) :
+                             new DiffNoContextWriter(fromContents, toContents));
+                
+            for (FileDiff fdiff : diffs) {
+                String str = dw.getDifference(fdiff);
+                writer.write(str);
+            }
+            writer.flush();
+                
+            // we can't close STDOUT:
+            // writer.close();
         }
-        clear();
+        catch (IOException ioe) {
+        }
     }
 
     // public void printFileNames() {

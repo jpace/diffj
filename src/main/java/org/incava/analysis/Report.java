@@ -87,9 +87,20 @@ public abstract class Report {
     }
 
     /**
+     * Writes all differences.
+     */
+    public abstract void writeDifferences();
+
+    /**
      * Writes all differences, and clears the list.
      */
-    public abstract void flush();
+    public void flush() {
+        if (hasDifferences()) {
+            printFileNames();
+            writeDifferences();
+        }
+        clear();
+    }
     
     public FileDiffs getDifferences() {
         return differences;

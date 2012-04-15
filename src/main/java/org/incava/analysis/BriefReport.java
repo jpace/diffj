@@ -26,20 +26,9 @@ public class BriefReport extends Report {
     }
 
     /**
-     * Writes all differences, and clears the list.
-     */
-    public void flush() {
-        if (hasDifferences()) {
-            printFileNames();
-            writeDifferences();
-        }
-        clear();
-    }
-
-    /**
      * Writes the differences.
      */
-    private void writeDifferences() {
+    public void writeDifferences() {
         try {
             Collection<FileDiff> diffs = getDifferences();
             String lastStr = null;
