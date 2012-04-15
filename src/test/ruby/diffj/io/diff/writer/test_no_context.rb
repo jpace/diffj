@@ -35,11 +35,6 @@ class DiffJ::WriterNoContextTestCase < Test::Unit::TestCase
     LocationRange.new from, to
   end
 
-  def get_string_builder
-    dw = DiffNoContextWriter.new FROMCONT, TOCONT
-    sb = java.lang.StringBuilder.new
-  end
-
   def create_exp_str lines, ch
     lines.collect { |line| "#{ch} #{line}\n" }.join("")
   end
@@ -58,17 +53,17 @@ class DiffJ::WriterNoContextTestCase < Test::Unit::TestCase
   
   def test_print_from
     run_change_test create_exp_str(FROMCONT[0 .. 1], "<") do |dw, sb, fdc|
-      dw.printFrom sb, fdc
+      dw.noctx_print_from sb, fdc
     end
   end
   
   def test_print_to
     run_change_test create_exp_str(TOCONT[2 .. 2], ">") do |dw, sb, fdc|
-      dw.printTo sb, fdc
+      dw.noctx_print_to sb, fdc
     end
   end
 
-  def test_printlines
+  def test_print_lines
     expected = ""
     expected << create_exp_str(FROMCONT[0 .. 1], "<")
     expected << "---\n"
@@ -76,7 +71,7 @@ class DiffJ::WriterNoContextTestCase < Test::Unit::TestCase
     expected << "\n"
 
     run_change_test expected do |dw, sb, fdc|
-      dw.printLines sb, fdc
+      dw.noctx_print_lines sb, fdc
     end
   end
 end

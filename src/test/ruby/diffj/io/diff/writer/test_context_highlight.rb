@@ -10,9 +10,7 @@ require 'diffj/io/writer'
 
 include Java
 
-java_import org.incava.analysis.DetailedReport
-
-class DiffJ::WriterContextHighlightTestCase < TestCase
+class DiffJ::WriterContextHighlightTestCase < Test::Unit::TestCase
   def test_all
     # not yet implemented
   end
