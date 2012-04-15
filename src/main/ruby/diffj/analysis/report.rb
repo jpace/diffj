@@ -10,7 +10,18 @@ include Java
 module DiffJ
   module Analysis
     # Reports differences in long form.
-    class DetReport < org.incava.analysis.DetailedReport
+    class LongReport < org.incava.analysis.DetailedReport
+      include Loggable
+      
+      def initialize writer, show_context, highilght
+        info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".on_blue
+        super
+      end
+
+      def flush
+        info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".on_green
+        super
+      end
     end
   end
 end

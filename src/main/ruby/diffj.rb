@@ -5,13 +5,14 @@ require 'rubygems'
 require 'java'
 require 'riel'
 require 'diffj/io'
+require 'diffj/analysis/report'
 
 include Java
 
-import org.incava.diffj.Options
-import org.incava.diffj.DiffJException
-import org.incava.analysis.BriefReport
-import org.incava.analysis.DetailedReport
+java_import org.incava.diffj.Options
+java_import org.incava.diffj.DiffJException
+java_import org.incava.analysis.BriefReport
+java_import org.incava.analysis.DetailedReport
 
 Log::level = Log::DEBUG
 Log.set_widths(-15, 5, -50)
@@ -25,7 +26,7 @@ module DiffJ
     
     def initialize brief, context, highlight, recurse, from_label, fromver, to_label, tover
       writer = java.io.OutputStreamWriter.new java.lang.System.out
-      @report = brief ? BriefReport.new(writer) : org.incava.analysis.DetailedReport.new(writer, context, highlight)
+      @report = brief ? BriefReport.new(writer) : DiffJ::Analysis::LongReport.new(writer, context, highlight)
       @recurse = recurse
       @from_label = from_label
       @fromver = fromver

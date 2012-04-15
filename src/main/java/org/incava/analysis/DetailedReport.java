@@ -64,41 +64,6 @@ public class DetailedReport extends Report {
     }
     
     /**
-     * Associates the given file with the list of references, including that are
-     * adding to this report later, i.e., prior to <code>flush</code>.
-     */
-    public void reset(File fromFile, File toFile) {
-        super.resetFiles(fromFile, toFile);
-
-        tr.Ace.log("fromFile: " + fromFile + "; toFile: " + toFile);
-        
-        fromContents = null;
-        toContents = null;
-        
-        try {
-            fromFileRdr = new FileReader(fromFile);
-            toFileRdr   = new FileReader(toFile);
-        }
-        catch (IOException ioe) {
-            tr.Ace.log("error reading files: " + fromFile + ", " + toFile);
-        }
-    }
-
-    /**
-     * Associates the given string source with the list of references, including
-     * that are adding to this report later, i.e., prior to <code>flush</code>.
-     */
-    public void reset(String fromSource, String toSource) {
-        super.reset(fromSource, toSource);
-
-        this.fromContents = null;
-        this.toContents = null;
-        
-        fromFileRdr = new StringReader(fromSource);
-        toFileRdr = new StringReader(toSource);
-    }
-
-    /**
      * Associates the given string source with the list of differences, including
      * that are adding to this report later, i.e., prior to <code>flush</code>.
      */

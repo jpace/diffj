@@ -72,15 +72,6 @@ public abstract class Report {
      * Associates the given string source with the list of differences, including
      * that are adding to this report later, i.e., prior to <code>flush</code>.
      */
-    public void reset(String fromSource, String toSource) {
-        this.fromFileName = "-";
-        this.toFileName   = "-";
-    }
-
-    /**
-     * Associates the given string source with the list of differences, including
-     * that are adding to this report later, i.e., prior to <code>flush</code>.
-     */
     public void reset(String fromFileName, String fromContents, String toFileName, String toContents) {
         this.fromFileName = fromFileName;
         this.toFileName   = toFileName;

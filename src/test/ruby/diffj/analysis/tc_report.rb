@@ -54,7 +54,7 @@ class DiffJ::ReportTestCase < Test::Unit::TestCase
     tocont   << "line four"
     tocont   << "a change applied to line five."
 
-    rpt.reset fromcont.join("\n"), tocont.join("\n")
+    rpt.reset "-", fromcont.join("\n"), "-", tocont.join("\n")
 
     filediffs = rpt.differences
 
