@@ -9,9 +9,6 @@ require 'diffj/io/diffwriter/tc'
 
 include Java
 
-java_import org.incava.analysis.DetailedReport
-java_import org.incava.analysis.FileDiffChange
-
 class DiffJ::WriterNoContextTestCase < DiffJ::WriterTestCase
   include Loggable
 
@@ -19,23 +16,23 @@ class DiffJ::WriterNoContextTestCase < DiffJ::WriterTestCase
     DiffJ::IO::Diff::NoContextWriter
   end
   
-  def test_print_from
-    run_change_test create_exp_str(FROMCONT[4 .. 4], "<") do |dw, sb, fdc|
+  def test_change_print_from
+    run_change_test create_exp_str(FROMCONT[5 .. 5], "<") do |dw, sb, fdc|
       dw.noctx_print_from sb, fdc
     end
   end
   
-  def test_print_to
-    run_change_test create_exp_str(TOCONT[5 .. 5], ">") do |dw, sb, fdc|
+  def test_change_print_to
+    run_change_test create_exp_str(TOCONT[4 .. 4], ">") do |dw, sb, fdc|
       dw.noctx_print_to sb, fdc
     end
   end
 
-  def test_print_lines
+  def test_change_print_lines
     expected = ""
-    expected << create_exp_str(FROMCONT[4 .. 4], "<")
+    expected << create_exp_str(FROMCONT[5 .. 5], "<")
     expected << "---\n"
-    expected << create_exp_str(TOCONT[5 .. 5], ">")
+    expected << create_exp_str(TOCONT[4 .. 4], ">")
     expected << "\n"
 
     run_change_test expected do |dw, sb, fdc|

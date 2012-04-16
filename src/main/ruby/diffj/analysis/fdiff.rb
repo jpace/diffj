@@ -106,6 +106,11 @@ module DiffJ
       info "to_loc_end: #{to_loc_end}".cyan
       super
     end
+
+    def printContext dw, sb
+      info "self: #{self}; #{self}".on_blue
+      super
+    end
   end
 
   class FDiffDelete < org.incava.analysis.FileDiffDelete

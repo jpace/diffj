@@ -35,6 +35,7 @@ module DiffJ
         end
 
         def ctx_print_lines sb, fdiff
+          info "fdiff: #{fdiff}; #{fdiff.class}".yellow
           fdiff.printContext self, sb
           sb.append EOLN
         end
