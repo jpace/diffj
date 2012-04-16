@@ -50,10 +50,6 @@ module DiffJ
           end
         end
       end
-
-      class CtxHighltWriter < DiffContextHighlightWriter
-      end
     end
   end
 end
-  
