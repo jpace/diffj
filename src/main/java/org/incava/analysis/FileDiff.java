@@ -82,6 +82,8 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * @param toLoc       The location range in the to-file.
      */
     public FileDiff(Type type, String message, LocationRange fromLoc, LocationRange toLoc) {
+        tr.Ace.setVerbose(true);
+        tr.Ace.cyan("message", message);
         this.type           = type;
         this.message        = message;
         this.firstLocation  = fromLoc;
@@ -115,6 +117,8 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * @return -1, 0, or 1, for less than, equivalent to, or greater than.
      */
     public int compareTo(FileDiff other) {
+        tr.Ace.cyan("other", other);
+
         if (this == other) {
             return 0;
         }
@@ -143,6 +147,8 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * @return Whether the other reference is equal to this one.
      */
     public boolean equals(Object obj) {
+        tr.Ace.cyan("obj", obj);
+
         if (obj instanceof FileDiff) {
             FileDiff fdiff = (FileDiff)obj;
             return compareTo(fdiff) == 0;
@@ -150,6 +156,10 @@ public abstract class FileDiff implements Comparable<FileDiff> {
         else {
             return false;
         }
+    }
+
+    public int hashCode() {
+        return toString().hashCode();
     }
 
     /**

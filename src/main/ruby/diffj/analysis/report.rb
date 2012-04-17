@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/analysis/fdiffset'
 
 include Java
 
@@ -16,7 +17,7 @@ module DiffJ
       def initialize writer
         # super writer
         @writer = writer
-        @differences = org.incava.analysis.FileDiffs.new
+        @differences = DiffJ::FDiff::FDiffSet.new
       end
 
       def get_differences
@@ -29,12 +30,14 @@ module DiffJ
 
       def clear
         info "differences: #{differences}".yellow
+        info "differences: #{differences.inspect}".yellow
         @differences.clear
-        info "differences: #{differences}".yellow
+        info "differences: #{differences.inspect}".yellow
+        info "differences: #{differences.size}".yellow
       end
 
       def has_differences?
-        !@differences.isEmpty
+        !@differences.empty?
       end
       
       def flush

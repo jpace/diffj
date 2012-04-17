@@ -9,10 +9,6 @@ require 'diffj/io/diffwriter/writer'
 
 include Java
 
-java_import org.incava.analysis.DiffContextHighlightWriter
-java_import org.incava.analysis.DiffContextWriter
-java_import org.incava.analysis.DiffNoContextWriter
-
 module DiffJ
   module Analysis
     # Reports differences in long form.
@@ -22,9 +18,7 @@ module DiffJ
       def initialize writer, show_context, highlight
         super writer
 
-        info "DiffJ::IO::CtxHighltWriter: #{DiffJ::IO::Diff::CtxHighltWriter}".on_green
-
-        @dwcls = show_context ? (highlight ?  DiffJ::IO::Diff::CtxHighltWriter : DiffContextWriter) : DiffNoContextWriter
+        @dwcls = show_context ? (highlight ?  DiffJ::IO::Diff::ContextHighlightWriter : DiffJ::IO::Diff::ContextWriter) : DiffJ::IO::Diff::NoContextWriter
         @from_contents = nil
         @to_contents = nil
       end
@@ -36,7 +30,7 @@ module DiffJ
           dw = @dwcls.new from_lines, to_lines
           
           differences.each do |fdiff|
-            str = dw.getDifference fdiff
+            str = dw.difference fdiff
             @writer.write(str)
           end
 

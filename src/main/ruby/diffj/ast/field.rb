@@ -98,11 +98,13 @@ module DiffJ
       from_names_to_vd = make_vd_map from_var_decls
       to_names_to_vd = make_vd_map to_var_decls
 
-      names = from_names_to_vd.keys + to_names_to_vd.keys
+      names = Set.new(from_names_to_vd.keys).merge(to_names_to_vd.keys)
 
       names.each do |name|
         from_var_decl = from_names_to_vd[name]
         to_var_decl = to_names_to_vd[name]
+
+        info "name: #{name}".bold
 
         if from_var_decl && to_var_decl
           compare_variable_types name, from, from_var_decl, to, to_var_decl

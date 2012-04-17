@@ -14,7 +14,7 @@ include Java
 
 class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
   def get_writer_class
-    DiffJ::IO::Diff::CtxHighltWriter
+    DiffJ::IO::Diff::ContextHighlightWriter
   end
 
   def get_change_expected_from
@@ -39,13 +39,13 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
 
   def test_change_print_from
     run_change_test get_change_expected_from do |dw, sb, fdc|
-      dw.printFrom sb, fdc
+      dw.print_from sb, fdc
     end
   end
 
   def test_change_print_to
     run_change_test get_change_expected_to do |dw, sb, fdc|
-      dw.printTo sb, fdc
+      dw.print_to sb, fdc
     end
   end
 
@@ -56,7 +56,7 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     expected << "\n"
     
     run_change_test expected do |dw, sb, fdc|
-      dw.printLines sb, fdc
+      dw.print_lines sb, fdc
     end
   end
 
@@ -70,7 +70,7 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     expected << "\n"
 
     run_add_test expected do |dw, sb, fda|
-      dw.printLines sb, fda
+      dw.print_lines sb, fda
     end
   end
 
@@ -84,7 +84,7 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     expected << "\n"
 
     run_delete_test expected do |dw, sb, fda|
-      dw.printLines sb, fda
+      dw.print_lines sb, fda
     end
   end
 end

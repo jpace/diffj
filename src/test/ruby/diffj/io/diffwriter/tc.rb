@@ -12,7 +12,6 @@ require 'diffj/io/diffwriter/no_context'
 
 include Java
 
-java_import org.incava.analysis.DetailedReport
 java_import org.incava.ijdk.text.Location
 java_import org.incava.ijdk.text.LocationRange
 
@@ -54,6 +53,13 @@ class DiffJ::WriterTestCase < Test::Unit::TestCase
     lines.collect { |line| "#{ch} #{line}\n" }.join("")
   end
 
+  def add_lines str, lines, range, ch = " "
+    range && range.each do |idx|
+      str << "#{ch} #{lines[idx]}\n"
+    end
+    str
+  end
+
   def run_delta_test expected, fdiff, &blk
     dw = get_writer_class.new FROMCONT, TOCONT
     sb = java.lang.StringBuilder.new
@@ -71,12 +77,12 @@ class DiffJ::WriterTestCase < Test::Unit::TestCase
   end
 
   def run_add_test expected, &blk
-    fda = org.incava.analysis.FileDiffAdd.new "text added", loc_rg(6, 1, 6, 1), loc_rg(7, 1, 8, 40)
+    fda = DiffJ::FDiffAdd.new "text added", :locranges => [ loc_rg(6, 1, 6, 1), loc_rg(7, 1, 8, 40) ]
     run_delta_test expected, fda, &blk
   end
 
   def run_delete_test expected, &blk
-    fda = org.incava.analysis.FileDiffDelete.new "text deleted", loc_rg(2, 1, 2, 35), loc_rg(2, 1, 2, 1)
+    fda = DiffJ::FDiffDelete.new "text deleted", :locranges => [ loc_rg(2, 1, 2, 35), loc_rg(2, 1, 2, 1) ]
     run_delta_test expected, fda, &blk
   end
 

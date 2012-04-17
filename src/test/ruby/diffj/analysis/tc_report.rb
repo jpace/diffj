@@ -6,12 +6,10 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj'
+require 'diffj/analysis/fdiff'
 
 include Java
 
-java_import org.incava.analysis.FileDiffAdd
-java_import org.incava.analysis.FileDiffChange
-java_import org.incava.analysis.FileDiffDelete
 java_import org.incava.ijdk.text.Location
 java_import org.incava.ijdk.text.LocationRange
 
@@ -63,9 +61,9 @@ class DiffJ::ReportTestCase < Test::Unit::TestCase
 
     filediffs = rpt.differences
 
-    filediffs.add FileDiffChange.new "text changed", loc_rg(1, 9, 1, 9), loc_rg(1, 9, 1, 23)
-    filediffs.add FileDiffAdd.new "line(s) inserted", loc_rg(2, 1, 2, 1), loc_rg(2, 1, 3, 23)
-    filediffs.add FileDiffDelete.new "line(s) removed", loc_rg(3, 1, 3, 11), loc_rg(5, 1, 5, 1)
+    filediffs.add DiffJ::FDiffChange.new "text changed", :locranges => [ loc_rg(1, 9, 1, 9), loc_rg(1, 9, 1, 23) ]
+    filediffs.add DiffJ::FDiffAdd.new "line(s) inserted", :locranges => [ loc_rg(2, 1, 2, 1), loc_rg(2, 1, 3, 23) ]
+    filediffs.add DiffJ::FDiffDelete.new "line(s) removed", :locranges => [ loc_rg(3, 1, 3, 11), loc_rg(5, 1, 5, 1) ]
 
     info "filediffs: #{filediffs}".on_red
     

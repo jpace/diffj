@@ -17,7 +17,7 @@ module DiffJ
       # Returns the given difference, in brief format.
       def to_string fdiff
         str  = ""
-        str << fdiff.toDiffSummaryString()
+        str << fdiff.to_diff_summary_string
         str << ": "
         str << fdiff.message
         str << "\n"

@@ -4,21 +4,20 @@
 require 'rubygems'
 require 'riel'
 require 'java'
+require 'diffj/io/diffwriter/writer'
 
 include Java
-
-java_import org.incava.analysis.DiffContextWriter
 
 module DiffJ
   module IO
     module Diff
       EOLN = "\n"               # $$$ @todo make OS-independent
 
-      class ContextWriter < DiffContextWriter
+      class ContextWriter < DiffJ::IO::Diff::Writer
         include Loggable
 
         def initialize from_contents, to_contents
-          super
+          # super
           
           @from_contents = from_contents
           @to_contents = to_contents
@@ -26,27 +25,33 @@ module DiffJ
           info "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$".green
         end
 
-        def ctx_print_from sb, fdiff
-          ctx_print_lines_by_location sb, true, fdiff, fdiff.getFirstLocation(), @from_contents
+        def print_from sb, fdiff
+          print_lines_by_location sb, true, fdiff, fdiff.first_location, @from_contents
         end
 
-        def ctx_print_to sb, fdiff
-          ctx_print_lines_by_location sb, false, fdiff, fdiff.getSecondLocation(), @to_contents
+        def print_to sb, fdiff
+          print_lines_by_location sb, false, fdiff, fdiff.second_location, @to_contents
         end
 
-        def ctx_print_lines sb, fdiff
+        def print_lines sb, fdiff
           info "fdiff: #{fdiff}; #{fdiff.class}".yellow
-          fdiff.printContext self, sb
+          fdiff.print_context self, sb
           sb.append EOLN
         end
 
-        def ctx_get_line lines, lidx, fromLine, fromColumn, toLine, toColumn, isDelete
+        def print_lines sb, fdiff
+          info "fdiff: #{fdiff}; #{fdiff.class}".yellow
+          fdiff.print_context self, sb
+          sb.append EOLN
+        end
+
+        def get_line lines, lidx, fromLine, fromColumn, toLine, toColumn, isDelete
           sb = java.lang.StringBuilder.new
           sb.append("! ").append(lines[lidx - 1]).append(EOLN);
           return sb.toString()
         end
 
-        def ctx_print_lines_by_location sb, isDelete, fdiff, locrg, lines
+        def print_lines_by_location sb, isDelete, fdiff, locrg, lines
           fromLine = locrg.getStart().getLine();
           fromColumn = locrg.getStart().getColumn();
           toLine = locrg.getEnd().getLine();
@@ -61,7 +66,7 @@ module DiffJ
           # spaces here.
           # ... I loathe tabs.
           (fromLine .. toLine).each do |lidx|
-            line = ctx_get_line(lines, lidx, fromLine, fromColumn, toLine, toColumn, isDelete)
+            line = get_line(lines, lidx, fromLine, fromColumn, toLine, toColumn, isDelete)
             sb.append(line);
           end
 

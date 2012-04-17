@@ -121,10 +121,17 @@ module DiffJ
       titd.compare from_node, to_node
     end
 
-    def compare_coids from_coid, to_coid      
+    def compare_coids from_coid, to_coid
+      info "from_td: #{from_coid}; #{from_coid.class}".yellow
+      info "to_td: #{to_coid}; #{to_coid.class}".yellow
+
       if !from_coid.interface? && to_coid.interface?
+        info "from_td: #{from_coid}; #{from_coid.class}".blue
+        info "to_td: #{to_coid}; #{to_coid.class}".blue
         changed from_coid, to_coid, TYPE_CHANGED_FROM_CLASS_TO_INTERFACE
       elsif from_coid.interface? && !to_coid.interface?
+        info "from_td: #{from_coid}; #{from_coid.class}".cyan
+        info "to_td: #{to_coid}; #{to_coid.class}".cyan
         changed from_coid, to_coid, TYPE_CHANGED_FROM_INTERFACE_TO_CLASS
       end
         

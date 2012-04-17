@@ -7,6 +7,9 @@ require 'riel'
 require 'diffj/io'
 require 'diffj/analysis/short_report'
 require 'diffj/analysis/long_report'
+require 'diffj/io/diffwriter/context'
+require 'diffj/io/diffwriter/context_highlight'
+require 'diffj/io/diffwriter/no_context'
 
 include Java
 
@@ -61,7 +64,7 @@ module DiffJ
         from_elmt = create_from_element from_name
         return false if from_elmt.nil?
         from_elmt.compare_to @report, to_elmt
-        @exit_value = @report.differences.wasAdded ? 1 : 0
+        @exit_value = @report.differences.was_added? ? 1 : 0
         true
       rescue DiffJException => de
         $stderr.puts de.message

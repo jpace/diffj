@@ -18,12 +18,15 @@ module DiffJ
       @filediffs = filediffs
     end
 
-    def add ref
-      @filediffs << ref
+    def add fd
+      # << is method_alias'ed to add, but method aliasing just copies the
+      # method; it doesn't create a "live" reference.
+      @filediffs << fd
     end
 
     def changed *args
       chgobj = Change.new args
+      info "args: #{args.inspect}".red
       @filediffs << chgobj.filediff
     end
 
