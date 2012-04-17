@@ -12,6 +12,7 @@ require 'diffj/fdiff/writers/context_highlight'
 require 'diffj/fdiff/writers/no_context'
 
 include Java
+include DiffJ::FDiff::Report
 
 java_import org.incava.diffj.Options
 java_import org.incava.diffj.DiffJException
@@ -30,7 +31,7 @@ module DiffJ
     
     def initialize brief, context, highlight, recurse, from_label, fromver, to_label, tover
       writer = java.io.OutputStreamWriter.new java.lang.System.out
-      @report = brief ? DiffJ::Analysis::ShortReport.new(writer) : DiffJ::Analysis::LongReport.new(writer, context, highlight)
+      @report = brief ? ShortReport.new(writer) : LongReport.new(writer, context, highlight)
       @recurse = recurse
       @from_label = from_label
       @fromver = fromver

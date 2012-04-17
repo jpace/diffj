@@ -10,11 +10,9 @@ require 'diffj/fdiff/reports/short'
 
 include Java
 
-java_import org.incava.analysis.BriefReport
-
 class DiffJ::ShortReportTestCase < DiffJ::ReportTestCase
   def create_report sw, show_context, highlight
-    DiffJ::Analysis::ShortReport.new sw
+    DiffJ::FDiff::Report::ShortReport.new sw
   end    
   
   def test_all
