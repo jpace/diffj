@@ -31,6 +31,7 @@ module DiffJ
       end
 
       def was_added?
+        # raise "this is obsolete"
         @added
       end
     end

@@ -4,7 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'java'
-require 'diffj/analysis/report'
+require 'diffj/fdiff/report'
 
 include Java
 

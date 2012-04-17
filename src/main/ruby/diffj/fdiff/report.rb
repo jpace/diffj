@@ -4,7 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'java'
-require 'diffj/analysis/fdiffset'
+require 'diffj/fdiff/fdiffset'
 
 include Java
 
@@ -15,7 +15,6 @@ module DiffJ
       include Loggable
       
       def initialize writer
-        # super writer
         @writer = writer
         @differences = DiffJ::FDiff::FDiffSet.new
       end
@@ -31,6 +30,7 @@ module DiffJ
       def clear
         info "differences: #{differences}".yellow
         info "differences: #{differences.inspect}".yellow
+        @had_differences ||= !@differences.empty?
         @differences.clear
         info "differences: #{differences.inspect}".yellow
         info "differences: #{differences.size}".yellow
@@ -38,6 +38,10 @@ module DiffJ
 
       def has_differences?
         !@differences.empty?
+      end
+      
+      def had_differences?
+        @had_differences
       end
       
       def flush
