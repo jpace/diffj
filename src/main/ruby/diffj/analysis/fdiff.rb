@@ -196,11 +196,11 @@ module DiffJ
   class FDiffCode < FDiffDelta
     include Loggable, FDiff
 
-    def printNoContext dw, sb
-      dw.printFrom sb, self
+    def print_no_context dw, sb
+      dw.print_from sb, self
       sb.append "---"
       sb.append DiffJ::IO::EOLN
-      dw.printTo sb, self
+      dw.print_to sb, self
     end
   end
 
@@ -214,13 +214,6 @@ module DiffJ
     def print_context dw, sb
       dw.print_to sb, self
     end
-    
-    def print_no_context dw, sb
-      dw.print_from sb, self
-      sb.append "---"
-      sb.append DiffJ::IO::EOLN
-      dw.print_to sb, self
-    end
   end
 
   class FDiffCodeDeleted < FDiffCode
@@ -232,13 +225,6 @@ module DiffJ
 
     def print_context dw, sb
       dw.print_from sb, self
-    end
-
-    def print_no_context dw, sb
-      dw.print_from sb, self
-      sb.append "---"
-      sb.append DiffJ::IO::EOLN
-      dw.print_to sb, self
     end
   end
 end
