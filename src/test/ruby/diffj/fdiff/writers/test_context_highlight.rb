@@ -13,7 +13,7 @@ include Java
 
 class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
   def get_writer_class
-    DiffJ::IO::Diff::ContextHighlightWriter
+    DiffJ::FDiff::Writer::ContextHighlightWriter
   end
 
   def get_change_expected_from

@@ -5,9 +5,13 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/fdiff/reports/report'
-require 'diffj/fdiff/writers/writer'
+require 'diffj/fdiff/writers/context'
+require 'diffj/fdiff/writers/context_highlight'
+require 'diffj/fdiff/writers/no_context'
 
 include Java
+
+include DiffJ::FDiff::Writer
 
 module DiffJ
   module Analysis
@@ -18,7 +22,7 @@ module DiffJ
       def initialize writer, show_context, highlight
         super writer
 
-        @dwcls = show_context ? (highlight ?  DiffJ::IO::Diff::ContextHighlightWriter : DiffJ::IO::Diff::ContextWriter) : DiffJ::IO::Diff::NoContextWriter
+        @dwcls = show_context ? (highlight ?  ContextHighlightWriter : ContextWriter) : NoContextWriter
         @from_contents = nil
         @to_contents = nil
       end

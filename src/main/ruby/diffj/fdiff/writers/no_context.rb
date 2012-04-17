@@ -9,11 +9,11 @@ require 'diffj/fdiff/writers/writer'
 include Java
 
 module DiffJ
-  module IO
-    module Diff
+  module FDiff
+    module Writer
       EOLN = "\n"               # $$$ @todo make OS-independent
       
-      class NoContextWriter < DiffJ::IO::Diff::Writer
+      class NoContextWriter < BaseWriter
         include Loggable
         
         def initialize from_contents, to_contents

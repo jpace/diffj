@@ -8,11 +8,11 @@ require 'java'
 include Java
 
 module DiffJ
-  module IO
-    module Diff
+  module FDiff
+    module Writer
       EOLN = "\n"               # $$$ @todo make OS-independent
 
-      class Writer
+      class BaseWriter
         # Returns a string representing the given reference, consistent with the
         # format of the Report subclass.
         def difference fdiff

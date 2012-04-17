@@ -12,7 +12,7 @@ include Java
 
 class DiffJ::WriterContextTestCase < DiffJ::WriterTestCase
   def get_writer_class
-    DiffJ::IO::Diff::ContextWriter
+    DiffJ::FDiff::Writer::ContextWriter
   end
 
   def test_change_print_from

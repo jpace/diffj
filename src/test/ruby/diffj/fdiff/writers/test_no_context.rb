@@ -13,7 +13,7 @@ class DiffJ::WriterNoContextTestCase < DiffJ::WriterTestCase
   include Loggable
 
   def get_writer_class
-    DiffJ::IO::Diff::NoContextWriter
+    DiffJ::FDiff::Writer::NoContextWriter
   end
 
   def create_exp_from range

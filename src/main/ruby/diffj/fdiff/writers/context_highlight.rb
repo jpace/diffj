@@ -9,8 +9,8 @@ require 'diffj/fdiff/writers/context'
 include Java
 
 module DiffJ
-  module IO
-    module Diff
+  module FDiff
+    module Writer
       EOLN = "\n"               # $$$ @todo make OS-independent
 
       class ContextHighlightWriter < ContextWriter
