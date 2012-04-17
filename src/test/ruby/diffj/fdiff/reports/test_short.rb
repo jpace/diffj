@@ -5,8 +5,8 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj'
-require 'diffj/fdiff/reports/tc_report'
-require 'diffj/fdiff/reports/short_report'
+require 'diffj/fdiff/reports/tc'
+require 'diffj/fdiff/reports/short'
 
 include Java
 
