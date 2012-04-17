@@ -5,7 +5,7 @@ require 'test/unit'
 require 'java'
 require 'rubygems'
 require 'riel'
-require 'diffj/io/diffwriter/tc'
+require 'diffj/fdiff/writers/tc'
 
 include Java
 

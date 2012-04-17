@@ -4,7 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'java'
-require 'diffj/io/diffwriter/context'
+require 'diffj/fdiff/writers/context'
 
 include Java
 

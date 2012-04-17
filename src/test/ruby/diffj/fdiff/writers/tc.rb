@@ -7,8 +7,8 @@ require 'rubygems'
 require 'riel'
 require 'diffj'
 require 'diffj/fdiff/fdiff'
-require 'diffj/io/diffwriter/writer'
-require 'diffj/io/diffwriter/no_context'
+require 'diffj/fdiff/writers/writer'
+require 'diffj/fdiff/writers/no_context'
 
 include Java
 

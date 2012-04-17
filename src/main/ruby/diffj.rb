@@ -7,9 +7,9 @@ require 'riel'
 require 'diffj/io'
 require 'diffj/fdiff/short_report'
 require 'diffj/fdiff/long_report'
-require 'diffj/io/diffwriter/context'
-require 'diffj/io/diffwriter/context_highlight'
-require 'diffj/io/diffwriter/no_context'
+require 'diffj/fdiff/writers/context'
+require 'diffj/fdiff/writers/context_highlight'
+require 'diffj/fdiff/writers/no_context'
 
 include Java
 

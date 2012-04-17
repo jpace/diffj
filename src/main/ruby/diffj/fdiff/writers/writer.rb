@@ -34,4 +34,3 @@ module DiffJ
     end
   end
 end
-
