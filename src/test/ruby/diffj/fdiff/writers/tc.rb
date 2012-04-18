@@ -1,21 +1,14 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'test/unit'
-require 'java'
-require 'rubygems'
-require 'riel'
-require 'diffj'
+require 'diffj/diffjtestcase'
 require 'diffj/fdiff/fdiff'
 require 'diffj/fdiff/writers/writer'
 require 'diffj/fdiff/writers/no_context'
 
 include Java
 
-java_import org.incava.ijdk.text.Location
-java_import org.incava.ijdk.text.LocationRange
-
-class DiffJ::WriterTestCase < Test::Unit::TestCase
+class DiffJ::WriterTestCase < DiffJ::TestCase
   include Loggable
 
   FROMCONT  = Array.new
@@ -42,13 +35,6 @@ class DiffJ::WriterTestCase < Test::Unit::TestCase
   TOCONT   << "For many a man so hard is of his heart,"  # add     # 7
   TOCONT   << "He may not weep although him sore smart." # add     # 8
 
-  def loc_rg from_line, from_col, to_line, to_col
-    from = Location.new from_line, from_col
-    to = Location.new to_line, to_col
-    
-    LocationRange.new from, to
-  end
-
   def create_exp_str lines, ch
     lines.collect { |line| "#{ch} #{line}\n" }.join("")
   end
@@ -72,17 +58,17 @@ class DiffJ::WriterTestCase < Test::Unit::TestCase
   end
 
   def run_change_test expected, &blk
-    fdc = DiffJ::FDiffChange.new "text changed", :locranges => [ loc_rg(6, 20, 6, 36), loc_rg(5, 20, 5, 33) ]
+    fdc = DiffJ::FDiffChange.new "text changed", :locranges => [ locrg(6, 20, 6, 36), locrg(5, 20, 5, 33) ]
     run_delta_test expected, fdc, &blk
   end
 
   def run_add_test expected, &blk
-    fda = DiffJ::FDiffAdd.new "text added", :locranges => [ loc_rg(6, 1, 6, 1), loc_rg(7, 1, 8, 40) ]
+    fda = DiffJ::FDiffAdd.new "text added", :locranges => [ locrg(6, 1, 6, 1), locrg(7, 1, 8, 40) ]
     run_delta_test expected, fda, &blk
   end
 
   def run_delete_test expected, &blk
-    fda = DiffJ::FDiffDelete.new "text deleted", :locranges => [ loc_rg(2, 1, 2, 35), loc_rg(2, 1, 2, 1) ]
+    fda = DiffJ::FDiffDelete.new "text deleted", :locranges => [ locrg(2, 1, 2, 35), locrg(2, 1, 2, 1) ]
     run_delta_test expected, fda, &blk
   end
 

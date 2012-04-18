@@ -11,8 +11,6 @@ include Java
 module DiffJ
   module FDiff
     module Writer
-      EOLN = "\n"               # $$$ @todo make OS-independent
-      
       class NoContextWriter < BaseWriter
         include Loggable
         
@@ -35,9 +33,9 @@ module DiffJ
         end
 
         def print_lines_by_location sb, locrg, ind, lines
-          fromLine = locrg.getStart().getLine()
-          throughLine = locrg.getEnd().getLine()
-          (fromLine .. throughLine).each do |lnum|
+          from_line = locrg.from.line
+          through_line = locrg.to.line
+          (from_line .. through_line).each do |lnum|
             sb.append ind + " " + lines[lnum - 1]
             sb.append EOLN
           end

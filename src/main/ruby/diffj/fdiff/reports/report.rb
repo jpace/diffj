@@ -4,7 +4,6 @@
 require 'rubygems'
 require 'riel'
 require 'java'
-require 'diffj/fdiff/fdiffset'
 
 include Java
 
@@ -16,7 +15,7 @@ module DiffJ
         
         def initialize writer
           @writer = writer
-          @differences = DiffJ::FDiff::FDiffSet.new
+          @differences = SortedSet.new
         end
 
         def get_differences
@@ -28,7 +27,6 @@ module DiffJ
         end
 
         def clear
-          info "differences: #{differences}".yellow
           info "differences: #{differences.inspect}".yellow
           @had_differences ||= !@differences.empty?
           @differences.clear
@@ -64,11 +62,7 @@ module DiffJ
           str << @to_file_name
           str << java.lang.System.getProperty("line.separator")
           
-          begin
-            @writer.write str
-          rescue java.io.IOException => ioe
-            # nothing
-          end
+          @writer.write str
           
           @from_file_name = nil
           @to_file_name = nil

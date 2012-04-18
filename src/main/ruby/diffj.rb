@@ -7,8 +7,8 @@ require 'riel'
 require 'diffj/io'
 require 'diffj/fdiff/reports/short'
 require 'diffj/fdiff/reports/long'
-require 'diffj/fdiff/writers/context'
-require 'diffj/fdiff/writers/context_highlight'
+require 'diffj/fdiff/writers/ctx_hl'
+require 'diffj/fdiff/writers/ctx_no_hl'
 require 'diffj/fdiff/writers/no_context'
 
 include Java
@@ -16,8 +16,6 @@ include DiffJ::FDiff::Report
 
 java_import org.incava.diffj.Options
 java_import org.incava.diffj.DiffJException
-java_import org.incava.analysis.BriefReport
-java_import org.incava.analysis.DetailedReport
 
 Log::level = Log::DEBUG
 Log.set_widths(-15, 5, -50)

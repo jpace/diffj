@@ -106,12 +106,12 @@ module DiffJ
     end
 
     def on_same_line? ref, locrg
-      ref && ref.getFirstLocation().getStart().getLine() == locrg.getStart().getLine()
+      ref && ref.first_location.from.line == locrg.from.line
     end
 
     def replace_reference name, ref, fromlocrg, tolocrg
       newmsg  = java.text.MessageFormat.format CODE_CHANGED, name
-      locs = [ ref.first_location.getStart(), fromlocrg.getEnd(), ref.second_location.getStart(), tolocrg.getEnd() ]
+      locs = [ ref.first_location.from, fromlocrg.to, ref.second_location.from, tolocrg.to ]
       newdiff = DiffJ::FDiffChange.new newmsg, :locations => locs
       filediffs.delete ref
       add newdiff
@@ -146,7 +146,6 @@ module DiffJ
       addend   = diff.getAddedEnd()
       
       # I have this guard here, but I don't know that it's ever been hit
-      # return nil unless is_diff?(delend) && is_diff?(addend)
       return nil if !is_diff?(delend) && !is_diff?(addend)
       
       fromlocrg = get_location_range from_list, delstart, delend

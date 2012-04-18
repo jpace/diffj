@@ -6,38 +6,45 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj/diffjtestcase'
-require 'diffj/io/location'
+
+file = $0
+puts "file: #{file}"
+
+puts "here: #{__FILE__}"
+
+# var = 'diffj/io/location'
+# require var
 
 include Java
 include DiffJ::IO
 
 class DiffJ::LocationTestCase < DiffJ::TestCase
   include Loggable
-  
+
   def test_ctor
-    loc = Location.new 17, 3
-    assert_equal 17, loc.line
-    assert_equal 3, loc.column
+    lc = loc 17, 3
+    assert_equal 17, lc.line
+    assert_equal 3, lc.column
   end
 
-  def test_to_string
-    loc = Location.new 632, 5
-    assert_equal "632:5", loc.to_string
+  def test_to_s
+    lc = loc 632, 5
+    assert_equal "632:5", lc.to_s
   end
 
   def test_equals
-    assert Location.new(111, 222).equals(Location.new(111, 222))
-    assert !Location.new(111, 222).equals(Location.new(111, 223))
-    assert !Location.new(112, 222).equals(Location.new(111, 222))
+    assert loc(111, 222) == loc(111, 222)
+    assert loc(111, 222) != loc(111, 223)
+    assert loc(112, 222) != loc(111, 222)
   end
 
-  def assert_compare_to exp, aline, acol, bline, bcol
-    assert_equal exp, Location.new(aline, acol).compare_to(Location.new(bline, bcol))
+  def assert_spaceship exp, aline, acol, bline, bcol
+    assert_equal exp, loc(aline, acol) <=> loc(bline, bcol)
   end
     
-  def test_compare_to
-    assert_compare_to( 0, 10, 14, 10, 14)
-    assert_compare_to( 1,  5, 10,  5,  9)
-    assert_compare_to(-1,  5, 18,  6, 18)
+  def test_spaceship
+    assert_spaceship( 0, 10, 14, 10, 14)
+    assert_spaceship( 1,  5, 10,  5,  9)
+    assert_spaceship(-1,  5, 18,  6, 18)
   end
 end

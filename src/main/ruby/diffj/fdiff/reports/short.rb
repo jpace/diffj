@@ -24,19 +24,16 @@ module DiffJ::FDiff::Report
     end
     
     def write_differences
-      begin
-        laststr = nil
-        differences.each do |fdiff|
-          str = to_string fdiff
-          if str != laststr
-            @writer.write str
-            laststr = str
-          end
+      laststr = nil
+      differences.each do |fdiff|
+        str = to_string fdiff
+        if str != laststr
+          @writer.write str
+          laststr = str
         end
-        # we can't close STDOUT
-        @writer.flush
-      rescue java.io.IOException => ioe
       end
+      # we can't close STDOUT
+      @writer.flush
     end
   end
 end

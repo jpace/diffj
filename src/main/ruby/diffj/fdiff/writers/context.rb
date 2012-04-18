@@ -11,68 +11,59 @@ include Java
 module DiffJ
   module FDiff
     module Writer
-      EOLN = "\n"               # $$$ @todo make OS-independent
-
       class ContextWriter < BaseWriter
         include Loggable
 
         def initialize from_contents, to_contents
-          # super
-          
           @from_contents = from_contents
           @to_contents = to_contents
-
-          info "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$".green
         end
 
         def print_from sb, fdiff
-          print_lines_by_location sb, true, fdiff, fdiff.first_location, @from_contents
+          print_lines_by_location sb, true, fdiff.first_location, @from_contents
         end
 
         def print_to sb, fdiff
-          print_lines_by_location sb, false, fdiff, fdiff.second_location, @to_contents
+          print_lines_by_location sb, false, fdiff.second_location, @to_contents
         end
 
         def print_lines sb, fdiff
-          info "fdiff: #{fdiff}; #{fdiff.class}".yellow
+          info "fdiff: #{fdiff}; #{fdiff.class}"
           fdiff.print_context self, sb
           sb.append EOLN
         end
 
         def print_lines sb, fdiff
-          info "fdiff: #{fdiff}; #{fdiff.class}".yellow
+          info "fdiff: #{fdiff}; #{fdiff.class}"
           fdiff.print_context self, sb
           sb.append EOLN
         end
 
-        def get_line lines, lidx, fromLine, fromColumn, toLine, toColumn, isDelete
-          sb = java.lang.StringBuilder.new
-          sb.append("! ").append(lines[lidx - 1]).append(EOLN);
-          return sb.toString()
+        def get_line lines, lidx, from_line, from_column, to_line, to_column, is_delete
+          raise "abstract method!"
         end
 
-        def print_lines_by_location sb, isDelete, fdiff, locrg, lines
-          fromLine = locrg.getStart().getLine();
-          fromColumn = locrg.getStart().getColumn();
-          toLine = locrg.getEnd().getLine();
-          toColumn = locrg.getEnd().getColumn();
+        def line_to_s line, ch = " "
+          "#{ch} #{line}\n"
+        end
+        
+        def print_lines_by_location sb, is_delete, locrg, lines
+          from_line = locrg.from.line
+          from_column = locrg.from.column
+          to_line = locrg.to.line
+          to_column = locrg.to.column
 
-          ([ 0, fromLine - 4 ].max ... fromLine - 1).each do |lnum|
-            sb.append("  ").append(lines[lnum])
-            sb.append(EOLN);
+          ([ 0, from_line - 4 ].max ... from_line - 1).each do |lnum|
+            sb.append line_to_s lines[lnum]
           end
 
-          # PMD reports columns using tabSize == 8, so we replace tabs with
-          # spaces here.
-          # ... I loathe tabs.
-          (fromLine .. toLine).each do |lidx|
-            line = get_line(lines, lidx, fromLine, fromColumn, toLine, toColumn, isDelete)
-            sb.append(line);
+          (from_line .. to_line).each do |lidx|
+            line = get_line(lines, lidx, from_line, from_column, to_line, to_column, is_delete)
+            sb.append line
           end
 
-          (toLine ... [ toLine + 3, lines.size() ].min).each do |lnum|
-            sb.append("  ").append(lines[lnum])
-            sb.append(EOLN)
+          (to_line ... [ to_line + 3, lines.size() ].min).each do |lnum|
+            sb.append line_to_s lines[lnum]
           end
         end
       end

@@ -6,22 +6,13 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj'
+require 'diffj/diffjtestcase'
 require 'diffj/fdiff/fdiff'
 
 include Java
 
-java_import org.incava.ijdk.text.Location
-java_import org.incava.ijdk.text.LocationRange
-
-class DiffJ::ReportTestCase < Test::Unit::TestCase
+class DiffJ::ReportTestCase < DiffJ::TestCase
   include Loggable
-
-  def loc_rg from_line, from_col, to_line, to_col
-    from = Location.new from_line, from_col
-    to = Location.new to_line, to_col
-    
-    LocationRange.new from, to
-  end
 
   def create_report sw, show_context, highlight
   end
@@ -61,9 +52,9 @@ class DiffJ::ReportTestCase < Test::Unit::TestCase
 
     filediffs = rpt.differences
 
-    filediffs.add DiffJ::FDiffChange.new "text changed", :locranges => [ loc_rg(1, 9, 1, 9), loc_rg(1, 9, 1, 23) ]
-    filediffs.add DiffJ::FDiffAdd.new "line(s) inserted", :locranges => [ loc_rg(2, 1, 2, 1), loc_rg(2, 1, 3, 23) ]
-    filediffs.add DiffJ::FDiffDelete.new "line(s) removed", :locranges => [ loc_rg(3, 1, 3, 11), loc_rg(5, 1, 5, 1) ]
+    filediffs.add DiffJ::FDiffChange.new "text changed", :locranges => [ locrg(1, 9, 1, 9), locrg(1, 9, 1, 23) ]
+    filediffs.add DiffJ::FDiffAdd.new "line(s) inserted", :locranges => [ locrg(2, 1, 2, 1), locrg(2, 1, 3, 23) ]
+    filediffs.add DiffJ::FDiffDelete.new "line(s) removed", :locranges => [ locrg(3, 1, 3, 11), locrg(5, 1, 5, 1) ]
 
     info "filediffs: #{filediffs}".on_red
     

@@ -6,7 +6,50 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj'
+
 require 'diffj/io/location'
+require 'diffj/io/locrange'
+
+file = $0
+puts "file: #{file}".red
+puts "file: #{__FILE__}".red
+
+class DiffJ::TestCase < Test::Unit::TestCase
+end
+
+def file_to_req_path file
+  file.sub(%r{.*src/test/ruby/}, '').sub(%r{\.rb}, '\1')
+end
+
+if file.index %r{diffj/.*/test_}
+  testee = file.sub(%r{.*src/test/ruby/}, '').sub(%r{test_(\w+).rb}, '\1')
+  puts "testee: #{testee}".red
+
+  require testee
+
+  # and roll up through all the 'tc.rb' files:
+
+  fullpath = Pathname.new(file).expand_path
+
+  puts "fullpath: #{fullpath}".red
+
+  while fullpath.to_s != '/'
+    tcfile = fullpath.parent + 'tc.rb'
+    puts "tcfile: #{tcfile}".red
+
+    if tcfile.exist?
+      puts "tcfile exists: #{tcfile}".red
+
+      tcpath = file_to_req_path tcfile.to_s
+      puts "tcpath: #{tcpath}".red
+
+      require tcpath
+    else
+      break
+    end
+    fullpath = fullpath.parent
+  end
+end
 
 include Java
 
@@ -120,9 +163,9 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def assert_diffs_equal exp, act, msg = ""
-    info "exp.type: #{exp.type}"
-    info "act.type: #{act.type}"
-    assert_equal exp.type, act.type, msg + ".type"
+    info "exp.diff_type: #{exp.diff_type}"
+    info "act.diff_type: #{act.diff_type}"
+    assert_equal exp.diff_type, act.diff_type, msg + ".type"
     assert_equal exp.message, act.message, msg + ".message"
 
     assert_equal exp.first_location, act.first_location, msg + ".first_location"
@@ -135,6 +178,15 @@ class DiffJ::TestCase < Test::Unit::TestCase
 
   def loc x, y
     DiffJ::IO::Location.new x, y
+  end
+
+  def locrg *args
+    from, to = if args.size == 2
+                 args
+               else
+                 [ loc(args[0], args[1]), loc(args[2], args[3]) ]
+               end
+    DiffJ::IO::LocationRange.new from, to
   end
 
   def loctext loc, text
@@ -152,8 +204,8 @@ class DiffJ::TestCase < Test::Unit::TestCase
     msgvals.kind_of?(Array) && msgvals.length > 1 ? format(msgvals[0], *(msgvals[1 .. -1])) : msgvals
   end
 
-  def make_fdiff type, msgvals, from_start, from_end, to_start, to_end
-    type.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
+  def make_fdiff diff_type, msgvals, from_start, from_end, to_start, to_end
+    diff_type.new get_message(msgvals), :locations => [ from_start, from_end, to_start, to_end ]
   end
 
   def make_fdiff_add msgvals, from_start, from_end, to_start, to_end

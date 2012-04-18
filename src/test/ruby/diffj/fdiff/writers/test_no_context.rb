@@ -1,11 +1,8 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'test/unit'
-require 'java'
-require 'rubygems'
-require 'riel'
 require 'diffj/fdiff/writers/tc'
+require 'diffj/fdiff/writers/no_context'
 
 include Java
 

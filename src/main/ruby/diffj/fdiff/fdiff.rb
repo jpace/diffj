@@ -5,11 +5,9 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/io/location'
+require 'diffj/io/locrange'
 
 include Java
-
-java_import org.incava.ijdk.text.Location
-java_import org.incava.ijdk.text.LocationRange
 
 module DiffJ
   module FDiff
@@ -23,11 +21,11 @@ module DiffJ
       end      
 
       def tks_to_location_range from, to = from
-        LocationRange.new to_begin_location(from), to_end_location(to)
+        DiffJ::IO::LocationRange.new to_begin_location(from), to_end_location(to)
       end
 
       def locs_to_location_range from, to
-        from && LocationRange.new(from, to)
+        from && DiffJ::IO::LocationRange.new(from, to)
       end
 
       # handles legacy overloading of FDiff* parameters for tokens, locations,
@@ -36,21 +34,20 @@ module DiffJ
         if args.size == 1
           arg = args[0]
           if locs = arg[:locations]
-            from_rg = locs_to_location_range(locs[0], locs[1])
-            to_rg = locs_to_location_range(locs[2], locs[3])
-            [ from_rg, to_rg ]
+            locs.each_slice(2).to_a.collect do |locpair|
+              locs_to_location_range(*locpair)
+            end
           elsif lrs = arg[:locranges]
             lrs
           elsif tks = arg[:tokens]
             if tks.size == 2
-              from_rg = tks_to_location_range tks[0]
-              to_rg = tks_to_location_range tks[1]
-              [ from_rg, to_rg ]
+              tks.collect { |tk| tks_to_location_range tk }
             else
               # 4 tokens
-              from_rg = tks_to_location_range(tks[0], tks[1])
-              to_rg = tks_to_location_range(tks[2], tks[3])
-              [ from_rg, to_rg ]
+              # collect_slice would be nice ...
+              tks.each_slice(2).to_a.collect do |tkpair|
+                tks_to_location_range(*tkpair)
+              end
             end
           else
             Log.info "wtf: #{arg}".on_red
@@ -65,7 +62,7 @@ module DiffJ
     end
   end
 
-  class FDiffDelta < org.incava.analysis.FileDiff
+  class FDiffDelta
     include Loggable, FDiff
 
     attr_reader :first_location
@@ -74,9 +71,8 @@ module DiffJ
     attr_reader :message
 
     def initialize msg, *args
-      super diff_type, msg, *(@first_location, @second_location = self.class.convert_to_locations(args))
-      # @first_location, @second_location = self.class.convert_to_locations(args)
-      @diff_type = diff_type.to_s
+      @first_location, @second_location = self.class.convert_to_locations args
+      @diff_type = diff_type
       @message = msg
     end
 
@@ -90,36 +86,28 @@ module DiffJ
 
     # returns "1" (if same line) or "1,3" (multiple lines)
     def to_line_string lr
-      fromLine = lr.getStart().getLine();
-      endLine = lr.getEnd().getLine();
-      str = ""
-      str << fromLine.to_s
-      if fromLine != endLine
-        str << "," << endLine.to_s
+      str = lr.from.line.to_s.dup
+      if lr.from.line != lr.to.line
+        str << "," << lr.to.line.to_s
       end
       str
     end
 
     # returns 1a,8, 3,14c4,10 ...
     def to_diff_summary_string
-      str = ""
-      str << to_line_string(@first_location)
-      str << @diff_type
-      str << to_line_string(@second_location)
+      to_line_string(@first_location) << @diff_type << to_line_string(@second_location)
     end
 
     def to_s
       return "foo" if true
       
-      str = ""
-      str << "["
+      str = "["
       str << @diff_type.to_s
-      str << " from: " << (@first_location ? @first_location.to_s : "null")
+      str << " from: " << @first_location.to_s
       if @second_location
-        str << " to: " << (@second_location ? @second_location.to_s : "null")
+        str << " to: " << @second_location.to_s
       end
       str << "] (" << @message << ")"
-      str
     end
 
     def compare a, b
@@ -141,10 +129,8 @@ module DiffJ
   end
 
   class FDiffAdd < FDiffDelta
-    include Loggable, FDiff
-
     def diff_type
-      org.incava.analysis.FileDiff::Type::ADDED
+      "a"
     end
 
     def print_context dw, sb
@@ -157,10 +143,8 @@ module DiffJ
   end
 
   class FDiffChange < FDiffDelta
-    include Loggable, FDiff
-
     def diff_type
-      org.incava.analysis.FileDiff::Type::CHANGED
+      "c"
     end
 
     def print_context dw, sb
@@ -178,10 +162,8 @@ module DiffJ
   end
 
   class FDiffDelete < FDiffDelta
-    include Loggable, FDiff
-
     def diff_type
-      org.incava.analysis.FileDiff::Type::DELETED
+      "d"
     end
 
     def print_context dw, sb
@@ -194,8 +176,6 @@ module DiffJ
   end
 
   class FDiffCode < FDiffDelta
-    include Loggable, FDiff
-
     def print_no_context dw, sb
       dw.print_from sb, self
       sb.append "---"
@@ -205,10 +185,8 @@ module DiffJ
   end
 
   class FDiffCodeAdded < FDiffCode
-    include Loggable, FDiff
-
     def diff_type
-      org.incava.analysis.FileDiff::Type::ADDED
+      "a"
     end
 
     def print_context dw, sb
@@ -217,10 +195,8 @@ module DiffJ
   end
 
   class FDiffCodeDeleted < FDiffCode
-    include Loggable, FDiff
-
     def diff_type
-      org.incava.analysis.FileDiff::Type::DELETED
+      "d"
     end
 
     def print_context dw, sb
