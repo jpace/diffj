@@ -9,14 +9,12 @@ include Java
 
 module DiffJ
   module IO
-    class Element # < Pathname
+    class Element
       include Loggable
 
       attr_reader :source_version
       
       def initialize name, srcver
-        info "name: #{name}".on_red
-        info "name.class: #{name.class}".on_red
         @name = name
         @source_version = srcver
         @pn = Pathname.new name

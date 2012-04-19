@@ -45,9 +45,7 @@ module DiffJ
 
       def <=> other
         cmp = line <=> other.line
-        return cmp unless cmp.zero?
-
-        column <=> other.column
+        cmp.nonzero? || column <=> other.column
       end
     end
   end

@@ -27,8 +27,8 @@ module DiffJ
         end
 
         def compare report, from_file, to_file
-          Log.info "from_file: #{from_file}".cyan
-          Log.info "to_file: #{to_file}".cyan
+          Log.info "from_file: #{from_file}"
+          Log.info "to_file: #{to_file}"
           from_file.compare report, to_file
           report.flush
         end

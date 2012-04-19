@@ -42,13 +42,6 @@ class DiffJ::ReportTestCase < DiffJ::TestCase
     tocont   << "line four"
     tocont   << "a change applied to line five."
 
-    # it looks like JRuby has a limit of three method parameters for lookup,
-    # so we do it ourself here:
-    method_params = [ java.lang.String, java.lang.String, java.lang.String, java.lang.String ]
-    # rpt.java_send :reset, method_params, "-", fromcont.join("\n"), "-", tocont.join("\n")
-
-    info "rpt: #{rpt}; #{rpt.class}".on_magenta
-
     rpt.reset "-", fromcont.join("\n"), "-", tocont.join("\n")
 
     filediffs = rpt.differences
@@ -57,7 +50,7 @@ class DiffJ::ReportTestCase < DiffJ::TestCase
     filediffs.add DiffJ::FDiffAdd.new "line(s) inserted", :locranges => [ locrg(2, 1, 2, 1), locrg(2, 1, 3, 23) ]
     filediffs.add DiffJ::FDiffDelete.new "line(s) removed", :locranges => [ locrg(3, 1, 3, 11), locrg(5, 1, 5, 1) ]
 
-    info "filediffs: #{filediffs}".on_red
+    info "filediffs: #{filediffs}"
     
     rpt.flush
 
@@ -76,6 +69,6 @@ class DiffJ::ReportTestCase < DiffJ::TestCase
 
   # this testcase has no tests of its own:
   def default_test
-    info "self: #{self}".cyan
+    info "self: #{self}"
   end
 end

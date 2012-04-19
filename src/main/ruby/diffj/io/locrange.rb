@@ -28,7 +28,7 @@ module DiffJ
 
       def <=> other
         cmp = from <=> other.from
-        cmp.zero? ? to <=> other.to : cmp
+        cmp.nonzero? || to <=> other.to
       end
     end
   end
