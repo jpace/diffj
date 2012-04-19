@@ -11,8 +11,8 @@ require 'diffj/fdiff/reports/short'
 include Java
 
 class DiffJ::ShortReportTestCase < DiffJ::ReportTestCase
-  def create_report sw, show_context, highlight
-    DiffJ::FDiff::Report::ShortReport.new sw
+  def create_report sio, show_context, highlight
+    DiffJ::FDiff::Report::ShortReport.new sio
   end    
   
   def test_all

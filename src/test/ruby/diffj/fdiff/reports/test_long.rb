@@ -11,8 +11,8 @@ require 'diffj/fdiff/reports/long'
 include Java
 
 class DiffJ::LongReportTestCase < DiffJ::ReportTestCase
-  def create_report sw, show_context, highlight
-    DiffJ::FDiff::Report::LongReport.new sw, show_context, highlight
+  def create_report sio, show_context, highlight
+    DiffJ::FDiff::Report::LongReport.new sio, show_context, highlight
   end
     
   def test_no_context

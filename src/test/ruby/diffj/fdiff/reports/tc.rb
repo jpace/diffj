@@ -8,18 +8,19 @@ require 'riel'
 require 'diffj'
 require 'diffj/diffjtestcase'
 require 'diffj/fdiff/fdiff'
+require 'stringio'
 
 include Java
 
 class DiffJ::ReportTestCase < DiffJ::TestCase
   include Loggable
 
-  def create_report sw, show_context, highlight
+  def create_report sio, show_context, highlight
   end
   
   def run_report show_context, highlight
-    sw = java.io.StringWriter.new
-    rpt = create_report sw, show_context, highlight
+    sio = StringIO.new
+    rpt = create_report sio, show_context, highlight
     
     fromcont = Array.new
     #            columns and lines are 1-indexed
@@ -62,9 +63,9 @@ class DiffJ::ReportTestCase < DiffJ::TestCase
 
     assert filediffs.empty?
 
-    info "sw: <<<#{sw}>>>"
+    info "sio: <<<#{sio.string}>>>"
     
-    sw.to_string
+    sio.string
   end
 
   def assert_report_result expected, show_context, highlight

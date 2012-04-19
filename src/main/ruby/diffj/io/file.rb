@@ -97,7 +97,7 @@ module DiffJ
            raise DiffJException.new "Error tokenizing " + @label + ": " + tme.message
          rescue ParseException => pe
            raise DiffJException.new "Error parsing " + @label + ": " + pe.message
-         rescue java.lang.Throwable => e
+         rescue => e
            raise DiffJException.new "Error processing " + @label + ": " + e.message
          end
       end

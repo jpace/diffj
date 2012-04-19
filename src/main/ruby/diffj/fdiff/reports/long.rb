@@ -35,7 +35,7 @@ module DiffJ::FDiff::Report
         str = dw.difference fdiff
         @writer.write str
       end
-
+      
       @writer.flush
       # we can't close STDOUT:
       # writer.close
