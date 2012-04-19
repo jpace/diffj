@@ -110,7 +110,7 @@ module DiffJ
     end
 
     def replace_reference name, ref, fromlocrg, tolocrg
-      newmsg  = java.text.MessageFormat.format CODE_CHANGED, name
+      newmsg = ResourceString.new(CODE_CHANGED).format name
       locs = [ ref.first_location.from, fromlocrg.to, ref.second_location.from, tolocrg.to ]
       newdiff = DiffJ::FDiffChange.new newmsg, :locations => locs
       filediffs.delete ref
@@ -119,7 +119,7 @@ module DiffJ
     end
 
     def add_reference name, msg, fromlocrg, tolocrg
-      str = java.text.MessageFormat.format msg, name
+      str = ResourceString.new(msg).format name
       fdiffcls = case msg
                  when CODE_ADDED
                    # this will show as add when highlighted, as change when not.

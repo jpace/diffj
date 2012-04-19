@@ -6,9 +6,9 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj'
-
 require 'diffj/io/location'
 require 'diffj/io/locrange'
+require 'diffj/util/resstring'
 
 file = $0
 puts "file: #{file}".red
@@ -197,7 +197,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def format msg, *values
-    java.text.MessageFormat.format msg, *values
+    ResourceString.new(msg).format *values
   end
 
   def get_message msgvals

@@ -5,6 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/fdiff/fdiff'
+require 'diffj/util/resstring'
 
 include Java
 
@@ -38,17 +39,7 @@ module DiffJ
         method(meth).call(*ast_elements)
       end
 
-      params = @params
-
-      parmary = java.util.ArrayList.new
-      @params.each do |parm|
-        parmary << parm
-      end
-
-      # hoops-jumping because of method signature clashes:
-      mf = java.text.MessageFormat.new @msg
-      sb = mf.format parmary.toArray, java.lang.StringBuffer.new, java.text.FieldPosition.new(0)
-      str = sb.toString
+      str = ResourceString.new(@msg).format *(@params)
       fdcls = get_filediff_cls
 
       @filediff = fdcls.new str, :tokens => @tokens
