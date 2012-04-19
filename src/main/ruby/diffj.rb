@@ -28,7 +28,7 @@ module DiffJ
     attr_reader :report
     
     def initialize brief, context, highlight, recurse, from_label, fromver, to_label, tover
-      writer = java.io.OutputStreamWriter.new java.lang.System.out
+      writer = $stdout
       @report = brief ? ShortReport.new(writer) : LongReport.new(writer, context, highlight)
       @recurse = recurse
       @from_label = from_label
@@ -42,7 +42,7 @@ module DiffJ
     def create_java_element fname, label, source
       begin
         info "fname: #{fname}"
-        @jef.create_element java.io.File.new(fname), label, source, @recurse
+        @jef.create_element Pathname.new(fname), label, source, @recurse
       rescue StandardError => de
         $stderr.puts de.message
         @exit_value = 1

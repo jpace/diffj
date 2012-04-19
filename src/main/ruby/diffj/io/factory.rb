@@ -31,15 +31,19 @@ module DiffJ
       end
 
       def create_file file, label, source
-        if file.nil? || file.name == "-" || (file.file? && verify_exists(file, label))
+        if file.nil? || file.to_s == "-" || (file.file? && verify_exists(file, label))
           File.new file, label, nil, source
         else
+          info "cannot create file: #{file}".on_red
           nil
         end
       end
 
       def verify_exists file, label
-        (file && file.exists) || no_such_file(file, label)
+        pn = file && Pathname.new(file.to_s)
+        info "file: #{file}".red
+        info "pn: #{pn}".red
+        (pn && pn.exist?) || no_such_file(file, label)
       end
 
       def no_such_file file, label

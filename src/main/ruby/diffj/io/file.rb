@@ -22,19 +22,13 @@ module DiffJ
       
       class << self
         def create_file dir, other_elmt
-          Log.info "dir: #{dir}"
-          Log.info "other_elmt: #{other_elmt}"
-          
-          begin
-            ::DiffJ::IO::Factory.new.create_file java.io.File.new(dir, other_elmt.name), nil, other_elmt.source_version
-          rescue DiffJException => de
-            raise de
-          rescue => e
-            raise DiffJException.new e
-          end
+          pn = Pathname.new(dir) + other_elmt.basename.to_s
+          ::DiffJ::IO::Factory.new.create_file pn, nil, other_elmt.source_version
         end
 
         def compare report, from_file, to_file
+          Log.info "from_file: #{from_file}".cyan
+          Log.info "to_file: #{to_file}".cyan
           from_file.compare report, to_file
           report.flush
         end
@@ -46,45 +40,31 @@ module DiffJ
       attr_reader :srcver
 
       def initialize file, label, contents, srcver
-        super label || file.path, srcver
-        info "file: #{file}".bold
+        super label || file.to_s, srcver
         @file = file
         @label = label
         @contents = contents
         @srcver = srcver
-
-        begin
-          is_stdin = file.nil? || file.name == "-"
-          @contents = contents
-          read if @contents.nil?
-          @label = label || (is_stdin ? "-" : file.getPath)
-        rescue java.io.FileNotFoundException => e
-          raise DiffJException.new "Error opening file '" + file.absolute_path + "': " + e.message, e
-        rescue java.io.IOException => e
-          raise DiffJException.new "I/O error with file '" + file.absolute_path + "': " + e.message, e
-        end
+        
+        is_stdin = file.nil? || file.to_s == "-"
+        @contents = contents || read(is_stdin)
+        @label = label || (is_stdin ? "-" : file.to_s)
       end
 
-      def read
-        is_stdin = @file.nil? || @file.name == "-"
+      def read is_stdin
         lines = is_stdin ? $stdin.readlines : ::IO.readlines(@file.to_s)
         @contents = lines.join
       end
 
       def compare_to report, to_elmt
-        info "self: #{self}".bold
-        info "to_elmt: #{to_elmt}".bold
         to_elmt.compare_from_file report, self
       end
 
       def compare_from_file report, from_file
-        info "from_file: #{from_file}".bold
-        info "self: #{self}".bold
         self.class.compare report, from_file, self
       end
 
       def compare_from_dir report, from_dir
-        info "self: #{self}".magenta
         self.class.compare report, self.class.create_file(from_dir, self), self
       end
 
@@ -102,7 +82,7 @@ module DiffJ
         when "1.4"
           # currently the default in PMD
         else
-          raise DiffJException.new("source version '" + @srcver + "' not recognized")
+          raise DiffJException.new "source version '" + @srcver + "' not recognized"
         end
 
         info "parser: #{parser}"
@@ -114,11 +94,11 @@ module DiffJ
            parser = get_parser
            parser.CompilationUnit
          rescue TokenMgrError => tme
-           raise DiffJException.new("Error tokenizing " + @label + ": " + tme.message)
+           raise DiffJException.new "Error tokenizing " + @label + ": " + tme.message
          rescue ParseException => pe
-           raise DiffJException.new("Error parsing " + @label + ": " + pe.message)
+           raise DiffJException.new "Error parsing " + @label + ": " + pe.message
          rescue java.lang.Throwable => e
-           raise DiffJException.new("Error processing " + @label + ": " + e.message)
+           raise DiffJException.new "Error processing " + @label + ": " + e.message
          end
       end
       
@@ -128,7 +108,8 @@ module DiffJ
 
         # it looks like JRuby has a limit of three method parameters for lookup,
         # so we do it ourself here:
-        method_params = [ java.lang.String, java.lang.String, java.lang.String, java.lang.String ]
+        # well, we used to, but I'm leaving this here for reference
+        # method_params = [ java.lang.String, java.lang.String, java.lang.String, java.lang.String ]
         # report.java_send :reset, method_params, label, contents, to_file.label, to_file.contents
 
         report.reset label, contents, to_file.label, to_file.contents

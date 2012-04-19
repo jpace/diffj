@@ -19,38 +19,55 @@ module DiffJ
       include Loggable
 
       def initialize file, srcver, recurse
-        super(file.path, srcver)
+        super file.to_s, srcver
         info "file: #{file}"
         @recurse = recurse
       end
       
-      def create_java_file file, label
-        File.new file, label, nil, source_version
+      def create_java_file jifile, label
+        File.new jifile, label, nil, source_version
       end
 
-      def create_java_directory file
-        self.class.new file, source_version, @recurse
+      def create_java_directory jidir
+        Directory.new jidir, source_version, @recurse
       end
 
+      def create_element jifd
+        return jifd.directory? ? create_java_directory(jifd) : create_java_file(jifd, nil)
+      end
+
+      # def + name
+      #   pn = Pathname.new(self.to_s) + name
+      #   pn.directory? Directory.new(pn.to_s) : File.n
+      # end
+        
       def element_names
-        files = listFiles
+        files = subelements
         names = Array.new
         files && files.each do |file|
-          names << file.name if file.directory? || (file.file? && file.name.index(%r{\.java$}))
+          if file.directory? || (file.file? && file.to_s.index(%r{\.java$}))
+            names << file.basename
+          end
         end
         names
       end
 
       def element name
-        files = listFiles
+        files = subelements
         files.each do |file|
-          if file.name == name
-            return file.directory ? create_java_directory(file) : create_java_file(file, nil)
+          if file.basename == name
+            return create_element file
           end
         end
         nil
       end
 
+      def subelements
+        # files = listFiles # children
+        # children.collect { |f| Pathname.new(f.to_s) }
+        children
+      end
+      
       def compare_to report, to_elmt
         info "self: #{self}"
         info "to_elmt: #{to_elmt}"
