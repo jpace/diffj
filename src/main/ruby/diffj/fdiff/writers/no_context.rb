@@ -19,25 +19,25 @@ module DiffJ
           @to_contents = to_contents
         end
         
-        def print_from sb, fdiff
-          print_lines_by_location sb, fdiff.first_location, "<", @from_contents
+        def print_from str, fdiff
+          print_lines_by_location str, fdiff.first_location, "<", @from_contents
         end
         
-        def print_to sb, fdiff
-          print_lines_by_location sb, fdiff.second_location, ">", @to_contents
+        def print_to str, fdiff
+          print_lines_by_location str, fdiff.second_location, ">", @to_contents
         end
         
-        def print_lines sb, fdiff
-          fdiff.print_no_context self, sb
-          sb.append EOLN
+        def print_lines str, fdiff
+          fdiff.print_no_context self, str
+          str << EOLN
         end
 
-        def print_lines_by_location sb, locrg, ind, lines
+        def print_lines_by_location str, locrg, ind, lines
           from_line = locrg.from.line
           through_line = locrg.to.line
           (from_line .. through_line).each do |lnum|
-            sb.append ind + " " + lines[lnum - 1]
-            sb.append EOLN
+            str << ind + " " + lines[lnum - 1]
+            str << EOLN
           end
         end
       end

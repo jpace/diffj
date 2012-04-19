@@ -19,24 +19,24 @@ module DiffJ
           @to_contents = to_contents
         end
 
-        def print_from sb, fdiff
-          print_lines_by_location sb, true, fdiff.first_location, @from_contents
+        def print_from str, fdiff
+          print_lines_by_location str, true, fdiff.first_location, @from_contents
         end
 
-        def print_to sb, fdiff
-          print_lines_by_location sb, false, fdiff.second_location, @to_contents
+        def print_to str, fdiff
+          print_lines_by_location str, false, fdiff.second_location, @to_contents
         end
 
-        def print_lines sb, fdiff
+        def print_lines str, fdiff
           info "fdiff: #{fdiff}; #{fdiff.class}"
-          fdiff.print_context self, sb
-          sb.append EOLN
+          fdiff.print_context self, str
+          str << EOLN
         end
 
-        def print_lines sb, fdiff
+        def print_lines str, fdiff
           info "fdiff: #{fdiff}; #{fdiff.class}"
-          fdiff.print_context self, sb
-          sb.append EOLN
+          fdiff.print_context self, str
+          str << EOLN
         end
 
         def get_line lines, lidx, from_line, from_column, to_line, to_column, is_delete
@@ -47,23 +47,23 @@ module DiffJ
           "#{ch} #{line}\n"
         end
         
-        def print_lines_by_location sb, is_delete, locrg, lines
+        def print_lines_by_location str, is_delete, locrg, lines
           from_line = locrg.from.line
           from_column = locrg.from.column
           to_line = locrg.to.line
           to_column = locrg.to.column
 
           ([ 0, from_line - 4 ].max ... from_line - 1).each do |lnum|
-            sb.append line_to_s lines[lnum]
+            str << line_to_s(lines[lnum])
           end
 
           (from_line .. to_line).each do |lidx|
             line = get_line(lines, lidx, from_line, from_column, to_line, to_column, is_delete)
-            sb.append line
+            str << line
           end
 
-          (to_line ... [ to_line + 3, lines.size() ].min).each do |lnum|
-            sb.append line_to_s lines[lnum]
+          (to_line ... [ to_line + 3, lines.size ].min).each do |lnum|
+            str << line_to_s(lines[lnum])
           end
         end
       end

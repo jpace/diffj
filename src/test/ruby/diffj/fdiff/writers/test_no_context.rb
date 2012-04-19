@@ -22,14 +22,14 @@ class DiffJ::WriterNoContextTestCase < DiffJ::WriterTestCase
   end
   
   def test_change_print_from
-    run_change_test create_exp_from(5 .. 5) do |dw, sb, fdc|
-      dw.print_from sb, fdc
+    run_change_test create_exp_from(5 .. 5) do |dw, str, fdc|
+      dw.print_from str, fdc
     end
   end
   
   def test_change_print_to
-    run_change_test create_exp_to(4 .. 4) do |dw, sb, fdc|
-      dw.print_to sb, fdc
+    run_change_test create_exp_to(4 .. 4) do |dw, str, fdc|
+      dw.print_to str, fdc
     end
   end
 
@@ -40,8 +40,8 @@ class DiffJ::WriterNoContextTestCase < DiffJ::WriterTestCase
     expected << create_exp_to(4 .. 4)
     expected << "\n"
 
-    run_change_test expected do |dw, sb, fdc|
-      dw.print_lines sb, fdc
+    run_change_test expected do |dw, str, fdc|
+      dw.print_lines str, fdc
     end
   end
 
@@ -49,8 +49,8 @@ class DiffJ::WriterNoContextTestCase < DiffJ::WriterTestCase
     expected = create_exp_to(6 .. 7)
     expected << "\n"
     
-    run_add_test expected do |dw, sb, fda|
-      dw.print_lines sb, fda
+    run_add_test expected do |dw, str, fda|
+      dw.print_lines str, fda
     end
   end
 
@@ -58,8 +58,8 @@ class DiffJ::WriterNoContextTestCase < DiffJ::WriterTestCase
     expected = create_exp_from(1 .. 1)
     expected << "\n"
     
-    run_delete_test expected do |dw, sb, fda|
-      dw.print_lines sb, fda
+    run_delete_test expected do |dw, str, fda|
+      dw.print_lines str, fda
     end
   end
 end

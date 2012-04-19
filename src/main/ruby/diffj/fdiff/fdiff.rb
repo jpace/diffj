@@ -133,12 +133,12 @@ module DiffJ
       "a"
     end
 
-    def print_context dw, sb
-      dw.print_to sb, self
+    def print_context dw, str
+      dw.print_to str, self
     end
 
-    def print_no_context dw, sb
-      dw.print_to sb, self
+    def print_no_context dw, str
+      dw.print_to str, self
     end
   end
 
@@ -147,17 +147,17 @@ module DiffJ
       "c"
     end
 
-    def print_context dw, sb
-      dw.print_from sb, self
-      sb.append DiffJ::IO::EOLN
-      dw.print_to sb, self
+    def print_context dw, str
+      dw.print_from str, self
+      str << DiffJ::IO::EOLN
+      dw.print_to str, self
     end
 
-    def print_no_context dw, sb
-      dw.print_from sb, self
-      sb.append "---"
-      sb.append DiffJ::IO::EOLN
-      dw.print_to sb, self
+    def print_no_context dw, str
+      dw.print_from str, self
+      str << "---"
+      str << DiffJ::IO::EOLN
+      dw.print_to str, self
     end
   end
 
@@ -166,21 +166,21 @@ module DiffJ
       "d"
     end
 
-    def print_context dw, sb
-      dw.print_from sb, self
+    def print_context dw, str
+      dw.print_from str, self
     end
 
-    def print_no_context dw, sb
-      dw.print_from sb, self
+    def print_no_context dw, str
+      dw.print_from str, self
     end
   end
 
   class FDiffCode < FDiffDelta
-    def print_no_context dw, sb
-      dw.print_from sb, self
-      sb.append "---"
-      sb.append DiffJ::IO::EOLN
-      dw.print_to sb, self
+    def print_no_context dw, str
+      dw.print_from str, self
+      str << "---"
+      str << DiffJ::IO::EOLN
+      dw.print_to str, self
     end
   end
 
@@ -189,8 +189,8 @@ module DiffJ
       "a"
     end
 
-    def print_context dw, sb
-      dw.print_to sb, self
+    def print_context dw, str
+      dw.print_to str, self
     end
   end
 
@@ -199,8 +199,8 @@ module DiffJ
       "d"
     end
 
-    def print_context dw, sb
-      dw.print_from sb, self
+    def print_context dw, str
+      dw.print_from str, self
     end
   end
 end

@@ -48,13 +48,10 @@ class DiffJ::WriterTestCase < DiffJ::TestCase
 
   def run_delta_test expected, fdiff, &blk
     dw = get_writer_class.new FROMCONT, TOCONT
-    sb = java.lang.StringBuilder.new
-    
-    blk.call dw, sb, fdiff
-
-    info "sb: #{sb}".green
-
-    assert_equal expected, sb.to_string
+    str = ""    
+    blk.call dw, str, fdiff
+    info "str: #{str}".green
+    assert_equal expected, str
   end
 
   def run_change_test expected, &blk

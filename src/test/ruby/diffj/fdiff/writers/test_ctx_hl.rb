@@ -32,14 +32,14 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
   end
 
   def test_change_print_from
-    run_change_test get_change_expected_from do |dw, sb, fdc|
-      dw.print_from sb, fdc
+    run_change_test get_change_expected_from do |dw, str, fdc|
+      dw.print_from str, fdc
     end
   end
 
   def test_change_print_to
-    run_change_test get_change_expected_to do |dw, sb, fdc|
-      dw.print_to sb, fdc
+    run_change_test get_change_expected_to do |dw, str, fdc|
+      dw.print_to str, fdc
     end
   end
 
@@ -49,8 +49,8 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     expected << get_change_expected_to
     expected << "\n"
     
-    run_change_test expected do |dw, sb, fdc|
-      dw.print_lines sb, fdc
+    run_change_test expected do |dw, str, fdc|
+      dw.print_lines str, fdc
     end
   end
 
@@ -63,8 +63,8 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     expected << "! \e[33mHe may not weep although him sore smart.\e[0m\n"
     expected << "\n"
 
-    run_add_test expected do |dw, sb, fda|
-      dw.print_lines sb, fda
+    run_add_test expected do |dw, str, fda|
+      dw.print_lines str, fda
     end
   end
 
@@ -77,8 +77,8 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     expected << "  Is signe that a man is well y-shrive.\n"
     expected << "\n"
 
-    run_delete_test expected do |dw, sb, fda|
-      dw.print_lines sb, fda
+    run_delete_test expected do |dw, str, fda|
+      dw.print_lines str, fda
     end
   end
 end

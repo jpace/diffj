@@ -13,15 +13,15 @@ class DiffJ::WriterContextTestCase < DiffJ::WriterTestCase
 
   def test_change_print_from
     expected = make_expected FROMCONT, 2 .. 4, 5 .. 5, 6 .. 6
-    run_change_test expected do |dw, sb, fdc|
-      dw.print_from sb, fdc
+    run_change_test expected do |dw, str, fdc|
+      dw.print_from str, fdc
     end
   end
 
   def test_change_print_to
     expected = make_expected TOCONT, 1 .. 3, 4 .. 4, 5 .. 7
-    run_change_test expected do |dw, sb, fdc|
-      dw.print_to sb, fdc
+    run_change_test expected do |dw, str, fdc|
+      dw.print_to str, fdc
     end
   end
 
@@ -29,8 +29,8 @@ class DiffJ::WriterContextTestCase < DiffJ::WriterTestCase
     expfrom = make_expected FROMCONT, 2 .. 4, 5 .. 5, 6 .. 6
     expto   = make_expected TOCONT,   1 .. 3, 4 .. 4, 5 .. 7
     expected = expfrom + "\n" + expto + "\n"
-    run_change_test expected do |dw, sb, fdc|
-      dw.print_lines sb, fdc
+    run_change_test expected do |dw, str, fdc|
+      dw.print_lines str, fdc
     end
   end
 
@@ -46,8 +46,8 @@ class DiffJ::WriterContextTestCase < DiffJ::WriterTestCase
     expected = make_expected TOCONT, 3 .. 5, 6 .. 7, nil
     expected << "\n"
     
-    run_add_test expected do |dw, sb, fda|
-      dw.print_lines sb, fda
+    run_add_test expected do |dw, str, fda|
+      dw.print_lines str, fda
     end
   end
 
@@ -55,8 +55,8 @@ class DiffJ::WriterContextTestCase < DiffJ::WriterTestCase
     expected = make_expected FROMCONT, 0 .. 0, 1 .. 1, 2 .. 4
     expected << "\n"
     
-    run_delete_test expected do |dw, sb, fdd|
-      dw.print_lines sb, fdd
+    run_delete_test expected do |dw, str, fdd|
+      dw.print_lines str, fdd
     end
   end
 end
