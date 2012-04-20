@@ -197,7 +197,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def format msg, *values
-    ResourceString.new(msg).format *values
+    ResourceString.new(msg).format(*values)
   end
 
   def get_message msgvals

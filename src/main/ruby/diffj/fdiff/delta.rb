@@ -39,7 +39,7 @@ module DiffJ
         method(meth).call(*ast_elements)
       end
 
-      str = ResourceString.new(@msg).format *(@params)
+      str = ResourceString.new(@msg).format(*@params)
       fdcls = get_filediff_cls
 
       @filediff = fdcls.new str, :tokens => @tokens
