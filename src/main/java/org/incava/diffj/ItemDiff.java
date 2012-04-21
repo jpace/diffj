@@ -152,8 +152,7 @@ public class ItemDiff extends DiffComparator {
     protected LocationRange getLocationRange(List<Token> tokenList, Integer start, Integer end) {
         Token startTk, endTk;
         if (end == Difference.NONE) {
-            startTk = getStart(tokenList, start);
-            endTk = startTk;
+            endTk = startTk = getStart(tokenList, start);
         }
         else {
             startTk = tokenList.get(start);

@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'diffj/diffjtestcase'
-require 'diffj/util/difflcs'
+require 'diffj/util/diff/lcs'
 
 include Java
 include DiffJ::DiffLCS
@@ -32,8 +32,7 @@ class DiffJ::DiffLCSTestCase < DiffJ::TestCase
     javaresult = diff.getLongestCommonSubsequences()
 
     # expected << org.incava.ijdk.util.diff::Difference.new(0, 1, 0, -1)
-    cmp = Comparator.new from, to
-    jrubyresult = cmp.lcs
+    jrubyresult = LCS.new(from, to).matches
 
     info "jrubyresult: #{jrubyresult.inspect}".yellow
     assert_equal javaresult.size, jrubyresult.size
@@ -112,6 +111,14 @@ class DiffJ::DiffLCSTestCase < DiffJ::TestCase
     run_lcs_test from, to, exp
   end
 
+  def test_jruby_lcs_with_blanks
+    from = [            "same", "same", "same", "", "same", "del", "",  "del" ]
+    to   = [ "ins", "", "same", "same", "same", "", "same"                    ]
+
+    exp = [ 2, 3, 4, 5, 6 ]
+    run_lcs_test from, to, exp
+  end
+
   def xxxtest_java_deleted_two
     from = %w{ a b c d }
     to   = %w{     c d }
@@ -131,7 +138,7 @@ class DiffJ::DiffLCSTestCase < DiffJ::TestCase
     expected = Array.new
     expected << Delta.new(0, 1, 0, -1)
 
-    actual = Comparator.new.compare from, to
+    actual = LCS.new(from, to).matches
 
     assert_equal expected, actual
   end
