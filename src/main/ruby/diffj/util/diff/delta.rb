@@ -39,21 +39,21 @@ module DiffJ
       end
 
       def extend_added idx
-        info "self: #{self.inspect}".blue.bold
+        # info "self: #{self.inspect}".blue.bold
         if @delete_end
-          info "should be a change"
+          # info "should be a change"
           Change.new @delete_start, @delete_end, @add_start, idx
         else
-          info "is (still) an add"
+          # info "is (still) an add"
           @add_end = idx
           self
         end
       end
 
       def extend_deleted idx
-        info "self: #{self.inspect}".green.bold
+        # info "self: #{self.inspect}".green.bold
         if @add_end
-          info "should be a change"
+          # info "should be a change"
           Change.new @delete_start, idx, @add_start, @add_end
         else
           info "is (still) a delete"

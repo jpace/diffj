@@ -3,6 +3,7 @@
 
 require 'diffj/diffjtestcase'
 require 'diffj/util/diff/traverser'
+require 'diffj/util/diff/traverser_orig'
 
 include Java
 include DiffJ::DiffLCS
@@ -25,7 +26,7 @@ class DiffJ::DiffTraverserTestCase < DiffJ::TestCase
     javaresult = diff.diff()
 
     (0 ... javaresult.size).each do |idx|
-      info "javaresult [#{idx}]: #{javaresult[idx].to_s}".yellow
+      # info "javaresult [#{idx}]: #{javaresult[idx].to_s}".yellow
     end
 
     # expected << org.incava.ijdk.util.diff::Difference.new(0, 1, 0, -1)
@@ -35,22 +36,22 @@ class DiffJ::DiffTraverserTestCase < DiffJ::TestCase
 
     jrubyresult = trav.diffs
 
-    info "jrubyresult: #{jrubyresult.inspect}".yellow
+    # info "jrubyresult: #{jrubyresult.inspect}".yellow
     assert_equal javaresult.size, jrubyresult.size
 
     (0 ... javaresult.size).each do |idx|
-      info "javaresult [#{idx}]: #{javaresult[idx].inspect}".yellow
-      info "jrubyresult[#{idx}]: #{jrubyresult[idx].inspect}".cyan
+      # info "javaresult [#{idx}]: #{javaresult[idx].inspect}".yellow
+      # info "jrubyresult[#{idx}]: #{jrubyresult[idx].inspect}".cyan
       assert_equal jrubyresult[idx], javaresult[idx], "idx: #{idx}"
     end
 
     if exp
-      info "exp: #{exp.inspect}".yellow
+      # info "exp: #{exp.inspect}".yellow
       assert_equal exp.size, jrubyresult.size
       
       (0 ... exp.size).each do |idx|
-        info "exp        [#{idx}]: #{exp[idx].inspect}".yellow
-        info "jrubyresult[#{idx}]: #{jrubyresult[idx].inspect}".cyan
+        # info "exp        [#{idx}]: #{exp[idx].inspect}".yellow
+        # info "jrubyresult[#{idx}]: #{jrubyresult[idx].inspect}".cyan
         assert_equal exp[idx], jrubyresult[idx], "idx: #{idx}"
       end
     end

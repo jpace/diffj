@@ -38,99 +38,80 @@ module DiffJ
       end
 
       def traverse_sequences matches, a_size, b_size
-        bi = 0
-        ai = 0
+        @bidx = 0
+        @aidx = 0
 
         lastmatch = matches.length - 1
 
-        info "lastmatch: #{lastmatch}"
-        
-        while ai <= lastmatch
-          bline = matches[ai]
-          info "bline: #{bline}"
-
+        while @aidx <= lastmatch
+          bline = matches[@aidx]
           if bline.nil?
-            on_a_not_b ai, bi
+            element_deleted
           else
-            while bi < bline
-              on_b_not_a ai, bi
-              bi += 1
-            end              
-
-            on_match ai, bi
-            bi += 1
+            if @bidx < bline
+              @bidx = elements_added bline - 1
+            end
+            elements_match
           end
-          ai += 1
         end
 
-        info "ai: #{ai}; a_size: #{a_size}"
-        info "bi: #{bi}; b_size: #{b_size}"
-
-        while ai < a_size || bi < b_size
-          info "ai: #{ai}; a_size: #{a_size}".yellow
-
-          # last A?
-          if ai == a_size && bi < b_size
-            info "bi: #{bi}; b_size: #{b_size}".yellow.bold
-            while bi < b_size
-              on_b_not_a ai, bi
-              bi += 1
-            end
-            return
+        while @aidx < a_size || @bidx < b_size
+          if @aidx == a_size    # last A
+            elements_added b_size - 1
+            break
+          elsif @bidx == b_size    # last B?
+            elements_deleted a_size - 1
+            break
           end
 
-          # last B?
-          if bi == b_size && ai < a_size
-            info "ai: #{ai}; a_size: #{a_size}".cyan.bold
-            while ai < a_size
-              on_a_not_b ai, bi
-              ai += 1
-            end
-            return
+          if @aidx < a_size
+            element_deleted
           end
 
-          if ai < a_size
-            info "ai: #{ai}; a_size: #{a_size}".blue.bold
-            on_a_not_b ai, bi
-            ai += 1
-          end
-
-          if bi < b_size
-            info "bi: #{bi}; b_size: #{b_size}".magenta.bold
-            on_b_not_a ai, bi
-            bi += 1
+          if @bidx < b_size
+            element_added
           end
         end
+      end
+
+      # Invoked for an element in <code>a</code> and not in <code>b</code>.
+      def element_deleted
+        elements_deleted @aidx
       end
 
       # Invoked for elements in <code>a</code> and not in <code>b</code>.
-      def on_a_not_b ai, bi
-        info "pending: #{@pending}".cyan
+      def elements_deleted aend
         if @pending.nil?
-          @pending = LCSDelta.new ai, ai, bi, nil
+          @pending = LCSDelta.new @aidx, aend, @bidx, nil
         else
-          @pending = @pending.extend_deleted ai
+          @pending = @pending.extend_deleted aend
         end
-        info "pending: #{@pending}".cyan.bold
+        @aidx = aend + 1
       end
 
       # Invoked for elements in <code>b</code> and not in <code>a</code>.
-      def on_b_not_a ai, bi
-        info "pending: #{@pending}".green
+      def elements_added bend
         if @pending.nil?
-          @pending = LCSDelta.new ai, nil, bi, bi
+          @pending = LCSDelta.new @aidx, nil, @bidx, bend
         else
-          @pending = @pending.extend_added bi
+          @pending = @pending.extend_added bend
         end
-        info "pending: #{@pending}".green.bold
+        @bidx = bend + 1
+      end
+
+      # Invoked for an element in <code>b</code> and not in <code>a</code>.
+      def element_added
+        elements_added @bidx
       end
 
       # Invoked for elements matching in <code>a</code> and <code>b</code>.
-      def on_match ai, bi
+      def elements_match
         if @pending
           @diffs << @pending
           @pending = nil
         end
+        @aidx += 1
+        @bidx += 1
       end
     end
   end
