@@ -41,7 +41,7 @@ module DiffJ
       def extend_added idx
         # info "self: #{self.inspect}".blue.bold
         if @delete_end
-          # info "should be a change"
+          # info "should be a change".red
           Change.new @delete_start, @delete_end, @add_start, idx
         else
           # info "is (still) an add"
@@ -56,7 +56,7 @@ module DiffJ
           # info "should be a change"
           Change.new @delete_start, idx, @add_start, @add_end
         else
-          info "is (still) a delete"
+          # info "is (still) a delete"
           @delete_end = idx
           self
         end
@@ -94,22 +94,31 @@ module DiffJ
     class Add < Delta
       attr_reader :add_end
       
-      def initialize delete_start, delete_end, add_start, add_end
-        super
+      def initialize delete_start, add_start, add_end
+        super delete_start, nil, add_start, add_end
       end
     end
 
     class Delete < Delta
       attr_reader :delete_end
       
-      def initialize delete_start, delete_end, add_start, add_end
-        super
+      def initialize delete_start, delete_end, add_start
+        super delete_start, delete_end, add_start, nil
       end
     end
 
     class Change < Delta
       attr_reader :add_end
 
+      def extend_added idx
+        @add_end = idx
+        self
+      end
+
+      def extend_deleted idx
+        @delete_end = idx
+        self
+      end
     end
   end
 end

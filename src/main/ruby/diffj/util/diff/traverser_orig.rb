@@ -15,6 +15,18 @@ module DiffJ
     DiffDelta = org.incava.ijdk.util.diff.Difference
     LCSDelta = DiffJ::DiffLCS::Delta
 
+    class OrigDelta < DiffJ::DiffLCS::Delta
+      def extend_added idx
+        @add_end = idx
+        self
+      end
+
+      def extend_deleted idx
+        @delete_end = idx
+        self
+      end
+    end
+
     # works most similar to the old Java one
     class OrigTraverser
       include Loggable
@@ -44,11 +56,8 @@ module DiffJ
 
         lastmatch = matches.length - 1
 
-        info "lastmatch: #{lastmatch}".bold.blue
-        
         while ai <= lastmatch
           bline = matches[ai]
-          info "bline: #{bline}".bold
 
           if bline.nil?
             on_a_not_b ai, bi
@@ -64,15 +73,9 @@ module DiffJ
           ai += 1
         end
 
-        info "ai: #{ai}; a_size: #{a_size}"
-        info "bi: #{bi}; b_size: #{b_size}"
-
         while ai < a_size || bi < b_size
-          info "ai: #{ai}; a_size: #{a_size}".yellow
-
           # last A?
           if ai == a_size && bi < b_size
-            info "bi: #{bi}; b_size: #{b_size}".yellow.bold
             while bi < b_size
               on_b_not_a ai, bi
               bi += 1
@@ -81,7 +84,6 @@ module DiffJ
 
           # last B?
           if bi == b_size && ai < a_size
-            info "ai: #{ai}; a_size: #{a_size}".cyan.bold
             while ai < a_size
               on_a_not_b ai, bi
               ai += 1
@@ -89,13 +91,11 @@ module DiffJ
           end
 
           if ai < a_size
-            info "ai: #{ai}; a_size: #{a_size}".blue.bold
             on_a_not_b ai, bi
             ai += 1
           end
 
           if bi < b_size
-            info "bi: #{bi}; b_size: #{b_size}".magenta.bold
             on_b_not_a ai, bi
             bi += 1
           end
@@ -105,7 +105,7 @@ module DiffJ
       # Invoked for elements in <code>a</code> and not in <code>b</code>.
       def on_a_not_b ai, bi
         if @pending.nil?
-          @pending = LCSDelta.new ai, ai, bi, nil
+          @pending = OrigDelta.new ai, ai, bi, nil
         else
           @pending = @pending.extend_deleted ai
         end
@@ -114,7 +114,7 @@ module DiffJ
       # Invoked for elements in <code>b</code> and not in <code>a</code>.
       def on_b_not_a ai, bi
         if @pending.nil?
-          @pending = LCSDelta.new ai, nil, bi, bi
+          @pending = OrigDelta.new ai, nil, bi, bi
         else
           @pending = @pending.extend_added bi
         end

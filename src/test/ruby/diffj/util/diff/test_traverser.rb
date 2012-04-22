@@ -4,6 +4,9 @@
 require 'diffj/diffjtestcase'
 require 'diffj/util/diff/traverser'
 require 'diffj/util/diff/traverser_orig'
+require 'diffj/util/diff/locosu'
+
+require 'benchmark'
 
 include Java
 include DiffJ::DiffLCS
@@ -149,5 +152,73 @@ class DiffJ::DiffTraverserTestCase < DiffJ::TestCase
            LCSDelta.new(3,   3,  5,  5)
           ]
     run_diff_test from, to, exp
+  end
+
+  def run_performance_test travcls, from, to
+    matches = LCS.new(from, to).matches
+    trav = travcls.new matches, from.size, to.size
+    result = trav.diffs
+  end
+
+  def run_java_performance_test from, to
+    differ = org.incava.ijdk.util.diff.Diff.new from, to
+    result = differ.diff
+  end
+
+  def run_locosu_performance_test from, to
+    differ = DiffJ::Locosu.new from, to
+    result = differ.diff
+  end
+
+  def run_benchmark_test num, from, to
+    info "num: #{num}".yellow
+    Benchmark.bm do |x|
+      x.report("old ".yellow.bold) do
+        num.times { run_performance_test OrigTraverser, from, to }
+      end
+
+      x.report("new ".green.bold) do 
+        num.times { run_performance_test Traverser, from, to }
+      end
+
+      x.report("java".cyan.bold) do
+        num.times { run_java_performance_test from, to }
+      end
+
+      x.report("loco".cyan.bold) do
+        num.times { run_locosu_performance_test from, to }
+      end
+    end
+  end
+
+  def get_test_data chars, size
+    data = Array.new
+    size.times do
+      data << chars[rand(chars.size)]
+    end
+    data
+  end
+
+  def test_performance
+    from = [            "same", "same", "same", "", "same", "del", "",  "del" ]
+    to   = [ "ins", "", "same", "same", "same", "", "same"                    ]
+
+    allchars = ('a' .. 'z').to_a
+    fewchars = ('a' .. 'g').to_a
+
+    printf "%10s %10s %10s %10s\n", "charset", "from", "to", "size"
+
+    [ [ 5, 7500 ], [ 10, 6000 ], [ 50, 1000 ], [ 100, 500 ], [ 250, 50 ], [ 1000, 2 ] ].each do |size, num|
+      info "size: #{size}; num: #{num}".cyan.bold
+      [ allchars, fewchars ].each_with_index do |charset, cidx|
+        from = get_test_data charset, size + rand(size)
+        to = get_test_data charset, size + rand(size)
+
+        printf "%10d %10d %10d %10d\n", charset.size, from.size, to.size, size
+        
+        run_benchmark_test num * (1 + cidx), from, to
+      end
+      puts
+    end
   end
 end

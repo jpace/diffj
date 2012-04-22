@@ -12,63 +12,59 @@ include Java
 module DiffJ
   # returns longest common subsequences within two enumerables
   module DiffLCS
-    DiffDelta = org.incava.ijdk.util.diff.Difference
-    LCSDelta = DiffJ::DiffLCS::Delta
-
     class Traverser
       include Loggable
       
       def initialize matches, a_size, b_size
         @diffs = Array.new
         @pending = nil
-        compute matches, a_size, b_size
+        @matches = matches
+        @a_size = a_size
+        @b_size = b_size
+        
+        traverse_sequences
+
+        if @pending
+          @diffs << @pending
+        end
       end
 
       def diffs
         @diffs
       end
 
-      def compute matches, a_size, b_size
-        traverse_sequences matches, a_size, b_size
-
-        # add the last difference, if pending:
-        if @pending
-          @diffs << @pending
-        end
-      end
-
-      def traverse_sequences matches, a_size, b_size
+      def traverse_sequences
         @bidx = 0
         @aidx = 0
 
-        lastmatch = matches.length - 1
+        lastmatch = @matches.length - 1
 
         while @aidx <= lastmatch
-          bline = matches[@aidx]
+          bline = @matches[@aidx]
           if bline.nil?
             element_deleted
           else
             if @bidx < bline
-              @bidx = elements_added bline - 1
+              elements_added bline - 1
             end
             elements_match
           end
         end
 
-        while @aidx < a_size || @bidx < b_size
-          if @aidx == a_size    # last A
-            elements_added b_size - 1
-            break
-          elsif @bidx == b_size    # last B?
-            elements_deleted a_size - 1
-            break
+        while @aidx < @a_size || @bidx < @b_size
+          if @aidx == @a_size   # last A
+            elements_added @b_size - 1
+            return
+          elsif @bidx == @b_size # last B?
+            elements_deleted @a_size - 1
+            return
           end
 
-          if @aidx < a_size
+          if @aidx < @a_size
             element_deleted
           end
 
-          if @bidx < b_size
+          if @bidx < @b_size
             element_added
           end
         end
@@ -82,7 +78,7 @@ module DiffJ
       # Invoked for elements in <code>a</code> and not in <code>b</code>.
       def elements_deleted aend
         if @pending.nil?
-          @pending = LCSDelta.new @aidx, aend, @bidx, nil
+          @pending = Delete.new @aidx, aend, @bidx
         else
           @pending = @pending.extend_deleted aend
         end
@@ -92,7 +88,7 @@ module DiffJ
       # Invoked for elements in <code>b</code> and not in <code>a</code>.
       def elements_added bend
         if @pending.nil?
-          @pending = LCSDelta.new @aidx, nil, @bidx, bend
+          @pending = Add.new @aidx, @bidx, bend
         else
           @pending = @pending.extend_added bend
         end
