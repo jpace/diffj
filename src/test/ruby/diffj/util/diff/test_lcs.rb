@@ -3,6 +3,7 @@
 
 require 'diffj/diffjtestcase'
 require 'diffj/util/diff/lcs'
+require 'benchmark'
 
 include Java
 include DiffJ::DiffLCS
@@ -10,48 +11,28 @@ include DiffJ::DiffLCS
 class DiffJ::DiffLCSTestCase < DiffJ::TestCase
   include Loggable
 
-  def xxxtest_java_lcs
-    from = %w{ a b c d }
-    to   = %w{     c d }
-
-    # expected << org.incava.ijdk.util.diff::Difference.new(0, 1, 0, -1)
-    diff = org.incava.ijdk.util.diff::Diff.new from, to
-    actual = diff.getLongestCommonSubsequences()
-
-    info "actual: #{actual}".red
-    actual.each_with_index do |elmt, idx|
-      info "result[#{idx}]: #{elmt}"
-    end
-  end
-
-  def run_lcs_test from, to, exp = nil
-    info "from: #{from}"
-    info "to: #{to}"
-
+  def assert_matches_legacy jrubyresult, from, to
     diff = org.incava.ijdk.util.diff::Diff.new from, to
     javaresult = diff.getLongestCommonSubsequences()
-
-    # expected << org.incava.ijdk.util.diff::Difference.new(0, 1, 0, -1)
-    jrubyresult = LCS.new(from, to).matches
 
     info "jrubyresult: #{jrubyresult.inspect}".yellow
     assert_equal javaresult.size, jrubyresult.size
 
     (0 ... javaresult.size).each do |idx|
-      info "javaresult [#{idx}]: #{javaresult[idx].inspect}".yellow
-      info "jrubyresult[#{idx}]: #{jrubyresult[idx].inspect}".cyan
       assert_equal javaresult[idx], jrubyresult[idx], "idx: #{idx}"
     end
+  end
 
-    if exp
-      info "exp: #{exp.inspect}".yellow
-      assert_equal exp.size, jrubyresult.size
-      
-      (0 ... exp.size).each do |idx|
-        info "exp        [#{idx}]: #{exp[idx].inspect}".yellow
-        info "jrubyresult[#{idx}]: #{jrubyresult[idx].inspect}".cyan
-        assert_equal exp[idx], jrubyresult[idx], "idx: #{idx}"
-      end
+  def run_lcs_test from, to, exp
+    info "from: #{from}"
+    info "to: #{to}"
+
+    jrubyresult = LCS.new(from, to).matches
+    assert_matches_legacy jrubyresult, from, to
+    
+    assert_equal exp.size, jrubyresult.size      
+    (0 ... exp.size).each do |idx|
+      assert_equal exp[idx], jrubyresult[idx], "idx: #{idx}"
     end
   end
 
@@ -141,5 +122,64 @@ class DiffJ::DiffLCSTestCase < DiffJ::TestCase
     actual = LCS.new(from, to).matches
 
     assert_equal expected, actual
+  end
+
+  def run_jruby_performance_test from, to
+    matches = LCS.new(from, to).matches
+  end
+
+  def run_java_performance_test from, to
+    diff = org.incava.ijdk.util.diff::Diff.new from, to
+    result = diff.getLongestCommonSubsequences()
+  end
+
+  def run_benchmark_test lbl, num, from, to
+    Benchmark.benchmark(lbl, 15) do |x|
+      x.report("jruby") do
+        num.times { run_jruby_performance_test from, to }
+      end
+
+      x.report("java") do
+        num.times { run_java_performance_test from, to }
+      end
+    end
+  end
+
+  def get_test_data chars, size
+    data = Array.new
+    size.times do
+      data << chars[rand(chars.size)]
+    end
+    data
+  end
+
+  def test_performance
+    if ARGV.empty?
+      info "skipping performance test (run with \"jruby ... -n test_performance -- run\""
+      return
+    end
+
+    allchars = ('a' .. 'z').to_a
+    fewchars = ('a' .. 'g').to_a
+
+    data_sets = [
+                 [ 5,    5000,  7500 ],
+                 [ 10,   5000,  7500 ], 
+                 [ 50,    250,   500 ],
+                 [ 100,    50,   100 ],
+                 [ 250,    15,    20 ],
+                 [ 1000,    2,     1 ]
+                ]
+
+    data_sets.each do |size, allnum, fewnum|
+      [ allchars, fewchars ].each_with_index do |charset, cidx|
+        from = get_test_data charset, size + rand(size)
+        to = get_test_data charset, size + rand(size)
+
+        num = cidx == 0 ? allnum : fewnum
+        run_benchmark_test "#{size} #{num}\n", num, from, to
+        puts
+      end
+    end
   end
 end

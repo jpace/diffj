@@ -31,28 +31,17 @@ module DiffJ
     end
 
     def compare from_cu, to_cu
-      info "from_cu: #{from_cu}".bold
-      info "to_cu: #{to_cu}".bold
-
       from_types = from_cu.type_declarations
       to_types = to_cu.type_declarations
       
       from_names_to_tds = make_td_map from_types
       to_names_to_tds = make_td_map to_types
 
-      info "from_names_to_tds: #{from_names_to_tds}".bold
-      info "to_names_to_tds: #{to_names_to_tds}".bold
-      
       names = from_names_to_tds.keys | to_names_to_tds.keys
-
-      info "names: #{names}"
 
       names.each do |name|
         fromtd = from_names_to_tds[name]
         totd = to_names_to_tds[name]
-
-        info "fromtd: #{fromtd}"
-        info "totd: #{totd}"
 
         if fromtd.nil?
           added from_cu, totd, TYPE_DECLARATION_ADDED, totd.namestr

@@ -72,7 +72,6 @@ module DiffJ
         reader = java.io.StringReader.new @contents
         jcs    = ::Java::net.sourceforge.pmd.ast.JavaCharStream.new reader
         parser = ::Java::net.sourceforge.pmd.ast.JavaParser.new jcs
-
         case @srcver
         when "1.3"
           parser.setJDK13
@@ -84,8 +83,6 @@ module DiffJ
         else
           raise DiffJException.new "source version '" + @srcver + "' not recognized"
         end
-
-        info "parser: #{parser}"
         parser
       end
       

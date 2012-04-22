@@ -11,8 +11,6 @@ module DiffJ
   module IO
     # location within a file (line and column)
     class Location
-      include Loggable      
-
       class << self
         def beginning tk
           tk && new(tk.beginLine, tk.beginColumn)
@@ -35,6 +33,10 @@ module DiffJ
         "#{line}:#{column}"
       end
 
+      def inspect
+        to_s
+      end
+
       def eql? other
         (self <=> other) == 0
       end
@@ -44,8 +46,7 @@ module DiffJ
       end
 
       def <=> other
-        cmp = line <=> other.line
-        cmp.nonzero? || column <=> other.column
+        (line <=> other.line).nonzero? || (column <=> other.column).nonzero? || 0
       end
     end
   end

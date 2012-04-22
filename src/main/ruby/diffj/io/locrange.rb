@@ -10,12 +10,18 @@ include Java
 module DiffJ
   module IO
     class LocationRange
+      include Comparable
+      
       attr_reader :from
       attr_reader :to
 
       def initialize from, to
         @from = from
         @to = to
+      end
+
+      def inspect
+        to_s
       end
 
       def to_s
@@ -27,8 +33,7 @@ module DiffJ
       end
 
       def <=> other
-        cmp = from <=> other.from
-        cmp.nonzero? || to <=> other.to
+        (from <=> other.from).nonzero? || (to <=> other.to).nonzero? || 0
       end
     end
   end

@@ -67,7 +67,7 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     tk = from
     while true
       tokens << tk
-      break if tk == to
+      break if tk.object_id == to.object_id
       tk = tk.next
     end
     tokens

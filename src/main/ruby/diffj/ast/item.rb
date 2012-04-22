@@ -5,8 +5,12 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/ast/element'
+require 'diffj/util/diff/lcs'
+require 'diffj/util/diff/traverser'
+require 'diffj/util/diff/delta'
 
 include Java
+include DiffJ::IO
 
 module DiffJ
   class ItemComparator < ElementComparator
@@ -76,22 +80,26 @@ module DiffJ
     end
 
     def get_start token_list, start
-      sttoken = org.incava.ijdk.util.ListExt.get token_list, start
-      if sttoken.nil? && token_list.size > 0
-        sttoken = org.incava.ijdk.util.ListExt.get token_list, -1
+      sttoken = token_list[start]
+      if sttoken.nil? && !token_list.empty?
+        sttoken = token_list[-1]
         sttoken = sttoken.next
       end
       sttoken
     end
 
     def get_message addend, delend
-      delend == org.incava.ijdk.util.diff.Difference::NONE ? CODE_ADDED : (addend == org.incava.ijdk.util.diff.Difference::NONE ? CODE_REMOVED : CODE_CHANGED)
+      is_none?(delend) ? CODE_ADDED : (is_none?(addend) ? CODE_REMOVED : CODE_CHANGED)
+    end
+
+    def is_none? idx
+      idx.nil? || idx == org.incava.ijdk.util.diff.Difference::NONE
     end
 
     def get_location_range tokenlist, startidx, endidx
       starttk = nil
       endtk = nil
-      if endidx == org.incava.ijdk.util.diff.Difference::NONE
+      if is_none? endidx
         starttk = get_start tokenlist, startidx
         endtk = starttk
       else
@@ -99,10 +107,10 @@ module DiffJ
         endtk = tokenlist[endidx]
       end
 
-      from = DiffJ::IO::Location.beginning starttk
-      to = DiffJ::IO::Location.ending endtk
+      from = Location.beginning starttk
+      to = Location.ending endtk
 
-      DiffJ::IO::LocationRange.new from, to
+      LocationRange.new from, to
     end
 
     def on_same_line? ref, locrg
@@ -110,9 +118,10 @@ module DiffJ
     end
 
     def replace_reference name, ref, fromlocrg, tolocrg
-      newmsg = ResourceString.new(CODE_CHANGED).format name
-      locs = [ ref.first_location.from, fromlocrg.to, ref.second_location.from, tolocrg.to ]
+      newmsg  = ResourceString.new(CODE_CHANGED).format name
+      locs    = [ ref.first_location.from, fromlocrg.to, ref.second_location.from, tolocrg.to ]
       newdiff = DiffJ::FDiffChange.new newmsg, :locations => locs
+
       filediffs.delete ref
       add newdiff
       newdiff
@@ -139,14 +148,36 @@ module DiffJ
       diff != org.incava.ijdk.util.diff.Difference::NONE
     end
     
-    def process_difference diff, from_name, from_list, to_list, prev_ref
+    def javadiff_process_difference diff, from_name, from_list, to_list, prev_ref
       delstart = diff.getDeletedStart()
       delend   = diff.getDeletedEnd()
       addstart = diff.getAddedStart()
       addend   = diff.getAddedEnd()
       
       # I have this guard here, but I don't know that it's ever been hit
-      return nil if !is_diff?(delend) && !is_diff?(addend)
+      return nil if is_none?(delend) && is_none?(addend)
+      
+      fromlocrg = get_location_range from_list, delstart, delend
+      tolocrg = get_location_range to_list, addstart, addend
+
+      msg = get_message addend, delend
+            
+      # $$$ this is untested:
+      if on_same_line? prev_ref, fromlocrg
+        replace_reference from_name, prev_ref, fromlocrg, tolocrg
+      else
+        add_reference from_name, msg, fromlocrg, tolocrg
+      end
+    end
+    
+    def jrubydiff_process_difference delta, from_name, from_list, to_list, prev_ref
+      delstart = delta.delete_start
+      delend   = delta.delete_end
+      addstart = delta.add_start
+      addend   = delta.add_end
+      
+      # I have this guard here, but I don't know that it's ever been hit
+      return nil if is_none?(delend) && is_none?(addend)
       
       fromlocrg = get_location_range from_list, delstart, delend
       tolocrg = get_location_range to_list, addstart, addend
@@ -166,8 +197,25 @@ module DiffJ
       end
     end
 
-    def compare_code from_name, from_list, to_name, to_list
-      info "self: #{self}".on_cyan
+    def jrubydiff_compare_code from_name, from_list, to_name, to_list
+      info "self: #{self}".bold.red.on_cyan
+
+      matches = DiffJ::DiffLCS::LCS.new(from_list, to_list).matches
+      trav = DiffJ::DiffLCS::Traverser.new matches, from_list.size, to_list.size
+
+      ref = nil      
+      difflist = trav.diffs
+      
+      difflist.each do |diff|
+        info "diff: #{diff}"
+        ref = jrubydiff_process_difference diff, from_name, from_list, to_list, ref
+        return if ref.nil?
+      end
+    end
+
+    def javadiff_compare_code from_name, from_list, to_name, to_list
+      info "self: #{self}".bold.red.on_cyan
+
       tc = org.incava.diffj.ItemDiff::TokenComparator.new
       d = org.incava.ijdk.util.diff.Diff.new from_list, to_list, tc
         
@@ -176,9 +224,14 @@ module DiffJ
       
       difflist.each do |diff|
         info "diff: #{diff}".red
-        ref = process_difference diff, from_name, from_list, to_list, ref
+        ref = javadiff_process_difference diff, from_name, from_list, to_list, ref
         return if ref.nil?
       end
+    end
+
+    def compare_code from_name, from_list, to_name, to_list
+      jrubydiff_compare_code from_name, from_list, to_name, to_list
+      # javadiff_compare_code from_name, from_list, to_name, to_list
     end
   end
 end

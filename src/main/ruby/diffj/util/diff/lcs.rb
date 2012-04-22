@@ -53,6 +53,9 @@ module DiffJ
       end
 
       def skip_common_from_start 
+        info "current: @from[#{@from_start}]: #{@from[@from_start]}; @to[#{@to_start}]: #{@to[@to_start]}".yellow
+        info "==? #{@from[@from_start] == @to[@to_start]}".yellow
+        
         while @from_start <= @from_end && @to_start <= @to_end && @from[@from_start] == @to[@to_start]
           @match_map[@from_start] = @to_start
           @from_start += 1
@@ -86,6 +89,8 @@ module DiffJ
         @match_map.each do |key, value|
           @matches[key] = value
         end
+
+        info "@matches: #{@matches}".cyan
       end
       
       def get_to_matches

@@ -122,16 +122,9 @@ module DiffJ
     end
 
     def compare_coids from_coid, to_coid
-      info "from_td: #{from_coid}; #{from_coid.class}".yellow
-      info "to_td: #{to_coid}; #{to_coid.class}".yellow
-
       if !from_coid.interface? && to_coid.interface?
-        info "from_td: #{from_coid}; #{from_coid.class}".blue
-        info "to_td: #{to_coid}; #{to_coid.class}".blue
         changed from_coid, to_coid, TYPE_CHANGED_FROM_CLASS_TO_INTERFACE
       elsif from_coid.interface? && !to_coid.interface?
-        info "from_td: #{from_coid}; #{from_coid.class}".cyan
-        info "to_td: #{to_coid}; #{to_coid.class}".cyan
         changed from_coid, to_coid, TYPE_CHANGED_FROM_INTERFACE_TO_CLASS
       end
         
@@ -146,9 +139,6 @@ module DiffJ
     end
 
     def compare from_td, to_td
-      info "from_td: #{from_td}; #{from_td.class}".magenta
-      info "to_td: #{to_td}; #{to_td.class}".magenta
-
       # class or interface declaration:
       fromtype = from_td.type_node
       totype = to_td.type_node

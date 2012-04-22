@@ -75,8 +75,8 @@ public class Options extends OptionSet {
         return instance;
     }
 
-    protected Options() {
-        super("diffj", "Analyzes and validates Java and Javadoc");
+    public Options() {
+        super("diffj", "Compares Java code");
 
         // use the diffj.* equivalent property for each option.
 
@@ -232,7 +232,6 @@ public class Options extends OptionSet {
 
         return unprocessed;
     }
-
 
     /**
      * Whether to use brief or detailed reporting.

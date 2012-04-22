@@ -10,11 +10,11 @@ require 'diffj/fdiff/reports/long'
 require 'diffj/fdiff/writers/ctx_hl'
 require 'diffj/fdiff/writers/ctx_no_hl'
 require 'diffj/fdiff/writers/no_context'
+require 'diffj/app/options'
 
 include Java
 include DiffJ::FDiff::Report
 
-java_import org.incava.diffj.Options
 java_import org.incava.diffj.DiffJException
 
 Log::level = Log::DEBUG
@@ -41,7 +41,6 @@ module DiffJ
 
     def create_java_element fname, label, source
       begin
-        info "fname: #{fname}"
         @jef.create_element Pathname.new(fname), label, source, @recurse
       rescue StandardError => de
         $stderr.puts de.message
@@ -88,9 +87,8 @@ module DiffJ
 end
 
 if __FILE__ == $0
-  opts = Options.get
-  names = opts.process ARGV
-  
+  opts = DiffJ::Options.new
+  names = opts.process ARGV  
   diffj = DiffJ::CLI.new(opts.showBriefOutput, 
                          opts.showContextOutput, 
                          opts.highlightOutput,

@@ -9,45 +9,51 @@ require 'diffj'
 require 'diffj/io/location'
 require 'diffj/io/locrange'
 require 'diffj/util/resstring'
+require 'pp'
 
-file = $0
-puts "file: #{file}".red
-puts "file: #{__FILE__}".red
+STDERR.sync = true
+STDOUT.sync = true
+
+# $DEBUG = true
 
 class DiffJ::TestCase < Test::Unit::TestCase
 end
 
-def file_to_req_path file
-  file.sub(%r{.*src/test/ruby/}, '').sub(%r{\.rb}, '\1')
-end
+if false
+  file = $0
 
-if file.index %r{diffj/.*/test_}
-  testee = file.sub(%r{.*src/test/ruby/}, '').sub(%r{test_(\w+).rb}, '\1')
-  puts "testee: #{testee}".red
+  def file_to_req_path file
+    file.sub(%r{.*src/test/ruby/}, '').sub(%r{\.rb}, '\1')
+  end
 
-  require testee
+  if file.index %r{diffj/.*/test_}
+    testee = file.sub(%r{.*src/test/ruby/}, '').sub(%r{test_(\w+).rb}, '\1')
+    # puts "testee: #{testee}".red
 
-  # and roll up through all the 'tc.rb' files:
+    require testee
 
-  fullpath = Pathname.new(file).expand_path
+    # and roll up through all the 'tc.rb' files:
 
-  puts "fullpath: #{fullpath}".red
+    fullpath = Pathname.new(file).expand_path
 
-  while fullpath.to_s != '/'
-    tcfile = fullpath.parent + 'tc.rb'
-    puts "tcfile: #{tcfile}".red
+    # puts "fullpath: #{fullpath}".red
 
-    if tcfile.exist?
-      puts "tcfile exists: #{tcfile}".red
+    while fullpath.to_s != '/'
+      tcfile = fullpath.parent + 'tc.rb'
+      # puts "tcfile: #{tcfile}".red
 
-      tcpath = file_to_req_path tcfile.to_s
-      puts "tcpath: #{tcpath}".red
+      if tcfile.exist?
+        # puts "tcfile exists: #{tcfile}".red
 
-      require tcpath
-    else
-      break
+        tcpath = file_to_req_path tcfile.to_s
+        # puts "tcpath: #{tcpath}".red
+
+        require tcpath
+      else
+        break
+      end
+      fullpath = fullpath.parent
     end
-    fullpath = fullpath.parent
   end
 end
 
@@ -117,11 +123,8 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def run_fdiff_test expected_fdiffs, dirname, basename
-    diffj = get_diffj
+    diffj  = get_diffj
     report = diffj.report
-    info "report: #{report}"
-    info "report.differences: #{report.differences}"
-
     fnames = %w{ d0 d1 }.collect { |subdir| TESTBED_DIR + '/' + dirname + '/' + subdir + '/' + basename + '.java' }
 
     fromname, toname = *fnames
@@ -131,28 +134,20 @@ class DiffJ::TestCase < Test::Unit::TestCase
     fromname, toname = get_from_and_to_filenames dirname, basename
 
     fromfile = diffj.create_from_element fromname
-    tofile = diffj.create_to_element toname
-
-    info "report: #{report}"
-    info "report.differences: #{report.differences}"
+    tofile   = diffj.create_to_element toname
 
     fromfile.compare report, tofile
 
-    info "report: #{report}"
-    info "report.differences: #{report.differences}"
-
     actual_fdiffs = report.differences
-
-    info "expected_fdiffs: #{expected_fdiffs.class}"
-    info "actual_fdiffs: #{actual_fdiffs.class}"
 
     assert_differences_match expected_fdiffs, actual_fdiffs
   end
 
   def assert_equal exp, act, msg = nil
     begin
-      super
+      super exp, act, msg
     rescue => e
+      info "e: #{e.class}".red
       info "msg: #{msg}".red
       info "exp: #{exp}".red
       info "exp: #{exp.class}".red
@@ -163,16 +158,9 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def assert_diffs_equal exp, act, msg = ""
-    info "exp.diff_type: #{exp.diff_type}"
-    info "act.diff_type: #{act.diff_type}"
-    assert_equal exp.diff_type, act.diff_type, msg + ".type"
-    assert_equal exp.message, act.message, msg + ".message"
-
-    assert_equal exp.first_location, act.first_location, msg + ".first_location"
-
-    info "exp.second_location: #{exp.second_location}"
-    info "act.second_location: #{act.second_location}"
-
+    assert_equal exp.diff_type,       act.diff_type,       msg + ".type"
+    assert_equal exp.message,         act.message,         msg + ".message"
+    assert_equal exp.first_location,  act.first_location,  msg + ".first_location"
     assert_equal exp.second_location, act.second_location, msg + ".second_location"
   end
 
@@ -197,7 +185,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def format msg, *values
-    ResourceString.new(msg).format(*values)
+    DiffJ::ResourceString.new(msg).format(*values)
   end
 
   def get_message msgvals

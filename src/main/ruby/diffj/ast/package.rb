@@ -25,9 +25,6 @@ module DiffJ
     end
 
     def compare_names fromnode, tonode
-      info "fromnode: #{fromnode}".cyan
-      info "tonode: #{tonode}".cyan
-
       fromname = find_name_node fromnode
       toname = find_name_node tonode
 
@@ -37,14 +34,8 @@ module DiffJ
     end
 
     def compare fromcu, tocu
-      info "fromcu: #{fromcu}"
-      info "tocu: #{tocu}"
-
       frompkg = fromcu.package
       topkg = tocu.package
-
-      info "frompkg: #{frompkg}"
-      info "topkg: #{topkg}"
 
       if frompkg
         if topkg

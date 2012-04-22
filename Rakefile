@@ -3,6 +3,7 @@ require 'rake'
 require 'fileutils'
 require 'java'
 require 'rake/testtask'
+require 'ant'
 
 puts "CLASSPATH: #{$CLASSPATH}"
 puts "CLASSPATH.class: #{$CLASSPATH.class}"

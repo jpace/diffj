@@ -26,6 +26,10 @@ module DiffJ
         @add_end = add_end
       end
 
+      def inspect
+        to_s
+      end
+
       def is_add?
         @delete_end.nil?
       end
@@ -72,6 +76,10 @@ module DiffJ
 
       def to_s
         "del: [#{@delete_start}, #{@delete_end}]; add: [#{@add_start}, #{@add_end}]"
+      end
+
+      def == other
+        (self <=> other) == 0
       end
 
       def <=> other

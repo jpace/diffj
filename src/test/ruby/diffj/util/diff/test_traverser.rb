@@ -16,47 +16,34 @@ class DiffJ::DiffTraverserTestCase < DiffJ::TestCase
 
   LCSDelta = DiffJ::DiffLCS::Delta
 
-  delta = LCSDelta.new 4, 4, 5, 6
-  Log.info "delta: #{delta.class}".on_blue
-
-  # DiffDelta = org.incava.ijdk.util.diff.Difference
-
-  def run_diff_test from, to, exp = nil
-    info "from: #{from}"
-    info "to: #{to}"
-
-    diff = org.incava.ijdk.util.diff::Diff.new from, to
-    javaresult = diff.diff()
-
-    (0 ... javaresult.size).each do |idx|
-      # info "javaresult [#{idx}]: #{javaresult[idx].to_s}".yellow
-    end
-
-    # expected << org.incava.ijdk.util.diff::Difference.new(0, 1, 0, -1)
-    matches = LCS.new(from, to).matches
-
-    trav = Traverser.new matches, from.size, to.size
-
+  def assert_matches_legacy jrubyresult, from, to
+    diff        = org.incava.ijdk.util.diff::Diff.new from, to
+    javaresult  = diff.diff
+    matches     = LCS.new(from, to).matches
+    trav        = Traverser.new matches, from.size, to.size
     jrubyresult = trav.diffs
 
     # info "jrubyresult: #{jrubyresult.inspect}".yellow
     assert_equal javaresult.size, jrubyresult.size
 
     (0 ... javaresult.size).each do |idx|
-      # info "javaresult [#{idx}]: #{javaresult[idx].inspect}".yellow
-      # info "jrubyresult[#{idx}]: #{jrubyresult[idx].inspect}".cyan
       assert_equal jrubyresult[idx], javaresult[idx], "idx: #{idx}"
     end
+  end
 
-    if exp
-      # info "exp: #{exp.inspect}".yellow
-      assert_equal exp.size, jrubyresult.size
-      
-      (0 ... exp.size).each do |idx|
-        # info "exp        [#{idx}]: #{exp[idx].inspect}".yellow
-        # info "jrubyresult[#{idx}]: #{jrubyresult[idx].inspect}".cyan
-        assert_equal exp[idx], jrubyresult[idx], "idx: #{idx}"
-      end
+  def run_diff_test from, to, exp
+    info "from: #{from}"
+    info "to: #{to}"
+
+    matches     = LCS.new(from, to).matches
+    trav        = Traverser.new matches, from.size, to.size
+    jrubyresult = trav.diffs
+
+    assert_matches_legacy jrubyresult, from, to
+    
+    assert_equal exp.size, jrubyresult.size      
+    (0 ... exp.size).each do |idx|
+      assert_equal exp[idx], jrubyresult[idx], "idx: #{idx}"
     end
   end
 
@@ -165,27 +152,35 @@ class DiffJ::DiffTraverserTestCase < DiffJ::TestCase
     result = differ.diff
   end
 
+  def run_orig_locosu_performance_test from, to
+    differ = DiffJ::OrigLocosu.new from, to
+    result = differ.diff
+  end
+
   def run_locosu_performance_test from, to
     differ = DiffJ::Locosu.new from, to
     result = differ.diff
   end
 
-  def run_benchmark_test num, from, to
-    info "num: #{num}".yellow
-    Benchmark.bm do |x|
-      x.report("old ".yellow.bold) do
+  def run_benchmark_test lbl, num, from, to
+    Benchmark.benchmark(lbl, 15) do |x|
+      x.report("jruby:orig") do
         num.times { run_performance_test OrigTraverser, from, to }
       end
 
-      x.report("new ".green.bold) do 
+      x.report("jruby:new") do 
         num.times { run_performance_test Traverser, from, to }
       end
 
-      x.report("java".cyan.bold) do
+      x.report("java:orig") do
         num.times { run_java_performance_test from, to }
       end
 
-      x.report("loco".cyan.bold) do
+      x.report("java:origlocosu") do
+        num.times { run_orig_locosu_performance_test from, to }
+      end
+
+      x.report("java:locosu") do
         num.times { run_locosu_performance_test from, to }
       end
     end
@@ -200,25 +195,32 @@ class DiffJ::DiffTraverserTestCase < DiffJ::TestCase
   end
 
   def test_performance
-    from = [            "same", "same", "same", "", "same", "del", "",  "del" ]
-    to   = [ "ins", "", "same", "same", "same", "", "same"                    ]
+    if ARGV.empty?
+      info "skipping performance test (run with \"jruby ... -n test_performance -- run\""
+      return
+    end
 
     allchars = ('a' .. 'z').to_a
     fewchars = ('a' .. 'g').to_a
 
-    printf "%10s %10s %10s %10s\n", "charset", "from", "to", "size"
+    data_sets = [
+                 [ 5,    5000,  7500 ],
+                 [ 10,   5000,  7500 ], 
+                 [ 50,    250,   500 ],
+                 [ 100,    50,   100 ],
+                 [ 250,    15,    20 ],
+                 [ 1000,    2,     1 ]
+                ]
 
-    [ [ 5, 7500 ], [ 10, 6000 ], [ 50, 1000 ], [ 100, 500 ], [ 250, 50 ], [ 1000, 2 ] ].each do |size, num|
-      info "size: #{size}; num: #{num}".cyan.bold
+    data_sets.each do |size, allnum, fewnum|
       [ allchars, fewchars ].each_with_index do |charset, cidx|
         from = get_test_data charset, size + rand(size)
         to = get_test_data charset, size + rand(size)
 
-        printf "%10d %10d %10d %10d\n", charset.size, from.size, to.size, size
-        
-        run_benchmark_test num * (1 + cidx), from, to
+        num = cidx == 0 ? allnum : fewnum
+        run_benchmark_test "#{size} #{num}\n", num, from, to
+        puts
       end
-      puts
     end
   end
 end
