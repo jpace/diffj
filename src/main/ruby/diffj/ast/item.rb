@@ -198,8 +198,6 @@ module DiffJ
     end
 
     def jrubydiff_compare_code from_name, from_list, to_name, to_list
-      info "self: #{self}".bold.red.on_cyan
-
       matches = DiffJ::DiffLCS::LCS.new(from_list, to_list).matches
       trav = DiffJ::DiffLCS::Traverser.new matches, from_list.size, to_list.size
 

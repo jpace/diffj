@@ -20,13 +20,8 @@ module DiffJ
         @pending = nil
         @matches = matches
 
-        info "matches: #{@matches}".bold.red.on_green
-        info "matches.size: #{@matches.size}".bold.red.on_green
-
         @a_size = a_size
         @b_size = b_size
-
-        info "a_size: #{@a_size}; b_size: #{@b_size}".on_blue
         
         traverse_sequences
 
@@ -45,9 +40,6 @@ module DiffJ
 
         lastmatch = @matches.length - 1
 
-        info "aidx: #{@aidx}; bidx: #{@bidx}".on_blue
-        info "lastmatch: #{lastmatch}".on_blue
-
         while @aidx <= lastmatch
           bline = @matches[@aidx]
           if bline.nil?
@@ -61,24 +53,19 @@ module DiffJ
         end
 
         while @aidx < @a_size || @bidx < @b_size
-          info "@aidx: #{@aidx}; @bidx: #{@bidx}".bold
           if @aidx == @a_size   # last A
-            info "@aidx: #{@aidx}; @bidx: #{@bidx}".red
             elements_added @b_size - 1
             return
           elsif @bidx == @b_size # last B?
-            info "@aidx: #{@aidx}; @bidx: #{@bidx}".yellow
             elements_deleted @a_size - 1
             return
           end
 
           if @aidx < @a_size
-            info "@aidx: #{@aidx}; @bidx: #{@bidx}".magenta
             element_deleted
           end
 
           if @bidx < @b_size
-            info "@aidx: #{@aidx}; @bidx: #{@bidx}".cyan
             element_added
           end
         end
@@ -96,9 +83,6 @@ module DiffJ
         else
           @pending = @pending.extend_deleted aend
         end
-
-        info "pending: #{@pending}".bold.yellow
-
         @aidx = aend + 1
       end
 
@@ -109,9 +93,6 @@ module DiffJ
         else
           @pending = @pending.extend_added bend
         end
-
-        info "pending: #{@pending}".bold.green
-
         @bidx = bend + 1
       end
 
@@ -126,9 +107,6 @@ module DiffJ
           @diffs << @pending
           @pending = nil
         end
-
-        info "pending: #{@pending}".bold.magenta
-
         @aidx += 1
         @bidx += 1
       end

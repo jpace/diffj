@@ -104,9 +104,6 @@ class DiffJ::TestCase < Test::Unit::TestCase
   end
 
   def assert_differences_match expected_diffs, actual_diffs
-    info "expected_diffs: #{expected_diffs.class}"
-    info "actual_diffs: #{actual_diffs.class}"
-
     if expected_diffs.length != actual_diffs.length
       info "mismatched number of diffs".red
       maxlen = [ expected_diffs.length, actual_diffs.length ].max
