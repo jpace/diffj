@@ -7,53 +7,76 @@ include Java
 
 require 'ant'
 
-$CLASSPATH << ":/usr/lib/jvm/java-6-openjdk/lib/tools.jar"
+# this is fixed in JRuby 1.6.0:
+$CLASSPATH << "#{ENV['JAVA_HOME']}/lib/tools.jar"
+
 $CLASSPATH << "build/libs/diffj-1.2.1.jar"
 $CLASSPATH << "libs/jruby-complete-1.6.3.jar"
 $CLASSPATH << "libs/pmd-4.2.5.jar"
 
-puts "ant: #{ant}"
+$clsmaindir = 'staging/classes/main'
+$clstestdir = 'staging/classes/test'
+
+$srcmainjavadir = 'src/main/java'
+$srctestjavadir = 'src/test/java'
+
+$srcmainrubydir = 'src/main/ruby'
+$srctestrubydir = 'src/test/ruby'
+
+$jarfname = 'diffj-1.2.1.jar'
+$buildlibsdir = 'staging/libs'
+$destjarfile = $buildlibsdir + '/' + $jarfname
+
+directory $clsmaindir
+directory $clstestdir
+directory $buildlibsdir
+
+buildjars = [ 'libs/jruby-complete-1.6.3.jar', 'libs/pmd-4.2.5.jar' ]
+testjars =  [ 'libs/junit-4.10.jar' ]
 
 task :setup do
-  puts "ant: #{ant}"
   ant.path :id => 'classpath' do
-    fileset :dir => 'staging/classes'
-    fileset :file => 'libs/jruby-complete-1.6.3.jar'
-    fileset :file => 'libs/junit-4.10.jar'
-    fileset :file => 'libs/pmd-4.2.5.jar'
+    buildjars.each do |jarfile|
+      fileset :file => jarfile
+    end
+  end
+
+  ant.path :id => 'test.classpath' do
+    pathelement :location => $clsmaindir
+    path        :refid    => 'classpath'
+    testjars.each do |jarfile|
+      fileset :file => jarfile
+    end
   end
 end
 
-directory 'staging/classes'
-directory 'staging/libs'
-
-puts "classpath: #{$CLASSPATH}"
-
-task :compile => [ :setup, 'staging/classes' ] do
-  ant.javac(:destdir => 'staging/classes', 
-            :srcdir => 'src/main/java',
+task :compile => [ :setup, $clsmaindir ] do
+  ant.javac(:destdir => $clsmaindir, 
+            :srcdir => $srcmainjavadir,
             :classpathref => 'classpath',
-            :source => '1.6',
-            :target => '1.6',
             :debug => 'yes',
             :includeantruntime => 'no')
 end
 
-task :jar => [ :compile, 'staging/libs' ] do
-  ant.jar(:jarfile => 'staging/libs/diffj-1.2.1.jar', 
-          :basedir => 'staging/classes')
+task :testscompile => [ :setup, $clstestdir, :compile ] do
+  ant.javac(:destdir => $clstestdir, 
+            :srcdir => $srctestjavadir,
+            :classpathref => 'test.classpath',
+            :debug => 'yes',
+            :includeantruntime => 'no')
+end
+
+task :jar => [ :compile, $buildlibsdir ] do
+  ant.jar(:jarfile => $destjarfile, 
+          :basedir => $clsmaindir)
 end
 
 class DiffJRakeTestTask < Rake::TestTask
   def initialize name, filter = name
-    super('test:' + name) do |t|
-      t.options = { :needs => [ :something ] }
-      t.libs << "src/main/ruby"
-      t.libs << "src/test/ruby"
-      # t.libs << "staging/libs/diffj-1.2.1.jar"
-      # t.libs << "libs/jruby-complete-1.6.3.jar"
-      # t.libs << "libs/pmd-4.2.5.jar" # this gets mushed into diffj-1.2.1.jar, but for future builds it won't.
-      t.pattern = "src/test/ruby/**/#{filter}/**/test*.rb"
+    super(('test:' + name) => :testscompile) do |t|
+      t.libs << $srcmainrubydir
+      t.libs << $srctestrubydir
+      t.pattern = "#{$srctestrubydir}/**/#{filter}/**/test*.rb"
       t.warning = true
       t.verbose = true
     end
