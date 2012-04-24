@@ -1,95 +1,58 @@
 require 'rubygems'
 require 'rake'
-require 'fileutils'
 require 'java'
 require 'rake/testtask'
+
+include Java
+
 require 'ant'
 
-puts "CLASSPATH: #{$CLASSPATH}"
-puts "CLASSPATH.class: #{$CLASSPATH.class}"
-
+$CLASSPATH << ":/usr/lib/jvm/java-6-openjdk/lib/tools.jar"
 $CLASSPATH << "build/libs/diffj-1.2.1.jar"
 $CLASSPATH << "libs/jruby-complete-1.6.3.jar"
-$CLASSPATH << "libs/pmd-4.2.5.jar" # this gets mushed into diffj-1.2.1.jar, but for future builds it won't.
+$CLASSPATH << "libs/pmd-4.2.5.jar"
 
-task :nothing do
-  puts "nothing"
-end
+puts "ant: #{ant}"
 
-require 'ant'
-require 'lib/tasks/common'
-
-if false
-  puts "$CLASSPATH: #{$CLASSPATH}"
-  $CLASSPATH << ":build/libs/diffj-1.2.1.jar:libs/jruby-complete-1.6.3.jar:libs/pmd-4.2.5.jar"
-  puts "$CLASSPATH: #{$CLASSPATH}"
-
-  puts "ENV: #{$ENV}"
-
-  task :default => :buildjar
-
-  $fname    = "diffj.rb"
-  $clsname  = "DiffjMain.class"
-
-  $builddir   = "build/jruby"
-
-  $metainfdir = "META-INF"
-  $mfname     = $metainfdir + "/MANIFEST.MF"
-  $mainclass  = "DiffJMain"
-
-  $jrubyjar   = "/home/jpace/Downloads/jruby-complete-1.6.3.jar"
-  $tgtjar     = "diffj-x.y.z.jar"
-
-  $rbfiles = %w{ diffj.rb }
-
-  directory $builddir
-
-  directory buildfile($metainfdir)
-
-  copytask $mfname, [ buildfile($metainfdir), "src/main/java/#{$mfname}" ], :manifest
-
-  copytask $tgtjar, [ $jrubyjar ], :tgtjar
-
-  copygroup $rbfiles, :rbfiles
-
-  jrubyctask $fname, :rbmain
-
-  task :jrubyc => $fname do |t|
-    puts "running: jrubyc -t #{$builddir} --javac #{t.prerequisites.last}"
-    sh "jrubyc -t #{$builddir} --javac #{t.prerequisites.last}"
-  end
-
-  copytask $clsname, [ $clsname ], :javaclass
-  
-  task :buildjar => [ :manifest, :tgtjar, :rbmain, :rbfiles ] do
-    Dir.chdir $builddir
-
-    sh "jar ufm #{$tgtjar} #{$mfname} *.class #{$rbfiles.join(' ')}"
+task :setup do
+  puts "ant: #{ant}"
+  ant.path :id => 'classpath' do
+    fileset :dir => 'staging/classes'
+    fileset :file => 'libs/jruby-complete-1.6.3.jar'
+    fileset :file => 'libs/junit-4.10.jar'
+    fileset :file => 'libs/pmd-4.2.5.jar'
   end
 end
 
-# beginning of cleaned up Rake code:
+directory 'staging/classes'
+directory 'staging/libs'
 
-task :runtest do
-  sh "jruby -Isrc/main/ruby -Isrc/test/ruby src/test/ruby/test_types_diff.rb"
+puts "classpath: #{$CLASSPATH}"
+
+task :compile => [ :setup, 'staging/classes' ] do
+  ant.javac(:destdir => 'staging/classes', 
+            :srcdir => 'src/main/java',
+            :classpathref => 'classpath',
+            :source => '1.6',
+            :target => '1.6',
+            :debug => 'yes',
+            :includeantruntime => 'no')
 end
 
-task :tests do
-  tests = Dir.glob("src/test/ruby/**/test*.rb")
-  puts "tests: #{tests}"
-  tests.each do |test|
-    sh "jruby -Isrc/main/ruby -Isrc/test/ruby #{test}"
-  end
+task :jar => [ :compile, 'staging/libs' ] do
+  ant.jar(:jarfile => 'staging/libs/diffj-1.2.1.jar', 
+          :basedir => 'staging/classes')
 end
 
 class DiffJRakeTestTask < Rake::TestTask
   def initialize name, filter = name
     super('test:' + name) do |t|
+      t.options = { :needs => [ :something ] }
       t.libs << "src/main/ruby"
       t.libs << "src/test/ruby"
-      t.libs << "build/libs/diffj-1.2.1.jar"
-      t.libs << "libs/jruby-complete-1.6.3.jar"
-      t.libs << "libs/pmd-4.2.5.jar" # this gets mushed into diffj-1.2.1.jar, but for future builds it won't.
+      # t.libs << "staging/libs/diffj-1.2.1.jar"
+      # t.libs << "libs/jruby-complete-1.6.3.jar"
+      # t.libs << "libs/pmd-4.2.5.jar" # this gets mushed into diffj-1.2.1.jar, but for future builds it won't.
       t.pattern = "src/test/ruby/**/#{filter}/**/test*.rb"
       t.warning = true
       t.verbose = true
