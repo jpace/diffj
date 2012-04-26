@@ -4,7 +4,6 @@
 require 'test/unit'
 require 'java'
 require 'rubygems'
-require 'riel'
 require 'diffj/diffjtestcase'
 require 'diffj/io/file'
 
@@ -36,7 +35,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
 
     (0 ... n_children).each do |ci|
       child = node.jjt_get_child ci
-      info "#{indent}child: #{child}".yellow
+      info "#{indent}child: #{child}"
 
       if recurse
         dump_node child, indent + "    ", recurse
@@ -45,7 +44,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
 
     tokens = node.tokens
     tokens.each do |tk|
-      info "#{indent}#{tk}".yellow
+      info "#{indent}#{tk}"
     end
   end
   
@@ -174,7 +173,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     pt    = process_node_subnode Java::NetSourceforgePmdAst::ASTPrimitiveType,                   typ
     vd    = process_node_subnode Java::NetSourceforgePmdAst::ASTVariableDeclarator,              fd, 1
 
-    dump_node td, "####".cyan, true
+    dump_node td, "####", true
   end
 
   def process_subnode_leading_tokens exptokens, parent, idx = 0
@@ -190,7 +189,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     compunit = file.compile
     info "compunit: #{compunit}"
 
-    dump_node compunit, "----".cyan, true
+    dump_node compunit, "----", true
     
     td    = process_subnode_leading_tokens [ "class" ],              compunit
     coid  = process_subnode_leading_tokens [ "class", "Test", "{" ], td
@@ -202,7 +201,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     vd    = process_subnode_leading_tokens %w{ i },                  fd, 1
     vdid  = process_subnode_leading_tokens %w{ },                    vd
 
-    dump_node td, "####".cyan, true
+    dump_node td, "####", true
   end
 
   def assert_is_token tk, msg = nil
@@ -229,7 +228,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
 
   def assert_leading_tokens explist, node
     ldg = node.leading_tokens
-    info "ldg: #{ldg}".on_red
+    info "ldg: #{ldg}"
     
     assert_tokens_match explist, ldg
   end
@@ -242,22 +241,22 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
   end
   
   def dump_nt node, indent = ""
-    info "node: #{node}".blue
+    info "node: #{node}"
 
-    info "#{indent}subnodes".on_blue
+    info "#{indent}subnodes"
     subnodes = node.nodes
     subnodes.each_with_index do |nd, nidx|
-      info "#{indent}#{nd}".on_blue
+      info "#{indent}#{nd}"
       nftk = nd.first_token
       info to_msg(nftk, indent)
       nltk = nd.last_token
       info to_msg(nltk, indent)
     end
 
-    info "#{indent}tokens".on_yellow
+    info "#{indent}tokens"
     tokens = node.tokens
     tokens.each do |tk|
-      info "#{indent}#{tk}".yellow
+      info "#{indent}#{tk}"
     end
 
     children = node.all_children

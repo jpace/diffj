@@ -6,6 +6,7 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj'
+require 'diffj/app/processor'
 require 'diffj/io/location'
 require 'diffj/io/locrange'
 require 'diffj/util/resstring'
@@ -13,6 +14,9 @@ require 'pp'
 
 STDERR.sync = true
 STDOUT.sync = true
+
+Log::level = Log::DEBUG
+Log.set_widths(-15, 5, -50)
 
 # $DEBUG = true
 
@@ -75,7 +79,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
     toname = nil
     tover = "1.5"
     
-    diffj = DiffJ::CLI.new brief, context, highlight, recurse, fromname, fromver, toname, tover
+    diffj = DiffJ::Processor.new brief, context, highlight, recurse, fromname, fromver, toname, tover
     diffj.process_names fnames
     assert_not_nil diffj
   end
@@ -90,7 +94,7 @@ class DiffJ::TestCase < Test::Unit::TestCase
     toname = nil
     tover = "1.5"
     
-    DiffJ::CLI.new brief, context, highlight, recurse, fromname, fromver, toname, tover
+    DiffJ::Processor.new brief, context, highlight, recurse, fromname, fromver, toname, tover
   end
 
   def get_from_and_to_filenames dirname, basename

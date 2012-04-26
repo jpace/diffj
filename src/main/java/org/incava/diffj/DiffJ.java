@@ -100,6 +100,7 @@ public class DiffJ {
         if (names.size() < 2) {
             System.err.println("usage: diffj from-file to-file");
             exitValue = 1;
+            return;
         }
 
         String lastName = ListExt.get(names, -1);
@@ -117,12 +118,20 @@ public class DiffJ {
     }
 
     public static void main(String[] args) {
-        Options      opts  = Options.get();
+        Options opts = Options.get();
         List<String> names = opts.process(Arrays.asList(args));
-        DiffJ        diffj = new DiffJ(opts.showBriefOutput(), opts.showContextOutput(), opts.highlightOutput(),
-                                       opts.recurse(),
-                                       opts.getFirstFileName(), opts.getFromSource(),
-                                       opts.getSecondFileName(), opts.getToSource());
+
+        if (opts.showVersion()) {
+            System.out.println("diffj, version " + Options.VERSION);
+            System.out.println("Written by Jeff Pace (jpace [at] incava [dot] org)");
+            System.out.println("Released under the Lesser GNU Public License");
+            System.exit(0);
+        }
+
+        DiffJ diffj = new DiffJ(opts.showBriefOutput(), opts.showContextOutput(), opts.highlightOutput(),
+                                opts.recurse(),
+                                opts.getFirstFileName(), opts.getFromSource(),
+                                opts.getSecondFileName(), opts.getToSource());
         diffj.processNames(names);
         System.exit(diffj.exitValue);
     }

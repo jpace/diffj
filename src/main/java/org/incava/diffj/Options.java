@@ -26,12 +26,17 @@ public class Options extends OptionSet {
     /**
      * Whether to show context (detailed reporting only).
      */
-    public boolean contextOutput = false;
+    private boolean contextOutput = false;
 
     /**
      * Whether to use colors for highlighting
      */
-    public boolean highlightOutput = false;
+    private boolean highlightOutput = false;
+
+    /**
+     * Whether to show the version.
+     */
+    private boolean showVersion = false;
 
     /**
      * The Java source version, of the from-file.
@@ -202,10 +207,7 @@ public class Options extends OptionSet {
 
         Boolean versionBool = versionOpt.getValue();
         if (versionBool != null) {
-            System.out.println("diffj, version " + VERSION);
-            System.out.println("Written by Jeff Pace (jpace [at] incava [dot] org)");
-            System.out.println("Released under the Lesser GNU Public License");
-            System.exit(0);
+            showVersion = true;
         }
 
         String sourceStr = sourceOpt.getValue();
@@ -252,6 +254,13 @@ public class Options extends OptionSet {
      */
     public boolean highlightOutput() {
         return highlightOutput;
+    }
+
+    /**
+     * Whether to show the version.
+     */
+    public boolean showVersion() {
+        return showVersion;
     }
 
     /**

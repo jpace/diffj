@@ -16,11 +16,13 @@ $CLASSPATH << "libs/pmd-4.2.5.jar"
 
 $clsmaindir = 'staging/classes/main'
 $clstestdir = 'staging/classes/test'
+$clsjrubydir = 'staging/classes/jruby'
 
 $srcmainjavadir = 'src/main/java'
-$srctestjavadir = 'src/test/java'
-
 $srcmainrubydir = 'src/main/ruby'
+$srcmainjrubydir = 'src/main/jruby'
+
+$srctestjavadir = 'src/test/java'
 $srctestrubydir = 'src/test/ruby'
 
 $jarfname = 'diffj-1.2.1.jar'
@@ -30,6 +32,7 @@ $destjarfile = $buildlibsdir + '/' + $jarfname
 directory $clsmaindir
 directory $clstestdir
 directory $buildlibsdir
+directory $clsjrubydir
 
 buildjars = [ 'libs/jruby-complete-1.6.3.jar', 'libs/pmd-4.2.5.jar' ]
 testjars =  [ 'libs/junit-4.10.jar' ]
@@ -58,7 +61,23 @@ task :compile => [ :setup, $clsmaindir ] do
             :includeantruntime => 'no')
 end
 
+task :jruby_compile => [ :setup, $clsmaindir ] do
+  ant.javac(:destdir => $clsmaindir, 
+            :srcdir => $srcmainjrubydir,
+            :classpathref => 'classpath',
+            :debug => 'yes',
+            :includeantruntime => 'no')
+end
+
 task :testscompile => [ :setup, $clstestdir, :compile ] do
+  ant.javac(:destdir => $clstestdir, 
+            :srcdir => $srctestjavadir,
+            :classpathref => 'test.classpath',
+            :debug => 'yes',
+            :includeantruntime => 'no')
+end
+
+task "tests:java" => [ :testscompile ] do
   ant.javac(:destdir => $clstestdir, 
             :srcdir => $srctestjavadir,
             :classpathref => 'test.classpath',
@@ -69,6 +88,10 @@ end
 task :jar => [ :compile, $buildlibsdir ] do
   ant.jar(:jarfile => $destjarfile, 
           :basedir => $clsmaindir)
+end
+
+task :diffj_jar_build => [ :compile, :jruby_compile ] do
+  sh "jar -cfm diffj.jar src/main/jar/launcher.manifest -C staging/classes/main . -C src/main/ruby . -C tmp ."
 end
 
 class DiffJRakeTestTask < Rake::TestTask
