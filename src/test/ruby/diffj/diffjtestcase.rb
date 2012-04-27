@@ -284,4 +284,52 @@ class DiffJ::TestCase < Test::Unit::TestCase
     
     [ msg, from_start, from_end, to_start, to_end ]
   end
+  
+  def dump_node node, indent = "", recurse = true
+    info "#{indent}#{node.inspect}"
+    
+    tk = node.get_first_token
+    ltk = node.get_last_token
+
+    while tk != ltk
+      info "#{indent}tk: #{tk.inspect}"
+      info "#{indent}tk: #{tk.kind}; #{tk.image}"
+      tk = tk.next
+    end
+
+    info "#{indent}tk: #{tk.inspect}"
+    info "#{indent}tk: #{tk.kind}; #{tk.image}"
+
+    # ldg = node.leading_tokens 
+    # info "ldg: #{ldg}"
+
+    n_children = node.jjt_get_num_children
+    info "#{indent}n_children: #{n_children}"
+
+    (0 ... n_children).each do |ci|
+      child = node.jjt_get_child ci
+      info "#{indent}child: #{child}"
+
+      if recurse
+        dump_node child, indent + "    ", recurse
+      end
+    end
+
+    tokens = node.tokens
+    tokens.each do |tk|
+      info "#{indent}#{tk}"
+    end
+  end
+
+  def assert_has_child cls, parent, idx = 0
+    jjtchild = parent.jjt_get_child idx
+    child = parent.node idx
+
+    assert_equal jjtchild, child
+    assert_same jjtchild, child
+
+    assert_instance_of cls, child
+
+    child
+  end
 end

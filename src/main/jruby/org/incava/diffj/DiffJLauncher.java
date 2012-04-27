@@ -12,16 +12,19 @@ public class DiffJLauncher {
             errorWriter = new StringWriter();
             ScriptingContainer container = new ScriptingContainer();
             container.setError(errorWriter);
+            // I think this requires 1.6.0+:
+            container.setArgv(args);
 
             StringBuilder sb = new StringBuilder();
-            sb.append("puts 'hello, world'\n");
-            sb.append("$CMD_ARGS = Array.new\n");
-            for (String arg : args) {
-                sb.append("$CMD_ARGS << '" + arg + "'\n");
-            }
-            sb.append("require 'diffj/app/cli'");
-            System.out.println("cmd: " + sb);        
-            container.runScriptlet(sb.toString());
+            sb.append("require 'diffj/app/cli'\n");
+            sb.append("DiffJ::CLI.run\n");
+            
+            Object obj = container.runScriptlet(sb.toString());
+            System.err.println("returned object: " + obj);
+            System.err.println("returned object: " + obj.getClass());
+
+            Long exitValue = (Long)obj;
+            System.err.println("exitValue: " + exitValue);
         }
         catch (EvalFailedException e) {
             System.out.println("e: " + e.getMessage());

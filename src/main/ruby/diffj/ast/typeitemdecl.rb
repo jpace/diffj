@@ -36,7 +36,12 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
     
     frommds.each do |frommd|
       tomds.each do |tomd|
+        info "frommd: #{frommd.to_string}".yellow
+        info "tomd: #{tomd.to_string}".yellow
+
         score = get_score frommd, tomd
+        info "score: #{score}".yellow
+
         if score > 0.0
           matches[score] << [ frommd, tomd ]
         end
@@ -46,6 +51,8 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
   end
 
   def compare_matches matches, fromunproc, tounproc
+    info "matches: #{matches}".yellow
+    
     matches.sort.reverse.each do |score, decls|
       fromproc = Array.new
       toproc = Array.new

@@ -183,16 +183,16 @@ module DiffJ
       tolocrg = get_location_range to_list, addstart, addend
 
       msg = get_message addend, delend
-      info "msg: #{msg}".on_green
+      info "msg: #{msg}"
             
       # $$$ this is untested:
       if on_same_line? prev_ref, fromlocrg
-        info "self: #{self}".yellow
+        info "self: #{self}"
         replace_reference from_name, prev_ref, fromlocrg, tolocrg
       else
-        info "self: #{self}".blue
+        info "self: #{self}"
         ref = add_reference from_name, msg, fromlocrg, tolocrg
-        info "ref: #{ref}".blue
+        info "ref: #{ref}".bold.blue
         ref
       end
     end

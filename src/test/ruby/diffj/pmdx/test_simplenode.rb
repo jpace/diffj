@@ -12,42 +12,6 @@ include Java
 class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
   include Loggable
   
-  def dump_node node, indent = "", recurse = true
-    info "#{indent}#{node.inspect}"
-    
-    tk = node.get_first_token
-    ltk = node.get_last_token
-
-    while tk != ltk
-      info "#{indent}tk: #{tk.inspect}"
-      info "#{indent}tk: #{tk.kind}; #{tk.image}"
-      tk = tk.next
-    end
-
-    info "#{indent}tk: #{tk.inspect}"
-    info "#{indent}tk: #{tk.kind}; #{tk.image}"
-
-    ldg = node.leading_tokens 
-    info "ldg: #{ldg}"
-
-    n_children = node.jjt_get_num_children
-    info "#{indent}n_children: #{n_children}"
-
-    (0 ... n_children).each do |ci|
-      child = node.jjt_get_child ci
-      info "#{indent}child: #{child}"
-
-      if recurse
-        dump_node child, indent + "    ", recurse
-      end
-    end
-
-    tokens = node.tokens
-    tokens.each do |tk|
-      info "#{indent}#{tk}"
-    end
-  end
-  
   def dump node, indent = "  "
     tk = compunit.get_first_token
     info "tk: #{tk.inspect}"
@@ -134,21 +98,8 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     fd    = process_parent_subnode coibd
     typ   = process_parent_subnode fd, 0
     pt    = process_parent_subnode typ
-    
-    vd = process_parent_subnode fd, 1
-    vdid = process_parent_subnode vd
-  end
-
-  def process_node_subnode cls, parent, idx = 0
-    jjtchild = parent.jjt_get_child idx
-    child = parent.node idx
-
-    assert_equal jjtchild, child
-    assert_same jjtchild, child
-
-    assert_instance_of cls, child
-
-    child
+    vd    = process_parent_subnode fd, 1
+    vdid  = process_parent_subnode vd
   end
   
   def test_nodes
@@ -164,14 +115,14 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     assert_equal 1, nodes.size
     td = nodes[0]
 
-    td    = process_node_subnode Java::NetSourceforgePmdAst::ASTTypeDeclaration,                 compunit    
-    coid  = process_node_subnode Java::NetSourceforgePmdAst::ASTClassOrInterfaceDeclaration,     td
-    coib  = process_node_subnode Java::NetSourceforgePmdAst::ASTClassOrInterfaceBody,            coid
-    coibd = process_node_subnode Java::NetSourceforgePmdAst::ASTClassOrInterfaceBodyDeclaration, coib
-    fd    = process_node_subnode Java::NetSourceforgePmdAst::ASTFieldDeclaration,                coibd
-    typ   = process_node_subnode Java::NetSourceforgePmdAst::ASTType,                            fd, 0
-    pt    = process_node_subnode Java::NetSourceforgePmdAst::ASTPrimitiveType,                   typ
-    vd    = process_node_subnode Java::NetSourceforgePmdAst::ASTVariableDeclarator,              fd, 1
+    td    = assert_has_child Java::NetSourceforgePmdAst::ASTTypeDeclaration,                 compunit    
+    coid  = assert_has_child Java::NetSourceforgePmdAst::ASTClassOrInterfaceDeclaration,     td
+    coib  = assert_has_child Java::NetSourceforgePmdAst::ASTClassOrInterfaceBody,            coid
+    coibd = assert_has_child Java::NetSourceforgePmdAst::ASTClassOrInterfaceBodyDeclaration, coib
+    fd    = assert_has_child Java::NetSourceforgePmdAst::ASTFieldDeclaration,                coibd
+    typ   = assert_has_child Java::NetSourceforgePmdAst::ASTType,                            fd, 0
+    pt    = assert_has_child Java::NetSourceforgePmdAst::ASTPrimitiveType,                   typ
+    vd    = assert_has_child Java::NetSourceforgePmdAst::ASTVariableDeclarator,              fd, 1
 
     dump_node td, "####", true
   end
@@ -237,9 +188,6 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     sprintf "%s%-20s %s", indent, tk.to_s, tk.inspect
   end
 
-  def dump_tokens_up_to fromtk, tk
-  end
-  
   def dump_nt node, indent = ""
     info "node: #{node}"
 
@@ -298,4 +246,83 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     assert_kind_of Java::net.sourceforge.pmd.ast.Token, eoftk
     assert_equal Java::net.sourceforge.pmd.ast.JavaParserConstants::EOF, eoftk.kind
   end    
+
+  def get_first_method_parameter compunit
+    td    = assert_has_child Java::NetSourceforgePmdAst::ASTTypeDeclaration,                 compunit    
+    coid  = assert_has_child Java::NetSourceforgePmdAst::ASTClassOrInterfaceDeclaration,     td
+    coib  = assert_has_child Java::NetSourceforgePmdAst::ASTClassOrInterfaceBody,            coid
+    coibd = assert_has_child Java::NetSourceforgePmdAst::ASTClassOrInterfaceBodyDeclaration, coib
+    md    = assert_has_child Java::NetSourceforgePmdAst::ASTMethodDeclaration,               coibd
+    mdc   = assert_has_child Java::NetSourceforgePmdAst::ASTMethodDeclarator,                md, 1
+    fps   = assert_has_child Java::NetSourceforgePmdAst::ASTFormalParameters,                mdc
+    fp    = assert_has_child Java::NetSourceforgePmdAst::ASTFormalParameter,                 fps
+    fp
+  end
+  
+  def test_nonvarargs
+    file = DiffJ::IO::File.new nil, "testfile.java", "class Test { void method(Object args) {} }", "1.6"
+    info "file: #{file}"
+
+    compunit = file.compile
+    info "compunit: #{compunit}"
+    
+    nodes = compunit.nodes
+    info "cu.nodes: #{compunit.nodes}"
+    
+    assert_equal 1, nodes.size
+    td = nodes[0]
+
+    param = get_first_method_parameter compunit
+
+    dump_node param, "####".bold
+
+    tokens = param.tokens
+    tokens.each do |tk|
+      info "    #{tk}".bold
+    end
+  end
+  
+  def test_varargs
+    file = DiffJ::IO::File.new nil, "testfile.java", "class Test { void method(Object ... args) {} }", "1.6"
+    info "file: #{file}"
+
+    compunit = file.compile
+    info "compunit: #{compunit}"
+    
+    nodes = compunit.nodes
+    info "cu.nodes: #{compunit.nodes}"
+    
+    assert_equal 1, nodes.size
+    td = nodes[0]
+
+    param = get_first_method_parameter compunit
+
+    dump_node param, "####".bold
+
+    tokens = param.tokens
+    tokens.each do |tk|
+      info "    #{tk}".bold
+    end
+  end
+
+  def test_c_array
+    file = DiffJ::IO::File.new nil, "testfile.java", "class Test { void method(Object[] args) {} }", "1.6"
+    info "file: #{file}"
+
+    compunit = file.compile
+    info "compunit: #{compunit}"
+    
+    nodes = compunit.nodes
+    info "cu.nodes: #{compunit.nodes}"
+    
+    assert_equal 1, nodes.size
+    td = nodes[0]
+
+    param = get_first_method_parameter compunit
+
+    tokens = param.tokens
+    tokens.each do |tk|
+      info "    #{tk}".bold
+    end
+  end
 end

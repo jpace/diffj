@@ -17,6 +17,30 @@ Log.set_widths(-15, 5, -50)
 module DiffJ
   class CLI < Processor
     include Loggable
+
+    class << self 
+      def run args = ARGV
+        Log.info "args: #{args}"
+
+        opts = DiffJ::Options.new
+        names = opts.process args
+        diffj = new(opts.showBriefOutput, 
+                    opts.showContextOutput, 
+                    opts.highlightOutput,
+                    opts.recurse,
+                    opts.firstFileName, opts.getFromSource,
+                    opts.getSecondFileName, opts.getToSource)
+        
+        rarray = Array.new
+        names.each do |name|
+          rarray << name
+        end
+
+        diffj.process_names rarray
+        Log.info "diffj.exit_value: #{diffj.exit_value}"
+        diffj.exit_value
+      end
+    end
     
     attr_reader :exit_value
     attr_reader :report
@@ -61,25 +85,3 @@ module DiffJ
     end
   end
 end
-
-args = $CMD_ARGS || ARGV
-
-puts "CLI pseudo-main, with args: #{args}"
-
-opts = DiffJ::Options.new
-names = opts.process args
-diffj = DiffJ::CLI.new(opts.showBriefOutput, 
-                       opts.showContextOutput, 
-                       opts.highlightOutput,
-                       opts.recurse,
-                       opts.firstFileName, opts.getFromSource,
-                       opts.getSecondFileName, opts.getToSource)
-
-rarray = Array.new
-names.each do |name|
-  rarray << name
-end
-
-diffj.process_names rarray
-puts "exiting with value: #{diffj.exit_value}"
-exit diffj.exit_value

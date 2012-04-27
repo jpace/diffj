@@ -75,7 +75,10 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
     # (int[], double) <=> (String) ==> 0 (0 of 3)
 
     from_param_types = get_parameter_types
+    info "from_param_types: #{from_param_types}"
+
     to_param_types = to.get_parameter_types
+    info "to_param_types: #{to_param_types}"
     
     match_counts = count_matches from_param_types, to_param_types
 
