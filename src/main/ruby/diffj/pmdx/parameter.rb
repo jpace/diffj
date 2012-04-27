@@ -26,10 +26,15 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   end
 
   def get_list_match from_list, from_index, to_list
+    info "from_index: #{from_index}".yellow
+
     to_size = to_list.size
 
     from_str = from_list[from_index]
     to_str = to_list[from_index]
+
+    info "from_str: #{from_str}".yellow
+    info "to_str: #{to_str}".yellow
         
     return -1 if from_str.nil?
     
@@ -111,21 +116,19 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameter
     # type is the first child, but we also have to look for the variable ID
     # including brackets, for arrays
     str = ""
-    type = find_child "net.sourceforge.pmd.ast.ASTType"
-    ttk = type.token 0
-        
-    while true
-      str << ttk.image
-      break if ttk == type.token(-1)
-      ttk = ttk.next
+
+    # handle "Object ary[]", those silly geese:
+    tkns = tokens
+    if tkns[-1].image == ']'
+      str << tkns.pop.image
+      if tkns[-1].image == '['
+        str = tkns.pop.image + str
+      end
     end
-            
-    vid = self[1]
-    vtk = vid.token 0
-    while vtk != vid.token(-1)
-      vtk = vtk.next;
-      str << vtk.image
-    end
-    str
+
+    # remove the variable name:
+    tkns.pop
+
+    tkns.collect { |tk| tk.image }.join('') + str
   end
 end

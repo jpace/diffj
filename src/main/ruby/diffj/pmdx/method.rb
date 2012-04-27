@@ -16,7 +16,7 @@ class Java::net.sourceforge.pmd.ast::ASTMethodDeclaration
   end
 
   def name
-    declarator.token(0)
+    declarator.token 0
   end
 
   def fullname

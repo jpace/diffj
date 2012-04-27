@@ -10,13 +10,11 @@ module DiffJ::Type::Method::Parameters
     end  
 
     def test_unchanged
-      # $$$ this is disabled
-      # run_test 'Unchanged'
+      run_test 'Unchanged'
     end
 
     def test_changed
-      # $$$ this is disabled
-      # run_test 'Changed', changed("idx", "index", loc(2, 22), loc(2, 22))
+      run_test 'Changed', changed("idx", "index", loc(2, 22), loc(2, 22))
     end
   end
 end
