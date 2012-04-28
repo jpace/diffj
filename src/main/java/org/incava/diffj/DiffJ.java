@@ -118,7 +118,7 @@ public class DiffJ {
     }
 
     public static void main(String[] args) {
-        Options opts = Options.get();
+        Options opts = new Options();
         List<String> names = opts.process(Arrays.asList(args));
 
         if (opts.showVersion()) {

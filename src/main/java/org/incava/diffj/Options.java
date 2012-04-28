@@ -56,12 +56,17 @@ public class Options extends OptionSet {
     /**
      * The name of the first file, if not the actual name.
      */
-    private String firstFileName;
+    private String firstFileName = null;
 
     /**
      * The name of the second file, if not the actual name.
      */
-    private String secondFileName;
+    private String secondFileName = null;
+
+    /**
+     * Whether to blather.
+     */
+    private Boolean verbose = false;
 
     private BooleanOption briefOpt;
     private BooleanOption contextOpt;
@@ -82,6 +87,9 @@ public class Options extends OptionSet {
 
     public Options() {
         super("diffj", "Compares Java code");
+
+        tr.Ace.setVerbose(true);
+        tr.Ace.onRed("this", this);
 
         // use the diffj.* equivalent property for each option.
 
@@ -142,7 +150,6 @@ public class Options extends OptionSet {
                     }
                 }
             };
-        nameOpt.setShortName('l');
         nameOpt.setShortName('L');
         addOption(nameOpt);
 
@@ -162,6 +169,8 @@ public class Options extends OptionSet {
      * processing.
      */
     public List<String> process(List<String> args) {
+        tr.Ace.bold("args", args);
+
         List<String> unprocessed = super.process(args);
 
         Integer tabWidthInt = tabWidthOpt.getValue();
@@ -170,9 +179,11 @@ public class Options extends OptionSet {
         }
     
         Boolean briefBool = briefOpt.getValue();
+        tr.Ace.yellow("briefBool", briefBool);
         if (briefBool != null) {
             briefOutput = briefBool;
         }
+        tr.Ace.yellow("briefOutput", briefOutput);
         
         Boolean contextBool = contextOpt.getValue();
         if (contextBool != null) {
@@ -267,7 +278,6 @@ public class Options extends OptionSet {
      * The Java source version, of the from-file.
      */
     public String getFromSource() {
-        tr.Ace.yellow("fromSource", fromSource);
         return fromSource;
     }
 
@@ -297,5 +307,12 @@ public class Options extends OptionSet {
      */
     public String getSecondFileName() {
         return secondFileName;
+    }
+
+    /**
+     * Whether to spew voluminous output.
+     */
+    public boolean isVerbose() {
+        return verbose;
     }
 }
