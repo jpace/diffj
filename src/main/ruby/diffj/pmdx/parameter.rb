@@ -26,16 +26,11 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   end
 
   def get_list_match from_list, from_index, to_list
-    info "from_index: #{from_index}".yellow
-
     to_size = to_list.size
 
     from_str = from_list[from_index]
     to_str = to_list[from_index]
 
-    info "from_str: #{from_str}".yellow
-    info "to_str: #{to_str}".yellow
-        
     return -1 if from_str.nil?
     
     if from_str == to_str
