@@ -31,6 +31,7 @@ class DiffJOptionsTest < Test::Unit::TestCase
     assert_option allexpvals, :first, opts.first_file_name
     assert_option allexpvals, :second, opts.second_file_name
     assert_option allexpvals, :help, opts.show_help
+    assert_option allexpvals, :verbose, opts.verbose
   end
 
   def default_option_values
@@ -45,6 +46,7 @@ class DiffJOptionsTest < Test::Unit::TestCase
     values[:first] = nil
     values[:second] = nil
     values[:help] = false
+    values[:verbose] = false
     values
   end
 
@@ -53,6 +55,7 @@ class DiffJOptionsTest < Test::Unit::TestCase
     opts = DiffJ::Options.new
     names = opts.process args
     info "opts: #{opts}".bold.green
+    info "args: #{args}".bold.green
     assert_options exp, opts
   end
 
@@ -125,5 +128,13 @@ class DiffJOptionsTest < Test::Unit::TestCase
 
   def test_help
     run_test %w{ -h --help }, { :help => true }
+  end
+
+  def test_verbose
+    run_test %w{ --verbose }, { :verbose => true }
+  end
+
+  def test_names
+    run_test %w{ --verbose abc xyz }, { :verbose => true }
   end
 end

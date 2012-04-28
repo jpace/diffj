@@ -24,6 +24,7 @@ module DiffJ
     attr_reader :second_file_name
     attr_reader :show_help
     attr_reader :show_version
+    attr_reader :verbose
 
     def initialize
       @show_brief_output = false
@@ -36,6 +37,7 @@ module DiffJ
       @second_file_name = nil
       @show_version = false
       @show_help = false
+      @verbose = false
     end
 
     def process args
@@ -84,6 +86,9 @@ module DiffJ
           end
         end
 
+        op.on "--verbose", "Run in verbose mode (for debugging)" do |@verbose|
+        end
+
         op.on_tail "-h", "--help", "Show this message" do |@show_help|
           info "@show_help: #{@show_help}".bold
         end
@@ -91,8 +96,10 @@ module DiffJ
         op.on_tail "-v", "--version", "Display the version" do |@show_version|
         end
         
-        op.parse! args
+        args = op.parse! args
       end
+
+      args
     end
   end
 end

@@ -24,12 +24,15 @@ module DiffJ
 
         opts = DiffJ::Options.new
         names = opts.process args
-        diffj = new(opts.showBriefOutput, 
-                    opts.showContextOutput, 
-                    opts.highlightOutput,
+
+        Log.info "names: #{names}".bold.yellow
+
+        diffj = new(opts.show_brief_output, 
+                    opts.show_context_output, 
+                    opts.highlight_output,
                     opts.recurse,
-                    opts.firstFileName, opts.getFromSource,
-                    opts.getSecondFileName, opts.getToSource)
+                    opts.first_file_name, opts.from_source,
+                    opts.second_file_name, opts.to_source)
         
         rarray = Array.new
         names.each do |name|
