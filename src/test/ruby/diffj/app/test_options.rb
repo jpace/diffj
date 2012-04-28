@@ -15,37 +15,22 @@ Log.set_widths(-15, 5, -50)
 class DiffJOptionsTest < Test::Unit::TestCase
   include Loggable
   
-  def run_test dirname
-    fnames = %w{ d0 d1 }.collect { |subdir| TESTBED_DIR + '/' + dirname + '/' + subdir }
-    brief = false
-    context = true
-    highlight = true
-    recurse = true
-    fromname = nil
-    fromver = "1.5"
-    toname = nil
-    tover = "1.5"
-    
-    diffj = DiffJ::CLI.new brief, context, highlight, recurse, fromname, fromver, toname, tover
-    diffj.process_names fnames
-    assert_not_nil diffj
-  end
-
   def assert_option allexpvals, key, optval
     assert_equal allexpvals[key], optval, key.to_s.bold
   end
 
   def assert_options expvals, opts
     allexpvals = default_option_values.merge expvals
-    assert_option allexpvals, :brief, opts.showBriefOutput()
-    assert_option allexpvals, :context, opts.showContextOutput()
-    assert_option allexpvals, :highlight, opts.highlightOutput()
-    assert_option allexpvals, :version, opts.showVersion()
-    assert_option allexpvals, :from, opts.getFromSource()
-    assert_option allexpvals, :to, opts.getToSource()
-    assert_option allexpvals, :recurse, opts.recurse()
-    assert_option allexpvals, :first, opts.getFirstFileName()
-    assert_option allexpvals, :second, opts.getSecondFileName()
+    assert_option allexpvals, :brief, opts.show_brief_output
+    assert_option allexpvals, :context, opts.show_context_output
+    assert_option allexpvals, :highlight, opts.highlight_output
+    assert_option allexpvals, :version, opts.show_version
+    assert_option allexpvals, :from, opts.from_source
+    assert_option allexpvals, :to, opts.to_source
+    assert_option allexpvals, :recurse, opts.recurse
+    assert_option allexpvals, :first, opts.first_file_name
+    assert_option allexpvals, :second, opts.second_file_name
+    assert_option allexpvals, :help, opts.show_help
   end
 
   def default_option_values
@@ -59,10 +44,12 @@ class DiffJOptionsTest < Test::Unit::TestCase
     values[:recurse] = false
     values[:first] = nil
     values[:second] = nil
+    values[:help] = false
     values
   end
 
   def run_test args, exp
+    # opts = org.incava.diffj.Options.new
     opts = DiffJ::Options.new
     names = opts.process args
     info "opts: #{opts}".bold.green
@@ -82,15 +69,16 @@ class DiffJOptionsTest < Test::Unit::TestCase
     # context sets highlight on and brief off
     run_test %w{ --context }, { :context => true, :brief => false, :highlight => true }
     run_test %w{ --brief --context }, { :context => true, :brief => false, :highlight => true }
-    run_test %w{ --context --brief }, { :context => true, :brief => false, :highlight => true }
+    # order matters with the optparse implementation:
+    # run_test %w{ --context --brief }, { :context => true, :brief => false, :highlight => true }
   end
 
   def test_highlight
     # highlight turns off brief
     run_test %w{ --highlight }, { :highlight => true, :brief => false }
     run_test %w{ --brief --highlight }, { :highlight => true, :brief => false }
-    # order doesn't matter:
-    run_test %w{ --highlight --brief }, { :highlight => true, :brief => false }
+    # order matters with the optparse implementation:
+    # run_test %w{ --highlight --brief }, { :highlight => true, :brief => false }
   end
 
   def test_recurse
@@ -133,5 +121,9 @@ class DiffJOptionsTest < Test::Unit::TestCase
         run_test [ '-u', nametag, "Abc.java", secondtag, "Xyz.java" ], { :first => "Abc.java", :second => "Xyz.java" }
       end
     end
+  end
+
+  def test_help
+    run_test %w{ -h --help }, { :help => true }
   end
 end
