@@ -8,12 +8,9 @@ require 'set'
 require 'diffj/ast'
 require 'diffj/io/element'
 require 'diffj/io/factory'
+require 'diffj/util/exception'
 
 include Java
-
-import org.incava.diffj.DiffJException
-import ::Java::net.sourceforge.pmd.ast.TokenMgrError
-import ::Java::net.sourceforge.pmd.ast.ParseException
 
 module DiffJ
   module IO
@@ -81,7 +78,7 @@ module DiffJ
         when "1.4"
           # currently the default in PMD
         else
-          raise DiffJException.new "source version '" + @srcver + "' not recognized"
+          raise DiffJ::Exception.new "source version '" + @srcver + "' not recognized"
         end
         parser
       end
@@ -90,12 +87,12 @@ module DiffJ
          begin
            parser = get_parser
            parser.CompilationUnit
-         rescue TokenMgrError => tme
-           raise DiffJException.new "Error tokenizing " + @label + ": " + tme.message
-         rescue ParseException => pe
-           raise DiffJException.new "Error parsing " + @label + ": " + pe.message
+         rescue ::Java::net.sourceforge.pmd.ast.TokenMgrError => tme
+           raise DiffJ::Exception.new "Error tokenizing " + @label + ": " + tme.message
+         rescue ::Java::net.sourceforge.pmd.ast.ParseException => pe
+           raise DiffJ::Exception.new "Error parsing " + @label + ": " + pe.message
          rescue => e
-           raise DiffJException.new "Error processing " + @label + ": " + e.message
+           raise DiffJ::Exception.new "Error processing " + @label + ": " + e.message
          end
       end
       

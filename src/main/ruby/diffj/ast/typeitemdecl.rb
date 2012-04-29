@@ -32,13 +32,62 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
   end
 
   def get_type_matches frommds, tomds
+    # info "frommds: #{frommds}; #{frommds.class}"
+    # info "@clsname: #{@clsname}"
+
+    if @clsname == "net.sourceforge.pmd.ast.ASTMethodDeclaration"
+      get_type_matches_for_methods frommds, tomds
+    else
+      matches = Hash.new { |h, k| h[k] = Array.new }
+      
+      frommds.each do |frommd|
+        tomds.each do |tomd|
+          score = get_score frommd, tomd
+          if score > 0.0
+            matches[score] << [ frommd, tomd ]
+          end
+        end
+      end
+      matches
+    end
+  end
+
+  def get_methods_by_name meths
+    meths_by_name = Hash.new { |h, k| h[k] = Array.new }
+    meths.each do |meth|
+      meths_by_name[meth.name.image] << meth
+    end
+    meths_by_name
+  end
+
+  def get_type_matches_for_methods frommds, tomds
     matches = Hash.new { |h, k| h[k] = Array.new }
+
+    frommds_by_name = get_methods_by_name frommds
+    # info "frommds_by_name: #{frommds_by_name.inspect}".bold.green   
+
+    tomds_by_name = get_methods_by_name tomds
+    # info "tomds_by_name: #{tomds_by_name.inspect}".bold.green
     
-    frommds.each do |frommd|
-      tomds.each do |tomd|
-        score = get_score frommd, tomd
-        if score > 0.0
-          matches[score] << [ frommd, tomd ]
+    common_methods = frommds_by_name.keys & tomds_by_name.keys
+    # info "common_methods: #{common_methods.inspect}".bold.yellow
+    
+    common_methods.each do |methname|
+      # info "methname: #{methname}"
+      froms = frommds_by_name[methname]
+      nfroms = froms.size
+
+      froms.each_with_index do |frommd, fidx|
+        tos = tomds_by_name[methname]
+        ntos = tos.size
+
+        tos.each_with_index do |tomd, tidx|
+          # info "#{fidx} of #{nfroms}, #{tidx} of #{ntos}"
+          # info "frommd: #{frommd.to_string}; tomd: #{tomd.to_string}"
+          score = get_score frommd, tomd
+          if score > 0.0
+            matches[score] << [ frommd, tomd ]
+          end
         end
       end
     end

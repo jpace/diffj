@@ -22,7 +22,11 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   end
 
   def get_parameter_types
-    nodes.collect { |node| node.typestr }
+    # stack "self: #{self.object_id}".bold
+    unless defined? @param_types
+      @param_types = nodes.collect { |node| node.typestr }
+    end
+    @param_types
   end
 
   def get_list_match from_list, from_index, to_list
@@ -66,19 +70,17 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
   end
 
   def match_score to
+    match_score_orig to
+  end
+
+  def match_score_orig to
     return 1.0 if size == 0 && to.size == 0
     
-    # (int[], double, String) <=> (int[], double, String) ==> 100% (3 of 3)
-    # (int[], double, String) <=> (double, int[], String) ==> 80% (3 of 3 - 10% * misordered)
-    # (int[], double)         <=> (double, int[], String) ==> 46% (2 of 3 - 10% * misordered)
-    # (int[], double, String) <=> (String) ==> 33% (1 of 3 params)
-    # (int[], double) <=> (String) ==> 0 (0 of 3)
+    from_param_types = get_parameter_types.dup
+    to_param_types   = to.get_parameter_types.dup
 
-    from_param_types = get_parameter_types
-    info "from_param_types: #{from_param_types}"
-
-    to_param_types = to.get_parameter_types
-    info "to_param_types: #{to_param_types}"
+    # info "from_param_types: #{from_param_types}"
+    # info "to_param_types: #{to_param_types}"
     
     match_counts = count_matches from_param_types, to_param_types
 
@@ -93,7 +95,58 @@ class Java::net.sourceforge.pmd.ast::ASTFormalParameters
     num_params = [ from_param_types.size, to_param_types.size ].max
     match = exact_matches.to_f / num_params
     match += misordered_matches.to_f / (2 * num_params)
+    
+    0.5 + (match / 2.0)
+  end
 
+  def match_score_new to
+    return 1.0 if size == 0 && to.size == 0
+    
+    from_param_types = get_parameter_types
+    to_param_types   = to.get_parameter_types
+
+    # info "from_param_types: #{from_param_types}"
+    # info "to_param_types: #{to_param_types}"    
+    
+    return 1.0 if from_param_types == to_param_types
+
+    max_params = [ from_param_types.size, to_param_types.size ].max
+
+    from_param_types = from_param_types.dup
+    to_param_types   = to_param_types.dup
+
+    n_exact = 0
+    n_misordered = 0
+
+    (0 ... [ from_param_types.length, to_param_types.length ].min).each do |idx|
+      if from_param_types[idx] == to_param_types[idx]
+        n_exact += 1
+        from_param_types[idx] = nil
+        to_param_types[idx] = nil
+      end
+    end
+
+    from_param_types.compact!
+    to_param_types.compact!
+
+    info "from_param_types: #{from_param_types}"
+    info "to_param_types: #{to_param_types}"
+
+    from_param_types.each do |fp|
+      if del = to_param_types.delete(fp)
+        n_misordered += 1
+      end
+    end
+
+    to_param_types.each do |tp|
+      if del = from_param_types.delete(tp)
+        n_misordered += 1
+      end
+    end
+
+    match = n_exact.to_f / max_params
+    match += n_misordered.to_f / (2 * max_params)
+    
     0.5 + (match / 2.0)
   end
 end

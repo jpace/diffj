@@ -66,14 +66,6 @@ task "java:compile" => [ :setup, $clsmaindir ] do
             :includeantruntime => 'no')
 end
 
-task "jruby:compile" => [ :setup, $clsmaindir ] do
-  ant.javac(:destdir => $clsmaindir, 
-            :srcdir => $srcmainjrubydir,
-            :classpathref => 'classpath',
-            :debug => 'yes',
-            :includeantruntime => 'no')
-end
-
 task "java:tests:compile" => [ :setup, $clstestdir, "java:compile" ] do
   ant.javac(:destdir => $clstestdir, 
             :srcdir => $srctestjavadir,
@@ -85,10 +77,6 @@ end
 task "java:jar" => [ "java:compile", $buildlibsdir ] do
   ant.jar(:jarfile => $diffjjar, 
           :basedir => $clsmaindir)
-end
-
-task "jruby:jar" => [ "java:compile", "jruby:compile" ] do
-  sh "jar -cfm diffj.jar src/main/jar/launcher.manifest -C #{$clsmaindir} . -C #{$srcmainrubydir} . -C tmp ."
 end
 
 task "java:tests" => [ "java:tests:compile", $reportdir ] do  
@@ -137,5 +125,16 @@ DiffJRakeTestTask.new('method/parameters/reorder/typechange')
 
 DiffJRakeTestTask.new('all', '*')
 
-task "jruby:tests" => "test:all"
+task "jruby:compile" => [ :setup, $clsmaindir ] do
+  ant.javac(:destdir => $clsmaindir, 
+            :srcdir => $srcmainjrubydir,
+            :classpathref => 'classpath',
+            :debug => 'yes',
+            :includeantruntime => 'no')
+end
 
+task "jruby:jar" => [ "java:compile", "jruby:compile" ] do
+  sh "jar -cfm diffj.jar src/main/jar/launcher.manifest -C #{$clsmaindir} . -C #{$srcmainrubydir} . -C tmp ."
+end
+
+task "jruby:tests" => "test:all"

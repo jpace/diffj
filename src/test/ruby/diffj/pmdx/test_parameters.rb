@@ -27,10 +27,10 @@ class DiffJ::ParametersTestCase < DiffJ::TestCase
     info "file: #{file}"
 
     compunit = file.compile
-    info "compunit: #{compunit}"
+    # info "compunit: #{compunit}"
     
     nodes = compunit.nodes
-    info "cu.nodes: #{compunit.nodes}"
+    # info "cu.nodes: #{compunit.nodes}"
     
     assert_equal 1, nodes.size
     td = nodes[0]
@@ -39,15 +39,17 @@ class DiffJ::ParametersTestCase < DiffJ::TestCase
 
     # dump_node params, "####".bold
 
-    tokens = params.tokens
-    tokens.each do |tk|
-      info "    #{tk}".bold
+    if false
+      tokens = params.tokens
+      tokens.each do |tk|
+        info "    #{tk}".bold
+      end
     end
 
     params.nodes.each do |param|
-      info "param: #{param}"
-      info "param.to_string: #{param.to_string}"
-      info "param.typestr: #{param.typestr}"
+      # info "param: #{param}"
+      # info "param.to_string: #{param.to_string}"
+      # info "param.typestr: #{param.typestr}"
     end
 
     params
@@ -62,9 +64,15 @@ class DiffJ::ParametersTestCase < DiffJ::TestCase
     to_params   = get_params to_decl
     info "to_params: #{to_params}"
 
+    orig_score = from_params.match_score_orig to_params
+    info "orig_score: #{orig_score}".bold.green
+    
     score = from_params.match_score to_params
     info "score: #{score}"
-    assert_equal exp, score
+    
+    score = (score * 100).round / 100.0
+    
+    assert_equal exp, score, "#{from_decl} <=> #{to_decl}"
   end
 
   def assert_typestr exp, decl
@@ -135,4 +143,32 @@ class DiffJ::ParametersTestCase < DiffJ::TestCase
   def test_varargs_to_c_array_same_name
     assert_match_score 0.5, "Object ... x", "Object[] x"
   end
+  
+  def test_params_exact_match
+    assert_match_score 1.0,  "A a",           "A a"
+    assert_match_score 1.0,  "A a, B b",      "A a, B b"
+    assert_match_score 1.0,  "A a, B b, C c", "A a, B b, C c"
+  end
+
+  def test_params_position_change
+    assert_match_score 0.75,  "A a, B b",      "B b, A a"
+    assert_match_score 0.83,  "A a, B b, C c", "B b, A a, C c"
+  end  
+
+  def test_params_added
+    assert_match_score 0.75,  "A a",           "A a, B b"
+    assert_match_score 0.63,  "A a",           "B b, A a"
+    assert_match_score 0.83,  "A a, B b",      "A a, B b, C c"
+    assert_match_score 0.75,  "A a, B b",      "A a, C c, B b"
+  end
+  
+  def test_multiple_params
+    assert_match_score 1.0,  "Object x, String y",          "Object x, String y"
+    assert_match_score 1.0,  "int[] a, double b, String c", "int[] x, double y, String z"
+    assert_match_score 0.83, "int[] a, double b, String c", "double x, int[] y, String z"
+    assert_match_score 0.67, "int[] a, double b",           "double x, int[] y, String z"
+    assert_match_score 0.58, "int[] a, double b, String c", "String x"
+    assert_match_score 0.5,  "int[] a, double b",           "String x"
+  end
+
 end

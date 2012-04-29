@@ -7,10 +7,9 @@ require 'java'
 require 'diffj/ast'
 require 'diffj/io/directory'
 require 'diffj/io/file'
+require 'diffj/util/exception'
 
 include Java
-
-import org.incava.diffj.DiffJException
 
 module DiffJ
   module IO
@@ -45,7 +44,7 @@ module DiffJ
 
       def no_such_file file, label
         info "file: #{file}; #{label}".red
-        raise DiffJException.new(name(file, label) + " does not exist")
+        raise DiffJ::Exception.new name(file, label) + " does not exist"
       end
 
       def name file, label

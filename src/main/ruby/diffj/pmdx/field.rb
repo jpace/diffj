@@ -33,4 +33,3 @@ class Java::net.sourceforge.pmd.ast::ASTFieldDeclaration
     score
   end
 end
-

@@ -6,10 +6,9 @@ require 'java'
 require 'riel'
 require 'diffj/app/processor'
 require 'diffj/app/options'
+require 'diffj/util/exception'
 
 include Java
-
-java_import org.incava.diffj.DiffJException
 
 Log::level = Log::DEBUG
 Log.set_widths(-15, 5, -50)
@@ -34,12 +33,7 @@ module DiffJ
                     opts.first_file_name, opts.from_source,
                     opts.second_file_name, opts.to_source)
         
-        rarray = Array.new
-        names.each do |name|
-          rarray << name
-        end
-
-        diffj.process_names rarray
+        diffj.process_names names
         Log.info "diffj.exit_value: #{diffj.exit_value}"
         diffj.exit_value
       end
@@ -67,7 +61,7 @@ module DiffJ
           @exit_value = @report.had_differences? ? 1 : 0
           true
         end
-      rescue DiffJException => de
+      rescue DiffJ::Exception => de
         $stderr.puts de.message
         @exit_value = 1
         nil

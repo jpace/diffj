@@ -11,8 +11,6 @@ require 'diffj/io/file'
 
 include Java
 
-import org.incava.diffj.DiffJException
-
 module DiffJ
   module IO
     class Directory < Element
