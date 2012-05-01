@@ -1,20 +1,25 @@
-= DiffJ
+DiffJ
+=====
 
-== NAME
+NAME
+----
 
 diffj - compare Java files by content
 
-== SYNOPSIS
+SYNOPSIS
+--------
 
 diffj [ options ] from-file to-file
 
-== DESCRIPTION
+DESCRIPTION
+-----------
 
 Similar to diff(1), DiffJ compares files, specifically Java files, without
 regard to formatting, organization, comments or whitespace, and outputs the
 differences by reporting the type of Java code that changed.
 
-== FEATURES
+FEATURES
+--------
 
 Java: DiffJ understands Java syntax (through version 1.6, at this writing), and
 compares code based on the Java content.
