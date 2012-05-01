@@ -93,7 +93,8 @@ module DiffJ
     end
 
     def is_none? idx
-      idx.nil? || idx == org.incava.ijdk.util.diff.Difference::NONE
+      # -1 is org.incava.ijdk.util.diff.Difference::NONE
+      idx.nil? || idx == -1
     end
 
     def get_location_range tokenlist, startidx, endidx
@@ -144,10 +145,6 @@ module DiffJ
       ref
     end
 
-    def is_diff? diff
-      diff != org.incava.ijdk.util.diff.Difference::NONE
-    end
-    
     def javadiff_process_difference diff, from_name, from_list, to_list, prev_ref
       delstart = diff.getDeletedStart()
       delend   = diff.getDeletedEnd()

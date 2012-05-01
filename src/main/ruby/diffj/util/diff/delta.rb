@@ -82,8 +82,13 @@ module DiffJ
         (self <=> other) == 0
       end
 
+      def is_java_diff? diff
+        defined?(Java::org.incava.ijdk.util.diff::Difference) && 
+          diff.java_kind_of?(org.incava.ijdk.util.diff.Difference)
+      end
+
       def <=> other
-        if other.java_kind_of? org.incava.ijdk.util.diff.Difference
+        if is_java_diff? other
           (_compare(@delete_start, other.getDeletedStart()).nonzero? ||
            _compare(@delete_end,   other.getDeletedEnd()).nonzero?   ||
            _compare(@add_start,    other.getAddedStart()).nonzero?   ||

@@ -20,19 +20,12 @@ public class DiffJLauncher {
             sb.append("DiffJ::CLI.run\n");
             
             Object obj = container.runScriptlet(sb.toString());
-            System.err.println("returned object: " + obj);
-            System.err.println("returned object: " + obj.getClass());
-
             Long exitValue = (Long)obj;
-            System.err.println("exitValue: " + exitValue);
+            System.exit(exitValue.intValue());
         }
         catch (EvalFailedException e) {
             System.out.println("e: " + e.getMessage());
+            System.exit(-1);
         } 
-        finally {
-            if (errorWriter != null) {
-                System.out.println("ew: " + errorWriter.toString());
-            }
-        }
     }
 }

@@ -7,12 +7,16 @@ include Java
 
 require 'ant'
 
+$DIFFJ_VERSION = "1.3.0"
+
 # this is fixed in JRuby 1.6.0:
 $CLASSPATH << "#{ENV['JAVA_HOME']}/lib/tools.jar"
 
 $jrubycompletejar = "libs/jruby-complete-1.6.3.jar"
 $pmdjar = "libs/pmd-4.2.5.jar"
 $junitjar = "libs/junit-4.10.jar"
+
+# we're still using this, for JRuby vs. Java tests:
 $diffjjar = "staging/libs/diffj-1.2.1.jar"
 
 $CLASSPATH << $diffjjar << $jrubycompletejar << $pmdjar
@@ -134,7 +138,13 @@ task "jruby:compile" => [ :setup, $clsmaindir ] do
 end
 
 task "jruby:jar" => [ "java:compile", "jruby:compile" ] do
-  sh "jar -cfm diffj.jar src/main/jar/launcher.manifest -C #{$clsmaindir} . -C #{$srcmainrubydir} . -C tmp ."
+  # sh "jar -cfm diffj.jar src/main/jar/launcher.manifest -C #{$clsmaindir} . -C #{$srcmainrubydir} . -C tmp ."
+  cmd  = "jar -cfm diffj-#{$DIFFJ_VERSION}.jar src/main/jar/launcher.manifest "
+  cmd << "-C #{$clsmaindir} org/incava/diffj/DiffJLauncher.class "
+  cmd << "-C build/tmp/jruby-complete . "
+  cmd << "-C #{$srcmainrubydir} . "
+  cmd << "-C tmp . "
+  sh cmd
 end
 
 task "jruby:tests" => "test:all"

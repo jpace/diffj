@@ -10,12 +10,13 @@ require 'diffj/util/exception'
 
 include Java
 
-Log::level = Log::DEBUG
 Log.set_widths(-15, 5, -50)
 
 module DiffJ
   class CLI < Processor
     include Loggable
+
+    VERSION = "1.3.0"
 
     class << self 
       def run args = ARGV
@@ -24,7 +25,21 @@ module DiffJ
         opts = DiffJ::Options.new
         names = opts.process args
 
-        Log.info "names: #{names}".bold.yellow
+        if opts.verbose
+          Log::level = Log::DEBUG
+        end
+
+        if opts.show_version
+          puts "diffj, version #{VERSION}"
+          puts "Written by Jeff Pace (jeugenepace [at] gmail [dot] com)"
+          puts "Released under the Lesser GNU Public License"
+          return 1
+        end
+
+        if opts.show_help
+          puts opts
+          return 1
+        end
 
         diffj = new(opts.show_brief_output, 
                     opts.show_context_output, 

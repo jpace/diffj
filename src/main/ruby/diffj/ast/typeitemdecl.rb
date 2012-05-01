@@ -39,7 +39,7 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
       get_type_matches_for_methods frommds, tomds
     else
       matches = Hash.new { |h, k| h[k] = Array.new }
-      
+
       frommds.each do |frommd|
         tomds.each do |tomd|
           score = get_score frommd, tomd
@@ -64,13 +64,8 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
     matches = Hash.new { |h, k| h[k] = Array.new }
 
     frommds_by_name = get_methods_by_name frommds
-    # info "frommds_by_name: #{frommds_by_name.inspect}".bold.green   
-
-    tomds_by_name = get_methods_by_name tomds
-    # info "tomds_by_name: #{tomds_by_name.inspect}".bold.green
-    
-    common_methods = frommds_by_name.keys & tomds_by_name.keys
-    # info "common_methods: #{common_methods.inspect}".bold.yellow
+    tomds_by_name   = get_methods_by_name tomds
+    common_methods  = frommds_by_name.keys & tomds_by_name.keys
     
     common_methods.each do |methname|
       # info "methname: #{methname}"
@@ -78,14 +73,20 @@ class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
       nfroms = froms.size
 
       froms.each_with_index do |frommd, fidx|
+        next unless frommd
+        
         tos = tomds_by_name[methname]
         ntos = tos.size
 
         tos.each_with_index do |tomd, tidx|
-          # info "#{fidx} of #{nfroms}, #{tidx} of #{ntos}"
-          # info "frommd: #{frommd.to_string}; tomd: #{tomd.to_string}"
+          next unless tomd
           score = get_score frommd, tomd
-          if score > 0.0
+          if score == 1.0
+            # perfect match, so don't compare against this element again:
+            tos[tidx] = nil
+            matches[score] << [ frommd, tomd ]
+            break
+          elsif score > 0.0
             matches[score] << [ frommd, tomd ]
           end
         end

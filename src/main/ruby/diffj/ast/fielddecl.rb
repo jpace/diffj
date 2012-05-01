@@ -9,8 +9,6 @@ require 'diffj/ast/field'
 
 include Java
 
-import org.incava.diffj.FieldDiff
-
 class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   include Loggable
 
@@ -25,7 +23,7 @@ class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   if false
     # old one:
     def do_compare from, to
-      differ = org.incava.diffj.FieldDiff.new filediffs
+      differ = Java::org.incava.diffj.FieldDiff.new filediffs
       differ.compare_access from.parent, to.parent
       differ.compare from, to
     end

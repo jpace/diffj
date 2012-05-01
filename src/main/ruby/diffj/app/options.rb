@@ -9,7 +9,7 @@ require 'optparse'
 include Java
 
 module DiffJ
-  class Options
+  class Options < OptionParser
     include Loggable
 
     SOURCE_DEFAULT = "1.5"
@@ -38,10 +38,8 @@ module DiffJ
       @show_version = false
       @show_help = false
       @verbose = false
-    end
 
-    def process args
-      options = OptionParser.new do |op|
+      super do |op|
         op.banner = "Usage: diffj [options] from-file to-file"
         op.separator ""
         op.separator "Options"
@@ -61,13 +59,13 @@ module DiffJ
         op.on "--recurse", "Process directories recursively" do |@recurse|
         end
 
-        op.on "--from-source VERSION", "The Java source version of from-file (default is #{SOURCE_DEFAULT}" do |@from_source|
+        op.on "--from-source VERSION", "The Java source version of from-file (default: #{SOURCE_DEFAULT})" do |@from_source|
+        end
+        
+        op.on "--to-source VERSION", "The Java source version of to-file (default: #{SOURCE_DEFAULT})" do |@to_source|
         end
 
-        op.on "--to-source VERSION", "The Java source version of to-file (default is #{SOURCE_DEFAULT}" do |@to_source|
-        end
-
-        op.on "--source VERSION", "The Java source version of from-file and to-file (default is #{SOURCE_DEFAULT}" do |src|
+        op.on "--source VERSION", "The Java source version of from-file and to-file (default: #{SOURCE_DEFAULT})" do |src|
           @from_source = src
           @to_source = src
         end
@@ -88,16 +86,67 @@ module DiffJ
 
         op.on "--verbose", "Run in verbose mode (for debugging)" do |@verbose|
         end
-
+        
         op.on_tail "-h", "--help", "Show this message" do |@show_help|
-          info "@show_help: #{@show_help}".bold
-        end
-
-        op.on_tail "-v", "--version", "Display the version" do |@show_version|
         end
         
-        args = op.parse! args
+        op.on_tail "-v", "--version", "Display the version" do |@show_version|
+        end
       end
+    end
+
+    def process args
+      parse! args
+    end
+
+    def orig_process args
+      # options = OptionParser.new do |op|
+      #   op.banner = "Usage: diffj [options] from-file to-file"
+      #   op.separator ""
+      #   op.separator "Options"
+
+      #   op.on "--brief", "Display output in brief form" { |@show_brief_output| }
+
+      #   op.on "--context", "Show context (non-brief form only)" do |@show_context_output|
+      #     @show_brief_output = false
+      #     @highlight_output = true
+      #   end
+        
+      #   op.on "--highlight", "Use colors (context output only)" do |@highlight_output|
+      #     @show_brief_output = false
+      #   end
+
+      #   op.on "--recurse", "Process directories recursively" { |@recurse| }
+
+      #   op.on "--from-source VERSION", "The Java source version of from-file (default is #{SOURCE_DEFAULT}" { |@from_source| }
+      #   op.on "--to-source VERSION", "The Java source version of to-file (default is #{SOURCE_DEFAULT}" { |@to_source| }
+
+      #   op.on "--source VERSION", "The Java source version of from-file and to-file (default is #{SOURCE_DEFAULT}" do |src|
+      #     @from_source = src
+      #     @to_source = src
+      #   end
+
+      #   op.on "-u", "Output unified context. Unused; for compatibility with GNU diff" do
+      #     # ignored
+      #   end
+
+      #   op.on "-L", "--name NAME", "Set the first/second name to be displayed" do |name|
+      #     info "name: #{name}".red
+
+      #     if @first_file_name
+      #       @second_file_name = name
+      #     else
+      #       @first_file_name = name
+      #     end
+      #   end
+
+      #   op.on "--verbose", "Run in verbose mode (for debugging)" { |@verbose| }
+        
+      #   op.on_tail "-h", "--help", "Show this message" { |@show_help| }
+      #   op.on_tail "-v", "--version", "Display the version" { |@show_version| }
+        
+      #   args = op.parse! args
+      # end
 
       args
     end

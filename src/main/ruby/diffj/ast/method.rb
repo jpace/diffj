@@ -63,9 +63,6 @@ module DiffJ
     end
 
     def compare from, to
-      info "from: #{from}"
-      info "to  : #{to}"
-
       compare_modifiers from, to
       compare_return_types from, to
       compare_parameters from, to

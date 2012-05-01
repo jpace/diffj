@@ -12,7 +12,7 @@ include Java
 module DiffJ
   # returns longest common subsequences within two enumerables
   module DiffLCS
-    DiffDelta = org.incava.ijdk.util.diff.Difference
+    # DiffDelta = org.incava.ijdk.util.diff.Difference
     LCSDelta = DiffJ::DiffLCS::Delta
 
     class OrigDelta < DiffJ::DiffLCS::Delta
