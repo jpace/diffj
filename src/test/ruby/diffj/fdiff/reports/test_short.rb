@@ -1,10 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
-require 'rubygems'
-require 'riel'
-require 'diffj'
 require 'diffj/fdiff/reports/tc'
 require 'diffj/fdiff/reports/short'
 

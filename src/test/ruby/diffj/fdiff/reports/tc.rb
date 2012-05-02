@@ -6,7 +6,7 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj'
-require 'diffj/diffjtestcase'
+require 'diffj/tc'
 require 'diffj/fdiff/fdiff'
 require 'stringio'
 

@@ -1,10 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'test/unit'
-require 'java'
-require 'rubygems'
-require 'diffj/diffjtestcase'
+require 'diffj/tc'
 require 'diffj/io/file'
 
 include Java

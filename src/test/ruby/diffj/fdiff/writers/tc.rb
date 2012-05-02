@@ -1,7 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'diffj/diffjtestcase'
+require 'diffj/tc'
 require 'diffj/fdiff/fdiff'
 require 'diffj/fdiff/writers/writer'
 require 'diffj/fdiff/writers/no_context'

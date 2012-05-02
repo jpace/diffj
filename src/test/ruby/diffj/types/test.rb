@@ -1,7 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'diffj/diffjtestcase'
+require 'diffj/tc'
 require 'diffj/ast/types'
 
 include Java

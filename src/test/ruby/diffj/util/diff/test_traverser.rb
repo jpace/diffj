@@ -1,7 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'diffj/diffjtestcase'
+require 'diffj/tc'
 require 'diffj/util/diff/traverser'
 require 'diffj/util/diff/traverser_orig'
 require 'diffj/util/diff/locosu'

@@ -1,19 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'test/unit'
-require 'java'
-require 'rubygems'
-require 'riel'
-require 'diffj/diffjtestcase'
-
-file = $0
-puts "file: #{file}"
-
-puts "here: #{__FILE__}"
-
-# var = 'diffj/io/location'
-# require var
+require 'diffj/tc'
 
 include Java
 include DiffJ::IO
