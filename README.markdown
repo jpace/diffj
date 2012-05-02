@@ -26,19 +26,17 @@ writing), and compares code based on the Java content.
 
 For example, the following are considered equivalent:
 
+#### src/test/resources/diffj/type/method/body/codechange/statement/*/Unchanged.java
+
 <pre><code><span style="color: black; background: white">
     Integer[] ary  =  new Integer[ index( str, ch ) + str.length( ) ];
     
     Integer[] ary = new Integer[index(str, ch) + str.length()];
 </span></code></pre>
 
-
-
-Ignoring Whitespace - DiffJ omits whitespace when comparing code, so it works
+Ignoring Whitespace: DiffJ omits whitespace when comparing code, so it works
 well when, for example, tabs have been replaced with spaces, when indentation
 levels have changed, or when the end-of-line style has changed.
-
-
 
 Ignoring Order of Declarations: DiffJ does not consider the organization of the
 code, such as the order of methods within a class. Thus if methods are reordered
@@ -49,9 +47,6 @@ Java type declarations (inner classes, fields, methods, and constructors).
 Ignoring Comments: DiffJ skips comments when comparing code. Thus comments that
 has been updated (perhaps as a result of running DoctorJ) will not be seen as a
 change. For example, these are equivalent:
-
-
-
 
 Showing Code Differences Narrowly: DiffJ reports the actual location (lines and
 columns) of code changes, and the output (in context and highlight mode)
