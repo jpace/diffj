@@ -115,15 +115,11 @@ public class ItemDiff extends DiffComparator {
         getFileDiffs().remove(fdiff);
         
         add(newDiff);
-        
+
         return newDiff;
     }
 
     protected FileDiff addReference(String name, String msg, LocationRange fromLocRg, LocationRange toLocRg) {
-        tr.Ace.setVerbose(true);
-
-        tr.Ace.yellow("msg", msg);
-
         String str = MessageFormat.format(msg, name);
 
         FileDiff fdiff = null;
@@ -131,20 +127,15 @@ public class ItemDiff extends DiffComparator {
         if (msg.equals(CODE_ADDED)) {
             // this will show as add when highlighted, as change when not.
             fdiff = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
-            tr.Ace.yellow("fdiff", fdiff);
         }
         else if (msg.equals(CODE_REMOVED)) {
             fdiff = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
-            tr.Ace.blue("fdiff", fdiff);
         }
         else {
             fdiff = new FileDiffChange(str, fromLocRg, toLocRg);
-            tr.Ace.green("fdiff", fdiff);
         }                    
 
         add(fdiff);
-
-        tr.Ace.setVerbose(false);
 
         return fdiff;
     }
@@ -166,10 +157,6 @@ public class ItemDiff extends DiffComparator {
     }
 
     protected FileDiff processDifference(Difference diff, String fromName, List<Token> fromList, List<Token> toList, FileDiff prevFdiff) {
-        tr.Ace.setVerbose(true);
-
-        tr.Ace.green("diff", diff);
-
         int delStart = diff.getDeletedStart();
         int delEnd   = diff.getDeletedEnd();
         int addStart = diff.getAddedStart();
@@ -184,13 +171,11 @@ public class ItemDiff extends DiffComparator {
         LocationRange toLocRg = getLocationRange(toList, addStart, addEnd);
 
         String msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);        
-        tr.Ace.onGreen("msg", msg);
 
         prevFdiff = isOnSameLine(prevFdiff, fromLocRg) ? 
             replaceReference(fromName, prevFdiff, fromLocRg, toLocRg) : 
             addReference(fromName, msg, fromLocRg, toLocRg);
         
-        tr.Ace.yellow("prevFdiff", prevFdiff);
         return prevFdiff;
     }
 

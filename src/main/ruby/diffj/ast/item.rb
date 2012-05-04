@@ -146,6 +146,8 @@ module DiffJ
     end
 
     def javadiff_process_difference diff, from_name, from_list, to_list, prev_ref
+      info "diff: #{diff}"
+
       delstart = diff.getDeletedStart()
       delend   = diff.getDeletedEnd()
       addstart = diff.getAddedStart()
@@ -168,6 +170,8 @@ module DiffJ
     end
     
     def jrubydiff_process_difference delta, from_name, from_list, to_list, prev_ref
+      info "delta: #{delta}"
+
       delstart = delta.delete_start
       delend   = delta.delete_end
       addstart = delta.add_start
@@ -189,7 +193,7 @@ module DiffJ
       else
         info "self: #{self}"
         ref = add_reference from_name, msg, fromlocrg, tolocrg
-        info "ref: #{ref}".bold.blue
+        info "ref: #{ref.inspect}".bold.blue
         ref
       end
     end
@@ -200,6 +204,7 @@ module DiffJ
 
       ref = nil      
       difflist = trav.diffs
+      info "difflist: #{difflist.inspect}"
       
       difflist.each do |diff|
         info "diff: #{diff}"

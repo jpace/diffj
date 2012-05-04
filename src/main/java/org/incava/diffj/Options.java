@@ -88,9 +88,6 @@ public class Options extends OptionSet {
     public Options() {
         super("diffj", "Compares Java code");
 
-        tr.Ace.setVerbose(true);
-        tr.Ace.onRed("this", this);
-
         // use the diffj.* equivalent property for each option.
 
         Boolean brief = new Boolean(briefOutput);

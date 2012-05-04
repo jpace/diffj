@@ -82,8 +82,6 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * @param toLoc       The location range in the to-file.
      */
     public FileDiff(Type type, String message, LocationRange fromLoc, LocationRange toLoc) {
-        tr.Ace.setVerbose(true);
-        tr.Ace.cyan("message", message);
         this.type           = type;
         this.message        = message;
         this.firstLocation  = fromLoc;

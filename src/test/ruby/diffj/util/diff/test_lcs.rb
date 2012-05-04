@@ -14,11 +14,12 @@ class DiffJ::DiffLCSTestCase < DiffJ::TestCase
   def assert_matches_legacy jrubyresult, from, to
     diff = org.incava.ijdk.util.diff::Diff.new from, to
     javaresult = diff.getLongestCommonSubsequences()
-
+    info "javaresult: #{javaresult}".magenta
     info "jrubyresult: #{jrubyresult.inspect}".yellow
     assert_equal javaresult.size, jrubyresult.size
 
     (0 ... javaresult.size).each do |idx|
+      info "#{idx}; #{javaresult[idx]} <=> #{jrubyresult[idx]}"
       assert_equal javaresult[idx], jrubyresult[idx], "idx: #{idx}"
     end
   end
@@ -30,7 +31,7 @@ class DiffJ::DiffLCSTestCase < DiffJ::TestCase
     jrubyresult = LCS.new(from, to).matches
     assert_matches_legacy jrubyresult, from, to
     
-    assert_equal exp.size, jrubyresult.size      
+    assert_equal exp.size, jrubyresult.size
     (0 ... exp.size).each do |idx|
       assert_equal exp[idx], jrubyresult[idx], "idx: #{idx}"
     end
@@ -152,7 +153,7 @@ class DiffJ::DiffLCSTestCase < DiffJ::TestCase
     end
     data
   end
-
+  
   def test_performance
     if ARGV.empty?
       info "skipping performance test (run with \"jruby ... -n test_performance -- run\""

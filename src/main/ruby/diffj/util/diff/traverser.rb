@@ -20,6 +20,11 @@ module DiffJ
         @pending = nil
         @matches = matches
 
+        # info "@matches: #{@matches.inspect}"
+        # @matches.each_with_index do |m, idx|
+        #   info "match[#{idx}]: #{m}"
+        # end
+
         @a_size = a_size
         @b_size = b_size
         

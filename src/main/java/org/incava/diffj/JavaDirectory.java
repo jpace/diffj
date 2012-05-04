@@ -67,19 +67,13 @@ public class JavaDirectory extends JavaFSElement {
         Set<String> names = new TreeSet<String>();
         names.addAll(fromDir.getElementNames());
         names.addAll(getElementNames());
-        tr.Ace.yellow("names", names);
         
         for (String name : names) {
-            tr.Ace.yellow("name", name);
             JavaFSElement fromElmt = fromDir.getElement(name);
-            tr.Ace.yellow("fromElmt", fromElmt);
             JavaFSElement toElmt = getElement(name);
-            tr.Ace.yellow("toElmt", toElmt);
 
             if (fromElmt != null && toElmt != null && (fromElmt.isFile() || (fromElmt.isDirectory() && canRecurse))) {
-                tr.Ace.setVerbose(false);
                 fromElmt.compareTo(report, toElmt);
-                tr.Ace.setVerbose(true);
             }
         }
 

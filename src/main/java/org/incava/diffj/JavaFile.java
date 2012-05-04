@@ -163,9 +163,6 @@ public class JavaFile extends JavaFSElement {
             CompilationUnitDiff cud = new CompilationUnitDiff(report);
             // chew the cud here ...
             cud.compare(fromCu, toCu);
-
-            tr.Ace.setVerbose(true);
-            tr.Ace.yellow("this", this);
         }
         catch (DiffJException de) {
             tr.Ace.red("de", de);

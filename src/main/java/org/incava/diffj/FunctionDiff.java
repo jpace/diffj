@@ -101,8 +101,6 @@ public class FunctionDiff extends ItemDiff {
     }
 
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
-        tr.Ace.setVerbose(true);
-
         List<String> fromParamTypes = ParameterUtil.getParameterTypes(fromFormalParams);
         List<String> toParamTypes = ParameterUtil.getParameterTypes(toFormalParams);
 
@@ -120,8 +118,6 @@ public class FunctionDiff extends ItemDiff {
         else if (toSize > 0) {
             markParametersAdded(fromFormalParams, toFormalParams);
         }
-
-        tr.Ace.setVerbose(false);
     }
 
     /**

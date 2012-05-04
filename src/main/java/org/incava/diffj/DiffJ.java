@@ -27,10 +27,10 @@ public class DiffJ {
                  boolean recurseDirectories,
                  String fromLabel, String fromSource,
                  String toLabel, String toSource) {
-        tr.Ace.set(true, 25, 4, 20, 25);
-        tr.Ace.setOutput(Qualog.VERBOSE, Qualog.LEVEL4);
-        tr.Ace.setOutput(Qualog.QUIET,   Qualog.LEVEL2);
-        tr.Ace.setVerbose(true);
+        // tr.Ace.set(true, 25, 4, 20, 25);
+        // tr.Ace.setOutput(Qualog.VERBOSE, Qualog.LEVEL4);
+        // tr.Ace.setOutput(Qualog.QUIET,   Qualog.LEVEL2);
+        // tr.Ace.setVerbose(true);
         // tr.Ace.stack("this", this, 15);
 
         Writer writer = new OutputStreamWriter(System.out);

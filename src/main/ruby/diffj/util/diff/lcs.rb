@@ -82,6 +82,11 @@ module DiffJ
 
         add_matches
 
+        info "@match_map: #{@match_map}"
+        @match_map.each do |key, value|
+          info "@match_map[#{key}]: #{value}"
+        end
+
         @matches = Array.new(@match_map.empty? ? 0 : 1 + @match_map.keys[-1])
         @match_map.each do |key, value|
           @matches[key] = value
@@ -92,8 +97,17 @@ module DiffJ
         to_matches = Hash.new { |h, k| h[k] = Array.new }
 
         (@to_start .. @to_end).each do |bi|
-          key = @to[bi]
-          to_matches[@to[bi]] << bi
+          info "bi: #{bi}"
+          to = @to[bi]
+          info "to: #{to}"
+          currval = to_matches[to]
+          info "currval: #{currval}"
+
+          to_matches[to] << bi
+        end
+
+        to_matches.each do |key, value|
+          info "#{key} (#{key.hash}) => #{value}"
         end
 
         to_matches
@@ -101,12 +115,17 @@ module DiffJ
 
       def add_matches
         to_matches = get_to_matches
+        info "to_matches: #{to_matches.inspect}"
+        to_matches.each do |key, value|
+          info "to_matches[#{key} (#{key.hash})]: #{value}"
+        end
 
         links = LCSTable.new
         thresholds = Thresholds.new
 
         (@from_start .. @from_end).each do |i|
           from_element = @from[i]
+          # info "from_element: #{from_element}"
           next unless positions = to_matches[from_element]
 
           k = 0
@@ -122,6 +141,7 @@ module DiffJ
         if !thresholds.empty?
           ti = thresholds.last_key
           chain = links.get_chain ti
+          info "chain: #{chain}"
           chain.each do |key, value|
             @match_map[key] = value
           end

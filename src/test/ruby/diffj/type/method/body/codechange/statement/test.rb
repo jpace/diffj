@@ -10,7 +10,7 @@ module DiffJ::Type::Method::Body::CodeChange
     end
 
     def test_changed
-      run_test 'Changed', changed("meth(String, char)", loc(3, 42), loc(3, 81), loc(3, 37), loc(3, 58))
+      run_test 'Changed', changed("meth(String, char)", loc(3, 42), loc(3, 83), loc(3, 37), loc(3, 58))
     end
   end
 end

@@ -20,7 +20,15 @@ class Java::net.sourceforge.pmd.ast::Token
 
   def <=> other
     (kind <=> other.kind).nonzero? ||
-    (image <=> other.image).nonzero? ||
+      (image <=> other.image).nonzero? ||
       0
+  end
+  
+  def hash
+    (kind.hash << 17) + image.hash
+  end
+
+  def eql? other
+    hash == other.hash
   end
 end
