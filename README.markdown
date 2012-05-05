@@ -21,6 +21,8 @@ comparing code when refactoring or fixing warnings, and also for reformatting,
 ensuring that although whitespace and comments might have changed, the code did
 not.
 
+<div>this is a test to see whether github strips divs</div>
+
 FEATURES
 --------
 
