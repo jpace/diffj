@@ -23,6 +23,8 @@ not.
 
 <div>this is a test to see whether github strips divs</div>
 
+<span>this is a test to see whether github strips spans</span>
+
 FEATURES
 --------
 
