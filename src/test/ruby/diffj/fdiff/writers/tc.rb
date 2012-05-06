@@ -47,7 +47,7 @@ class DiffJ::WriterTestCase < DiffJ::TestCase
   end
 
   def run_delta_test expected, fdiff, &blk
-    dw = get_writer_class.new FROMCONT, TOCONT
+    dw = get_writer FROMCONT, TOCONT
     str = ""    
     blk.call dw, str, fdiff
     assert_equal expected, str
@@ -66,6 +66,10 @@ class DiffJ::WriterTestCase < DiffJ::TestCase
   def run_delete_test expected, &blk
     fda = DiffJ::FDiffDelete.new "text deleted", :locranges => [ locrg(2, 1, 2, 35), locrg(2, 1, 2, 1) ]
     run_delta_test expected, fda, &blk
+  end
+
+  def get_writer fromcont, tocont
+    get_writer_class.new fromcont, tocont
   end
 
   def get_writer_class

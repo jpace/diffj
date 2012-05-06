@@ -22,11 +22,11 @@ module DiffJ
         RED = @@hl.code "red"
         YELLOW = @@hl.code "yellow"
 
-        def initialize from_contents, to_contents, color_deleted = RED, color_added = YELLOW
+        def initialize from_contents, to_contents, color_deleted = nil, color_added = nil
           super from_contents, to_contents
 
-          @color_deleted = color_deleted
-          @color_added = color_added
+          @color_deleted = color_deleted || RED
+          @color_added = color_added || YELLOW
         end          
 
         def get_line lines, lidx, from_line, from_column, to_line, to_column, is_delete

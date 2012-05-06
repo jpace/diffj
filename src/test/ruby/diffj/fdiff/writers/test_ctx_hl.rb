@@ -3,12 +3,19 @@
 
 require 'diffj/fdiff/writers/tc'
 require 'diffj/fdiff/writers/ctx_hl'
+require 'riel/text'
 
 include Java
 
 class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
   def get_writer_class
     DiffJ::FDiff::Writer::ContextHighlightWriter
+  end
+
+  def setup
+    info "here: #{self}"
+    @from_color = nil
+    @to_color = nil
   end
 
   def get_change_expected_from color = "\e[31m"
@@ -82,10 +89,19 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     end
   end
 
-  def xxx_test_deleted_print_lines_different_color
-    expected = get_change_expected_from "\e[33m"
+  def get_writer fromcont, tocont
+    DiffJ::FDiff::Writer::ContextHighlightWriter.new fromcont, tocont, @from_color, @to_color
+  end
+
+  def test_change_print_lines_different_color
+    hl = ::Text::ANSIHighlighter.new
+
+    @from_color = hl.code "bold magenta on black"
+    @to_color = hl.code "cyan"
+
+    expected = get_change_expected_from(@from_color)
     expected << "\n"
-    expected << get_change_expected_to
+    expected << get_change_expected_to(@to_color)
     expected << "\n"
     
     run_change_test expected do |dw, str, fdc|

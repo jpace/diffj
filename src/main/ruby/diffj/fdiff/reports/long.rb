@@ -34,7 +34,7 @@ module DiffJ::FDiff::Report
              if @context_opts[:highlight]
                from_color = @context_opts[:from_color]
                to_color = @context_opts[:to_color]
-               ContextHighlightWriter.new from_lines, to_lines
+               ContextHighlightWriter.new from_lines, to_lines, from_color, to_color
              else
                ContextNoHighlightWriter.new from_lines, to_lines
              end
