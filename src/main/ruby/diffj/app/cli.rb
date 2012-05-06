@@ -41,9 +41,15 @@ module DiffJ
           return 1
         end
 
+        ctx_opts = { 
+          :context => opts.show_context_output, 
+          :highlight => opts.highlight_output,
+          :from_color => opts.from_color,
+          :to_color => opts.to_color
+        }
+
         diffj = new(opts.show_brief_output, 
-                    opts.show_context_output, 
-                    opts.highlight_output,
+                    ctx_opts,
                     opts.recurse,
                     opts.first_file_name, opts.from_source,
                     opts.second_file_name, opts.to_source)
@@ -57,7 +63,7 @@ module DiffJ
     attr_reader :exit_value
     attr_reader :report
     
-    def initialize brief, context, highlight, recurse, from_label, fromver, to_label, tover
+    def initialize brief, context_opts, recurse, from_label, fromver, to_label, tover
       super
       @exit_value = 0
     end

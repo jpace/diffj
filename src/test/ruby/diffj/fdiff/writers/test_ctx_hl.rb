@@ -99,9 +99,12 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     @from_color = hl.code "bold magenta on black"
     @to_color = hl.code "cyan"
 
-    expected = get_change_expected_from(@from_color)
+    from_code = hl.code @from_color
+    to_code = hl.code @to_color
+
+    expected = get_change_expected_from(from_code)
     expected << "\n"
-    expected << get_change_expected_to(@to_color)
+    expected << get_change_expected_to(to_code)
     expected << "\n"
     
     run_change_test expected do |dw, str, fdc|

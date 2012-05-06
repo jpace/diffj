@@ -14,6 +14,9 @@ module DiffJ
 
     SOURCE_DEFAULT = "1.5"
 
+    DEFAULT_FROM_COLOR_TEXT = DiffJ::FDiff::Writer::ContextHighlightWriter::DEFAULT_FROM_COLOR_TEXT
+    DEFAULT_TO_COLOR_TEXT = DiffJ::FDiff::Writer::ContextHighlightWriter::DEFAULT_TO_COLOR_TEXT
+
     attr_reader :show_brief_output
     attr_reader :show_context_output
     attr_reader :highlight_output
@@ -25,6 +28,8 @@ module DiffJ
     attr_reader :show_help
     attr_reader :show_version
     attr_reader :verbose
+    attr_reader :from_color
+    attr_reader :to_color
 
     def initialize
       @show_brief_output = false
@@ -32,6 +37,10 @@ module DiffJ
       @highlight_output = false
       @from_source = SOURCE_DEFAULT
       @to_source = SOURCE_DEFAULT
+
+      @from_color = nil
+      @to_color = nil
+
       @recurse = false
       @first_file_name = nil
       @second_file_name = nil
@@ -63,6 +72,12 @@ module DiffJ
         end
         
         op.on "--to-source VERSION", "The Java source version of to-file (default: #{SOURCE_DEFAULT})" do |@to_source|
+        end
+
+        op.on "--from-color COLOR", "The text color of the from-file text (default: #{DEFAULT_FROM_COLOR_TEXT})" do |@from_color|
+        end
+        
+        op.on "--to-color COLOR", "The text color of the to-file text (default: #{DEFAULT_TO_COLOR_TEXT})" do |@to_color|
         end
 
         op.on "--source VERSION", "The Java source version of from-file and to-file (default: #{SOURCE_DEFAULT})" do |src|

@@ -18,15 +18,18 @@ module DiffJ
         @@hl = ::Text::ANSIHighlighter.new
         
         RESET = "\e[0m"
-        # RED = "\e[31m"
-        RED = @@hl.code "red"
-        YELLOW = @@hl.code "yellow"
+        
+        DEFAULT_FROM_COLOR_TEXT = "red"
+        DEFAULT_TO_COLOR_TEXT = "yellow"
+
+        DEFAULT_FROM_COLOR = @@hl.code DEFAULT_FROM_COLOR_TEXT
+        DEFAULT_TO_COLOR = @@hl.code DEFAULT_TO_COLOR_TEXT
 
         def initialize from_contents, to_contents, color_deleted = nil, color_added = nil
           super from_contents, to_contents
 
-          @color_deleted = color_deleted || RED
-          @color_added = color_added || YELLOW
+          @color_deleted = (color_deleted && @@hl.code(color_deleted)) || DEFAULT_FROM_COLOR
+          @color_added = (color_added && @@hl.code(color_added)) || DEFAULT_TO_COLOR
         end          
 
         def get_line lines, lidx, from_line, from_column, to_line, to_column, is_delete
