@@ -11,21 +11,21 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
     DiffJ::FDiff::Writer::ContextHighlightWriter
   end
 
-  def get_change_expected_from
+  def get_change_expected_from color = "\e[31m"
     expected = ""
     expected << "  There as he wist to have a good pittance:\n"
     expected << "  For unto a poor order for to give\n"
     expected << "  Is signe that a man is well y-shrive.\n"
-    expected << "! For if he gave, he \e[31mdurste make avant\e[0m,\n"
+    expected << "! For if he gave, he #{color}durste make avant\e[0m,\n"
     expected << "  He wiste that the man was repentant.\n"
   end
 
-  def get_change_expected_to
+  def get_change_expected_to color = "\e[33m"
     expected = ""
     expected << "  Where he know he would get good payment\n"
     expected << "  For unto a poor order for to give\n"
     expected << "  Is signe that a man is well y-shrive.\n"
-    expected << "! For if he gave, he \e[33mdared to boast\e[0m,\n"
+    expected << "! For if he gave, he #{color}dared to boast\e[0m,\n"
     expected << "  He knew that the man was repentant.\n"
     expected << "  For many a man so hard is of his heart,\n"
     expected << "  He may not weep although him sore smart.\n"
@@ -79,6 +79,17 @@ class DiffJ::WriterContextHighlightTestCase < DiffJ::WriterTestCase
 
     run_delete_test expected do |dw, str, fda|
       dw.print_lines str, fda
+    end
+  end
+
+  def xxx_test_deleted_print_lines_different_color
+    expected = get_change_expected_from "\e[33m"
+    expected << "\n"
+    expected << get_change_expected_to
+    expected << "\n"
+    
+    run_change_test expected do |dw, str, fdc|
+      dw.print_lines str, fdc
     end
   end
 end

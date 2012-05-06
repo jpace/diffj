@@ -78,8 +78,10 @@ class DiffJ::TestCase < Test::Unit::TestCase
     fromver = "1.5"
     toname = nil
     tover = "1.5"
+
+    context_opts = { :context => true, highlight => true }
     
-    diffj = DiffJ::Processor.new brief, context, highlight, recurse, fromname, fromver, toname, tover
+    diffj = DiffJ::Processor.new brief, context_opts, recurse, fromname, fromver, toname, tover
     diffj.process_names fnames
     assert_not_nil diffj
   end
@@ -93,8 +95,10 @@ class DiffJ::TestCase < Test::Unit::TestCase
     fromver = "1.5"
     toname = nil
     tover = "1.5"
+
+    context_opts = { :context => true, highlight => true }
     
-    DiffJ::Processor.new brief, context, highlight, recurse, fromname, fromver, toname, tover
+    DiffJ::Processor.new brief, context_opts, recurse, fromname, fromver, toname, tover
   end
 
   def get_from_and_to_filenames dirname, basename

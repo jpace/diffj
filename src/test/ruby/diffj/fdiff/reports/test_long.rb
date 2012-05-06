@@ -8,7 +8,9 @@ include Java
 
 class DiffJ::LongReportTestCase < DiffJ::ReportTestCase
   def create_report sio, show_context, highlight
-    DiffJ::FDiff::Report::LongReport.new sio, show_context, highlight
+    context_opts = { :context => show_context, :highlight => highlight }
+
+    DiffJ::FDiff::Report::LongReport.new sio, context_opts
   end
     
   def test_no_context

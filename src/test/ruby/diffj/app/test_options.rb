@@ -54,8 +54,8 @@ class DiffJOptionsTest < Test::Unit::TestCase
     # opts = org.incava.diffj.Options.new
     opts = DiffJ::Options.new
     names = opts.process args
-    info "opts: #{opts}".bold.green
-    info "args: #{args}".bold.green
+    # info "opts: #{opts}".bold.green
+    # info "args: #{args}".bold.green
     assert_options exp, opts
   end
 

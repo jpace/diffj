@@ -75,7 +75,7 @@ module DiffJ
         end
 
         op.on "-L", "--name NAME", "Set the first/second name to be displayed" do |name|
-          info "name: #{name}".red
+          # info "name: #{name}".red
 
           if @first_file_name
             @second_file_name = name
@@ -97,58 +97,6 @@ module DiffJ
 
     def process args
       parse! args
-    end
-
-    def orig_process args
-      # options = OptionParser.new do |op|
-      #   op.banner = "Usage: diffj [options] from-file to-file"
-      #   op.separator ""
-      #   op.separator "Options"
-
-      #   op.on "--brief", "Display output in brief form" { |@show_brief_output| }
-
-      #   op.on "--context", "Show context (non-brief form only)" do |@show_context_output|
-      #     @show_brief_output = false
-      #     @highlight_output = true
-      #   end
-        
-      #   op.on "--highlight", "Use colors (context output only)" do |@highlight_output|
-      #     @show_brief_output = false
-      #   end
-
-      #   op.on "--recurse", "Process directories recursively" { |@recurse| }
-
-      #   op.on "--from-source VERSION", "The Java source version of from-file (default is #{SOURCE_DEFAULT}" { |@from_source| }
-      #   op.on "--to-source VERSION", "The Java source version of to-file (default is #{SOURCE_DEFAULT}" { |@to_source| }
-
-      #   op.on "--source VERSION", "The Java source version of from-file and to-file (default is #{SOURCE_DEFAULT}" do |src|
-      #     @from_source = src
-      #     @to_source = src
-      #   end
-
-      #   op.on "-u", "Output unified context. Unused; for compatibility with GNU diff" do
-      #     # ignored
-      #   end
-
-      #   op.on "-L", "--name NAME", "Set the first/second name to be displayed" do |name|
-      #     info "name: #{name}".red
-
-      #     if @first_file_name
-      #       @second_file_name = name
-      #     else
-      #       @first_file_name = name
-      #     end
-      #   end
-
-      #   op.on "--verbose", "Run in verbose mode (for debugging)" { |@verbose| }
-        
-      #   op.on_tail "-h", "--help", "Show this message" { |@show_help| }
-      #   op.on_tail "-v", "--version", "Display the version" { |@show_version| }
-        
-      #   args = op.parse! args
-      # end
-
-      args
     end
   end
 end

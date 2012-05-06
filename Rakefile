@@ -17,7 +17,10 @@ $pmdjar = "libs/pmd-4.2.5.jar"
 $junitjar = "libs/junit-4.10.jar"
 
 # we're still using this, for JRuby vs. Java tests:
-$diffjjar = "staging/libs/diffj-1.2.1.jar"
+$diffjjar = "staging/libs/diffj-1.3.0.jar"
+
+# this is the full JRuby jarfile, which will replace the above:
+$diffj_jr_jar = "diffj-#{$DIFFJ_VERSION}.jar"
 
 $CLASSPATH << $diffjjar << $jrubycompletejar << $pmdjar
 
@@ -78,6 +81,8 @@ task "java:tests:compile" => [ :setup, $clstestdir, "java:compile" ] do
             :includeantruntime => 'no')
 end
 
+# this should depend on the tests, but sometimes I create a jar for
+# field testing, which won't yet pass the tests.
 task "java:jar" => [ "java:compile", $buildlibsdir ] do
   ant.jar(:jarfile => $diffjjar, 
           :basedir => $clsmaindir)
@@ -104,7 +109,7 @@ end
 
 class DiffJRakeTestTask < Rake::TestTask
   def initialize name, filter = name
-    super(('test:' + name) => "java:tests:compile") do |t|
+    super(('test:' + name) => [ "java:tests:compile", "java:jar" ]) do |t|
       t.libs << $srcmainrubydir
       t.libs << $srctestrubydir
       t.pattern = "#{$srctestrubydir}/**/#{filter}/**/test*.rb"
@@ -139,7 +144,7 @@ end
 
 task "jruby:jar" => [ "java:compile", "jruby:compile" ] do
   # sh "jar -cfm diffj.jar src/main/jar/launcher.manifest -C #{$clsmaindir} . -C #{$srcmainrubydir} . -C tmp ."
-  cmd  = "jar -cfm diffj-#{$DIFFJ_VERSION}.jar src/main/jar/launcher.manifest "
+  cmd  = "jar -cfm #{$diffj_jr_jar} src/main/jar/launcher.manifest "
   cmd << "-C #{$clsmaindir} org/incava/diffj/DiffJLauncher.class "
   # this is PMD and JRuby combined, since jar whines about duplicate directories (such as "org"):
   cmd << "-C vendor/all . "
@@ -149,3 +154,9 @@ task "jruby:jar" => [ "java:compile", "jruby:compile" ] do
 end
 
 task "jruby:tests" => "test:all"
+
+# todo:
+
+# add gem install riel
+# dependencies from Rake on Gradle
+

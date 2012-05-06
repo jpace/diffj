@@ -49,7 +49,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
 
     assert_tokens_match exptokens, compunit.tokens
 
-    dump_node compunit, "!!!!", true
+    # dump_node compunit, "!!!!", true
     
     # typedecl has same tokens except for EOF (nil):
     td = compunit.node(0)
@@ -84,7 +84,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     compunit = file.compile
     info "compunit: #{compunit}"
 
-    dump_node compunit, "!!!!", true
+    # dump_node compunit, "!!!!", true
 
     assert_nil compunit.parent
 
@@ -121,7 +121,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     pt    = assert_has_child Java::NetSourceforgePmdAst::ASTPrimitiveType,                   typ
     vd    = assert_has_child Java::NetSourceforgePmdAst::ASTVariableDeclarator,              fd, 1
 
-    dump_node td, "####", true
+    # dump_node td, "####", true
   end
 
   def process_subnode_leading_tokens exptokens, parent, idx = 0
@@ -137,7 +137,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     compunit = file.compile
     info "compunit: #{compunit}"
 
-    dump_node compunit, "----", true
+    # dump_node compunit, "----", true
     
     td    = process_subnode_leading_tokens [ "class" ],              compunit
     coid  = process_subnode_leading_tokens [ "class", "Test", "{" ], td
@@ -149,7 +149,7 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
     vd    = process_subnode_leading_tokens %w{ i },                  fd, 1
     vdid  = process_subnode_leading_tokens %w{ },                    vd
 
-    dump_node td, "####", true
+    # dump_node td, "####", true
   end
 
   def assert_is_token tk, msg = nil
@@ -271,11 +271,13 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
 
     param = get_first_method_parameter compunit
 
-    dump_node param, "####".bold
-
-    tokens = param.tokens
-    tokens.each do |tk|
-      info "    #{tk}".bold
+    if false
+      dump_node param, "####".bold
+      
+      tokens = param.tokens
+      tokens.each do |tk|
+        info "    #{tk}".bold
+      end
     end
   end
   
@@ -294,11 +296,13 @@ class DiffJ::SimpleNodeTestCase < DiffJ::TestCase
 
     param = get_first_method_parameter compunit
 
-    dump_node param, "####".bold
+    if false
+      dump_node param, "####".bold
 
-    tokens = param.tokens
-    tokens.each do |tk|
-      info "    #{tk}".bold
+      tokens = param.tokens
+      tokens.each do |tk|
+        info "    #{tk}".bold
+      end
     end
   end
 

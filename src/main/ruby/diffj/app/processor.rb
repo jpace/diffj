@@ -20,9 +20,9 @@ module DiffJ
     attr_reader :exit_value
     attr_reader :report
     
-    def initialize brief, context, highlight, recurse, from_label, fromver, to_label, tover
+    def initialize brief, context_opts, recurse, from_label, fromver, to_label, tover
       writer = $stdout
-      @report = brief ? DiffJ::FDiff::Report::ShortReport.new(writer) : DiffJ::FDiff::Report::LongReport.new(writer, context, highlight)
+      @report = brief ? DiffJ::FDiff::Report::ShortReport.new(writer) : DiffJ::FDiff::Report::LongReport.new(writer, context_opts)
       @recurse = recurse
       @from_label = from_label
       @fromver = fromver

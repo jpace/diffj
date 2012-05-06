@@ -18,10 +18,10 @@ module DiffJ::FDiff::Report
   class LongReport < BaseReport
     include Loggable
     
-    def initialize writer, show_context, highlight
+    def initialize writer, context_opts = Hash.new
       super writer
 
-      @dwcls = show_context ? (highlight ?  ContextHighlightWriter : ContextNoHighlightWriter) : NoContextWriter
+      @context_opts = context_opts
       @from_contents = nil
       @to_contents = nil
     end
@@ -29,7 +29,18 @@ module DiffJ::FDiff::Report
     def write_differences
       from_lines = @from_contents.split "\n"
       to_lines = @to_contents.split "\n"
-      dw = @dwcls.new from_lines, to_lines
+
+      dw = if @context_opts && @context_opts[:context]
+             if @context_opts[:highlight]
+               from_color = @context_opts[:from_color]
+               to_color = @context_opts[:to_color]
+               ContextHighlightWriter.new from_lines, to_lines
+             else
+               ContextNoHighlightWriter.new from_lines, to_lines
+             end
+           else
+             NoContextWriter.new from_lines, to_lines
+           end
       
       differences.each do |fdiff|
         str = dw.difference fdiff

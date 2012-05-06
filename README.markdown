@@ -21,10 +21,6 @@ comparing code when refactoring or fixing warnings, and also for reformatting,
 ensuring that although whitespace and comments might have changed, the code did
 not.
 
-<div>this is a test to see whether github strips divs</div>
-
-<span>this is a test to see whether github strips spans</span>
-
 FEATURES
 --------
 
@@ -62,7 +58,7 @@ as a change.
 **Showing added and deleted declarations**: DiffJ reports declarations that have
 been added and deleted, described by their Java type. For example:
 
-<div width="100%" style="background: #111111; color: #EEEEEE; margin: 2em; padding: 0.25em 0.75em 0.75em 0.75em; ">
+<table width="100%" style="background: #111111; color: #EEEEEE; margin: 2em; padding: 0.25em 0.75em 0.75em 0.75em; ">
 <pre><code>
 d0/Removed.java <=> d1/Removed.java
 2,3d1,4 method removed: contender(Double[], StringBuilder)
@@ -72,7 +68,7 @@ d0/Removed.java <=> d1/Removed.java
   
       public void contender() {
       }
-</code></pre></div>
+</code></pre></table>
 
 **Showing parameters**: DiffJ reports constructor and methods parameters that have
 been added, deleted, and changed:

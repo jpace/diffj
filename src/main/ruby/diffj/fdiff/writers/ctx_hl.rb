@@ -5,6 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'java'
 require 'diffj/fdiff/writers/context'
+require 'riel/text'
 
 include Java
 
@@ -13,14 +14,20 @@ module DiffJ
     module Writer
       class ContextHighlightWriter < ContextWriter
         include Loggable
+
+        @@hl = ::Text::ANSIHighlighter.new
         
         RESET = "\e[0m"
-        RED = "\e[31m"
-        YELLOW = "\e[33m"
+        # RED = "\e[31m"
+        RED = @@hl.code "red"
+        YELLOW = @@hl.code "yellow"
 
-        COLOR_ADDED = YELLOW
-        COLOR_DELETED = RED
-        COLOR_RESET = RESET
+        def initialize from_contents, to_contents, color_deleted = RED, color_added = YELLOW
+          super from_contents, to_contents
+
+          @color_deleted = color_deleted
+          @color_added = color_added
+        end          
 
         def get_line lines, lidx, from_line, from_column, to_line, to_column, is_delete
           line = lines[lidx - 1]
@@ -38,7 +45,7 @@ module DiffJ
           fcol = from_line == lidx ? from_column - 1 : 0
           tcol = to_line   == lidx ? to_column       : llen
 
-          highlight_color = is_delete ? COLOR_DELETED : COLOR_ADDED
+          highlight_color = is_delete ? @color_deleted : @color_added
 
           str = "! "
           str << line[0 ... fcol]

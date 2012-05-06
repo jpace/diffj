@@ -4,7 +4,6 @@
 require 'rubygems'
 require 'riel'
 require 'java'
-require 'stringio'
 
 include Java
 
