@@ -108,3 +108,9 @@ d0/Changed.java <=> d1/Changed.java
       }
   }
 </code></pre></div>
+
+<p>
+
+    <a href="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png" target="_blank">
+    <img src="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png" alt="codechange statement" style="max-width:100%;"/></a></p>
+</p>

@@ -5,6 +5,7 @@ require 'rubygems'
 require 'java'
 require 'riel'
 require 'optparse'
+require 'diffj/fdiff/writers/ctx_hl'
 
 include Java
 
@@ -48,6 +49,10 @@ module DiffJ
       @show_help = false
       @verbose = false
 
+      homedir = Env::home_directory
+      @rcfile = homedir && Pathname.new(homedir) + '.diffjrc'
+      info "rcfile: #{@rcfile}"
+
       super do |op|
         op.banner = "Usage: diffj [options] from-file to-file"
         op.separator ""
@@ -61,14 +66,18 @@ module DiffJ
           @highlight_output = true
         end
         
-        op.on "--highlight", "Use colors (context output only)" do |@highlight_output|
-          @show_brief_output = false
+        op.on "--[no-]highlight", "Use colors (context output only)" do |@highlight_output|
+          info "@highlight_output: #{@highlight_output}".bold.on_blue
+          if @highlight_output
+            @show_brief_output = false
+          end
         end
 
         op.on "--recurse", "Process directories recursively" do |@recurse|
         end
 
         op.on "--from-source VERSION", "The Java source version of from-file (default: #{SOURCE_DEFAULT})" do |@from_source|
+          stack "from-source: #{@from_source}".on_red
         end
         
         op.on "--to-source VERSION", "The Java source version of to-file (default: #{SOURCE_DEFAULT})" do |@to_source|
@@ -110,7 +119,36 @@ module DiffJ
       end
     end
 
+    def parse_from_rcfile rcfile
+      asopts = Array.new
+
+      info "rcfile: #{rcfile}"
+
+      ::IO.readlines(rcfile).each do |line|
+        line = line.chomp.strip.gsub %r{[^\\]\#.*}, ''
+        info "line: #{line}"
+        name, value = line.split(%r{\s*[:=]\s*})
+
+        info "line: #{line}"
+
+        if value == "true"
+          asopts << "--#{name}"
+        elsif value == "false"
+          asopts << "--no-#{name}" << value
+        else
+          asopts << "--#{name}" << value
+        end
+      end
+
+      info "asopts: #{asopts}".bold
+
+      parse! asopts
+    end
+
     def process args
+      if @rcfile && Pathname.new(@rcfile).exist?
+        parse_from_rcfile @rcfile
+      end
       parse! args
     end
   end

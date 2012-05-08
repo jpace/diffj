@@ -6,6 +6,7 @@ require 'java'
 require 'rubygems'
 require 'riel'
 require 'diffj/app/options'
+require 'tempfile'
 
 include Java
 
@@ -136,5 +137,64 @@ class DiffJOptionsTest < Test::Unit::TestCase
 
   def test_names
     run_test %w{ --verbose abc xyz }, { :verbose => true }
+  end
+
+  def run_rcfile_test args, exp
+    tf = Tempfile.new Pathname(__FILE__).basename.to_s
+    info "tf.path: #{tf}"
+
+    args.each do |name, value|
+      info "name: #{name}"
+      info "value: #{value}"
+      tf.puts "#{name}: #{value}"
+    end
+
+    tf.flush
+
+    puts tf.readlines
+
+    opts = DiffJ::Options.new
+    # evalstr = "@rcfile = '" + tf.path + "'"
+    # opts.instance_eval evalstr
+
+    opts.parse_from_rcfile tf.path
+
+    # args = %w{  }
+
+    # names = opts.process args
+    # info "opts: #{opts}".bold.green
+    # info "args: #{args}".bold.green
+
+    assert_options exp, opts
+  end
+
+  def test_rcfile_default
+    args = []
+    exp = { }
+    run_rcfile_test [], exp
+  end
+
+  def test_rcfile_option_from_source
+    args = [
+            %w{ from-source 1.6 }
+           ]
+    exp = { :from => "1.6" }    
+    run_rcfile_test args, exp
+  end
+
+  def test_rcfile_option_highlight
+    args = [
+            %w{ highlight true }
+           ]
+    exp = { :highlight => true }
+    run_rcfile_test args, exp
+  end
+
+  def test_rcfile_option_highlight_false
+    args = [
+            %w{ highlight false }
+           ]
+    exp = { :highlight => false }    
+    run_rcfile_test args, exp
   end
 end
