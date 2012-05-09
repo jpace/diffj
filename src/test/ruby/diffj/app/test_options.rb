@@ -57,6 +57,9 @@ class DiffJOptionsTest < Test::Unit::TestCase
 
   def run_test args, exp
     opts = DiffJ::Options.new
+    evalstr = "@rcfile = nil"
+    opts.instance_eval evalstr
+    
     names = opts.process args
     assert_options exp, opts
   end
