@@ -39,8 +39,8 @@ module DiffJ
       @from_source = SOURCE_DEFAULT
       @to_source = SOURCE_DEFAULT
 
-      @from_color = nil
-      @to_color = nil
+      @from_color = DEFAULT_FROM_COLOR_TEXT
+      @to_color = DEFAULT_TO_COLOR_TEXT
 
       @recurse = false
       @first_file_name = nil
@@ -51,8 +51,7 @@ module DiffJ
 
       homedir = Env::home_directory
       @rcfile = homedir && Pathname.new(homedir) + '.diffjrc'
-      info "rcfile: #{@rcfile}"
-
+      
       super do |op|
         op.banner = "Usage: diffj [options] from-file to-file"
         op.separator ""
@@ -67,7 +66,6 @@ module DiffJ
         end
         
         op.on "--[no-]highlight", "Use colors (context output only)" do |@highlight_output|
-          info "@highlight_output: #{@highlight_output}".bold.on_blue
           if @highlight_output
             @show_brief_output = false
           end
@@ -77,7 +75,6 @@ module DiffJ
         end
 
         op.on "--from-source VERSION", "The Java source version of from-file (default: #{SOURCE_DEFAULT})" do |@from_source|
-          stack "from-source: #{@from_source}".on_red
         end
         
         op.on "--to-source VERSION", "The Java source version of to-file (default: #{SOURCE_DEFAULT})" do |@to_source|
@@ -99,8 +96,6 @@ module DiffJ
         end
 
         op.on "-L", "--name NAME", "Set the first/second name to be displayed" do |name|
-          # info "name: #{name}".red
-
           if @first_file_name
             @second_file_name = name
           else
@@ -122,14 +117,9 @@ module DiffJ
     def parse_from_rcfile rcfile
       asopts = Array.new
 
-      info "rcfile: #{rcfile}"
-
       ::IO.readlines(rcfile).each do |line|
         line = line.chomp.strip.gsub %r{[^\\]\#.*}, ''
-        info "line: #{line}"
         name, value = line.split(%r{\s*[:=]\s*})
-
-        info "line: #{line}"
 
         if value == "true"
           asopts << "--#{name}"
@@ -139,8 +129,6 @@ module DiffJ
           asopts << "--#{name}" << value
         end
       end
-
-      info "asopts: #{asopts}".bold
 
       parse! asopts
     end

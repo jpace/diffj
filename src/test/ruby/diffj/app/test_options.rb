@@ -33,6 +33,8 @@ class DiffJOptionsTest < Test::Unit::TestCase
     assert_option allexpvals, :second, opts.second_file_name
     assert_option allexpvals, :help, opts.show_help
     assert_option allexpvals, :verbose, opts.verbose
+    assert_option allexpvals, :from_color, opts.from_color
+    assert_option allexpvals, :to_color, opts.to_color
   end
 
   def default_option_values
@@ -48,15 +50,14 @@ class DiffJOptionsTest < Test::Unit::TestCase
     values[:second] = nil
     values[:help] = false
     values[:verbose] = false
+    values[:from_color] = DiffJ::FDiff::Writer::ContextHighlightWriter::DEFAULT_FROM_COLOR_TEXT
+    values[:to_color] = DiffJ::FDiff::Writer::ContextHighlightWriter::DEFAULT_TO_COLOR_TEXT
     values
   end
 
   def run_test args, exp
-    # opts = org.incava.diffj.Options.new
     opts = DiffJ::Options.new
     names = opts.process args
-    # info "opts: #{opts}".bold.green
-    # info "args: #{args}".bold.green
     assert_options exp, opts
   end
 
@@ -159,12 +160,6 @@ class DiffJOptionsTest < Test::Unit::TestCase
 
     opts.parse_from_rcfile tf.path
 
-    # args = %w{  }
-
-    # names = opts.process args
-    # info "opts: #{opts}".bold.green
-    # info "args: #{args}".bold.green
-
     assert_options exp, opts
   end
 
@@ -195,6 +190,51 @@ class DiffJOptionsTest < Test::Unit::TestCase
             %w{ highlight false }
            ]
     exp = { :highlight => false }    
+    run_rcfile_test args, exp
+  end
+
+  def test_rcfile_option_multiples
+    args = [
+            %w{ context true },
+            %w{ source 1.4 }
+           ]
+    exp = { 
+      :brief => false,
+      :context => true,
+      :from => "1.4",
+      :to => "1.4",
+      :highlight => true,
+    }
+    run_rcfile_test args, exp
+  end
+
+  def test_rcfile_option_context_highlight_off
+    args = [
+            %w{ context true },
+            %w{ highlight false },
+           ]
+    exp = { 
+      :brief => false,
+      :context => true,
+      :highlight => false,
+    }
+    run_rcfile_test args, exp
+  end
+
+  def test_rcfile_option_context_colors
+    args = [
+            %w{ context true },
+            %w{ highlight true },
+            [ 'from-color', 'bold blue on green' ],
+            [ 'to-color', 'underscore magenta on cyan' ],
+           ]
+    exp = { 
+      :brief => false,
+      :context => true,
+      :highlight => true,
+      :from_color => 'bold blue on green',
+      :to_color => 'underscore magenta on cyan',
+    }
     run_rcfile_test args, exp
   end
 end

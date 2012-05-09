@@ -30,12 +30,11 @@ line-by-line.
 
 For example, the following are considered equivalent:
 
-<div width="100%" style="background: #111111; color: #EEEEEE; margin: 2em; padding: 0.25em 0.75em 0.75em 0.75em; ">
 <pre><code>
 Integer[] ary  =  new Integer[ index( str, ch ) + str.length( ) ];
 
 Integer[] ary = new Integer[index(str, ch) + str.length()];
-</code></pre></div>
+</code></pre>
 
 **Ignoring whitespace**. DiffJ ignores whitespace when comparing code, so it
 works well when, for example, tabs have been replaced with spaces, when
@@ -58,7 +57,6 @@ as a change.
 **Showing added and deleted declarations**: DiffJ reports declarations that have
 been added and deleted, described by their Java type. For example:
 
-<table width="100%" style="background: #111111; color: #EEEEEE; margin: 2em; padding: 0.25em 0.75em 0.75em 0.75em; ">
 <pre><code>
 d0/Removed.java <=> d1/Removed.java
 2,3d1,4 method removed: contender(Double[], StringBuilder)
@@ -68,7 +66,7 @@ d0/Removed.java <=> d1/Removed.java
   
       public void contender() {
       }
-</code></pre></table>
+</code></pre>
 
 **Showing parameters**: DiffJ reports constructor and methods parameters that have
 been added, deleted, and changed:
@@ -114,3 +112,16 @@ d0/Changed.java <=> d1/Changed.java
     <a href="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png" target="_blank">
     <img src="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png" alt="codechange statement" style="max-width:100%;"/></a></p>
 </p>
+
+**Configuration files**: DiffJ looks for a configuration file as ~/.diffrc, and
+uses the name/value pairs there for its options. All options are supported, with
+the syntax "name: value". For boolean options (such as
+--highlight/--no-highlight), the value should be either true or false.
+
+As an example, the following file sets DiffJ to use the source version as 1.6,
+and to show context with non-default colors:
+
+    context: true
+    highlight: true
+    from-color: bold blue on green
+    to-color: underscore magenta on cyan
