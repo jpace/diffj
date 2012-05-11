@@ -31,9 +31,9 @@ line-by-line.
 For example, the following are considered equivalent:
 
 <pre><code>
-Integer[] ary  =  new Integer[ index( str, ch ) + str.length( ) ];
+    Integer[] ary  =  new Integer[ index( str, ch ) + str.length( ) ];
 
-Integer[] ary = new Integer[index(str, ch) + str.length()];
+    Integer[] ary = new Integer[index(str, ch) + str.length()];
 </code></pre>
 
 **Ignoring whitespace**. DiffJ ignores whitespace when comparing code, so it
@@ -51,7 +51,7 @@ constructors).
 consider reordered import statements to be a change in the code.
 
 **Ignoring comments**: DiffJ skips comments when comparing code. Thus comments
-that has been updated (perhaps as a result of running DoctorJ) will not be seen
+that have been updated (perhaps as a result of running DoctorJ) will not be seen
 as a change.
 
 **Showing added and deleted declarations**: DiffJ reports declarations that have
@@ -125,3 +125,12 @@ and to show context with non-default colors:
     highlight: true
     from-color: bold blue on green
     to-color: underscore magenta on cyan
+
+
+OPTIONS
+-------
+
+<table>
+<tr><td><b>--brief</b></td><td>Display output in brief form</td></tr>
+</table>
+
