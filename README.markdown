@@ -131,6 +131,48 @@ OPTIONS
 -------
 
 <table>
-<tr><td><b>--brief</b></td><td>Display output in brief form</td></tr>
-</table>
+<tr><td>
+`--brief`
+  Display output in brief form.
 
+`--context`
+  Show context (non-brief form only).
+
+`--[no-]highlight`
+  Use colors (context output only).
+
+`--recurse`
+  Process directories recursively.
+
+`--from-source VERSION`
+  The Java source version of from-file (default: 1.5).
+
+`--to-source VERSION`
+  The Java source version of to-file (default: 1.5).
+
+`--from-color COLOR`
+  The text color of the from-file text (default: red).
+
+`--to-color COLOR`
+  The text color of the to-file text (default: yellow).
+
+`--source VERSION`
+  The Java source version of from-file and to-file (default: 1.5).
+
+`-u`
+  Output unified context. Unused; exists for compatibility with GNU diff.
+
+`-L NAME`
+`--name NAME`
+  Set the first/second name to be displayed.
+
+`--verbose`
+  Run in verbose mode (for debugging).
+
+`-h`
+`--help`
+  Show help summary.
+
+`-v`
+`--version`
+  Display the version.
