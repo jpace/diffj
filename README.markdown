@@ -30,9 +30,8 @@ line-by-line.
 
 For example, the following are considered equivalent:
 
-<pre><code>
-    Integer[] ary  =  new Integer[ index( str, ch ) + str.length( ) ];
-
+<pre><code>    Integer[] ary  =  new Integer[ index( str, ch ) + str.length( ) ];
+    
     Integer[] ary = new Integer[index(str, ch) + str.length()];
 </code></pre>
 
@@ -61,8 +60,8 @@ been added and deleted, described by their Java type. For example:
 d0/Removed.java <=> d1/Removed.java
 2,3d1,4 method removed: contender(Double[], StringBuilder)
   class Removed {
-!     public <span style="color: red; background: black">void contender(Double[] dary, StringBuilder sb) {</span>
-!     <span style="color: red; background: black">}</span>
+!     public <span class="s0">void contender(Double[] dary, StringBuilder sb) {</span>
+!     <span class="p">}</span>
   
       public void contender() {
       }
@@ -116,7 +115,7 @@ d0/Changed.java <=> d1/Changed.java
 **Configuration files**: DiffJ looks for a configuration file as ~/.diffrc, and
 uses the name/value pairs there for its options. All options are supported, with
 the syntax "name: value". For boolean options (such as
---highlight/--no-highlight), the value should be either true or false.
+`--highlight`/`--no-highlight`), the value should be either true or false.
 
 As an example, the following file sets DiffJ to use the source version as 1.6,
 and to show context with non-default colors:
@@ -130,49 +129,67 @@ and to show context with non-default colors:
 OPTIONS
 -------
 
-<table>
-<tr><td>
-`--brief`
-  Display output in brief form.
+    --brief   
+        Display output in brief form.
 
-`--context`
-  Show context (non-brief form only).
+    --context
+        Show context (non-brief form only).
 
-`--[no-]highlight`
-  Use colors (context output only).
+    --[no-]highlight
+        Use colors (context output only).
 
-`--recurse`
-  Process directories recursively.
+    --recurse
+        Process directories recursively.
 
-`--from-source VERSION`
-  The Java source version of from-file (default: 1.5).
+    --from-source VERSION
+        The Java source version of from-file (default: 1.5).
 
-`--to-source VERSION`
-  The Java source version of to-file (default: 1.5).
+    --to-source VERSION
+        The Java source version of to-file (default: 1.5).
 
-`--from-color COLOR`
-  The text color of the from-file text (default: red).
+    --from-color COLOR
+        The text color of the from-file text (default: red).
 
-`--to-color COLOR`
-  The text color of the to-file text (default: yellow).
+    --to-color COLOR
+        The text color of the to-file text (default: yellow).
 
-`--source VERSION`
-  The Java source version of from-file and to-file (default: 1.5).
+    --source VERSION
+        The Java source version of from-file and to-file (default: 1.5).
 
-`-u`
-  Output unified context. Unused; exists for compatibility with GNU diff.
+    -u
+        Output unified context. Unused; exists for compatibility with GNU diff.
 
-`-L NAME`
-`--name NAME`
-  Set the first/second name to be displayed.
+    -L NAME  --name NAME
+        Set the first/second name to be displayed. This is useful for diffing
+        with an external program, such as svn, where the file names are the temp
+        files, and which passes in the real names as arguments.
 
-`--verbose`
-  Run in verbose mode (for debugging).
+    --verbose
+        Run in verbose mode (for debugging).
 
-`-h`
-`--help`
-  Show help summary.
+    -h  --help
+        Show help summary.
 
-`-v`
-`--version`
-  Display the version.
+    -v  --version
+        Display the version.
+
+EXAMPLES
+--------
+
+    % diffj old/Foo.java new/Foo.java
+        Compares the two files, in the brief output format.
+
+    % diffj --context branches/3.1.4 trunk
+        Compares the files in the two directories, reporting their differences
+        with context.
+
+    % diffj --highlight -r branches/3.1.4 branches/3.1.5
+        Compares the two directories recursively, reporting their differences
+        with context, and changes highlighted.
+
+    % diffj --highlight --from-color "bold red on white" --to-color "cyan on black" ../v1.2.3 .
+        Displays differences in the given colors.
+
+    % diffj --from-source 1.4 --to-source 1.6 -r ~myproj/old ~myproj/current
+        Compares the code, using Java 1.4 and 1.6 as the source for the from-
+        and the to-files.
