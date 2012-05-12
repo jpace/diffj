@@ -89,27 +89,12 @@ and columns) of code changes, and the output (in context and highlight mode)
 displays the exact change. Thus if a variable changes within a line of code,
 that variable itself is highlighted for the from- and to-files.
 
-<div width="100%" style="background: #111111; color: #EEEEEE; margin: 2em; padding: 0.25em 0.75em 0.75em 0.75em; ">
-<pre><code>
-d0/Changed.java <=> d1/Changed.java
-3c3 code changed in meth(String, char)
-  class Changed {
-      void meth(String str, char ch) {
-!         Integer[ ]  ary  =  new Integer[ <span style="color: red">str.indexOf ( ch, 317 ) + str.length ( )</span> ];
-      }
-  }
-
-  class Changed {
-      void meth(String str, char ch) {
-!         Integer[] ary = new Integer[<span style="color: yellow">10 + str.length() + ch</span>];
-      }
-  }
-</code></pre></div>
-
 <p>
-
+<center>
     <a href="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png" target="_blank">
-    <img src="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png" alt="codechange statement" style="max-width:100%;"/></a></p>
+    <img src="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png"
+    alt="codechange statement" style="max-width:100%; float: center"/></a></p>
+</center>
 </p>
 
 **Configuration files**: DiffJ looks for a configuration file as ~/.diffrc, and
