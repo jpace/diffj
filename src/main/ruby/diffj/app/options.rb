@@ -118,7 +118,7 @@ module DiffJ
       asopts = Array.new
 
       ::IO.readlines(rcfile).each do |line|
-        line = line.chomp.strip.gsub %r{[^\\]\#.*}, ''
+        line = line.chomp.strip.gsub %r{\#.*}, ''
         name, value = line.split(%r{\s*[:=]\s*})
 
         if value == "true"

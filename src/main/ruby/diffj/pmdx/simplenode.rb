@@ -152,4 +152,40 @@ class Java::net.sourceforge.pmd.ast::SimpleNode
     end
     nil
   end
+  
+  def dump_node indent = "", recurse = true
+    info "#{indent}#{inspect}"
+    
+    tk = get_first_token
+    ltk = get_last_token
+
+    while tk != ltk
+      info "#{indent}tk: #{tk.inspect}"
+      info "#{indent}tk: #{tk.kind}; #{tk.image}"
+      tk = tk.next
+    end
+
+    info "#{indent}tk: #{tk.inspect}"
+    info "#{indent}tk: #{tk.kind}; #{tk.image}"
+
+    # ldg = leading_tokens 
+    # info "ldg: #{ldg}"
+
+    n_children = jjt_get_num_children
+    info "#{indent}n_children: #{n_children}"
+
+    (0 ... n_children).each do |ci|
+      child = jjt_get_child ci
+      info "#{indent}child: #{child}"
+
+      if recurse
+        child.dump_node indent + "    ", recurse
+      end
+    end
+
+    tokens.each do |tk|
+      info "#{indent}#{tk}"
+    end
+  end
+
 end

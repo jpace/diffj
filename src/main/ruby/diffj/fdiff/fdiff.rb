@@ -99,8 +99,6 @@ module DiffJ
     end
 
     def to_s
-      return "foo" if true
-      
       str = "["
       str << @diff_type.to_s
       str << " from: " << @first_location.to_s

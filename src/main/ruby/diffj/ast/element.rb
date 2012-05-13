@@ -26,6 +26,8 @@ module DiffJ
 
     def changed *args
       chgobj = Change.new args
+      info "chgobj: #{chgobj}".bold.green
+      info "chgobj.filediff: #{chgobj.filediff}".bold.green
       @filediffs << chgobj.filediff
     end
 

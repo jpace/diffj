@@ -13,6 +13,9 @@ require 'diffj/ast/innertypedecl'
 include Java
 
 module DiffJ
+  class SupertypeComparator < ElementComparator    
+  end
+
   class TypeComparator < ItemComparator
     include Loggable
 
@@ -75,7 +78,13 @@ module DiffJ
     
     def compare_imp_ext from_type, to_type, msgs, ext_imp_class_name
       from_map = get_ext_imp_map from_type, ext_imp_class_name
-      to_map = get_ext_imp_map to_type, ext_imp_class_name
+      to_map   = get_ext_imp_map to_type,   ext_imp_class_name
+
+      info "from_map: #{from_map}".bold.cyan
+      info "to_map: #{to_map}".bold.cyan
+
+      info "from_type: #{from_type}".bold.cyan
+      info "to_type: #{to_type}".bold.cyan
 
       # change from x to y, instead of "add x, remove y"
       
@@ -93,12 +102,19 @@ module DiffJ
         type_names = from_map.keys + to_map.keys
 
         type_names.each do |type_name|
+          info "type_name: #{type_name}".bold.cyan
+
           from = from_map[type_name]
           to = to_map[type_name]
 
+          info "from: #{from}".bold.cyan
+          info "to: #{to}".bold.cyan
+
           if from.nil?
+            to.dump_node ""
             changed from_type, to, msgs[0], type_name
           elsif to.nil?
+            from.dump_node "-----".blue
             changed from, to_type, msgs[1], type_name
           end
         end
