@@ -13,11 +13,99 @@ require 'diffj/ast/innertypedecl'
 include Java
 
 module DiffJ
+  module TypeMessages
+    EXTENDED_TYPE_REMOVED = "extended type removed: {0}"
+    EXTENDED_TYPE_ADDED = "extended type added: {0}"
+    EXTENDED_TYPE_CHANGED = "extended type changed from {0} to {1}"
+    EXTENDED_TYPE_MSGS = [ EXTENDED_TYPE_ADDED, EXTENDED_TYPE_REMOVED, EXTENDED_TYPE_CHANGED ]
+
+    IMPLEMENTED_TYPE_REMOVED = "implemented type removed: {0}"
+    IMPLEMENTED_TYPE_ADDED = "implemented type added: {0}"
+    IMPLEMENTED_TYPE_CHANGED = "implemented type changed from {0} to {1}"
+    IMPLEMENTED_TYPE_MSGS = [ IMPLEMENTED_TYPE_ADDED, IMPLEMENTED_TYPE_REMOVED, IMPLEMENTED_TYPE_CHANGED ]
+  end
+
   class SupertypeComparator < ElementComparator    
+    include TypeMessages
+
+    def initialize filediffs, from_type, to_type
+      super filediffs
+      compare from_type, to_type
+    end
+
+    def get_supertype_map coid
+      map = Hash.new
+      if list = coid.find_child(ast_type)
+        types = list.find_children "net.sourceforge.pmd.ast.ASTClassOrInterfaceType"
+        types.each do |type|
+          map[type.to_string] = type
+        end
+      end
+      map
+    end
+    
+    def compare from_type, to_type
+      msgs = messages
+      from_map = get_supertype_map from_type
+      to_map   = get_supertype_map to_type
+
+      # change from x to y, instead of "add x, remove y"
+      
+      if from_map.length == 1 && to_map.length == 1
+        from_name = from_map.keys[0]
+        to_name = to_map.keys[0]
+
+        if from_name != to_name
+          from = from_map[from_name]
+          to = to_map[to_name]
+                
+          changed from, to, messages[2], from_name, to_name
+        end
+      else
+        type_names = from_map.keys + to_map.keys
+
+        type_names.each do |type_name|
+          from = from_map[type_name]
+          to = to_map[type_name]
+
+          # we narrow the difference to the supertype list, if there is one.
+          # otherwise it's the whole class, which is often excessive.
+
+          if from.nil?
+            stlist = from_type.find_child(ast_type) || from_type
+            changed stlist, to, messages[0], type_name
+          elsif to.nil?
+            stlist = to_type.find_child(ast_type) || to_type
+            changed from, stlist, messages[1], type_name
+          end
+        end
+      end
+    end
+    
+  end
+
+  class ImplementsComparator < SupertypeComparator
+    def messages 
+      IMPLEMENTED_TYPE_MSGS
+    end
+
+    def ast_type
+      "net.sourceforge.pmd.ast.ASTImplementsList"
+    end
+  end
+
+  class ExtendsComparator < SupertypeComparator
+    def messages 
+      EXTENDED_TYPE_MSGS
+    end
+
+    def ast_type
+      "net.sourceforge.pmd.ast.ASTExtendsList"
+    end
   end
 
   class TypeComparator < ItemComparator
-    include Loggable
+    include Loggable, TypeMessages
 
     TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface"
     TYPE_CHANGED_FROM_INTERFACE_TO_CLASS = "type changed from interface to class"
@@ -40,16 +128,6 @@ module DiffJ
     INNER_CLASS_REMOVED = "inner class removed: {0}"
     INNER_CLASS_MSGS = [ INNER_CLASS_ADDED, INNER_CLASS_REMOVED ]
 
-    EXTENDED_TYPE_REMOVED = "extended type removed: {0}"
-    EXTENDED_TYPE_ADDED = "extended type added: {0}"
-    EXTENDED_TYPE_CHANGED = "extended type changed from {0} to {1}"
-    EXTENDED_TYPE_MSGS = [ EXTENDED_TYPE_ADDED, EXTENDED_TYPE_REMOVED, EXTENDED_TYPE_CHANGED ]
-
-    IMPLEMENTED_TYPE_REMOVED = "implemented type removed: {0}"
-    IMPLEMENTED_TYPE_ADDED = "implemented type added: {0}"
-    IMPLEMENTED_TYPE_CHANGED = "implemented type changed from {0} to {1}"
-    IMPLEMENTED_TYPE_MSGS = [ IMPLEMENTED_TYPE_ADDED, IMPLEMENTED_TYPE_REMOVED, IMPLEMENTED_TYPE_CHANGED ]
-
     VALID_TYPE_MODIFIERS = [
                             ::Java::net.sourceforge.pmd.ast.JavaParserConstants.ABSTRACT,
                             ::Java::net.sourceforge.pmd.ast.JavaParserConstants.FINAL,
@@ -58,67 +136,11 @@ module DiffJ
                            ]
 
     def compare_extends from_type, to_type
-      compare_imp_ext from_type, to_type, EXTENDED_TYPE_MSGS, "net.sourceforge.pmd.ast.ASTExtendsList"
+      ExtendsComparator.new filediffs, from_type, to_type
     end
 
     def compare_implements from_type, to_type
-      compare_imp_ext from_type, to_type, IMPLEMENTED_TYPE_MSGS, "net.sourceforge.pmd.ast.ASTImplementsList"
-    end
-
-    def get_ext_imp_map coid, ext_imp_class_name
-      map = Hash.new
-      if list = coid.find_child(ext_imp_class_name)
-        types = list.find_children "net.sourceforge.pmd.ast.ASTClassOrInterfaceType"
-        types.each do |type|
-          map[type.to_string] = type
-        end
-      end
-      map
-    end
-    
-    def compare_imp_ext from_type, to_type, msgs, ext_imp_class_name
-      from_map = get_ext_imp_map from_type, ext_imp_class_name
-      to_map   = get_ext_imp_map to_type,   ext_imp_class_name
-
-      info "from_map: #{from_map}".bold.cyan
-      info "to_map: #{to_map}".bold.cyan
-
-      info "from_type: #{from_type}".bold.cyan
-      info "to_type: #{to_type}".bold.cyan
-
-      # change from x to y, instead of "add x, remove y"
-      
-      if from_map.length == 1 && to_map.length == 1
-        from_name = from_map.keys[0]
-        to_name = to_map.keys[0]
-
-        if from_name != to_name
-          from = from_map[from_name]
-          to = to_map[to_name]
-                
-          changed from, to, msgs[2], from_name, to_name
-        end
-      else
-        type_names = from_map.keys + to_map.keys
-
-        type_names.each do |type_name|
-          info "type_name: #{type_name}".bold.cyan
-
-          from = from_map[type_name]
-          to = to_map[type_name]
-
-          info "from: #{from}".bold.cyan
-          info "to: #{to}".bold.cyan
-
-          if from.nil?
-            to.dump_node ""
-            changed from_type, to, msgs[0], type_name
-          elsif to.nil?
-            from.dump_node "-----".blue
-            changed from, to_type, msgs[1], type_name
-          end
-        end
-      end
+      ImplementsComparator.new filediffs, from_type, to_type
     end
 
     def compare_declarations from_node, to_node
