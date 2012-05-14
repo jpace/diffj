@@ -68,18 +68,12 @@ module DiffJ
           from = from_map[type_name]
           to = to_map[type_name]
 
-          # we narrow the difference to the supertype list, if there is one.
-          # otherwise it's the whole class, which is often excessive.
-
-          from.dump_node("****") if from
-          to.dump_node("----") if to
-
           if from.nil?
             stlist = from_type.find_child(ast_type) || from_type
-            changed stlist, to, messages[0], type_name
+            added stlist, to, messages[0], type_name
           elsif to.nil?
             stlist = to_type.find_child(ast_type) || to_type
-            changed from, stlist, messages[1], type_name
+            deleted from, stlist, messages[1], type_name
           end
         end
       end
