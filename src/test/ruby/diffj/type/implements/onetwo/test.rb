@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'diffj/type/implements/tc'
-require 'diffj/ast/type'
 
 include Java
 
