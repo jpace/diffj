@@ -71,6 +71,9 @@ module DiffJ
           # we narrow the difference to the supertype list, if there is one.
           # otherwise it's the whole class, which is often excessive.
 
+          from.dump_node("****") if from
+          to.dump_node("----") if to
+
           if from.nil?
             stlist = from_type.find_child(ast_type) || from_type
             changed stlist, to, messages[0], type_name
