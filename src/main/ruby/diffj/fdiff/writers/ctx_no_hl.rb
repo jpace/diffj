@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/fdiff/writers/context'
 

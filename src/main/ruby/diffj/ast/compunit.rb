@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/ast/package'
 require 'diffj/ast/imports'

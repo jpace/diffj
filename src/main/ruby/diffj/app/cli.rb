@@ -1,14 +1,17 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'java'
-require 'riel'
-require 'diffj/app/processor'
-require 'diffj/app/options'
-require 'diffj/util/exception'
+def time_req what
+  start = Time.now
+  require what
+  puts "#{Time.new - start}: #{what}"
+end
 
-include Java
+time_req 'rubygems'
+time_req 'riel/log'
+time_req 'diffj/app/processor'
+time_req 'diffj/app/options'
+time_req 'diffj/util/exception'
 
 Log.set_widths(-15, 5, -50)
 
@@ -53,8 +56,9 @@ module DiffJ
                     opts.recurse,
                     opts.first_file_name, opts.from_source,
                     opts.second_file_name, opts.to_source)
-        
+
         diffj.process_names names
+
         Log.info "diffj.exit_value: #{diffj.exit_value}"
         diffj.exit_value
       end

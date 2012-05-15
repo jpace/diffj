@@ -2,10 +2,7 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
-require 'java'
-
-include Java
+require 'riel/log'
 
 module DiffJ
   module DiffLCS

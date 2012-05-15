@@ -2,15 +2,13 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log'
 require 'java'
 require 'diffj/ast/item'
 
 include Java
 
 class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
-  include Loggable
-
   def initialize diffs, clsname
     super diffs
     @clsname = clsname

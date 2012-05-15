@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'set'
 require 'diffj/ast'
@@ -15,8 +13,6 @@ include Java
 module DiffJ
   module IO
     class File < Element
-      include Loggable
-      
       class << self
         def create_file dir, other_elmt
           pn = Pathname.new(dir) + other_elmt.basename.to_s

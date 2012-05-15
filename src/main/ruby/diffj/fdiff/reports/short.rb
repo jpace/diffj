@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log'
 require 'java'
 require 'diffj/fdiff/reports/report'
 

@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/ast/item'
 require 'diffj/ast/function'
@@ -11,7 +9,6 @@ include Java
 
 module DiffJ
   class MethodComparator < FunctionComparator
-    include Loggable
 
     METHOD_BLOCK_ADDED = "method block added"
     METHOD_BLOCK_REMOVED = "method block removed"

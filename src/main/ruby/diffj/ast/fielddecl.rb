@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/ast/typeitemdecl'
 require 'diffj/ast/field'
@@ -10,8 +8,6 @@ require 'diffj/ast/field'
 include Java
 
 class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
-  include Loggable
-
   def initialize diffs
     super diffs, "net.sourceforge.pmd.ast.ASTFieldDeclaration"
   end

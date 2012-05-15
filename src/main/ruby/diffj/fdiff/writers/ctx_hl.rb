@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/fdiff/writers/context'
 require 'riel/text'

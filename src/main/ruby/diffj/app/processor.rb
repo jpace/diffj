@@ -1,9 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'java'
-require 'riel'
 require 'diffj/io'
 require 'diffj/fdiff/reports/short'
 require 'diffj/fdiff/reports/long'
@@ -11,12 +8,8 @@ require 'diffj/fdiff/writers/ctx_hl'
 require 'diffj/fdiff/writers/ctx_no_hl'
 require 'diffj/fdiff/writers/no_context'
 
-include Java
-
 module DiffJ
   class Processor
-    include Loggable
-    
     attr_reader :exit_value
     attr_reader :report
     

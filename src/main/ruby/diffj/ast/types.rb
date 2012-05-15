@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/ast/element'
 require 'diffj/ast/type'
@@ -11,7 +9,6 @@ include Java
 
 module DiffJ
   class TypesComparator < ElementComparator
-    include Loggable
 
     TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface"
     TYPE_CHANGED_FROM_INTERFACE_TO_CLASS = "type changed from interface to class"

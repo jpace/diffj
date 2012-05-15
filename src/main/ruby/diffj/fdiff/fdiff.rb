@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log'
 require 'java'
 require 'diffj/io/location'
 require 'diffj/io/locrange'

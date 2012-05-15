@@ -2,12 +2,9 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
-require 'java'
+require 'riel/log'
 require 'diffj/util/diff/delta'
 require 'diffj/util/diff/lcs'
-
-include Java
 
 module DiffJ
   # returns longest common subsequences within two enumerables

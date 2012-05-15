@@ -1,21 +1,14 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
-require 'java'
 require 'set'
 require 'diffj/ast'
 require 'diffj/io/element'
 require 'diffj/io/file'
 
-include Java
-
 module DiffJ
   module IO
     class Directory < Element
-      include Loggable
-
       def initialize file, srcver, recurse
         super file.to_s, srcver
         info "file: #{file}"

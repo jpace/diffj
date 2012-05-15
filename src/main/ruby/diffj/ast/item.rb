@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/ast/element'
 require 'diffj/util/diff/lcs'
@@ -14,8 +12,6 @@ include DiffJ::IO
 
 module DiffJ
   class ItemComparator < ElementComparator
-    include Loggable
-
     MODIFIER_REMOVED = "modifier removed: {0}"
     MODIFIER_ADDED = "modifier added: {0}"
     MODIFIER_CHANGED = "modifier changed from {0} to {1}"

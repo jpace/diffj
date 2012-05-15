@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/ast/element'
 
@@ -10,7 +8,6 @@ include Java
 
 module DiffJ
   class PackageComparator < ElementComparator
-    include Loggable
     
     PACKAGE_REMOVED = "package removed: {0}"
     PACKAGE_ADDED = "package added: {0}"

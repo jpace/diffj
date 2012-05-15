@@ -2,14 +2,12 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
-require 'java'
+require 'riel/pathname'
+require 'riel/log'
 require 'diffj/ast'
 require 'diffj/io/directory'
 require 'diffj/io/file'
 require 'diffj/util/exception'
-
-include Java
 
 module DiffJ
   module IO

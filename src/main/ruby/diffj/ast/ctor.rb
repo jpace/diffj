@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/ast/item'
 require 'diffj/ast/function'
@@ -11,8 +9,6 @@ include Java
 
 module DiffJ
   class CtorComparator < FunctionComparator
-    include Loggable
-
     def compare_parameters from, to
       super from.parameters, to.parameters
     end

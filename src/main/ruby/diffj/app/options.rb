@@ -3,8 +3,8 @@
 
 require 'rubygems'
 require 'java'
-require 'riel'
 require 'optparse'
+require 'riel/env'
 require 'diffj/fdiff/writers/ctx_hl'
 
 include Java

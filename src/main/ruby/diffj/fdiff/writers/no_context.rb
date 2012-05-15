@@ -2,9 +2,9 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/fdiff/writers/writer'
+require 'riel/log'
 
 include Java
 

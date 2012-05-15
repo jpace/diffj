@@ -1,12 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
-require 'java'
-
-include Java
-
 module DiffJ
   module IO
     class LocationRange

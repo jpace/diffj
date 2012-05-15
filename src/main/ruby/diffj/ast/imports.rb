@@ -1,8 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'java'
 require 'diffj/ast/element'
 
@@ -10,7 +8,6 @@ include Java
 
 module DiffJ
   class ImportsComparator < ElementComparator
-    include Loggable
 
     IMPORT_REMOVED = "import removed: {0}"
     IMPORT_ADDED = "import added: {0}"
