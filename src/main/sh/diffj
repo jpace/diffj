@@ -1,0 +1,3 @@
+#!/bin/sh -f
+
+java -client -Djruby.compile.mode=OFF -jar /proj/org/incava/diffj/diffj-1.3.0.jar $*
