@@ -1,9 +1,8 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel/log'
 require 'diffj/util/diff/thresholds'
+require 'riel/log'
 
 module DiffJ
   # returns longest common subsequences within two enumerables
