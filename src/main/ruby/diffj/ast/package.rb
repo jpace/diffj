@@ -1,10 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/ast/element'
-
-include Java
 
 module DiffJ
   class PackageComparator < ElementComparator

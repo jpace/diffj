@@ -1,12 +1,8 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel/log'
 require 'java'
 require 'diffj/ast/item'
-
-include Java
 
 class DiffJ::TypeItemDeclComparator < DiffJ::ItemComparator
   def initialize diffs, clsname

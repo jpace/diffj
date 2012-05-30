@@ -1,11 +1,8 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/ast/typeitemdecl'
 require 'diffj/ast/type'
-
-include Java
 
 class DiffJ::InnerTypeComparator < DiffJ::TypeItemDeclComparator
   def initialize diffs, typecomp
@@ -18,8 +15,6 @@ class DiffJ::InnerTypeComparator < DiffJ::TypeItemDeclComparator
   end
 
   def do_compare from, to
-    info "from: #{from}; #{from.class}"
-    info "to: #{to}; #{to.class}"
     @typecomp.compare_coids from, to
   end
 

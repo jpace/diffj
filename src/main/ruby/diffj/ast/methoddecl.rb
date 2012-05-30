@@ -1,13 +1,10 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/ast/typeitemdecl'
 require 'diffj/ast/type'
 require 'diffj/ast/method'
 require 'diffj/pmdx'
-
-include Java
 
 module DiffJ
   class MethodDeclComparator < DiffJ::TypeItemDeclComparator

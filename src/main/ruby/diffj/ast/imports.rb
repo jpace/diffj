@@ -1,10 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/ast/element'
-
-include Java
 
 module DiffJ
   class ImportsComparator < ElementComparator
@@ -61,8 +58,6 @@ module DiffJ
     def compare_import_blocks fromimports, toimports
       from_names_to_imps = make_import_map fromimports
       to_names_to_imps = make_import_map toimports
-      info "from_names_to_imps: #{from_names_to_imps}"
-      info "to_names_to_imps: #{to_names_to_imps}"
 
       names = from_names_to_imps.keys + to_names_to_imps.keys
 

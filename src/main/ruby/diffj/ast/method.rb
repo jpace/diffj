@@ -5,8 +5,6 @@ require 'java'
 require 'diffj/ast/item'
 require 'diffj/ast/function'
 
-include Java
-
 module DiffJ
   class MethodComparator < FunctionComparator
 

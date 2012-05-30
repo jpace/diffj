@@ -1,11 +1,8 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/ast/element'
 require 'diffj/ast/type'
-
-include Java
 
 module DiffJ
   class TypesComparator < ElementComparator

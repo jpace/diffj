@@ -1,11 +1,8 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/ast/typeitemdecl'
 require 'diffj/ast/field'
-
-include Java
 
 class DiffJ::FieldDeclComparator < DiffJ::TypeItemDeclComparator
   def initialize diffs

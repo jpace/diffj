@@ -1,12 +1,9 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/ast/typeitemdecl'
 require 'diffj/ast/type'
 require 'diffj/ast/ctor'
-
-include Java
 
 class DiffJ::CtorDeclComparator < DiffJ::TypeItemDeclComparator
 

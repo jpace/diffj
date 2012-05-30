@@ -4,8 +4,6 @@
 require 'java'
 require 'diffj/ast/item'
 
-include Java
-
 module DiffJ
   class FieldComparator < ItemComparator
     VARIABLE_REMOVED = "variable removed: {0}"

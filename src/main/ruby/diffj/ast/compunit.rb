@@ -1,12 +1,9 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/ast/package'
 require 'diffj/ast/imports'
 require 'diffj/ast/types'
-
-include Java
 
 module DiffJ
   class CompUnitComparator

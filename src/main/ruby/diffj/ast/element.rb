@@ -1,12 +1,9 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
 require 'riel/log'
 require 'java'
 require 'diffj/fdiff/delta'
-
-include Java
 
 module DiffJ
   class ElementComparator
@@ -26,8 +23,6 @@ module DiffJ
 
     def changed *args
       chgobj = Change.new args
-      info "chgobj: #{chgobj}".bold.green
-      info "chgobj.filediff: #{chgobj.filediff}".bold.green
       @filediffs << chgobj.filediff
     end
 

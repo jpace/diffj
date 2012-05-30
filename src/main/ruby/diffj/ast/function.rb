@@ -1,12 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel/log'
-require 'java'
 require 'diffj/ast/item'
-
-include Java
 
 module DiffJ
   module ParamDiff
@@ -34,7 +29,7 @@ module DiffJ
   end
 
   class ParamLists
-    include ParamDiff, Loggable
+    include ParamDiff
 
     attr_reader :from
     attr_reader :to

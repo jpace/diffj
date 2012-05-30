@@ -8,8 +8,6 @@ require 'diffj/ast/fielddecl'
 require 'diffj/ast/ctordecl'
 require 'diffj/ast/innertypedecl'
 
-include Java
-
 module DiffJ
   module TypeMessages
     EXTENDED_TYPE_REMOVED = "extended type removed: {0}"
