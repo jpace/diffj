@@ -1,10 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'java'
 require 'diffj/fdiff/writers/writer'
-
-include Java
 
 module DiffJ
   module FDiff

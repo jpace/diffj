@@ -1,12 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'java'
 require 'diffj/fdiff/writers/writer'
-require 'riel/log'
-
-include Java
 
 module DiffJ
   module FDiff

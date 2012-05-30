@@ -1,7 +1,6 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
 require 'riel/log'
 require 'java'
 require 'diffj/fdiff/fdiff'

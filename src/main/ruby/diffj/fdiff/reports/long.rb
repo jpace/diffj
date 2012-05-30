@@ -1,23 +1,16 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel/log'
-require 'java'
 require 'diffj/fdiff/reports/report'
 require 'diffj/fdiff/writers/ctx_hl'
 require 'diffj/fdiff/writers/ctx_no_hl'
 require 'diffj/fdiff/writers/no_context'
-
-include Java
 
 include DiffJ::FDiff::Writer
 
 # Reports differences in long form.
 module DiffJ::FDiff::Report
   class LongReport < BaseReport
-    include Loggable
-    
     def initialize writer, context_opts = Hash.new
       super writer
 

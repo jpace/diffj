@@ -1,12 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel/log'
-require 'java'
 require 'diffj/fdiff/reports/report'
-
-include Java
 
 # Reports differences in short form. 
 module DiffJ::FDiff::Report
