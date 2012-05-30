@@ -3,4 +3,3 @@
 
 require 'diffj/ast/compunit'
 require 'diffj/pmdx'
-
