@@ -1,17 +1,10 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-def time_req what
-  start = Time.now
-  require what
-  puts "#{Time.new - start}: #{what}"
-end
-
-time_req 'rubygems'
-time_req 'riel/log'
-time_req 'diffj/app/processor'
-time_req 'diffj/app/options'
-time_req 'diffj/util/exception'
+require 'riel/log'
+require 'diffj/app/processor'
+require 'diffj/app/options'
+require 'diffj/util/exception'
 
 Log.set_widths(-15, 5, -50)
 
