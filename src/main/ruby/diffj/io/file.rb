@@ -3,7 +3,6 @@
 
 require 'java'
 require 'set'
-require 'diffj/ast'
 require 'diffj/io/element'
 require 'diffj/io/factory'
 require 'diffj/util/exception'

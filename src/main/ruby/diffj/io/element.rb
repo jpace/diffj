@@ -1,11 +1,7 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
-require 'rubygems'
 require 'riel/log'
-require 'java'
-
-include Java
 
 module DiffJ
   module IO
