@@ -9,7 +9,7 @@ public class DiffJLauncher {
 
     public static void log(String msg) {
         long currTime = System.currentTimeMillis();
-        System.out.printf("%10d %4d %s\n", currTime, currTime - start, msg);
+        // System.out.printf("%10d %4d %s\n", currTime, currTime - start, msg);
     }
 
     public static void main(String[] args) {
