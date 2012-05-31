@@ -143,12 +143,10 @@ task "jruby:compile" => [ :setup, $clsmaindir ] do
 end
 
 task "jruby:jar" => [ "java:compile", "jruby:compile" ] do
-  # sh "jar -cfm diffj.jar src/main/jar/launcher.manifest -C #{$clsmaindir} . -C #{$srcmainrubydir} . -C tmp ."
   cmd  = "jar -cfm #{$diffj_jr_jar} src/main/jar/launcher.manifest "
   cmd << "-C #{$clsmaindir} org/incava/diffj/DiffJLauncher.class "
   # this is PMD and JRuby combined, since jar whines about duplicate directories (such as "org"):
   cmd << "-C vendor/all . "
-  cmd << "-C vendor/gem . "
   cmd << "-C #{$srcmainrubydir} . "
   sh cmd
 end
@@ -159,4 +157,3 @@ task "jruby:tests" => "test:all"
 
 # add gem install riel
 # dependencies from Rake on Gradle
-

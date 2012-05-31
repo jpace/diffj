@@ -1,6 +1,8 @@
 #!/usr/bin/jruby -w
 # -*- ruby -*-
 
+# require 'rubygems'
+
 require 'riel/log'
 require 'diffj/app/processor'
 require 'diffj/app/options'
@@ -74,6 +76,7 @@ module DiffJ
     end
 
     def compare from_name, to_elmt
+      puts "comparing: #{from_name}"
       begin 
         if super
           @exit_value = @report.had_differences? ? 1 : 0
@@ -81,6 +84,8 @@ module DiffJ
         end
       rescue DiffJ::Exception => de
         $stderr.puts de.message
+        $stderr.puts de.backtrace
+        raise de
         @exit_value = 1
         nil
       end

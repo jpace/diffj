@@ -5,32 +5,40 @@ import org.jruby.embed.EvalFailedException;
 import org.jruby.embed.ScriptingContainer;
 
 public class DiffJLauncher {
+    private static long start = System.currentTimeMillis();
+
+    public static void log(String msg) {
+        long currTime = System.currentTimeMillis();
+        System.out.printf("%10d %4d %s\n", currTime, currTime - start, msg);
+    }
+
     public static void main(String[] args) {
         StringWriter errorWriter = null;
 
         long start = System.currentTimeMillis();
-        System.out.println("starting ... " + (System.currentTimeMillis() - start));
+        log("starting ... ");
 
         try {
             errorWriter = new StringWriter();
-            System.out.println("loading container ... " + (System.currentTimeMillis() - start));
+            log("loading container ... ");
 
             ScriptingContainer container = new ScriptingContainer();
             container.setError(errorWriter);
             // I think this requires 1.6.0+:
             container.setArgv(args);
 
-            System.out.println("creating script ... " + (System.currentTimeMillis() - start));
+            log("creating script ... ");
 
             StringBuilder sb = new StringBuilder();
             sb.append("require 'diffj/app/cli'\n");
             sb.append("DiffJ::CLI.run\n");
+            // sb.append("1\n");
 
-            System.out.println("running script ... " + (System.currentTimeMillis() - start));
+            log("running script ... ");
             
             Object obj = container.runScriptlet(sb.toString());
 
-            System.out.println("exiting ... " + (System.currentTimeMillis() - start));
+            log("exiting ... ");
 
             Long exitValue = (Long)obj;
             System.exit(exitValue.intValue());
