@@ -1,3 +1,10 @@
-#!/bin/sh -f
+#!/bin/bash
 
-java -Xmx1G -client -Djruby.compile.mode=OFF -jar /proj/org/incava/diffj/diffj-1.3.0.jar $*
+CLASSPATH=$CLASSPATH:/proj/org/incava/diffj/diffj-1.3.0.jar
+
+JARFILE=/proj/org/incava/diffj/diffj-1.3.0.jar
+
+# java -jar diffj.jar is about 10% faster than java -cp diffj.jar org.incava.diffj.DiffJLauncher
+java -Xmx1G -client -Djruby.compile.mode=OFF -classpath "$CLASSPATH" -jar "$JARFILE" $*
+
+# java -Xmx1G -client -Djruby.compile.mode=OFF -classpath "$CLASSPATH" org.incava.diffj.DiffJLauncher $*
