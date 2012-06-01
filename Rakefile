@@ -2,12 +2,14 @@ require 'rubygems'
 require 'rake'
 require 'java'
 require 'rake/testtask'
+require 'rake/packagetask'
 
 include Java
 
 require 'ant'
 
-$DIFFJ_VERSION    = "1.3.0"
+DIFFJ_VERSION    = "1.3.0"
+$diffj_fname      = "diffj-#{DIFFJ_VERSION}"
 
 # directories - Gradle/Maven layout (mostly)
 
@@ -28,9 +30,16 @@ directory $staging_cls_main_dir   = $staging_cls_dir + '/main'
 directory $staging_cls_test_dir   = $staging_cls_dir + '/test'
 directory $staging_cls_jruby_dir  = $staging_cls_dir + '/jruby'
 
-directory $staging_libs           = $staging_dir + '/libs'
 directory $staging_report_dir     = $staging_dir + '/report'
-directory $staging_bin_dir        = $staging_dir + '/bin'
+
+# this is the destination of the Java-only jarfile:
+directory $staging_libs           = $staging_dir + '/libs'
+
+directory $staging_dist_dir       = $staging_dir + "/dist"
+directory $staging_dist_diffj_dir = $staging_dist_dir + "/#{$diffj_fname}"
+
+directory $staging_dist_bin_dir   = $staging_dist_diffj_dir + '/bin'
+directory $staging_dist_lib_dir   = $staging_dist_diffj_dir + '/lib'
 
 $libs_dir           = 'libs'
 $jruby_complete_jar = 'libs/jruby-complete-1.6.3.jar'
@@ -38,21 +47,21 @@ $pmd_jar            = 'libs/pmd-4.2.5.jar'
 $junit_jar          = 'libs/junit-4.10.jar'
 
 # we're still using this, for JRuby vs. Java tests:
-$diffj_java_jar     = 'staging/libs/diffj-1.3.0.jar'
+$diffj_java_jar     = "staging/libs/#{$diffj_fname}.jar"
 
 # this is the full JRuby jarfile, which will replace the above:
-$diffj_jruby_jar    = 'diffj-#{$DIFFJ_VERSION}.jar'
+$diffj_jruby_jar    = "#{$diffj_fname}.jar"
 
 # this is fixed in JRuby 1.6.0:
 $CLASSPATH << "#{ENV['JAVA_HOME']}/lib/tools.jar"
 
-# this doesn't seem to work. if $diffj_java_jar doesn't exist when the Rakefile
+# This doesn't seem to work. If $diffj_java_jar doesn't exist when the Rakefile
 # is executed, java:jar is executed, but the jruby:tests task fails with an
 # error that the DiffJ Java code can't be found. But the next time jruby:tests
 # runs (with the diffj jarfile existing now), it runs successfully.
 
 $CLASSPATH << $diffj_java_jar
-# $CLASSPATH << $jruby_complete_jar
+$CLASSPATH << $jruby_complete_jar
 $CLASSPATH << $pmd_jar
 
 buildjars = [ $jruby_complete_jar, $pmd_jar ]
@@ -171,10 +180,11 @@ DiffJRakeTestTask.new 'method/parameters/reorder/typechange'
 task "jruby:tests" => [ "test:all" ]
 
 desc "Distribution"
-task "dist" => [ "java:jar", $staging_bin_dir ] do
-  # create staging/dist/diffj-#{version}
-  # copy src/main/sh/diffj to staging/dist/diffj-#{version}/bin
-  # copy diffj-#{version} to staging/dist/diffj-#{version}/lib
+task "dist" => [ "java:jar", $staging_dist_bin_dir, $staging_dist_lib_dir ] do
+  cp "src/main/sh/diffj", $staging_dist_bin_dir
+  cp $diffj_jruby_jar, $staging_dist_lib_dir
+  cd $staging_dist_dir
+  sh "zip -r #{$diffj_fname}.zip #{$diffj_fname}"
 end
 
 # todo:
