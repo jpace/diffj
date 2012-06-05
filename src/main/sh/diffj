@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "starting"
-
 ##############################################################################
 ##
 ##  diffj start up script for UN*X
@@ -82,21 +80,12 @@ while [ -h "$PRG" ] ; do
     fi
 done
 
-echo "pwd"
-
 SAVED="`pwd`"
-
-echo "cd"
-cd "`dirname \"$PRG\"`/.."
-
-echo "app home"
+# bash displays the full directory name, when cd'ing to a relative path, so we
+# need the full path here.
+cd "$SAVED/`dirname \"$PRG\"`/.."
 APP_HOME="`pwd -P`"
-
-echo "chdir"
-
 cd "$SAVED"
-
-echo "setting jarfile"
 
 JARFILE=$APP_HOME/lib/diffj-1.3.0.jar
 CLASSPATH=$APP_HOME/lib/diffj-1.3.0.jar:$CLASSPATH
@@ -191,7 +180,6 @@ if $cygwin ; then
     esac
 fi
 
-echo "running"
-# java -jar diffj.jar is about 10% faster than java -cp diffj.jar org.incava.diffj.DiffJLauncher
+# java -jar diffj.jar is about 10% faster than java -classpath diffj.jar org.incava.diffj.DiffJLauncher
 java -Xmx1G -client -Djruby.compile.mode=OFF -classpath "$CLASSPATH" -jar "$JARFILE" $*
 # java -Xmx1G -client -Djruby.compile.mode=OFF -classpath "$CLASSPATH" org.incava.diffj.DiffJLauncher $*
