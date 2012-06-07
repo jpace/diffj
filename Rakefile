@@ -9,64 +9,64 @@ include Java
 require 'ant'
 
 DIFFJ_VERSION    = "1.3.0"
-$diffj_name      = "diffj"
-$diffj_fullname  = "#{$diffj_name}-#{DIFFJ_VERSION}"
+DIFFJ_NAME      = "diffj"
+DIFFJ_FULLNAME  = "#{DIFFJ_NAME}-#{DIFFJ_VERSION}"
 
 # directories - Gradle/Maven layout (mostly)
 
-$src_dir            = 'src'
-$src_main_dir       = $src_dir      + '/main'
-$src_main_java_dir  = $src_main_dir + '/java'
-$src_main_ruby_dir  = $src_main_dir + '/ruby'
-$src_main_jruby_dir = $src_main_dir + '/jruby'
+SRC_DIR            = 'src'
+SRC_MAIN_DIR       = SRC_DIR      + '/main'
+SRC_MAIN_JAVA_DIR  = SRC_MAIN_DIR + '/java'
+SRC_MAIN_RUBY_DIR  = SRC_MAIN_DIR + '/ruby'
+SRC_MAIN_JRUBY_DIR = SRC_MAIN_DIR + '/jruby'
 
-$src_test_dir       = $src_dir      + '/test'
-$src_test_java_dir  = $src_test_dir + '/java'
-$src_test_ruby_dir  = $src_test_dir + '/ruby'
+SRC_TEST_DIR       = SRC_DIR      + '/test'
+SRC_TEST_JAVA_DIR  = SRC_TEST_DIR + '/java'
+SRC_TEST_RUBY_DIR  = SRC_TEST_DIR + '/ruby'
 
-$staging_dir        = 'staging'
-$staging_cls_dir    = $staging_dir + '/classes'
+STAGING_DIR        = 'staging'
+STAGING_CLS_DIR    = STAGING_DIR + '/classes'
 
-directory $staging_cls_main_dir   = $staging_cls_dir + '/main'
-directory $staging_cls_test_dir   = $staging_cls_dir + '/test'
-directory $staging_cls_jruby_dir  = $staging_cls_dir + '/jruby'
+directory STAGING_CLS_MAIN_DIR   = STAGING_CLS_DIR + '/main'
+directory STAGING_CLS_TEST_DIR   = STAGING_CLS_DIR + '/test'
+directory STAGING_CLS_JRUBY_DIR  = STAGING_CLS_DIR + '/jruby'
 
-directory $staging_report_dir     = $staging_dir + '/report'
+directory STAGING_REPORT_DIR     = STAGING_DIR + '/report'
 
 # this is the destination of the Java-only jarfile:
-directory $staging_libs           = $staging_dir + '/libs'
+directory STAGING_LIBS           = STAGING_DIR + '/libs'
 
-directory $staging_dist_dir       = $staging_dir + "/dist"
-directory $staging_dist_diffj_dir = $staging_dist_dir + "/#{$diffj_fullname}"
+directory STAGING_DIST_DIR       = STAGING_DIR + "/dist"
+directory STAGING_DIST_DIFFJ_DIR = STAGING_DIST_DIR + "/#{DIFFJ_FULLNAME}"
 
-directory $staging_dist_bin_dir   = $staging_dist_diffj_dir + '/bin'
-directory $staging_dist_lib_dir   = $staging_dist_diffj_dir + '/lib/' + $diffj_name
+directory STAGING_DIST_BIN_DIR   = STAGING_DIST_DIFFJ_DIR + '/bin'
+directory STAGING_DIST_LIB_DIR   = STAGING_DIST_DIFFJ_DIR + '/lib/' + DIFFJ_NAME
 
-$libs_dir           = 'libs'
-$jruby_complete_jar = 'libs/jruby-complete-1.6.3.jar'
-$pmd_jar            = 'libs/pmd-4.2.5.jar'
-$junit_jar          = 'libs/junit-4.10.jar'
+LIBS_DIR           = 'libs'
+JRUBY_COMPLETE_JAR = 'libs/jruby-complete-1.6.3.jar'
+PMD_JAR            = 'libs/pmd-4.2.5.jar'
+JUNIT_JAR          = 'libs/junit-4.10.jar'
 
 # we're still using this, for JRuby vs. Java tests:
-$diffj_java_jar     = "staging/libs/#{$diffj_fullname}.jar"
+DIFFJ_JAVA_JAR     = "staging/libs/#{DIFFJ_FULLNAME}.jar"
 
 # this is the full JRuby jarfile, which will replace the above:
-$diffj_jruby_jar    = "#{$diffj_fullname}.jar"
+DIFFJ_JRUBY_JAR    = "#{DIFFJ_FULLNAME}.jar"
 
 # this is fixed in JRuby 1.6.0:
 $CLASSPATH << "#{ENV['JAVA_HOME']}/lib/tools.jar"
 
-# This doesn't seem to work. If $diffj_java_jar doesn't exist when the Rakefile
+# This doesn't seem to work. If DIFFJ_JAVA_JAR doesn't exist when the Rakefile
 # is executed, java:jar is executed, but the jruby:tests task fails with an
 # error that the DiffJ Java code can't be found. But the next time jruby:tests
 # runs (with the diffj jarfile existing now), it runs successfully.
 
-$CLASSPATH << $diffj_java_jar
-$CLASSPATH << $jruby_complete_jar
-$CLASSPATH << $pmd_jar
+$CLASSPATH << DIFFJ_JAVA_JAR
+$CLASSPATH << JRUBY_COMPLETE_JAR
+$CLASSPATH << PMD_JAR
 
-buildjars = [ $jruby_complete_jar, $pmd_jar ]
-testjars =  [ $junit_jar ]
+buildjars = [ JRUBY_COMPLETE_JAR, PMD_JAR ]
+testjars =  [ JUNIT_JAR ]
 
 # Ant code to build Java
 
@@ -78,26 +78,26 @@ task :setup do
   end
 
   ant.path :id => 'test.classpath' do
-    pathelement :location => $staging_cls_main_dir
+    pathelement :location => STAGING_CLS_MAIN_DIR
     path        :refid    => 'classpath'
     testjars.each do |jarfile|
       fileset :file => jarfile
     end
-    pathelement :location => $staging_cls_test_dir
+    pathelement :location => STAGING_CLS_TEST_DIR
   end
 end
 
-task 'java:compile' => [ :setup, $staging_cls_main_dir ] do
-  ant.javac(:destdir => $staging_cls_main_dir, 
-            :srcdir => $src_main_java_dir,
+task 'java:compile' => [ :setup, STAGING_CLS_MAIN_DIR ] do
+  ant.javac(:destdir => STAGING_CLS_MAIN_DIR, 
+            :srcdir => SRC_MAIN_JAVA_DIR,
             :classpathref => 'classpath',
             :debug => 'yes',
             :includeantruntime => 'no')
 end
 
-task 'java:tests:compile' => [ :setup, $staging_cls_test_dir, 'java:compile' ] do
-  ant.javac(:destdir => $staging_cls_test_dir, 
-            :srcdir => $src_test_java_dir,
+task 'java:tests:compile' => [ :setup, STAGING_CLS_TEST_DIR, 'java:compile' ] do
+  ant.javac(:destdir => STAGING_CLS_TEST_DIR, 
+            :srcdir => SRC_TEST_JAVA_DIR,
             :classpathref => 'test.classpath',
             :debug => 'yes',
             :includeantruntime => 'no')
@@ -106,38 +106,38 @@ end
 # this should depend on the tests, but sometimes I create a jar for
 # field testing, which won't yet pass the tests.
 desc "Build the jarfile for the Java code (no JRuby)"
-task "java:jar" => [ "java:compile", $staging_libs ] do
-  ant.jar(:jarfile => $diffj_java_jar, 
-          :basedir => $staging_cls_main_dir)
+task "java:jar" => [ "java:compile", STAGING_LIBS ] do
+  ant.jar(:jarfile => DIFFJ_JAVA_JAR, 
+          :basedir => STAGING_CLS_MAIN_DIR)
 end
 
 desc "Run the Java tests"
-task "java:tests" => [ "java:tests:compile", $staging_report_dir ] do  
+task "java:tests" => [ "java:tests:compile", STAGING_REPORT_DIR ] do  
   ant.junit(:fork => "yes", :forkmode => "once", :printsummary => "yes",  
             :showoutput => true,
             :haltonfailure => "no", :failureproperty => "tests.failed") do  
     classpath :refid => 'test.classpath'  
     formatter :type => "xml"
     formatter :type => "plain"
-    batchtest :todir => $staging_report_dir do  
-      fileset :dir => $src_test_java_dir, :includes => '**/Test*.java'  
+    batchtest :todir => STAGING_REPORT_DIR do  
+      fileset :dir => SRC_TEST_JAVA_DIR, :includes => '**/Test*.java'  
     end  
   end  
   if ant.project.getProperty "tests.failed"
-    ant.junitreport :todir => $staging_report_dir do  
-      fileset :dir => $staging_report_dir, :includes => "TEST-*.xml"  
-      report :todir => "#{$staging_report_dir}/html"  
+    ant.junitreport :todir => STAGING_REPORT_DIR do  
+      fileset :dir => STAGING_REPORT_DIR, :includes => "TEST-*.xml"  
+      report :todir => "#{STAGING_REPORT_DIR}/html"  
     end  
-    ant.fail :message => "Test(s) failed. Report is at #{$staging_report_dir}/html."
+    ant.fail :message => "Test(s) failed. Report is at #{STAGING_REPORT_DIR}/html."
   end  
 end
 
 # JRuby tasks:
 
 desc "Compile the JRuby code"
-task "jruby:compile" => [ :setup, $staging_cls_main_dir ] do
-  ant.javac(:destdir => $staging_cls_main_dir, 
-            :srcdir => $src_main_jruby_dir,
+task "jruby:compile" => [ :setup, STAGING_CLS_MAIN_DIR ] do
+  ant.javac(:destdir => STAGING_CLS_MAIN_DIR, 
+            :srcdir => SRC_MAIN_JRUBY_DIR,
             :classpathref => 'classpath',
             :debug => 'yes',
             :includeantruntime => 'no')
@@ -145,20 +145,20 @@ end
 
 desc "Build the jarfile including JRuby and PMD"
 task "jruby:jar" => [ "java:compile", "jruby:compile" ] do
-  cmd  = "jar -cfm #{$diffj_jruby_jar} src/main/jar/launcher.manifest "
-  cmd << "-C #{$staging_cls_main_dir} org/incava/diffj/DiffJLauncher.class "
+  cmd  = "jar -cfm #{DIFFJ_JRUBY_JAR} src/main/jar/launcher.manifest "
+  cmd << "-C #{STAGING_CLS_MAIN_DIR} org/incava/diffj/DiffJLauncher.class "
   # this is PMD and JRuby combined, since jar whines about duplicate directories (such as "org"):
   cmd << "-C vendor/all . "
-  cmd << "-C #{$src_main_ruby_dir} . "
+  cmd << "-C #{SRC_MAIN_RUBY_DIR} . "
   sh cmd
 end
 
 class DiffJRakeTestTask < Rake::TestTask
   def initialize name, filter = name
     super(('test:' + name) => [ "java:tests:compile", "java:jar" ]) do |t|
-      t.libs << $src_main_ruby_dir
-      t.libs << $src_test_ruby_dir
-      t.pattern = "#{$src_test_ruby_dir}/**/#{filter}/**/test*.rb"
+      t.libs << SRC_MAIN_RUBY_DIR
+      t.libs << SRC_TEST_RUBY_DIR
+      t.pattern = "#{SRC_TEST_RUBY_DIR}/**/#{filter}/**/test*.rb"
       t.warning = true
       t.verbose = true
     end
@@ -181,22 +181,22 @@ DiffJRakeTestTask.new 'method/parameters/reorder/typechange'
 task "jruby:tests" => [ "test:all" ]
 
 desc "Distribution"
-task "dist" => [ "java:jar", $staging_dist_bin_dir, $staging_dist_lib_dir ] do
-  cp "src/main/sh/diffj", $staging_dist_bin_dir
-  cp $diffj_jruby_jar, $staging_dist_lib_dir
+task "dist" => [ "java:jar", STAGING_DIST_BIN_DIR, STAGING_DIST_LIB_DIR ] do
+  cp "src/main/sh/diffj", STAGING_DIST_BIN_DIR
+  cp DIFFJ_JRUBY_JAR, STAGING_DIST_LIB_DIR
   origdir = Dir.pwd
-  cd $staging_dist_dir
-  sh "zip -r #{$diffj_fullname}.zip #{$diffj_fullname}"
+  cd STAGING_DIST_DIR
+  sh "zip -r #{DIFFJ_FULLNAME}.zip #{DIFFJ_FULLNAME}"
   cd origdir
 end
 
 desc "Build Debian package"
 task "debian:dist" => [ "dist" ] do
-  cd $staging_dist_dir + '/' + $diffj_fullname
-  rm "../diffj_#{DIFFJ_VERSION}_all.deb"
-  url = "http://www.incava.org/projects/diffj"
-  desc = "Java-aware file comparator"
-  maint = "jeugenepace at gmail dot com"
+  cd STAGING_DIST_DIR + '/' + DIFFJ_FULLNAME
+  debpkgfile = "../diffj_#{DIFFJ_VERSION}_all.deb"
+  if File.exists? debpkgfile
+    rm debpkgfile
+  end
   cmd = Array.new
   cmd << "fpm"
   cmd << "-s" << "dir"
@@ -205,9 +205,10 @@ task "debian:dist" => [ "dist" ] do
   cmd << "--version" << DIFFJ_VERSION
   cmd << "--prefix" << "usr"
   cmd << "--architecture" << "all"
-  cmd << "--package" << "../diffj_#{DIFFJ_VERSION}_all.deb"
-  cmd << "--maintainer" << "jeugenepace at gmail dot com"
-  
+  cmd << "--maintainer" << "'jeugenepace at gmail dot com'"
+  cmd << "--description" << "'Java-aware file comparator'"
+  cmd << "--url" << "http://www.incava.org/projects/diffj"
+  cmd << "--package" << debpkgfile
   cmd << "."
   sh cmd.join(' ')
 end
