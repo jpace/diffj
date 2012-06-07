@@ -9,7 +9,8 @@ include Java
 require 'ant'
 
 DIFFJ_VERSION    = "1.3.0"
-$diffj_fname      = "diffj-#{DIFFJ_VERSION}"
+$diffj_name      = "diffj"
+$diffj_fullname  = "#{$diffj_name}-#{DIFFJ_VERSION}"
 
 # directories - Gradle/Maven layout (mostly)
 
@@ -36,10 +37,10 @@ directory $staging_report_dir     = $staging_dir + '/report'
 directory $staging_libs           = $staging_dir + '/libs'
 
 directory $staging_dist_dir       = $staging_dir + "/dist"
-directory $staging_dist_diffj_dir = $staging_dist_dir + "/#{$diffj_fname}"
+directory $staging_dist_diffj_dir = $staging_dist_dir + "/#{$diffj_fullname}"
 
 directory $staging_dist_bin_dir   = $staging_dist_diffj_dir + '/bin'
-directory $staging_dist_lib_dir   = $staging_dist_diffj_dir + '/lib'
+directory $staging_dist_lib_dir   = $staging_dist_diffj_dir + '/lib/' + $diffj_name
 
 $libs_dir           = 'libs'
 $jruby_complete_jar = 'libs/jruby-complete-1.6.3.jar'
@@ -47,10 +48,10 @@ $pmd_jar            = 'libs/pmd-4.2.5.jar'
 $junit_jar          = 'libs/junit-4.10.jar'
 
 # we're still using this, for JRuby vs. Java tests:
-$diffj_java_jar     = "staging/libs/#{$diffj_fname}.jar"
+$diffj_java_jar     = "staging/libs/#{$diffj_fullname}.jar"
 
 # this is the full JRuby jarfile, which will replace the above:
-$diffj_jruby_jar    = "#{$diffj_fname}.jar"
+$diffj_jruby_jar    = "#{$diffj_fullname}.jar"
 
 # this is fixed in JRuby 1.6.0:
 $CLASSPATH << "#{ENV['JAVA_HOME']}/lib/tools.jar"
@@ -183,8 +184,32 @@ desc "Distribution"
 task "dist" => [ "java:jar", $staging_dist_bin_dir, $staging_dist_lib_dir ] do
   cp "src/main/sh/diffj", $staging_dist_bin_dir
   cp $diffj_jruby_jar, $staging_dist_lib_dir
+  origdir = Dir.pwd
   cd $staging_dist_dir
-  sh "zip -r #{$diffj_fname}.zip #{$diffj_fname}"
+  sh "zip -r #{$diffj_fullname}.zip #{$diffj_fullname}"
+  cd origdir
+end
+
+desc "Build Debian package"
+task "debian:dist" => [ "dist" ] do
+  cd $staging_dist_dir + '/' + $diffj_fullname
+  rm "../diffj_#{DIFFJ_VERSION}_all.deb"
+  url = "http://www.incava.org/projects/diffj"
+  desc = "Java-aware file comparator"
+  maint = "jeugenepace at gmail dot com"
+  cmd = Array.new
+  cmd << "fpm"
+  cmd << "-s" << "dir"
+  cmd << "-t" << "deb"
+  cmd << "--name" << "diffj"
+  cmd << "--version" << DIFFJ_VERSION
+  cmd << "--prefix" << "usr"
+  cmd << "--architecture" << "all"
+  cmd << "--package" << "../diffj_#{DIFFJ_VERSION}_all.deb"
+  cmd << "--maintainer" << "jeugenepace at gmail dot com"
+  
+  cmd << "."
+  sh cmd.join(' ')
 end
 
 # todo:

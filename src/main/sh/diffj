@@ -11,6 +11,8 @@
 JAVA_OPTS="$JAVA_OPTS -Xmx1G -client -Djruby.compile.mode=OFF"
 
 APP_NAME=diffj
+APP_VERSION=1.3.0
+APP=$APP_NAME-$APP_VERSION
 
 # Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD="maximum"
@@ -81,14 +83,19 @@ while [ -h "$PRG" ] ; do
 done
 
 SAVED="`pwd`"
+
 # bash displays the full directory name, when cd'ing to a relative path, so we
 # need the full path here.
-cd "$SAVED/`dirname \"$PRG\"`/.."
+
+# this allows a full path, such as /usr/bin/diffj:
+USR_DIR="$SAVED/`dirname \"$PRG\"`/.."
+USR_DIR=`echo $USR_DIR | sed -e 's/.*\/\//\//g'`
+cd $USR_DIR
 APP_HOME="`pwd -P`"
 cd "$SAVED"
 
-JARFILE=$APP_HOME/lib/diffj-1.3.0.jar
-CLASSPATH=$APP_HOME/lib/diffj-1.3.0.jar:$CLASSPATH
+JARFILE=$APP_HOME/lib/$APP_NAME/$APP.jar
+CLASSPATH=$APP_HOME/lib/$APP_NAME/$APP.jar:$CLASSPATH
 
 # Determine the Java command to use to start the JVM.
 if [ -z "$JAVACMD" ] ; then
