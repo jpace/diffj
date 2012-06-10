@@ -96,7 +96,7 @@ output is in glorious color(s).
   import java.io.File;
   
   abstract public class Changed 
-!     implements &lt;mMap&gt;
+!     implements &lt;Map&gt;
    {
   
     public void obsoleteMethod() {
@@ -113,8 +113,8 @@ output is in glorious color(s).
       implements Map
    {
   
-!   public &lt;mvoid obsoleteMethod() {&gt;
-! &lt;m  }&gt;
+!   public &lt;void obsoleteMethod() {&gt;
+! &lt;  }&gt;
   
     public Changed( int  s ) 
      {
@@ -123,7 +123,7 @@ output is in glorious color(s).
     public void obsoleteMethod() {
     }
   
-!   public Changed( int  &lt;ms&gt; ) 
+!   public Changed( int  &lt;s&gt; ) 
      {
        size = s;
      }
@@ -140,7 +140,7 @@ output is in glorious color(s).
   
     public Changed( int  s ) 
      {
-!      &lt;msize = s&gt;;
+!      &lt;size = s&gt;;
      }
   
     private int size;
@@ -157,7 +157,7 @@ output is in glorious color(s).
        size = s;
      }
   
-!   &lt;mprivate&gt; int size;
+!   &lt;private&gt; int size;
   
     // @todo - comment this field
     static final public int MAX_SIZE = 317;
@@ -174,7 +174,7 @@ output is in glorious color(s).
     // @todo - comment this field
     static final public int MAX_SIZE = 317;
   
-!   private int &lt;midx&gt;;
+!   private int &lt;idx&gt;;
       
   }
 
