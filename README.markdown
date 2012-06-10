@@ -79,13 +79,113 @@ and columns) of code changes, and the output (in context and highlight mode)
 displays the exact change. Thus if a variable changes within a line of code,
 that variable itself is highlighted for the from- and to-files.
 
-<p>
-<center>
-    <a href="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png" target="_blank">
-    <img src="https://github.com/jeugenepace/diffj/raw/7a93ee2fbfe01ba6a0f2a8193d356cc4f8b53f23/src/site/resources/img/diffj-codechange-statement.png"
-    alt="codechange statement" style="max-width:100%; float: center"/></a></p>
-</center>
-</p>
+**An example**: the example below is contrived, in that differences are marked
+&lt;like so;&gt;. In the real world (where GitHub doesn't strip font colors) the
+output is in glorious color(s).
+
+<pre>code>./src/test/resources/diffj/example/d0/Changed.java <=> ./src/test/resources/diffj/example/d1/Changed.java
+9,28a21,22 method added: newMethod()
+          this.size = size;
+      }
+  
+!     public &lt;void newMethod() {&gt;
+! &lt;    }&gt;
+  }
+
+10c8 implemented type changed from Map to List
+  import java.io.File;
+  
+  abstract public class Changed 
+!     implements &lt;mMap&gt;
+   {
+  
+    public void obsoleteMethod() {
+
+  import java.util.List;
+  import java.util.Map;
+  
+! public abstract class Changed implements &lt;List&gt; {
+      /**
+       * The maximum size of this object.
+       */
+
+13,14d8,23 method removed: obsoleteMethod()
+      implements Map
+   {
+  
+!   public &lt;mvoid obsoleteMethod() {&gt;
+! &lt;m  }&gt;
+  
+    public Changed( int  s ) 
+     {
+
+16c17 parameter name changed from s to size
+    public void obsoleteMethod() {
+    }
+  
+!   public Changed( int  &lt;ms&gt; ) 
+     {
+       size = s;
+     }
+
+      private final int size;
+      private int index;
+  
+!     public Changed(int &lt;size&gt;) {
+          this.size = size;
+      }
+  
+
+18c18 code changed in Changed(int)
+  
+    public Changed( int  s ) 
+     {
+!      &lt;msize = s&gt;;
+     }
+  
+    private int size;
+
+      private int index;
+  
+      public Changed(int size) {
+!         &lt;this.size = size&gt;;
+      }
+  
+      public void newMethod() {
+
+21c14 modifier added: final
+       size = s;
+     }
+  
+!   &lt;mprivate&gt; int size;
+  
+    // @todo - comment this field
+    static final public int MAX_SIZE = 317;
+
+       */
+      public final static int MAX_SIZE = 317;
+  
+!     private &lt;final&gt; int size;
+      private int index;
+  
+      public Changed(int size) {
+
+26c15 variable changed from idx to index
+    // @todo - comment this field
+    static final public int MAX_SIZE = 317;
+  
+!   private int &lt;midx&gt;;
+      
+  }
+
+      public final static int MAX_SIZE = 317;
+  
+      private final int size;
+!     private int &lt;index&gt;;
+  
+      public Changed(int size) {
+          this.size = size;
+</code></pre>
 
 **Configuration files**: DiffJ looks for a configuration file as ~/.diffrc, and
 uses the name/value pairs there for its options. All options are supported, with
