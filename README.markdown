@@ -83,7 +83,7 @@ that variable itself is highlighted for the from- and to-files.
 &lt;like so;&gt;. In the real world (where GitHub doesn't strip font colors) the
 output is in glorious color(s).
 
-<pre>code>./src/test/resources/diffj/example/d0/Changed.java <=> ./src/test/resources/diffj/example/d1/Changed.java
+<pre>code>./example/d0/Changed.java <=> ./example/d1/Changed.java
 9,28a21,22 method added: newMethod()
           this.size = size;
       }
