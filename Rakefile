@@ -181,12 +181,13 @@ DiffJRakeTestTask.new 'method/parameters/reorder/typechange'
 task "jruby:tests" => [ "test:all" ]
 
 desc "Distribution"
-task "dist" => [ "java:jar", STAGING_DIST_BIN_DIR, STAGING_DIST_LIB_DIR ] do
+task "dist" => [ "java:jar", "jruby:jar", STAGING_DIST_BIN_DIR, STAGING_DIST_LIB_DIR ] do
   cp "src/main/sh/diffj", STAGING_DIST_BIN_DIR
   cp DIFFJ_JRUBY_JAR, STAGING_DIST_LIB_DIR
   origdir = Dir.pwd
   cd STAGING_DIST_DIR
   sh "zip -r #{DIFFJ_FULLNAME}.zip #{DIFFJ_FULLNAME}"
+  sh "tar zcvf #{DIFFJ_FULLNAME}.tar.gz #{DIFFJ_FULLNAME}"
   cd origdir
 end
 

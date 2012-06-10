@@ -188,5 +188,5 @@ if $cygwin ; then
 fi
 
 # java -jar diffj.jar is about 10% faster than java -classpath diffj.jar org.incava.diffj.DiffJLauncher
-java -Xmx1G -client -Djruby.compile.mode=OFF -classpath "$CLASSPATH" -jar "$JARFILE" $*
-# java -Xmx1G -client -Djruby.compile.mode=OFF -classpath "$CLASSPATH" org.incava.diffj.DiffJLauncher $*
+java -Xmx1G -client -Djruby.compile.mode=OFF -classpath "$CLASSPATH" -jar "$JARFILE" "$@"
+# java -Xmx1G -client -Djruby.compile.mode=OFF -classpath "$CLASSPATH" org.incava.diffj.DiffJLauncher "$@"

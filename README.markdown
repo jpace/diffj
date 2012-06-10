@@ -1,31 +1,24 @@
 DiffJ
 =====
 
-NAME
-----
+DiffJ compares Java files based on their code, without regard to formatting,
+organization, comments, or whitespace. Differences are reported as to the
+precise type of change.
 
-diffj - compare Java files by content
+DiffJ was designed for comparing code when refactoring and reformatting,
+with the differences narrowed to the extent possible, thus isolating changes.
 
-SYNOPSIS
---------
+
+SUMMARY
+-------
 
 diffj [ options ] from-file to-file
-
-DESCRIPTION
------------
-
-Similar to diff(1), DiffJ compares files, specifically Java files, without
-regard to formatting, organization, comments or whitespace, and outputs the
-differences by reporting the type of Java code that changed. It is primarily for
-comparing code when refactoring or fixing warnings, and also for reformatting,
-ensuring that although whitespace and comments might have changed, the code did
-not.
 
 FEATURES
 --------
 
-Understanding Java Content: DiffJ handles Java syntax (through version 1.6, at
-this writing), and compares code based on the actual Java code, not
+*Understanding Java content**: DiffJ handles Java syntax (through version 1.6,
+at this writing), and compares code based on the actual Java code, not
 line-by-line.
 
 For example, the following are considered equivalent:
@@ -56,8 +49,7 @@ as a change.
 **Showing added and deleted declarations**: DiffJ reports declarations that have
 been added and deleted, described by their Java type. For example:
 
-<pre><code>
-d0/Removed.java <=> d1/Removed.java
+<pre><code>d0/Removed.java <=> d1/Removed.java
 2,3d1,4 method removed: contender(Double[], StringBuilder)
   class Removed {
 !     public <span class="s0">void contender(Double[] dary, StringBuilder sb) {</span>
@@ -70,9 +62,7 @@ d0/Removed.java <=> d1/Removed.java
 **Showing parameters**: DiffJ reports constructor and methods parameters that have
 been added, deleted, and changed:
 
-<div width="100%" style="background: #111111; color: #EEEEEE; margin: 2em; padding: 0.25em 0.75em 0.75em 0.75em; ">
-<pre><code>
-2c2 parameter name changed from idx to index
+<pre><code>2c2 parameter name changed from idx to index
   class Changed {
 !     void changed(int <span style="color: red; background: black">idx</span>) {
       }
@@ -82,7 +72,7 @@ been added, deleted, and changed:
 !     void changed(int <span style="color: yellow; background: black">index</span>) {
       }
   }
-</code></pre></div>
+</code></pre>
 
 **Showing code differences narrowly**: DiffJ reports the actual location (lines
 and columns) of code changes, and the output (in context and highlight mode)
@@ -109,7 +99,6 @@ and to show context with non-default colors:
     highlight: true
     from-color: bold blue on green
     to-color: underscore magenta on cyan
-
 
 OPTIONS
 -------
