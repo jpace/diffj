@@ -43,7 +43,7 @@ constructors).
 consider reordered import statements to be a change in the code.
 
 **Ignoring comments**: DiffJ skips comments when comparing code. Thus comments
-that have been updated (perhaps as a result of running DoctorJ) will not be seen
+that have been <font color="red">updated</font> (perhaps as a result of running DoctorJ) will not be seen
 as a change.
 
 **Showing added and deleted declarations**: DiffJ reports declarations that have
