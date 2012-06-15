@@ -18,7 +18,7 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/jeugenepace/diffj">View on GitHub</a>
 
-          <h1 id="project_title">Diffj</h1>
+          <h1 id="project_title">DiffJ</h1>
           <h2 id="project_tagline">A command line application to compare Java files without regard to formatting.</h2>
 
             <section id="downloads">
@@ -108,24 +108,23 @@ and columns) of code changes, and the output (in context and highlight mode)
 displays the exact change. Thus if a variable changes within a line of code,
 that variable itself is highlighted for the from- and to-files.</p>
 
-<p><strong>An example</strong>: the example below is contrived, in that differences are marked
-&lt;like so;&gt;. In the real world (where GitHub doesn't strip font colors) the
-output is in glorious color(s).</p>
+<p><strong>An example</strong>: using the from-color of red (the default) and
+the to-color of blue (it defaults to yellow, for dark backgrounds):</p>
 
-<pre>code&gt;./example/d0/Changed.java  ./example/d1/Changed.java
+<pre>./example/d0/Changed.java &lt;=&gt; ./example/d1/Changed.java
 9,28a21,22 method added: newMethod()
           this.size = size;
       }
   
-!     public <font color="red">void newMethod() {</font>
-! &lt;    }&gt;
+!     public <font color="blue">void newMethod() {</font>
+! <font color="blue">    }</font>
   }
 
 10c8 implemented type changed from Map to List
   import java.io.File;
   
   abstract public class Changed 
-!     implements &lt;Map&gt;
+!     implements <font color="red">Map</font>
    {
   
     public void obsoleteMethod() {
@@ -133,7 +132,7 @@ output is in glorious color(s).</p>
   import java.util.List;
   import java.util.Map;
   
-! public abstract class Changed implements &lt;List&gt; {
+! public abstract class Changed implements <font color="blue">List</font> {
       /**
        * The maximum size of this object.
        */
@@ -142,8 +141,8 @@ output is in glorious color(s).</p>
       implements Map
    {
   
-!   public &lt;void obsoleteMethod() {&gt;
-! &lt;  }&gt;
+!   public <font color="red">void obsoleteMethod() {</font>
+! <font color="red">  }</font>
   
     public Changed( int  s ) 
      {
@@ -152,7 +151,7 @@ output is in glorious color(s).</p>
     public void obsoleteMethod() {
     }
   
-!   public Changed( int  &lt;s&gt; ) 
+!   public Changed( int  <font color="red">s</font> ) 
      {
        size = s;
      }
@@ -160,7 +159,7 @@ output is in glorious color(s).</p>
       private final int size;
       private int index;
   
-!     public Changed(int &lt;size&gt;) {
+!     public Changed(int <font color="blue">size</font>) {
           this.size = size;
       }
   
@@ -169,7 +168,7 @@ output is in glorious color(s).</p>
   
     public Changed( int  s ) 
      {
-!      &lt;size = s&gt;;
+!      <font color="red">size = s</font>;
      }
   
     private int size;
@@ -177,7 +176,7 @@ output is in glorious color(s).</p>
       private int index;
   
       public Changed(int size) {
-!         &lt;this.size = size&gt;;
+!         <font color="blue">this.size = size</font>;
       }
   
       public void newMethod() {
@@ -186,7 +185,7 @@ output is in glorious color(s).</p>
        size = s;
      }
   
-!   &lt;private&gt; int size;
+!   <font color="red">private</font> int size;
   
     // @todo - comment this field
     static final public int MAX_SIZE = 317;
@@ -194,7 +193,7 @@ output is in glorious color(s).</p>
        */
       public final static int MAX_SIZE = 317;
   
-!     private &lt;final&gt; int size;
+!     private <font color="blue">final</font> int size;
       private int index;
   
       public Changed(int size) {
@@ -203,17 +202,18 @@ output is in glorious color(s).</p>
     // @todo - comment this field
     static final public int MAX_SIZE = 317;
   
-!   private int &lt;idx&gt;;
+!   private int <font color="red">idx</font>;
       
   }
 
       public final static int MAX_SIZE = 317;
   
       private final int size;
-!     private int &lt;index&gt;;
+!     private int <font color="blue">index</font>;
   
       public Changed(int size) {
           this.size = size;
+
 </pre>
 
 <p><strong>Configuration files</strong>: DiffJ looks for a configuration file as ~/.diffrc, and
