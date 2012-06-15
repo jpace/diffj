@@ -3,6 +3,7 @@ require 'rake'
 require 'java'
 require 'rake/testtask'
 require 'rake/packagetask'
+require 'pathname'
 
 include Java
 
@@ -212,6 +213,11 @@ task "debian:dist" => [ "dist" ] do
   cmd << "--package" << debpkgfile
   cmd << "."
   sh cmd.join(' ')
+end
+
+task "clean" do
+  staging = Pathname.new "staging"
+  staging.rmtree if staging.exist?
 end
 
 # todo:

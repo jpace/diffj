@@ -8,7 +8,6 @@ precise type of change.
 DiffJ was designed for comparing code when refactoring and reformatting,
 with the differences narrowed to the extent possible, thus isolating changes.
 
-
 SUMMARY
 -------
 
@@ -17,7 +16,7 @@ diffj [ options ] from-file to-file
 FEATURES
 --------
 
-*Understanding Java content**: DiffJ handles Java syntax (through version 1.6,
+**Understanding Java content**: DiffJ handles Java syntax (through version 1.6,
 at this writing), and compares code based on the actual Java code, not
 line-by-line.
 
@@ -267,3 +266,20 @@ EXAMPLES
     % diffj --from-source 1.4 --to-source 1.6 -r ~myproj/old ~myproj/current
         Compares the code, using Java 1.4 and 1.6 as the source for the from-
         and the to-files.
+
+DOWNLOAD
+--------
+
+*Source*: 
+
+    *Github*: https://github.com/jeugenepace/diffj
+
+*Binaries*
+
+    *Tarball*: 
+
+    *Zip*: 
+
+    *Debian*: 
+
+    *Tarball*: 
