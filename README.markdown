@@ -11,7 +11,7 @@ with the differences narrowed to the extent possible, thus isolating changes.
 SUMMARY
 -------
 
-diffj [ options ] from-file to-file
+    diffj [ options ] from-file to-file
 
 FEATURES
 --------
@@ -264,8 +264,8 @@ EXAMPLES
         Displays differences in the given colors.
 
     % diffj --from-source 1.4 --to-source 1.6 -r ~myproj/old ~myproj/current
-        Compares the code, using Java 1.4 and 1.6 as the source for the from-
-        and the to-files.
+        Compares the code, using Java 1.4 as the source of the from-files, and
+        1.6 as the source for the to-files.
 
 DOWNLOAD
 --------
@@ -282,4 +282,3 @@ DOWNLOAD
 
     *Debian*: 
 
-    *Tarball*: 
