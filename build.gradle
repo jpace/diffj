@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 group = 'org.incava.diffj'
-version ='1.2.1'
+version ='1.4.0'
 mainClassName = 'org.incava.diffj.DiffJ'
 
 repositories {

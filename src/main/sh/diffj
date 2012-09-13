@@ -11,7 +11,7 @@
 JAVA_OPTS="$JAVA_OPTS -Xmx1G -client -Djruby.compile.mode=OFF"
 
 APP_NAME=diffj
-APP_VERSION=1.3.0
+APP_VERSION=1.4.0
 APP=$APP_NAME-$APP_VERSION
 
 # Use the maximum available, or set MAX_FD != -1 to use that value.
