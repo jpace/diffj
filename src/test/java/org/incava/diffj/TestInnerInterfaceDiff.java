@@ -1,6 +1,6 @@
 package org.incava.diffj;
 
-public class TestInnerInterfaceDiff extends AbstractTestItemDiff {
+public class TestInnerInterfaceDiff extends ItemDiffTest {
     public TestInnerInterfaceDiff(String name) {
         super(name);
     }

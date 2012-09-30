@@ -6,7 +6,7 @@ import java.util.List;
 import org.incava.analysis.*;
 import org.incava.ijdk.util.ANSI;
 
-public class TestOutputNoContext extends AbstractTestOutput {
+public class TestOutputNoContext extends OutputTest {
     public TestOutputNoContext(String name) {
         super(name);
     }

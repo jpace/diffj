@@ -7,8 +7,8 @@ import java.util.List;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.Report;
 
-public abstract class AbstractTestOutputContext extends AbstractTestOutput {
-    public AbstractTestOutputContext(String name) {
+public abstract class OutputContextTest extends OutputTest {
+    public OutputContextTest(String name) {
         super(name);
     }
 

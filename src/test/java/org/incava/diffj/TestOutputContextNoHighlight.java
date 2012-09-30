@@ -3,7 +3,7 @@ package org.incava.diffj;
 import org.incava.analysis.DetailedReport;
 import org.incava.analysis.Report;
 
-public class TestOutputContextNoHighlight extends AbstractTestOutputContext {
+public class TestOutputContextNoHighlight extends OutputContextTest {
     public TestOutputContextNoHighlight(String name) {
         super(name);
     }

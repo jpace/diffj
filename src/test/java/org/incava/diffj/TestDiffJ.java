@@ -7,7 +7,7 @@ import org.incava.ijdk.io.IO;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.ijdk.util.ANSI;
 
-public class TestDiffJ extends AbstractDiffJTest {
+public class TestDiffJ extends DiffJTest {
     public TestDiffJ(String name) {
         super(name);
         tr.Ace.setVerbose(true);

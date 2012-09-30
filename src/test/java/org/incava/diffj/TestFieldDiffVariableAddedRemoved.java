@@ -4,7 +4,7 @@ import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
 import org.incava.java.Java;
 
-public class TestFieldDiffVariableAddedRemoved extends AbstractTestItemDiff {
+public class TestFieldDiffVariableAddedRemoved extends ItemDiffTest {
     protected final static String[] VARIABLE_MSGS = new String[] {
         FieldDiff.VARIABLE_REMOVED,
         FieldDiff.VARIABLE_CHANGED, 

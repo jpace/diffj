@@ -11,14 +11,14 @@ import org.incava.analysis.Report;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
-import org.incava.test.AbstractTestCaseExt;
+import org.incava.test.IncavaTestCase;
 
-public class AbstractDiffJTest extends AbstractTestCaseExt {
+public class DiffJTest extends IncavaTestCase {
     public static final FileDiff[] NO_CHANGES = new FileDiff[0];
     
     private Report report;
     
-    public AbstractDiffJTest(String name) {
+    public DiffJTest(String name) {
         super(name);
     }
 

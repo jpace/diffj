@@ -1,6 +1,6 @@
 package org.incava.diffj;
 
-public class TestTypeMethodDiff extends AbstractTestItemDiff {
+public class TestTypeMethodDiff extends ItemDiffTest {
     public TestTypeMethodDiff(String name) {
         super(name);
     }

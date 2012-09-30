@@ -4,7 +4,7 @@ import org.incava.analysis.DetailedReport;
 import org.incava.analysis.Report;
 import org.incava.ijdk.util.ANSI;
 
-public class TestOutputContextHighlight extends AbstractTestOutputContext {
+public class TestOutputContextHighlight extends OutputContextTest {
     public TestOutputContextHighlight(String name) {
         super(name);
     }

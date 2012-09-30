@@ -6,7 +6,7 @@ import org.incava.analysis.FileDiffDelete;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.java.Java;
 
-public class TestImportsDiff extends AbstractDiffJTest {
+public class TestImportsDiff extends DiffJTest {
     public TestImportsDiff(String name) {
         super(name);
     }

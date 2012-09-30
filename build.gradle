@@ -27,7 +27,8 @@ jar {
 }
 
 test {
-    excludes = [ '**/Abstract*', '**/.#*' ]
+    // excludes = [ '**/Abstract*', '**/.#*' ]
+    includes = [ '**/Test*' ]
 }
 
 logging.captureStandardOutput LogLevel.ERROR

@@ -2,12 +2,10 @@ package org.incava.diffj;
 
 import org.incava.analysis.FileDiffChange;
 
-public class TestFieldDiff extends AbstractTestItemDiff {
+public class TestFieldDiff extends ItemDiffTest {
     public TestFieldDiff(String name) {
         super(name);
-
         tr.Ace.setVerbose(true);
-        tr.Ace.stack(tr.Ace.ON_RED, "name", name);
     }
 
     public void testAccessAdded() {
@@ -150,7 +148,7 @@ public class TestFieldDiff extends AbstractTestItemDiff {
                  makeCodeDeletedRef(FieldDiff.CODE_REMOVED, "i", loc(2, 15), loc(2, 17), loc(3, 14), loc(3, 14)));
     }
 
-    // public static class TestFieldDiffVariableAddedRemoved extends AbstractTestItemDiff {
+    // public static class TestFieldDiffVariableAddedRemoved extends ItemDiffTest {
         
     //     public TestFieldDiffVariableAddedRemoved(String name) {
     //         super(name);

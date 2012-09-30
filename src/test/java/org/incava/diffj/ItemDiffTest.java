@@ -7,7 +7,7 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.ijdk.text.Location;
 
-public class AbstractTestItemDiff extends AbstractDiffJTest {
+public class ItemDiffTest extends DiffJTest {
     protected final static String[] METHOD_MSGS = new String[] {
         TypeDiff.METHOD_REMOVED,
         TypeDiff.METHOD_CHANGED, 
@@ -68,7 +68,7 @@ public class AbstractTestItemDiff extends AbstractDiffJTest {
         FieldDiff.VARIABLE_ADDED,
     };
 
-    public AbstractTestItemDiff(String name) {
+    public ItemDiffTest(String name) {
         super(name);
     }
 

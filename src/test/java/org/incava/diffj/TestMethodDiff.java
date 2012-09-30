@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
 import org.incava.ijdk.text.Location;
 
-public class TestMethodDiff extends AbstractTestItemDiff {
+public class TestMethodDiff extends ItemDiffTest {
     protected final static String[] PARAM_MSGS = new String[] {
         MethodDiff.PARAMETER_REMOVED,
         null,

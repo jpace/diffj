@@ -3,14 +3,12 @@ package org.incava.test;
 import junit.framework.TestCase;
 import java.util.*;
 
-
-public class AbstractTestCaseExt extends TestCase {
-
-    public AbstractTestCaseExt(String name) {
+public class IncavaTestCase extends TestCase {
+    public IncavaTestCase(String name) {
         super(name);
     }
 
-    public AbstractTestCaseExt() {
+    public IncavaTestCase() {
     }
 
     static protected String toMessage(String msg) {
@@ -41,9 +39,7 @@ public class AbstractTestCaseExt extends TestCase {
 
     static public void assertEquals(String msg, Object[] expected, Object[] actual) {
         String m = toMessage(msg);
-        
         assertEquals(m + "array sizes", expected.length, actual.length);
-
         for (int ni = 0; ni < expected.length; ++ni) {
             assertEquals(m + "array[" + ni + "]", expected[ni], actual[ni]);
         }
@@ -59,9 +55,7 @@ public class AbstractTestCaseExt extends TestCase {
 
     static public void assertEquals(String msg, int[] expected, int[] actual) {
         String m = toMessage(msg);
- 
         assertEquals(m + "array sizes", expected.length, actual.length);
-
         for (int ni = 0; ni < expected.length; ++ni) {
             assertEquals(m + "array[" + ni + "]", expected[ni], actual[ni]);
         }

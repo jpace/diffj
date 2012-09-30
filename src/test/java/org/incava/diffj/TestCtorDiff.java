@@ -6,7 +6,7 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
 
-public class TestCtorDiff extends AbstractTestItemDiff {
+public class TestCtorDiff extends ItemDiffTest {
     protected final static String[] PARAMETER_MSGS = new String[] {
         CtorDiff.PARAMETER_REMOVED,
         null,
