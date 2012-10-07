@@ -53,60 +53,14 @@ public class ItemDiff extends DiffComparator {
         super(differences);
     }
 
-    /**
-     * Returns a map from token types ("kinds", as java.lang.Integers), to the
-     * token. This assumes that there are no leadking tokens of the same type
-     * for the given node.
-     */
-    protected Map<Integer, Token> getModifierMap(SimpleNode node) {
-        List<Token>         mods   = SimpleNodeUtil.getLeadingTokens(node);        
-        Map<Integer, Token> byKind = new TreeMap<Integer, Token>();
-
-        for (Token tk : mods) {
-            byKind.put(Integer.valueOf(tk.kind), tk);
-        }
-
-        return byKind;
-    }
-
     public void compareModifiers(SimpleNode aNode, SimpleNode bNode, int[] modifierTypes) {
-        List<Token> aMods = SimpleNodeUtil.getLeadingTokens(aNode);
-        List<Token> bMods = SimpleNodeUtil.getLeadingTokens(bNode);
-
-        Map<Integer, Token> aByKind = getModifierMap(aNode);
-        Map<Integer, Token> bByKind = getModifierMap(bNode);
-        
-        for (int mi = 0; mi < modifierTypes.length; ++mi) {
-            Integer modInt = Integer.valueOf(modifierTypes[mi]);
-            Token   aMod   = aByKind.get(modInt);
-            Token   bMod   = bByKind.get(modInt);
-
-            if (aMod == null) {
-                if (bMod != null) {
-                    changed(aNode.getFirstToken(), bMod, MODIFIER_ADDED, bMod.image);
-                }
-            }
-            else if (bMod == null) {
-                changed(aMod, bNode.getFirstToken(), MODIFIER_REMOVED, aMod.image);
-            }
-        }
+        ModifiersDiff md = new ModifiersDiff(getFileDiffs());
+        md.compareModifiers(aNode, bNode, modifierTypes);
     }
 
     public void compareAccess(SimpleNode aNode, SimpleNode bNode) {
-        Token aAccess = ItemUtil.getAccess(aNode);
-        Token bAccess = ItemUtil.getAccess(bNode);
-
-        if (aAccess == null) {
-            if (bAccess != null) {
-                changed(aNode.getFirstToken(), bAccess, ACCESS_ADDED, bAccess.image);
-            }
-        }
-        else if (bAccess == null) {
-            changed(aAccess, bNode.getFirstToken(), ACCESS_REMOVED, aAccess.image);
-        }
-        else if (!aAccess.image.equals(bAccess.image)) {
-            changed(aAccess, bAccess, ACCESS_CHANGED, aAccess.image, bAccess.image);
-        }
+        AccessDiff ad = new AccessDiff(getFileDiffs());
+        ad.compareAccess(aNode, bNode);
     }
 
     protected FileDiff replaceReference(String name, FileDiff fdiff, LocationRange fromLocRg, LocationRange toLocRg) {
