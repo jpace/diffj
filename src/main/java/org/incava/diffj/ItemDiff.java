@@ -23,7 +23,7 @@ public class ItemDiff extends DiffComparator {
 
     public void compareAccess(SimpleNode aNode, SimpleNode bNode) {
         AccessDiff ad = new AccessDiff(getFileDiffs());
-        ad.compareAccess(aNode, bNode);
+        ad.compare(aNode, bNode);
     }
 
     public void compareCode(String fromName, List<Token> fromList, String toName, List<Token> toList) {

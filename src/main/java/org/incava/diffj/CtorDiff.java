@@ -28,14 +28,12 @@ public class CtorDiff extends FunctionDiff {
     protected void compareParameters(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
         ASTFormalParameters afp = CtorUtil.getParameters(a);
         ASTFormalParameters bfp = CtorUtil.getParameters(b);
-
         compareParameters(afp, bfp);
     }
 
     protected void compareThrows(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
         ASTNameList at = CtorUtil.getThrowsList(a);
         ASTNameList bt = CtorUtil.getThrowsList(b);
-
         compareThrows(a, at, b, bt);
     }
 

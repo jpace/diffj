@@ -10,7 +10,7 @@ public class AccessDiff extends DiffComparator {
         super(differences);
     }
 
-    public void compareAccess(SimpleNode aNode, SimpleNode bNode) {
+    public void compare(SimpleNode aNode, SimpleNode bNode) {
         Token aAccess = ItemUtil.getAccess(aNode);
         Token bAccess = ItemUtil.getAccess(bNode);
 

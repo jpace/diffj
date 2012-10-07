@@ -32,3 +32,30 @@ test {
 }
 
 logging.captureStandardOutput LogLevel.ERROR
+
+// -- PMD configuration --
+
+configurations {
+    pmdConf
+}
+ 
+dependencies {
+    pmdConf 'pmd:pmd:4.2.5'
+}
+ 
+task pmd << {
+    println 'Running PMD static code analysis'
+    ant {
+        taskdef(name:'pmd', classname:'net.sourceforge.pmd.ant.PMDTask', classpath: configurations.pmdConf.asPath)
+ 
+        pmd(shortFilenames:'true', failonruleviolation:'true', rulesetfiles:'rulesets/basic.xml') {
+            formatter(type:'text', toConsole:'true')
+            fileset(dir: "src/main/java") {
+                include(name: '**/*.java')
+            }
+            fileset(dir: "src/test/java") {
+                include(name: '**/*.java')
+            }
+        }
+    }
+}
