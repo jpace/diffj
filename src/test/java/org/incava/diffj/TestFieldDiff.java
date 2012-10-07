@@ -89,7 +89,7 @@ public class TestFieldDiff extends ItemDiffTest {
                            "    int i = 4;",
                            "}"),
                  
-                 new FileDiffChange(FieldDiff.INITIALIZER_ADDED, loc(2, 9), loc(2, 9), loc(3, 13), loc(3, 13)));
+                 new FileDiffChange(Messages.INITIALIZER_ADDED, loc(2, 9), loc(2, 9), loc(3, 13), loc(3, 13)));
     }
 
     public void testInitializerRemoved() {
@@ -103,7 +103,7 @@ public class TestFieldDiff extends ItemDiffTest {
                            "    int i;",
                            "}"),
                  
-                 new FileDiffChange(FieldDiff.INITIALIZER_REMOVED, loc(2, 13), loc(2, 13), loc(3, 9), loc(3, 9)));
+                 new FileDiffChange(Messages.INITIALIZER_REMOVED, loc(2, 13), loc(2, 13), loc(3, 9), loc(3, 9)));
     }
 
     public void testInitializerCodeChanged() {
@@ -117,7 +117,7 @@ public class TestFieldDiff extends ItemDiffTest {
                            "    int i = 5;",
                            "}"),
                  
-                 makeCodeChangedRef(FieldDiff.CODE_CHANGED, "i", loc(2, 13), loc(2, 13), loc(3, 13), loc(3, 13)));
+                 makeCodeChangedRef(Messages.CODE_CHANGED, "i", loc(2, 13), loc(2, 13), loc(3, 13), loc(3, 13)));
     }
 
     public void testInitializerCodeAdded() {
@@ -131,7 +131,7 @@ public class TestFieldDiff extends ItemDiffTest {
                            "    int i = 4 * 5;",
                            "}"),
                  
-                 makeCodeAddedRef(FieldDiff.CODE_ADDED, "i", loc(2, 14), loc(2, 14), loc(3, 15), loc(3, 17)));
+                 makeCodeAddedRef(Messages.CODE_ADDED, "i", loc(2, 14), loc(2, 14), loc(3, 15), loc(3, 17)));
     }
 
     public void testInitializerCodeRemoved() {
@@ -145,7 +145,7 @@ public class TestFieldDiff extends ItemDiffTest {
                            "    int i = 4;",
                            "}"),
                  
-                 makeCodeDeletedRef(FieldDiff.CODE_REMOVED, "i", loc(2, 15), loc(2, 17), loc(3, 14), loc(3, 14)));
+                 makeCodeDeletedRef(Messages.CODE_REMOVED, "i", loc(2, 15), loc(2, 17), loc(3, 14), loc(3, 14)));
     }
 
     // public static class TestFieldDiffVariableAddedRemoved extends ItemDiffTest {
@@ -178,7 +178,7 @@ public class TestFieldDiff extends ItemDiffTest {
     //                  // variable type changed for v from Object to V
 
     //                  makeFieldRef(null, "v",  loc(3, 20), loc(6,  5), loc(7, 23), loc(7, 26)),
-    //                  makeCodeChangedRef(FieldDiff.VARIABLE_REMOVED, "v",  loc(5, 33), loc(5, 33), loc(6, 25), loc(6, 25)),
+    //                  makeCodeChangedRef(Messages.VARIABLE_REMOVED, "v",  loc(5, 33), loc(5, 33), loc(6, 25), loc(6, 25)),
     //                  Java.SOURCE_1_5);
     //     }
     // }
@@ -226,7 +226,7 @@ public class TestFieldDiff extends ItemDiffTest {
                            "",
                            "}"),
                  
-                 new FileDiffChange(getFromToMessage(FieldDiff.VARIABLE_TYPE_CHANGED, "s", "Set", "HashSet"),
+                 new FileDiffChange(getFromToMessage(Messages.VARIABLE_TYPE_CHANGED, "s", "Set", "HashSet"),
                                           loc(2, 5), loc(2, 5, "Set"), 
                                           loc(4, 5), loc(4, 5, "HashSet")));
     }

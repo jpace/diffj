@@ -6,9 +6,9 @@ import org.incava.java.Java;
 
 public class TestFieldDiffVariableAddedRemoved extends ItemDiffTest {
     protected final static String[] VARIABLE_MSGS = new String[] {
-        FieldDiff.VARIABLE_REMOVED,
-        FieldDiff.VARIABLE_CHANGED, 
-        FieldDiff.VARIABLE_ADDED,
+        Messages.VARIABLE_REMOVED,
+        Messages.VARIABLE_CHANGED, 
+        Messages.VARIABLE_ADDED,
     };
 
     public TestFieldDiffVariableAddedRemoved(String name) {
@@ -26,7 +26,7 @@ public class TestFieldDiffVariableAddedRemoved extends ItemDiffTest {
     public FileDiff makeVariableTypeChangedRef(String varName, String fromType, String toType, 
                                                int fromLine, int fromFromCol, int fromToCol, // this assumes that type doesn't span lines
                                                int toLine,   int toFromCol,   int toToCol) {
-        return new FileDiffChange(getFromToMessage(FieldDiff.VARIABLE_TYPE_CHANGED, varName, fromType, toType),
+        return new FileDiffChange(getFromToMessage(Messages.VARIABLE_TYPE_CHANGED, varName, fromType, toType),
                                   loc(fromLine, fromFromCol), loc(fromLine, fromToCol), 
                                   loc(toLine,   toFromCol),   loc(toLine, toToCol));
     }
@@ -34,7 +34,7 @@ public class TestFieldDiffVariableAddedRemoved extends ItemDiffTest {
     public FileDiff makeVariableRemovedRef(String varName, 
                                            int fromLine, int fromCol, 
                                            int toLine,   int toCol) {
-        return makeCodeChangedRef(FieldDiff.VARIABLE_REMOVED, varName,  
+        return makeCodeChangedRef(Messages.VARIABLE_REMOVED, varName,  
                                   loc(fromLine, fromCol), loc(fromLine, fromCol, varName), 
                                   loc(toLine, toCol),     loc(toLine,   toCol,   varName));
     }

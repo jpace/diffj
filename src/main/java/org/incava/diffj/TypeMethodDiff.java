@@ -28,10 +28,10 @@ public class TypeMethodDiff extends AbstractTypeItemDiff<ASTMethodDeclaration> {
     }
 
     public String getAddedMessage(ASTMethodDeclaration md) {
-        return TypeDiff.METHOD_ADDED;
+        return Messages.METHOD_ADDED;
     }
 
     public String getRemovedMessage(ASTMethodDeclaration md) {
-        return TypeDiff.METHOD_REMOVED;
+        return Messages.METHOD_REMOVED;
     }
 }

@@ -14,12 +14,6 @@ import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class TypesDiff extends ItemDiff {
-    public static final String TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface";
-    public static final String TYPE_CHANGED_FROM_INTERFACE_TO_CLASS = "type changed from interface to class";
-
-    public static final String TYPE_DECLARATION_ADDED = "type declaration added: {0}";
-    public static final String TYPE_DECLARATION_REMOVED = "type declaration removed: {0}";
-
     public TypesDiff(FileDiffs differences) {
         super(differences);
     }
@@ -41,11 +35,11 @@ public class TypesDiff extends ItemDiff {
 
             if (atd == null) {
                 Token bName = TypeDeclarationUtil.getName(btd);
-                added(a, btd, TYPE_DECLARATION_ADDED, bName.image);
+                added(a, btd, Messages.TYPE_DECLARATION_ADDED, bName.image);
             }
             else if (btd == null) {
                 Token aName = TypeDeclarationUtil.getName(atd);
-                deleted(atd, b, TYPE_DECLARATION_REMOVED, aName.image);
+                deleted(atd, b, Messages.TYPE_DECLARATION_REMOVED, aName.image);
             }
             else {
                 TypeDiff differ = new TypeDiff(getFileDiffs());

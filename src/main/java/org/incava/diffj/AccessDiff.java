@@ -6,10 +6,6 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.*;
 
 public class AccessDiff extends DiffComparator {    
-    public static final String ACCESS_REMOVED = "access removed: {0}";
-    public static final String ACCESS_ADDED = "access added: {0}";
-    public static final String ACCESS_CHANGED = "access changed from {0} to {1}";
-
     public AccessDiff(FileDiffs differences) {
         super(differences);
     }
@@ -20,14 +16,14 @@ public class AccessDiff extends DiffComparator {
 
         if (aAccess == null) {
             if (bAccess != null) {
-                changed(aNode.getFirstToken(), bAccess, ACCESS_ADDED, bAccess.image);
+                changed(aNode.getFirstToken(), bAccess, Messages.ACCESS_ADDED, bAccess.image);
             }
         }
         else if (bAccess == null) {
-            changed(aAccess, bNode.getFirstToken(), ACCESS_REMOVED, aAccess.image);
+            changed(aAccess, bNode.getFirstToken(), Messages.ACCESS_REMOVED, aAccess.image);
         }
         else if (!aAccess.image.equals(bAccess.image)) {
-            changed(aAccess, bAccess, ACCESS_CHANGED, aAccess.image, bAccess.image);
+            changed(aAccess, bAccess, Messages.ACCESS_CHANGED, aAccess.image, bAccess.image);
         }
     }
 }

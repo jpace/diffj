@@ -14,9 +14,6 @@ import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class MethodDiff extends FunctionDiff {
-    public static final String METHOD_BLOCK_ADDED = "method block added";
-    public static final String METHOD_BLOCK_REMOVED = "method block removed";
-
     protected static final int[] VALID_MODIFIERS = new int[] {
         JavaParserConstants.ABSTRACT,
         JavaParserConstants.FINAL,
@@ -64,11 +61,11 @@ public class MethodDiff extends FunctionDiff {
 
         if (fromBlock == null) {
             if (toBlock != null) {
-                changed(from, to, METHOD_BLOCK_ADDED);
+                changed(from, to, Messages.METHOD_BLOCK_ADDED);
             }
         }
         else if (toBlock == null) {
-            changed(from, to, METHOD_BLOCK_REMOVED);
+            changed(from, to, Messages.METHOD_BLOCK_REMOVED);
         }
         else {
             String fromName = MethodUtil.getFullName(from);

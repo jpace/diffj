@@ -23,18 +23,6 @@ import org.incava.ijdk.util.diff.Difference;
 import org.incava.pmdx.*;
 
 public class ItemDiff extends DiffComparator {    
-    public static final String MODIFIER_REMOVED = "modifier removed: {0}";
-    public static final String MODIFIER_ADDED = "modifier added: {0}";
-    public static final String MODIFIER_CHANGED = "modifier changed from {0} to {1}";
-
-    public static final String ACCESS_REMOVED = "access removed: {0}";
-    public static final String ACCESS_ADDED = "access added: {0}";
-    public static final String ACCESS_CHANGED = "access changed from {0} to {1}";
-    
-    public static final String CODE_CHANGED = "code changed in {0}";
-    public static final String CODE_ADDED = "code added in {0}";
-    public static final String CODE_REMOVED = "code removed in {0}";
-
     public static class TokenComparator extends DefaultComparator<Token> {
         public int doCompare(Token xt, Token yt) {
             int cmp = xt.kind < yt.kind ? -1 : (xt.kind > yt.kind ? 1 : 0);
@@ -64,7 +52,7 @@ public class ItemDiff extends DiffComparator {
     }
 
     protected FileDiff replaceReference(String name, FileDiff fdiff, LocationRange fromLocRg, LocationRange toLocRg) {
-        String   newMsg  = MessageFormat.format(CODE_CHANGED, name);
+        String   newMsg  = MessageFormat.format(Messages.CODE_CHANGED, name);
         FileDiff newDiff = new FileDiffChange(newMsg, fdiff.getFirstLocation().getStart(), fromLocRg.getEnd(), fdiff.getSecondLocation().getStart(), toLocRg.getEnd());
         
         getFileDiffs().remove(fdiff);
@@ -79,11 +67,11 @@ public class ItemDiff extends DiffComparator {
 
         FileDiff fdiff = null;
 
-        if (msg.equals(CODE_ADDED)) {
+        if (msg.equals(Messages.CODE_ADDED)) {
             // this will show as add when highlighted, as change when not.
             fdiff = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
         }
-        else if (msg.equals(CODE_REMOVED)) {
+        else if (msg.equals(Messages.CODE_REMOVED)) {
             fdiff = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
         }
         else {
@@ -125,7 +113,7 @@ public class ItemDiff extends DiffComparator {
         LocationRange fromLocRg = getLocationRange(fromList, delStart, delEnd);
         LocationRange toLocRg = getLocationRange(toList, addStart, addEnd);
 
-        String msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);        
+        String msg = delEnd == Difference.NONE ? Messages.CODE_ADDED : (addEnd == Difference.NONE ? Messages.CODE_REMOVED : Messages.CODE_CHANGED);
 
         prevFdiff = isOnSameLine(prevFdiff, fromLocRg) ? 
             replaceReference(fromName, prevFdiff, fromLocRg, toLocRg) : 

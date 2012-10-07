@@ -17,13 +17,6 @@ import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class FieldDiff extends ItemDiff {
-    public static final String VARIABLE_REMOVED = "variable removed: {0}";
-    public static final String VARIABLE_ADDED = "variable added: {0}";
-    public static final String VARIABLE_CHANGED = "variable changed from {0} to {1}";
-    public static final String VARIABLE_TYPE_CHANGED = "variable type for {0} changed from {1} to {2}";
-    public static final String INITIALIZER_REMOVED = "initializer removed";
-    public static final String INITIALIZER_ADDED = "initializer added";
-
     protected static final int[] VALID_MODIFIERS = new int[] {
         JavaParserConstants.FINAL,
         JavaParserConstants.STATIC,
@@ -60,11 +53,11 @@ public class FieldDiff extends ItemDiff {
         
         if (fromInit == null) {
             if (toInit != null) {
-                changed(from, toInit, INITIALIZER_ADDED);
+                changed(from, toInit, Messages.INITIALIZER_ADDED);
             }
         }
         else if (toInit == null) {
-            changed(fromInit, to, INITIALIZER_REMOVED);
+            changed(fromInit, to, Messages.INITIALIZER_REMOVED);
         }
         else {
             String fromName = FieldUtil.getName(from).image;
@@ -93,7 +86,7 @@ public class FieldDiff extends ItemDiff {
         String toTypeStr = SimpleNodeUtil.toString(toType);
 
         if (!fromTypeStr.equals(toTypeStr)) {
-            changed(fromType, toType, VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
+            changed(fromType, toType, Messages.VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
         }
 
         compareVariableInits(fromVarDecl, toVarDecl);
@@ -102,7 +95,7 @@ public class FieldDiff extends ItemDiff {
     protected void processChangedVariable(ASTVariableDeclarator fromVarDecl, ASTVariableDeclarator toVarDecl) {
         Token fromTk = FieldUtil.getName(fromVarDecl);
         Token toTk = FieldUtil.getName(toVarDecl);
-        changed(fromTk, toTk, VARIABLE_CHANGED);
+        changed(fromTk, toTk, Messages.VARIABLE_CHANGED);
         compareVariableInits(fromVarDecl, toVarDecl);
     }
 
@@ -134,10 +127,10 @@ public class FieldDiff extends ItemDiff {
                 processChangedVariable(fromVarDecls.get(0), toVarDecls.get(0));
             }
             else if (fromVarDecl == null) {
-                processAddDelVariable(name, VARIABLE_ADDED, fromVarDecls.get(0), toVarDecl);
+                processAddDelVariable(name, Messages.VARIABLE_ADDED, fromVarDecls.get(0), toVarDecl);
             }
             else {
-                processAddDelVariable(name, VARIABLE_REMOVED, fromVarDecl, toVarDecls.get(0));
+                processAddDelVariable(name, Messages.VARIABLE_REMOVED, fromVarDecl, toVarDecls.get(0));
             }
         }
     }

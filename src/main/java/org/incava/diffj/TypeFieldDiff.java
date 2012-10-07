@@ -22,11 +22,11 @@ public class TypeFieldDiff extends AbstractTypeItemDiff<ASTFieldDeclaration> {
     }
 
     public String getAddedMessage(ASTFieldDeclaration fd) {
-        return TypeDiff.FIELD_ADDED;
+        return Messages.FIELD_ADDED;
     }
 
     public String getRemovedMessage(ASTFieldDeclaration fd) {
-        return TypeDiff.FIELD_REMOVED;
+        return Messages.FIELD_REMOVED;
     }
 
     public double getScore(ASTFieldDeclaration a, ASTFieldDeclaration b) {

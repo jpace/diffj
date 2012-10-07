@@ -19,33 +19,6 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class TypeDiff extends ItemDiff {
-    public static final String TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface";
-    public static final String TYPE_CHANGED_FROM_INTERFACE_TO_CLASS = "type changed from interface to class";
-
-    public static final String METHOD_REMOVED = "method removed: {0}";
-    public static final String METHOD_ADDED = "method added: {0}";
-    public static final String METHOD_CHANGED = "method changed from {0} to {1}";
-
-    public static final String CONSTRUCTOR_REMOVED = "constructor removed: {0}";
-    public static final String CONSTRUCTOR_ADDED = "constructor added: {0}";
-
-    public static final String FIELD_REMOVED = "field removed: {0}";
-    public static final String FIELD_ADDED = "field added: {0}";
-
-    public static final String INNER_INTERFACE_ADDED = "inner interface added: {0}";
-    public static final String INNER_INTERFACE_REMOVED = "inner interface removed: {0}";
-
-    public static final String INNER_CLASS_ADDED = "inner class added: {0}";
-    public static final String INNER_CLASS_REMOVED = "inner class removed: {0}";
-
-    public static final String EXTENDED_TYPE_REMOVED = "extended type removed: {0}";
-    public static final String EXTENDED_TYPE_ADDED = "extended type added: {0}";
-    public static final String EXTENDED_TYPE_CHANGED = "extended type changed from {0} to {1}";
-
-    public static final String IMPLEMENTED_TYPE_REMOVED = "implemented type removed: {0}";
-    public static final String IMPLEMENTED_TYPE_ADDED = "implemented type added: {0}";
-    public static final String IMPLEMENTED_TYPE_CHANGED = "implemented type changed from {0} to {1}";
-
     public static final int[] VALID_TYPE_MODIFIERS = new int[] {
         JavaParserConstants.ABSTRACT,
         JavaParserConstants.FINAL,
@@ -78,10 +51,10 @@ public class TypeDiff extends ItemDiff {
 
     public void compare(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
         if (!at.isInterface() && bt.isInterface()) {
-            changed(at, bt, TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
+            changed(at, bt, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
         else if (at.isInterface() && !bt.isInterface()) {
-            changed(at, bt, TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
+            changed(at, bt, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
         }
         
         SimpleNode atParent = SimpleNodeUtil.getParent(at);
@@ -157,11 +130,11 @@ public class TypeDiff extends ItemDiff {
     }
 
     protected void compareExtends(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        compareImpExt(at, bt, EXTENDED_TYPE_ADDED, EXTENDED_TYPE_CHANGED, EXTENDED_TYPE_REMOVED, "net.sourceforge.pmd.ast.ASTExtendsList");
+        compareImpExt(at, bt, Messages.EXTENDED_TYPE_ADDED, Messages.EXTENDED_TYPE_CHANGED, Messages.EXTENDED_TYPE_REMOVED, "net.sourceforge.pmd.ast.ASTExtendsList");
     }
 
     protected void compareImplements(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        compareImpExt(at, bt, IMPLEMENTED_TYPE_ADDED, IMPLEMENTED_TYPE_CHANGED, IMPLEMENTED_TYPE_REMOVED, "net.sourceforge.pmd.ast.ASTImplementsList");
+        compareImpExt(at, bt, Messages.IMPLEMENTED_TYPE_ADDED, Messages.IMPLEMENTED_TYPE_CHANGED, Messages.IMPLEMENTED_TYPE_REMOVED, "net.sourceforge.pmd.ast.ASTImplementsList");
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {

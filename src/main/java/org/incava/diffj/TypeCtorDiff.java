@@ -27,10 +27,10 @@ public class TypeCtorDiff extends AbstractTypeItemDiff<ASTConstructorDeclaration
     }
 
     public String getAddedMessage(ASTConstructorDeclaration md) {
-        return TypeDiff.CONSTRUCTOR_ADDED;
+        return Messages.CONSTRUCTOR_ADDED;
     }
 
     public String getRemovedMessage(ASTConstructorDeclaration md) {
-        return TypeDiff.CONSTRUCTOR_REMOVED;
+        return Messages.CONSTRUCTOR_REMOVED;
     }
 }

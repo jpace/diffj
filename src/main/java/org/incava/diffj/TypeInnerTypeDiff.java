@@ -22,11 +22,11 @@ public class TypeInnerTypeDiff extends AbstractTypeItemDiff<ASTClassOrInterfaceD
     }
 
     public String getAddedMessage(ASTClassOrInterfaceDeclaration coid) {
-        return coid.isInterface() ? TypeDiff.INNER_INTERFACE_ADDED : TypeDiff.INNER_CLASS_ADDED;
+        return coid.isInterface() ? Messages.INNER_INTERFACE_ADDED : Messages.INNER_CLASS_ADDED;
     }
 
     public String getRemovedMessage(ASTClassOrInterfaceDeclaration coid) {
-        return coid.isInterface() ? TypeDiff.INNER_INTERFACE_REMOVED : TypeDiff.INNER_CLASS_REMOVED;
+        return coid.isInterface() ? Messages.INNER_INTERFACE_REMOVED : Messages.INNER_CLASS_REMOVED;
     }
 
     public double getScore(ASTClassOrInterfaceDeclaration a, ASTClassOrInterfaceDeclaration b) {

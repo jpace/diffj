@@ -6,9 +6,9 @@ import org.incava.ijdk.text.Location;
 
 public class TestMethodDiff extends ItemDiffTest {
     protected final static String[] PARAM_MSGS = new String[] {
-        MethodDiff.PARAMETER_REMOVED,
+        Messages.PARAMETER_REMOVED,
         null,
-        MethodDiff.PARAMETER_ADDED,
+        Messages.PARAMETER_ADDED,
     };
 
     public TestMethodDiff(String name) {
@@ -110,7 +110,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    Integer foo() { return null; }",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, MethodDiff.RETURN_TYPE_CHANGED, "Object", "Integer"),
+                 new FileDiffChange(getMessage(null, null, Messages.RETURN_TYPE_CHANGED, "Object", "Integer"),
                                     loc(2, 5), loc(2, 10), 
                                     loc(3, 5), loc(3, 11)));
     }
@@ -126,7 +126,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo(Integer i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "i", loc(2, 13), loc(2, 14), loc(3, 22), loc(3, 22)));
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "i", loc(2, 13), loc(2, 14), loc(3, 22), loc(3, 22)));
     }
 
     public void testParameterAddedOneToTwo() {
@@ -140,7 +140,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo(String s, Integer i) {}",
                            "}"),
 
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "i", loc(2, 13), loc(2, 22), loc(3, 24), loc(3, 32)));
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "i", loc(2, 13), loc(2, 22), loc(3, 24), loc(3, 32)));
     }
 
     public void testParameterAddedOneToThree() {
@@ -154,8 +154,8 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo(List[] ary, String s, Integer i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "ary", loc(2, 13), loc(2, 22), loc(3, 14), loc(3, 23)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "i",   loc(2, 13), loc(2, 22), loc(3, 36), loc(3, 44)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "ary", loc(2, 13), loc(2, 22), loc(3, 14), loc(3, 23)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "i",   loc(2, 13), loc(2, 22), loc(3, 36), loc(3, 44)),
                  makeParamReorderedRef("s", 0, 1, loc(2, 21), loc(3, 33)));
     }
 
@@ -170,7 +170,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.PARAMETER_REMOVED, "i", loc(2, 22), loc(2, 22), loc(3, 13), loc(3, 14)));
+                 makeCodeChangedRef(Messages.PARAMETER_REMOVED, "i", loc(2, 22), loc(2, 22), loc(3, 13), loc(3, 14)));
     }
 
     public void testParameterRemovedTwoToOne() {
@@ -184,7 +184,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.PARAMETER_REMOVED, "i", loc(2, 24), loc(2, 32), loc(2, 13), loc(2, 22)));
+                 makeCodeChangedRef(Messages.PARAMETER_REMOVED, "i", loc(2, 24), loc(2, 32), loc(2, 13), loc(2, 22)));
     }
 
     public void testParameterRemovedThreeToOne() {
@@ -198,9 +198,9 @@ public class TestMethodDiff extends ItemDiffTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.PARAMETER_REMOVED, "ary", loc(2, 14), loc(2, 23), loc(2, 13), loc(2, 22)),
+                 makeCodeChangedRef(Messages.PARAMETER_REMOVED, "ary", loc(2, 14), loc(2, 23), loc(2, 13), loc(2, 22)),
                  makeParamReorderedRef("s", 1, 0, loc(2, 33), loc(2, 21)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_REMOVED, "i",   loc(2, 36), loc(2, 44), loc(2, 13), loc(2, 22)));
+                 makeCodeChangedRef(Messages.PARAMETER_REMOVED, "i",   loc(2, 36), loc(2, 44), loc(2, 13), loc(2, 22)));
     }
 
     public void testParameterChangedType() {
@@ -214,7 +214,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo(Integer i) {}",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, MethodDiff.PARAMETER_TYPE_CHANGED, "int", "Integer"), 
+                 new FileDiffChange(getMessage(null, null, Messages.PARAMETER_TYPE_CHANGED, "int", "Integer"), 
                                     loc(2, 14), loc(2, 18), 
                                     loc(3, 14), loc(3, 22)));
     }
@@ -230,7 +230,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo(int x) {}",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, MethodDiff.PARAMETER_NAME_CHANGED, "i", "x"),
+                 new FileDiffChange(getMessage(null, null, Messages.PARAMETER_NAME_CHANGED, "i", "x"),
                                     loc(2, 18), loc(2, 18), 
                                     loc(3, 18), loc(3, 18)));
     }
@@ -276,7 +276,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo(int i2, int i) {}",
                            "}"),
 
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "i2", loc(2, 13), loc(2, 19), loc(3, 14), loc(3, 19)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "i2", loc(2, 13), loc(2, 19), loc(3, 14), loc(3, 19)),
                  makeParamReorderedRef("i", 0, 1, loc(2, 18), loc(3, 26)));
     }
 
@@ -291,7 +291,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo() throws Exception {}",
                            "}"),
 
-                 makeCodeChangedRef(MethodDiff.THROWS_ADDED, "Exception", loc(2, 5), loc(2, 17), loc(3, 23), loc(3, 31)));
+                 makeCodeChangedRef(Messages.THROWS_ADDED, "Exception", loc(2, 5), loc(2, 17), loc(3, 23), loc(3, 31)));
     }
 
     public void testThrowsAddedOneToTwo() {
@@ -305,7 +305,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo() throws IOException, NullPointerException {}",
                            "}"),
 
-                 makeCodeChangedRef(MethodDiff.THROWS_ADDED, "NullPointerException", loc(2, 23), loc(2, 33), loc(3, 36), loc(3, 55)));
+                 makeCodeChangedRef(Messages.THROWS_ADDED, "NullPointerException", loc(2, 23), loc(2, 33), loc(3, 36), loc(3, 55)));
     }
 
     public void testThrowsAddedOneToThree() {
@@ -319,9 +319,9 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo() throws ArrayIndexOutOfBoundsException, IOException, NullPointerException {}",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.THROWS_ADDED, "ArrayIndexOutOfBoundsException", loc(2, 23), loc(2, 33), loc(3, 23), loc(3, 52)),
+                 makeCodeChangedRef(Messages.THROWS_ADDED, "ArrayIndexOutOfBoundsException", loc(2, 23), loc(2, 33), loc(3, 23), loc(3, 52)),
                  new FileDiffChange(throwsReordMsg("IOException", 0, 1), loc(2, 23), loc(2, 33), loc(3, 55), loc(3, 65)),
-                 makeCodeChangedRef(MethodDiff.THROWS_ADDED, "NullPointerException", loc(2, 23), loc(2, 33), loc(3, 68), loc(3, 87)));
+                 makeCodeChangedRef(Messages.THROWS_ADDED, "NullPointerException", loc(2, 23), loc(2, 33), loc(3, 68), loc(3, 87)));
     }
 
     public void testThrowsRemovedOneToNone() {
@@ -335,7 +335,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.THROWS_REMOVED, "IOException", loc(2, 23), loc(2, 33), loc(3, 5), loc(3, 17)));
+                 makeCodeChangedRef(Messages.THROWS_REMOVED, "IOException", loc(2, 23), loc(2, 33), loc(3, 5), loc(3, 17)));
     }
 
     public void testThrowsRemovedTwoToOne() {
@@ -349,7 +349,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.THROWS_REMOVED, "NullPointerException", loc(2, 36), loc(2, 55), loc(2, 23), loc(2, 33)));
+                 makeCodeChangedRef(Messages.THROWS_REMOVED, "NullPointerException", loc(2, 36), loc(2, 55), loc(2, 23), loc(2, 33)));
     }
 
     public void testThrowsRemovedThreeToOne() {
@@ -363,9 +363,9 @@ public class TestMethodDiff extends ItemDiffTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.THROWS_REMOVED, "ArrayIndexOutOfBoundsException", loc(2, 23), loc(2, 52), loc(2, 23), loc(2, 33)),
+                 makeCodeChangedRef(Messages.THROWS_REMOVED, "ArrayIndexOutOfBoundsException", loc(2, 23), loc(2, 52), loc(2, 23), loc(2, 33)),
                  new FileDiffChange(throwsReordMsg("IOException", 1, 0), loc(2, 55), loc(2, 65), loc(2, 23), loc(2, 33)),
-                 makeCodeChangedRef(MethodDiff.THROWS_REMOVED, "NullPointerException", loc(2, 68), loc(2, 87), loc(2, 23), loc(2, 33)));
+                 makeCodeChangedRef(Messages.THROWS_REMOVED, "NullPointerException", loc(2, 68), loc(2, 87), loc(2, 23), loc(2, 33)));
     }
 
     public void testThrowsReordered() {
@@ -399,7 +399,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "}"),
                  
                  makeModifierRef("abstract", null, loc(2, 5), loc(2, 12), loc(3, 5), loc(3, 8)),
-                 new FileDiffChange(MethodDiff.METHOD_BLOCK_ADDED, loc(2, 14), loc(2, 24), loc(3, 5), loc(3, 17)));
+                 new FileDiffChange(Messages.METHOD_BLOCK_ADDED, loc(2, 14), loc(2, 24), loc(3, 5), loc(3, 17)));
     }
 
     public void testImplementedToAbstractMethod() {
@@ -414,7 +414,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "}"),
                  
                  makeModifierRef(null, "abstract", loc(2, 5), loc(2,  8), loc(3, 5), loc(3, 12)),
-                 new FileDiffChange(MethodDiff.METHOD_BLOCK_REMOVED, loc(2, 5), loc(2, 17), loc(3, 14), loc(3, 24)));
+                 new FileDiffChange(Messages.METHOD_BLOCK_REMOVED, loc(2, 5), loc(2, 17), loc(3, 14), loc(3, 24)));
     }
 
     public void testCodeNotChanged() {
@@ -447,7 +447,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    }",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.CODE_CHANGED, "bar()", loc(2, 25), loc(2, 25), loc(4, 17), loc(4, 17)));
+                 makeCodeChangedRef(Messages.CODE_CHANGED, "bar()", loc(2, 25), loc(2, 25), loc(4, 17), loc(4, 17)));
     }
     
     public void testCodeInserted() {
@@ -464,7 +464,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    }",
                            "}"),
                  
-                 makeCodeAddedRef(MethodDiff.CODE_ADDED, "bar()", loc(2, 17), loc(2, 22), loc(4, 9), loc(4, 18)));
+                 makeCodeAddedRef(Messages.CODE_ADDED, "bar()", loc(2, 17), loc(2, 22), loc(4, 9), loc(4, 18)));
     }
 
     public void testCodeDeleted() {
@@ -481,7 +481,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    int bar() { return -1; }",
                            "}"),
                  
-                 makeCodeDeletedRef(MethodDiff.CODE_REMOVED, "bar()", loc(3, 9), loc(3, 18), loc(3, 17), loc(3, 22)));
+                 makeCodeDeletedRef(Messages.CODE_REMOVED, "bar()", loc(3, 9), loc(3, 18), loc(3, 17), loc(3, 22)));
     }
 
     public void testCodeInsertedAndChanged() {
@@ -498,7 +498,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    }",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.CODE_CHANGED, "bar()", loc(2, 17), loc(2, 25), loc(4, 9), loc(5, 17)));
+                 makeCodeChangedRef(Messages.CODE_CHANGED, "bar()", loc(2, 17), loc(2, 25), loc(4, 9), loc(5, 17)));
     }
 
     public void testMethodNativeToImplemented() {
@@ -515,7 +515,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "}"),
 
                  makeModifierRef("native", null, loc(2, 5), loc(2, 10), loc(3, 5), loc(3, 8)),
-                 new FileDiffChange(MethodDiff.METHOD_BLOCK_ADDED, loc(2, 12), loc(2, 22), loc(3, 5), loc(5, 5)));
+                 new FileDiffChange(Messages.METHOD_BLOCK_ADDED, loc(2, 12), loc(2, 22), loc(3, 5), loc(5, 5)));
     }
 
     public void testMethodImplementedToNative() {
@@ -530,7 +530,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "}"),
                  
                  makeModifierRef(null, "native", loc(2, 5), loc(2, 8), loc(2, 5), loc(2, 10)),
-                 new FileDiffChange(MethodDiff.METHOD_BLOCK_REMOVED, loc(2, 5), loc(4, 5), loc(2, 12), loc(2, 22)));
+                 new FileDiffChange(Messages.METHOD_BLOCK_REMOVED, loc(2, 5), loc(4, 5), loc(2, 12), loc(2, 22)));
     }
 
     // See comment in TestDiff.java, with regard to misleading LCSes.
@@ -646,7 +646,7 @@ public class TestMethodDiff extends ItemDiffTest {
                            "            }",
                            "        }"),
                  
-                 makeCodeChangedRef(MethodDiff.CODE_CHANGED, "bar()", loc(2, 17), loc(2, 25), loc(4, 9), loc(5, 17)));
+                 makeCodeChangedRef(Messages.CODE_CHANGED, "bar()", loc(2, 17), loc(2, 25), loc(4, 9), loc(5, 17)));
     }
 
     public void testParameterReorderedByName() {
@@ -662,44 +662,44 @@ public class TestMethodDiff extends ItemDiffTest {
                            "                    String string1, String string2, String string3, java.lang.Object[] obj1, java.lang.Object[] obj2);",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED,   "obj",     loc(2, 39), loc(4, 28), loc(3, 21), loc(3, 40)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED,   "string1", loc(2, 39), loc(4, 28), loc(4, 21), loc(4, 34)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED,   "string2", loc(2, 39), loc(4, 28), loc(4, 37), loc(4, 50)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED,   "string3", loc(2, 39), loc(4, 28), loc(4, 53), loc(4, 66)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_REMOVED, "ctx",     loc(2, 40), loc(2, 56), loc(3, 20), loc(4, 117)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED,   "obj",     loc(2, 39), loc(4, 28), loc(3, 21), loc(3, 40)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED,   "string1", loc(2, 39), loc(4, 28), loc(4, 21), loc(4, 34)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED,   "string2", loc(2, 39), loc(4, 28), loc(4, 37), loc(4, 50)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED,   "string3", loc(2, 39), loc(4, 28), loc(4, 53), loc(4, 66)),
+                 makeCodeChangedRef(Messages.PARAMETER_REMOVED, "ctx",     loc(2, 40), loc(2, 56), loc(3, 20), loc(4, 117)),
                  new FileDiffChange(paramReordMsg("obj1", 1, 4), loc(3, 9), loc(3, 27), loc(4, 69), loc(4, 91)),
                  new FileDiffChange(paramReordMsg("obj2", 2, 5), loc(4, 9), loc(4, 27), loc(4, 94), loc(4, 116)));
     }
 
     protected String paramMsg(String from, String to) {
-        return getMessage(MethodDiff.PARAMETER_REMOVED,
-                          MethodDiff.PARAMETER_ADDED,
+        return getMessage(Messages.PARAMETER_REMOVED,
+                          Messages.PARAMETER_ADDED,
                           null, 
                           from, to);
     }
 
     protected FileDiffChange makeParamReorderedRef(String paramName, int oldPosition, int newPosition, Location fromStart, Location toStart) {
-        String msg = MessageFormat.format(MethodDiff.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
+        String msg = MessageFormat.format(Messages.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
         return new FileDiffChange(msg, fromStart, loc(fromStart, paramName), toStart, loc(toStart, paramName));
     }
 
     protected String paramReordMsg(String paramName, int oldPosition, int newPosition) {
-        return MessageFormat.format(MethodDiff.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
+        return MessageFormat.format(Messages.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
     }
 
     protected String paramReordRenamedMsg(String oldName, int oldPosition, String newName, int newPosition) {
-        return MessageFormat.format(MethodDiff.PARAMETER_REORDERED_AND_RENAMED, oldName, oldPosition, newPosition, newName);
+        return MessageFormat.format(Messages.PARAMETER_REORDERED_AND_RENAMED, oldName, oldPosition, newPosition, newName);
     }
 
     protected String throwsMsg(String from, String to) {
-        return getMessage(MethodDiff.THROWS_REMOVED,
-                          MethodDiff.THROWS_ADDED,
+        return getMessage(Messages.THROWS_REMOVED,
+                          Messages.THROWS_ADDED,
                           null, 
                           from, to);
     }
 
     protected String throwsReordMsg(String throwsName, int oldPosition, int newPosition) {
-        return MessageFormat.format(MethodDiff.THROWS_REORDERED, throwsName, oldPosition, newPosition);
+        return MessageFormat.format(Messages.THROWS_REORDERED, throwsName, oldPosition, newPosition);
     }
 
     public void xtestIfStatementsNotChangedBracesToStatements() {
@@ -718,11 +718,11 @@ public class TestMethodDiff extends ItemDiffTest {
                            "    }",
                            "}"),
                  
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "obj",     loc(2, 39), loc(4, 28), loc(3, 21), loc(3, 40)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "string1", loc(2, 39), loc(4, 28), loc(4, 21), loc(4, 34)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "string2", loc(2, 39), loc(4, 28), loc(4, 37), loc(4, 50)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_ADDED, "string3", loc(2, 39), loc(4, 28), loc(4, 53), loc(4, 66)),
-                 makeCodeChangedRef(MethodDiff.PARAMETER_REMOVED, "ctx",   loc(2, 40), loc(2, 56), loc(3, 20), loc(4, 117)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "obj",     loc(2, 39), loc(4, 28), loc(3, 21), loc(3, 40)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "string1", loc(2, 39), loc(4, 28), loc(4, 21), loc(4, 34)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "string2", loc(2, 39), loc(4, 28), loc(4, 37), loc(4, 50)),
+                 makeCodeChangedRef(Messages.PARAMETER_ADDED, "string3", loc(2, 39), loc(4, 28), loc(4, 53), loc(4, 66)),
+                 makeCodeChangedRef(Messages.PARAMETER_REMOVED, "ctx",   loc(2, 40), loc(2, 56), loc(3, 20), loc(4, 117)),
                  new FileDiffChange(paramReordMsg("obj1", 1, 4), loc(3, 9), loc(3, 27), loc(4, 69), loc(4, 91)),
                  new FileDiffChange(paramReordMsg("obj2", 2, 5), loc(4, 9), loc(4, 27), loc(4, 94), loc(4, 116)));
     }
