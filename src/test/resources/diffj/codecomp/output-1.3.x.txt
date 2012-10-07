@@ -1,0 +1,20 @@
+src/test/resources/diffj/codecomp/d0/Changed.java <=> src/test/resources/diffj/codecomp/d1/Changed.java
+4,5d4 code removed in f(String)
+  class Changed {
+      void f(String s) {
+          boolean debug = true;
+!         if ([31mdebug) System.out.println("foo");[0m
+! [31m        if ([0ms instanceof String) System.out.println("s: " + s);        
+  
+          String x = null;
+          String y = null;
+
+7,8d6 code removed in f(String)
+          if (debug) System.out.println("foo");
+          if (s instanceof String) System.out.println("s: " + s);        
+  
+!         String x [31m= null;[0m
+! [31m        String y[0m = null;
+      }
+  }
+

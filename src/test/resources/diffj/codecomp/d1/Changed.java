@@ -1,5 +1,8 @@
 class Changed {
-    void method() {
-        if (true) { foo(); }
+    void f(String s) {
+        boolean debug = true;
+        if (s instanceof String) System.out.println("s: " + s);
+
+        String x = null;
     }
 }

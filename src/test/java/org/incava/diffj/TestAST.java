@@ -2,8 +2,10 @@ package org.incava.diffj;
 
 import java.io.*;
 import java.net.URL;
+import java.util.List;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.ast.Token;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
 import org.incava.pmdx.SimpleNodeUtil;
@@ -29,10 +31,17 @@ public class TestAST extends DiffJTest {
         SimpleNodeUtil.dump(node);
     }
 
-    public SimpleNode getChild(SimpleNode parent, int idx, boolean show) {
+    public List<Token> dumpTokens(SimpleNode node) {
+        List<Token> tokens = SimpleNodeUtil.getChildTokens(node);
+        tr.Ace.log("tokens", tokens);
+        return tokens;
+    }
+
+    public SimpleNode getChild(SimpleNode parent, int idx, boolean dump) {
         SimpleNode child = SimpleNodeUtil.findChild(parent, (String)null, idx);
-        if (show) {
+        if (dump) {
             dump(child);
+            // dumpTokens(child);
         }
         return child;
     }
@@ -53,6 +62,12 @@ public class TestAST extends DiffJTest {
         SimpleNode meth = getChild(bodyDecl, 0, false);
 
         SimpleNode methBlk = getChild(meth, 2, true);
+
+        List<SimpleNode> statements = SimpleNodeUtil.snatchChildren(methBlk, null);
+        for (SimpleNode stmt : statements) {
+            tr.Ace.yellow("stmt", stmt);
+            dumpTokens(stmt);
+        }
     }
 
     public void testSomething() throws Exception {

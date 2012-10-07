@@ -27,7 +27,7 @@ jar {
 }
 
 test {
-    // excludes = [ '**/Abstract*', '**/.#*' ]
+    // excludes = [ '**/IncavaTestCase*', '**/.#*' ]
     includes = [ '**/Test*' ]
 }
 

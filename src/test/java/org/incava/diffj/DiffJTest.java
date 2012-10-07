@@ -111,10 +111,10 @@ public class DiffJTest extends IncavaTestCase {
                 if (expectations.length != diffs.size()) {
                     tr.Ace.setVerbose(true);
                     
-                    tr.Ace.yellow("diffs.size", String.valueOf(diffs.size()));
+                    tr.Ace.yellow("diffs.size", diffs.size());
                     tr.Ace.yellow("diffs", diffs);
                     
-                    tr.Ace.yellow("expectations.length", String.valueOf(expectations.length));
+                    tr.Ace.yellow("expectations.length", expectations.length);
                     tr.Ace.yellow("expectations", expectations);
                     
                     assertEquals("number of differences", expectations.length, diffs.size());
