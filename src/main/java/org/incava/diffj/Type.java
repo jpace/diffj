@@ -72,7 +72,7 @@ public class Type extends Item {
         TypeFieldDiff tfd = new TypeFieldDiff(diffs);
         tfd.compare(aNode, bNode);
         
-        TypeCtorDiff ctd = new TypeCtorDiff(diffs);
+        TypeCtor ctd = new TypeCtor(diffs);
         ctd.compare(aNode, bNode);
         
         TypeInnerTypeDiff titd = new TypeInnerTypeDiff(diffs, this);
