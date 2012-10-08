@@ -1,7 +1,7 @@
 package org.incava.diffj;
 
-public class TestMethodDiffCodeChange extends ItemDiffTest {
-    public TestMethodDiffCodeChange(String name) {
+public class TestMethodCodeChange extends ItemTest {
+    public TestMethodCodeChange(String name) {
         super(name);
     }
 

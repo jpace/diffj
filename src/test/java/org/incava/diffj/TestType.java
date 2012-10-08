@@ -2,8 +2,8 @@ package org.incava.diffj;
 
 import org.incava.analysis.FileDiffChange;
 
-public class TestTypeDiff extends ItemDiffTest {
-    public TestTypeDiff(String name) {
+public class TestType extends ItemTest {
+    public TestType(String name) {
         super(name);
     }
 

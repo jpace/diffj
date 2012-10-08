@@ -7,7 +7,7 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.ijdk.text.Location;
 
-public class ItemDiffTest extends DiffJTest {
+public class ItemTest extends DiffJTest {
     protected final static String[] METHOD_MSGS = new String[] {
         Messages.METHOD_REMOVED,
         Messages.METHOD_CHANGED, 
@@ -68,7 +68,7 @@ public class ItemDiffTest extends DiffJTest {
         Messages.VARIABLE_ADDED,
     };
 
-    public ItemDiffTest(String name) {
+    public ItemTest(String name) {
         super(name);
     }
 

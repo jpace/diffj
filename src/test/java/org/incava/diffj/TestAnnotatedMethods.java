@@ -2,8 +2,8 @@ package org.incava.diffj;
 
 import org.incava.java.Java;
 
-public class TestAnnotatedMethods extends ItemDiffTest {
-    protected final static String[] METHOD_MSGS = TestTypeDiff.METHOD_MSGS;
+public class TestAnnotatedMethods extends ItemTest {
+    protected final static String[] METHOD_MSGS = TestType.METHOD_MSGS;
 
     public TestAnnotatedMethods(String name) {
         super(name);
