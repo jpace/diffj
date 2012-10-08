@@ -24,8 +24,8 @@ public class FunctionDiff extends ItemDiff {
     }
 
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
-        ParameterDiff pd = new ParameterDiff(getFileDiffs());
-        pd.compareParameters(fromFormalParams, toFormalParams);
+        Parameters params = new Parameters(getFileDiffs(), fromFormalParams, toFormalParams);
+        params.compare();
     }
     
     protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
