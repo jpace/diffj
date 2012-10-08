@@ -9,10 +9,10 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.*;
 
 public class Modifiers {    
-    private final DiffComparator differences;
+    private final Differences differences;
 
     public Modifiers(FileDiffs fileDiffs) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
     }
 
     /**

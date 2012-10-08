@@ -5,10 +5,10 @@ import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 
 public class CompilationUnits {
-    private final DiffComparator differences;
+    private final Differences differences;
 
     public CompilationUnits(Report report) {
-        this.differences = new DiffComparator(report);
+        this.differences = new Differences(report);
     }
 
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {

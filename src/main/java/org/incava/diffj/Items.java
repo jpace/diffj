@@ -6,10 +6,14 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 
 public class Items {
-    protected final DiffComparator differences;
+    protected final Differences differences;
     
     public Items(FileDiffs fileDiffs) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
+    }
+    
+    public Items(Differences differences) {
+        this.differences = differences;
     }
 
     public void compareModifiers(SimpleNode aNode, SimpleNode bNode, int[] modifierTypes) {

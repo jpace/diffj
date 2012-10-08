@@ -9,10 +9,10 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.ThrowsUtil;
 
 public class Throws {
-    private final DiffComparator differences;
+    private final Differences differences;
 
     public Throws(FileDiffs fileDiffs) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
     }
     
     public void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {

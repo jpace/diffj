@@ -11,10 +11,10 @@ import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Packages {
-    private final DiffComparator differences;
+    private final Differences differences;
 
     public Packages(FileDiffs fileDiffs) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
     }
 
     public ASTName findChildName(ASTPackageDeclaration pkg) {

@@ -6,10 +6,10 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.*;
 
 public class Access {
-    private final DiffComparator differences;
+    private final Differences differences;
 
     public Access(FileDiffs fileDiffs) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
     }
 
     public void compare(SimpleNode aNode, SimpleNode bNode) {

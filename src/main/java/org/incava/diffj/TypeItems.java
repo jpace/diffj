@@ -15,20 +15,16 @@ import org.incava.ijdk.util.MultiMap;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public abstract class TypeItems<Type extends SimpleNode> {
-    protected final DiffComparator differences;
+    protected final Differences differences;
     private final String clsName;
 
     public TypeItems(FileDiffs fileDiffs, String clsName) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
         this.clsName = clsName;
     }
 
     public TypeItems(FileDiffs differences, Class<Type> cls) {
         this(differences, cls == null ? (String)null : cls.getName());
-    }
-
-    public String getClassName() {
-        return clsName;
     }
 
     public void compare(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {

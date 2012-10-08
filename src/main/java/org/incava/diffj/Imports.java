@@ -16,10 +16,10 @@ import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Imports {
-    private final DiffComparator differences;
+    private final Differences differences;
 
     public Imports(FileDiffs fileDiffs) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
     }
 
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {

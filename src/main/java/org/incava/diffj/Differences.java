@@ -14,21 +14,21 @@ import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class DiffComparator {
+public class Differences {
     private final Report report;    
     private final FileDiffs fileDiffs;
 
-    public DiffComparator(Report report) {
+    public Differences(Report report) {
         this.report = report;
         this.fileDiffs = report.getDifferences();
     }
 
-    public DiffComparator(FileDiffs diffs) {
+    public Differences(FileDiffs diffs) {
         this.report = null;
         this.fileDiffs = diffs;
     }
 
-    public DiffComparator() {
+    public Differences() {
         this(new FileDiffs());
     }
 

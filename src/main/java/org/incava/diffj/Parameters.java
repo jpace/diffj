@@ -10,12 +10,12 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.ParameterUtil;
 
 public class Parameters {
-    private final DiffComparator differences;
+    private final Differences differences;
     private final ASTFormalParameters fromFormalParams;
     private final ASTFormalParameters toFormalParams;
     
     public Parameters(FileDiffs fileDiffs, ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
         this.fromFormalParams = fromFormalParams;
         this.toFormalParams = toFormalParams;
     }

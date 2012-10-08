@@ -28,10 +28,10 @@ public class Code {
         }
     }
 
-    private final DiffComparator differences;
+    private final Differences differences;
 
     public Code(FileDiffs fileDiffs) {
-        this.differences = new DiffComparator(fileDiffs);
+        this.differences = new Differences(fileDiffs);
     }
 
     public void compareCode(String fromName, List<Token> fromList, String toName, List<Token> toList) {
