@@ -6,9 +6,9 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.ClassUtil;
 
 public class TypeInnerTypeDiff extends TypeItem<ASTClassOrInterfaceDeclaration> {
-    private final TypeDiff typeDiff;
+    private final Type typeDiff;
 
-    public TypeInnerTypeDiff(FileDiffs differences, TypeDiff typeDiff) {
+    public TypeInnerTypeDiff(FileDiffs differences, Type typeDiff) {
         super(differences, "net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration");
         this.typeDiff = typeDiff;
     }

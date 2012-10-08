@@ -16,9 +16,9 @@ public class TypeCtorDiff extends TypeItem<ASTConstructorDeclaration> {
     }    
 
     public void doCompare(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
-        CtorDiff differ = new CtorDiff(fileDiffs);
-        differ.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
-        differ.compare(a, b);
+        Ctor ctor = new Ctor(fileDiffs);
+        ctor.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
+        ctor.compare(a, b);
     }
 
     public double getScore(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {

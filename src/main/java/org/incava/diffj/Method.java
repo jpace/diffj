@@ -13,7 +13,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class MethodDiff extends FunctionDiff {
+public class Method extends Function {
     protected static final int[] VALID_MODIFIERS = new int[] {
         JavaParserConstants.ABSTRACT,
         JavaParserConstants.FINAL,
@@ -22,7 +22,7 @@ public class MethodDiff extends FunctionDiff {
         JavaParserConstants.STRICTFP
     };
 
-    public MethodDiff(FileDiffs differences) {
+    public Method(FileDiffs differences) {
         super(differences);
     }
 
@@ -41,14 +41,12 @@ public class MethodDiff extends FunctionDiff {
     protected void compareParameters(ASTMethodDeclaration from, ASTMethodDeclaration to) {
         ASTFormalParameters fromFormalParams = MethodUtil.getParameters(from);
         ASTFormalParameters toFormalParams = MethodUtil.getParameters(to);
-
         compareParameters(fromFormalParams, toFormalParams);
     }
 
     protected void compareThrows(ASTMethodDeclaration from, ASTMethodDeclaration to) {
         ASTNameList fromThrowsList = MethodUtil.getThrowsList(from);
         ASTNameList toThrowsList = MethodUtil.getThrowsList(to);
-
         compareThrows(from, fromThrowsList, to, toThrowsList);
     }
 
@@ -61,16 +59,15 @@ public class MethodDiff extends FunctionDiff {
 
         if (fromBlock == null) {
             if (toBlock != null) {
-                changed(from, to, Messages.METHOD_BLOCK_ADDED);
+                differences.changed(from, to, Messages.METHOD_BLOCK_ADDED);
             }
         }
         else if (toBlock == null) {
-            changed(from, to, Messages.METHOD_BLOCK_REMOVED);
+            differences.changed(from, to, Messages.METHOD_BLOCK_REMOVED);
         }
         else {
             String fromName = MethodUtil.getFullName(from);
             String toName = MethodUtil.getFullName(to);
-            
             compareBlocks(fromName, fromBlock, toName, toBlock);
         }
     }
@@ -89,7 +86,6 @@ public class MethodDiff extends FunctionDiff {
     protected void compareBlocks(String fromName, ASTBlock fromBlock, String toName, ASTBlock toBlock) {
         List<Token> from = SimpleNodeUtil.getChildTokens(fromBlock);
         List<Token> to = SimpleNodeUtil.getChildTokens(toBlock);
-
         compareCode(fromName, from, toName, to);
     }
 }

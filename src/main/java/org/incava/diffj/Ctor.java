@@ -12,8 +12,8 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class CtorDiff extends FunctionDiff {
-    public CtorDiff(FileDiffs differences) {
+public class Ctor extends Function {
+    public Ctor(FileDiffs differences) {
         super(differences);
     }
 
@@ -60,10 +60,8 @@ public class CtorDiff extends FunctionDiff {
     protected void compareBodies(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
         List<Token> aCode = getCodeSerially(a);
         List<Token> bCode = getCodeSerially(b);
-        
         String aName = CtorUtil.getFullName(a);
         String bName = CtorUtil.getFullName(b);
-
         compareCode(aName, aCode, bName, bCode);
     }
 }

@@ -15,9 +15,9 @@ public class TypeFieldDiff extends TypeItem<ASTFieldDeclaration> {
     }    
 
     public void doCompare(ASTFieldDeclaration a, ASTFieldDeclaration b) {
-        FieldDiff differ = new FieldDiff(fileDiffs);
-        differ.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
-        differ.compare(a, b);
+        Field field = new Field(fileDiffs);
+        field.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
+        field.compare(a, b);
     }
 
     public String getName(ASTFieldDeclaration fd) {

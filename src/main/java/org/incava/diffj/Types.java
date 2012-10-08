@@ -13,8 +13,8 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class TypesDiff extends ItemDiff {
-    public TypesDiff(FileDiffs differences) {
+public class Types extends Item {
+    public Types(FileDiffs differences) {
         super(differences);
     }
 
@@ -35,15 +35,15 @@ public class TypesDiff extends ItemDiff {
 
             if (atd == null) {
                 Token bName = TypeDeclarationUtil.getName(btd);
-                added(a, btd, Messages.TYPE_DECLARATION_ADDED, bName.image);
+                differences.added(a, btd, Messages.TYPE_DECLARATION_ADDED, bName.image);
             }
             else if (btd == null) {
                 Token aName = TypeDeclarationUtil.getName(atd);
-                deleted(atd, b, Messages.TYPE_DECLARATION_REMOVED, aName.image);
+                differences.deleted(atd, b, Messages.TYPE_DECLARATION_REMOVED, aName.image);
             }
             else {
-                TypeDiff differ = new TypeDiff(getFileDiffs());
-                differ.compare(atd, btd);
+                Type type = new Type(differences.getFileDiffs());
+                type.compare(atd, btd);
             }
         }
     }

@@ -16,9 +16,9 @@ public class TypeMethodDiff extends TypeItem<ASTMethodDeclaration> {
     }    
 
     public void doCompare(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        MethodDiff differ = new MethodDiff(fileDiffs);
-        differ.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
-        differ.compare(a, b);
+        Method method = new Method(fileDiffs);
+        method.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
+        method.compare(a, b);
     }
 
     public double getScore(ASTMethodDeclaration a, ASTMethodDeclaration b) {

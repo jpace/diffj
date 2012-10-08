@@ -6,23 +6,18 @@ import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffs;
-import org.incava.analysis.Report;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class TypeDiff extends ItemDiff {
+public class Type extends Item {
     public static final int[] VALID_TYPE_MODIFIERS = new int[] {
         JavaParserConstants.ABSTRACT,
         JavaParserConstants.FINAL,
         JavaParserConstants.STATIC, // valid only for inner types
         JavaParserConstants.STRICTFP
     };
-    
-    public TypeDiff(Report report) {
-        super(report);
-    }
 
-    public TypeDiff(FileDiffs differences) {
+    public Type(FileDiffs differences) {
         super(differences);
     }
 
@@ -43,10 +38,10 @@ public class TypeDiff extends ItemDiff {
 
     public void compare(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
         if (!at.isInterface() && bt.isInterface()) {
-            changed(at, bt, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
+            differences.changed(at, bt, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
         else if (at.isInterface() && !bt.isInterface()) {
-            changed(at, bt, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
+            differences.changed(at, bt, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
         }
         
         SimpleNode atParent = SimpleNodeUtil.getParent(at);
@@ -60,18 +55,17 @@ public class TypeDiff extends ItemDiff {
     }
 
     protected void compareExtends(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        Extends ed = new Extends(getFileDiffs());
+        Extends ed = new Extends(differences.getFileDiffs());
         ed.compareExtends(at, bt);
     }
 
     protected void compareImplements(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        Implements id = new Implements(getFileDiffs());
+        Implements id = new Implements(differences.getFileDiffs());
         id.compareImplements(at, bt);
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
-        FileDiffs diffs = getFileDiffs();
-        
+        FileDiffs diffs = differences.getFileDiffs();        
         TypeMethodDiff tmd = new TypeMethodDiff(diffs);
         tmd.compare(aNode, bNode);
         

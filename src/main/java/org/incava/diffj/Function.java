@@ -7,8 +7,8 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class FunctionDiff extends ItemDiff {
-    public FunctionDiff(FileDiffs differences) {
+public class Function extends Item {
+    public Function(FileDiffs differences) {
         super(differences);
     }
 
@@ -19,17 +19,17 @@ public class FunctionDiff extends ItemDiff {
         String     toRetTypeStr   = SimpleNodeUtil.toString(toRetType);
 
         if (!fromRetTypeStr.equals(toRetTypeStr)) {
-            changed(fromRetType, toRetType, Messages.RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
+            differences.changed(fromRetType, toRetType, Messages.RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
         }
     }
 
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
-        Parameters params = new Parameters(getFileDiffs(), fromFormalParams, toFormalParams);
+        Parameters params = new Parameters(differences.getFileDiffs(), fromFormalParams, toFormalParams);
         params.compare();
     }
     
     protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
-        Throws thrws = new Throws(getFileDiffs());
+        Throws thrws = new Throws(differences.getFileDiffs());
         thrws.compareThrows(fromNode, fromNameList, toNode, toNameList);
     }
 }

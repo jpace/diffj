@@ -16,13 +16,13 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class FieldDiff extends ItemDiff {
+public class Field extends Item {
     protected static final int[] VALID_MODIFIERS = new int[] {
         JavaParserConstants.FINAL,
         JavaParserConstants.STATIC,
     };
 
-    public FieldDiff(FileDiffs differences) {
+    public Field(FileDiffs differences) {
         super(differences);
     }
 
@@ -53,16 +53,15 @@ public class FieldDiff extends ItemDiff {
         
         if (fromInit == null) {
             if (toInit != null) {
-                changed(from, toInit, Messages.INITIALIZER_ADDED);
+                differences.changed(from, toInit, Messages.INITIALIZER_ADDED);
             }
         }
         else if (toInit == null) {
-            changed(fromInit, to, Messages.INITIALIZER_REMOVED);
+            differences.changed(fromInit, to, Messages.INITIALIZER_REMOVED);
         }
         else {
             String fromName = FieldUtil.getName(from).image;
             String toName = FieldUtil.getName(to).image;
-
             compareInitCode(fromName, fromInit, toName, toInit);
         }
     }
@@ -86,7 +85,7 @@ public class FieldDiff extends ItemDiff {
         String toTypeStr = SimpleNodeUtil.toString(toType);
 
         if (!fromTypeStr.equals(toTypeStr)) {
-            changed(fromType, toType, Messages.VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
+            differences.changed(fromType, toType, Messages.VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
         }
 
         compareVariableInits(fromVarDecl, toVarDecl);
@@ -95,14 +94,14 @@ public class FieldDiff extends ItemDiff {
     protected void processChangedVariable(ASTVariableDeclarator fromVarDecl, ASTVariableDeclarator toVarDecl) {
         Token fromTk = FieldUtil.getName(fromVarDecl);
         Token toTk = FieldUtil.getName(toVarDecl);
-        changed(fromTk, toTk, Messages.VARIABLE_CHANGED);
+        differences.changed(fromTk, toTk, Messages.VARIABLE_CHANGED);
         compareVariableInits(fromVarDecl, toVarDecl);
     }
 
     protected void processAddDelVariable(String name, String msg, ASTVariableDeclarator fromVarDecl, ASTVariableDeclarator toVarDecl) {
         Token fromTk = FieldUtil.getName(fromVarDecl);
         Token toTk = FieldUtil.getName(toVarDecl);
-        changed(fromTk, toTk, msg, name);
+        differences.changed(fromTk, toTk, msg, name);
     }
 
     protected void compareVariables(ASTFieldDeclaration from, ASTFieldDeclaration to) {

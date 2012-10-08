@@ -22,7 +22,7 @@ public class CompilationUnit {
             Imports imps = new Imports(diffs);
             imps.compare(a, b);
 
-            TypesDiff td = new TypesDiff(diffs);
+            Types td = new Types(diffs);
             td.compare(a, b);
         }
     }
