@@ -17,8 +17,8 @@ public class ItemDiff extends DiffComparator {
     }
 
     public void compareModifiers(SimpleNode aNode, SimpleNode bNode, int[] modifierTypes) {
-        ModifiersDiff md = new ModifiersDiff(getFileDiffs());
-        md.compareModifiers(aNode, bNode, modifierTypes);
+        Modifiers mods = new Modifiers(getFileDiffs());
+        mods.compareModifiers(aNode, bNode, modifierTypes);
     }
 
     public void compareAccess(SimpleNode aNode, SimpleNode bNode) {

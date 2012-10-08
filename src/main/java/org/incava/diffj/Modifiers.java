@@ -8,13 +8,11 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.*;
 
-public class ModifiersDiff extends DiffComparator {    
-    public static final String MODIFIER_REMOVED = "modifier removed: {0}";
-    public static final String MODIFIER_ADDED = "modifier added: {0}";
-    public static final String MODIFIER_CHANGED = "modifier changed from {0} to {1}";
+public class Modifiers {    
+    private final DiffComparator differences;
 
-    public ModifiersDiff(FileDiffs differences) {
-        super(differences);
+    public Modifiers(FileDiffs fileDiffs) {
+        this.differences = new DiffComparator(fileDiffs);
     }
 
     /**
@@ -23,7 +21,7 @@ public class ModifiersDiff extends DiffComparator {
      * the given node.
      */
     protected Map<Integer, Token> getModifierMap(SimpleNode node) {
-        List<Token>         mods   = SimpleNodeUtil.getLeadingTokens(node);        
+        List<Token> mods = SimpleNodeUtil.getLeadingTokens(node);        
         Map<Integer, Token> byKind = new TreeMap<Integer, Token>();
 
         for (Token tk : mods) {
@@ -47,11 +45,11 @@ public class ModifiersDiff extends DiffComparator {
 
             if (aMod == null) {
                 if (bMod != null) {
-                    changed(aNode.getFirstToken(), bMod, MODIFIER_ADDED, bMod.image);
+                    differences.changed(aNode.getFirstToken(), bMod, Messages.MODIFIER_ADDED, bMod.image);
                 }
             }
             else if (bMod == null) {
-                changed(aMod, bNode.getFirstToken(), MODIFIER_REMOVED, aMod.image);
+                differences.changed(aMod, bNode.getFirstToken(), Messages.MODIFIER_REMOVED, aMod.image);
             }
         }
     }
