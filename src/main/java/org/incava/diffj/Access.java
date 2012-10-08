@@ -5,9 +5,11 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.*;
 
-public class AccessDiff extends DiffComparator {    
-    public AccessDiff(FileDiffs differences) {
-        super(differences);
+public class Access {
+    private final DiffComparator differences;
+
+    public Access(FileDiffs fileDiffs) {
+        this.differences = new DiffComparator(fileDiffs);
     }
 
     public void compare(SimpleNode aNode, SimpleNode bNode) {
@@ -16,14 +18,14 @@ public class AccessDiff extends DiffComparator {
 
         if (aAccess == null) {
             if (bAccess != null) {
-                changed(aNode.getFirstToken(), bAccess, Messages.ACCESS_ADDED, bAccess.image);
+                differences.changed(aNode.getFirstToken(), bAccess, Messages.ACCESS_ADDED, bAccess.image);
             }
         }
         else if (bAccess == null) {
-            changed(aAccess, bNode.getFirstToken(), Messages.ACCESS_REMOVED, aAccess.image);
+            differences.changed(aAccess, bNode.getFirstToken(), Messages.ACCESS_REMOVED, aAccess.image);
         }
         else if (!aAccess.image.equals(bAccess.image)) {
-            changed(aAccess, bAccess, Messages.ACCESS_CHANGED, aAccess.image, bAccess.image);
+            differences.changed(aAccess, bAccess, Messages.ACCESS_CHANGED, aAccess.image, bAccess.image);
         }
     }
 }

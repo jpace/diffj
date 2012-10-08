@@ -8,8 +8,8 @@ import org.incava.analysis.FileDiffs;
 /**
  * Compares implements.
  */
-public class ImplementsDiff extends SuperDiff {
-    public ImplementsDiff(FileDiffs differences) {
+public class Implements extends Super {
+    public Implements(FileDiffs differences) {
         super(differences);
     }
 
@@ -22,14 +22,14 @@ public class ImplementsDiff extends SuperDiff {
     }
 
     protected void superTypeChanged(ASTClassOrInterfaceType a, String aName, ASTClassOrInterfaceType b, String bName) {
-        changed(a, b, Messages.IMPLEMENTED_TYPE_CHANGED, aName, bName);
+        differences.changed(a, b, Messages.IMPLEMENTED_TYPE_CHANGED, aName, bName);
     }
 
     protected void superTypeAdded(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceType bType, String typeName) {
-        changed(at, bType, Messages.IMPLEMENTED_TYPE_ADDED, typeName);
+        differences.changed(at, bType, Messages.IMPLEMENTED_TYPE_ADDED, typeName);
     }
 
     protected void superTypeRemoved(ASTClassOrInterfaceType aType, ASTClassOrInterfaceDeclaration bt, String typeName) {
-        changed(aType, bt, Messages.IMPLEMENTED_TYPE_REMOVED, typeName);
+        differences.changed(aType, bt, Messages.IMPLEMENTED_TYPE_REMOVED, typeName);
     }
 }

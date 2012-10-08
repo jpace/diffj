@@ -1,26 +1,26 @@
 package org.incava.diffj;
 
-import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
-import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 
-public class CompilationUnitDiff extends DiffComparator {
-    public CompilationUnitDiff(Report report) {
-        super(report);
+public class CompilationUnit {
+    private final DiffComparator differences;
+
+    public CompilationUnit(Report report) {
+        this.differences = new DiffComparator(report);
     }
 
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
-        FileDiffs diffs = getFileDiffs();
+        FileDiffs diffs = differences.getFileDiffs();
         tr.Ace.log("diffs", diffs);
         
         if (a != null && b != null) {
-            PackageDiff pd = new PackageDiff(diffs);
+            Package pd = new Package(diffs);
             pd.compare(a, b);
             
-            ImportsDiff id = new ImportsDiff(diffs);
-            id.compare(a, b);
+            Imports imps = new Imports(diffs);
+            imps.compare(a, b);
 
             TypesDiff td = new TypesDiff(diffs);
             td.compare(a, b);

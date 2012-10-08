@@ -70,4 +70,9 @@ public class Messages {
     
     public static final String INITIALIZER_REMOVED = "initializer removed";
     public static final String INITIALIZER_ADDED = "initializer added";
+
+    public static final String IMPORT_REMOVED = "import removed: {0}";
+    public static final String IMPORT_ADDED = "import added: {0}";
+    public static final String IMPORT_SECTION_REMOVED = "import section removed";
+    public static final String IMPORT_SECTION_ADDED = "import section added";
 }

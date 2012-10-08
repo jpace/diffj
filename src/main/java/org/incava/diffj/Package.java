@@ -10,9 +10,11 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class PackageDiff extends DiffComparator {
-    public PackageDiff(FileDiffs differences) {
-        super(differences);        
+public class Package {
+    private final DiffComparator differences;
+
+    public Package(FileDiffs fileDiffs) {
+        this.differences = new DiffComparator(fileDiffs);
     }
 
     public ASTName findChildName(ASTPackageDeclaration pkg) {
@@ -31,7 +33,7 @@ public class PackageDiff extends DiffComparator {
                 if (aPos == null) {
                     aPos = a;
                 }
-                added(aPos, name, Messages.PACKAGE_ADDED);
+                differences.added(aPos, name, Messages.PACKAGE_ADDED);
             }
         }
         else if (bPkg == null) {
@@ -41,7 +43,7 @@ public class PackageDiff extends DiffComparator {
             if (bPos == null) {
                 bPos = b;
             }
-            deleted(name, bPos, Messages.PACKAGE_REMOVED);
+            differences.deleted(name, bPos, Messages.PACKAGE_REMOVED);
         }
         else {
             ASTName aName = findChildName(aPkg);
@@ -50,7 +52,7 @@ public class PackageDiff extends DiffComparator {
             String  bStr  = SimpleNodeUtil.toString(bName);
 
             if (!aStr.equals(bStr)) {
-                changed(aName, bName, Messages.PACKAGE_RENAMED);
+                differences.changed(aName, bName, Messages.PACKAGE_RENAMED);
             }
         }
     }

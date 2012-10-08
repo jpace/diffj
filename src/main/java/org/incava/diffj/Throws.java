@@ -8,13 +8,11 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.ThrowsUtil;
 
-public class ThrowsDiff extends DiffComparator {
-    public static final String THROWS_REMOVED = "throws removed: {0}";
-    public static final String THROWS_ADDED = "throws added: {0}";
-    public static final String THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}";
+public class Throws {
+    private final DiffComparator differences;
 
-    public ThrowsDiff(FileDiffs differences) {
-        super(differences);
+    public Throws(FileDiffs fileDiffs) {
+        this.differences = new DiffComparator(fileDiffs);
     }
     
     public void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
@@ -36,20 +34,20 @@ public class ThrowsDiff extends DiffComparator {
     }
 
     protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, String msg, ASTName name) {
-        changed(fromNode, toNode, msg, SimpleNodeUtil.toString(name));
+        differences.changed(fromNode, toNode, msg, SimpleNodeUtil.toString(name));
     }
 
     protected void addAllThrows(SimpleNode fromNode, ASTNameList toNameList) {
         List<ASTName> names = getChildNames(toNameList);
         for (ASTName name : names) {
-            changeThrows(fromNode, name, THROWS_ADDED, name);
+            changeThrows(fromNode, name, Messages.THROWS_ADDED, name);
         }
     }
 
     protected void removeAllThrows(ASTNameList fromNameList, SimpleNode toNode) {
         List<ASTName> names = getChildNames(fromNameList);
         for (ASTName name : names) {
-            changeThrows(name, toNode, THROWS_REMOVED, name);
+            changeThrows(name, toNode, Messages.THROWS_REMOVED, name);
         }
     }
 
@@ -70,17 +68,17 @@ public class ThrowsDiff extends DiffComparator {
             else if (throwsMatch >= 0) {
                 ASTName toName = ThrowsUtil.getNameNode(toNameList, throwsMatch);
                 String fromNameStr = SimpleNodeUtil.toString(fromName);
-                changed(fromName, toName, THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
+                differences.changed(fromName, toName, Messages.THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
             }
             else {
-                changeThrows(fromName, toNameList, THROWS_REMOVED, fromName);
+                changeThrows(fromName, toNameList, Messages.THROWS_REMOVED, fromName);
             }
         }
 
         for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
             if (toNames.get(toIdx) != null) {
                 ASTName toName = ThrowsUtil.getNameNode(toNameList, toIdx);
-                changeThrows(fromNameList, toName, THROWS_ADDED, toName);
+                changeThrows(fromNameList, toName, Messages.THROWS_ADDED, toName);
             }
         }
     }

@@ -22,12 +22,12 @@ public class ItemDiff extends DiffComparator {
     }
 
     public void compareAccess(SimpleNode aNode, SimpleNode bNode) {
-        AccessDiff ad = new AccessDiff(getFileDiffs());
-        ad.compare(aNode, bNode);
+        Access acc = new Access(getFileDiffs());
+        acc.compare(aNode, bNode);
     }
 
     public void compareCode(String fromName, List<Token> fromList, String toName, List<Token> toList) {
-        CodeDiff cd = new CodeDiff(getFileDiffs());
-        cd.compareCode(fromName, fromList, toName, toList);
+        Code code = new Code(getFileDiffs());
+        code.compareCode(fromName, fromList, toName, toList);
     }
 }

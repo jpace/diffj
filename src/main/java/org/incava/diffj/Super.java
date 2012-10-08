@@ -14,9 +14,11 @@ import org.incava.pmdx.SimpleNodeUtil;
 /**
  * Compares super (extends or implements).
  */
-public abstract class SuperDiff extends DiffComparator {
-    public SuperDiff(FileDiffs differences) {
-        super(differences);
+public abstract class Super {
+    protected final DiffComparator differences;
+
+    public Super(FileDiffs fileDiffs) {
+        this.differences = new DiffComparator(fileDiffs);
     }
 
     abstract protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid);    

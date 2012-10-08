@@ -17,7 +17,7 @@ import org.incava.ijdk.util.diff.Diff;
 import org.incava.ijdk.util.diff.Difference;
 import org.incava.pmdx.*;
 
-public class CodeDiff extends DiffComparator {    
+public class Code {    
     public static class TokenComparator extends DefaultComparator<Token> {
         public int doCompare(Token xt, Token yt) {
             int cmp = xt.kind < yt.kind ? -1 : (xt.kind > yt.kind ? 1 : 0);
@@ -28,8 +28,10 @@ public class CodeDiff extends DiffComparator {
         }
     }
 
-    public CodeDiff(FileDiffs differences) {
-        super(differences);
+    private final DiffComparator differences;
+
+    public Code(FileDiffs fileDiffs) {
+        this.differences = new DiffComparator(fileDiffs);
     }
 
     public void compareCode(String fromName, List<Token> fromList, String toName, List<Token> toList) {
@@ -50,9 +52,8 @@ public class CodeDiff extends DiffComparator {
         String   newMsg  = MessageFormat.format(Messages.CODE_CHANGED, name);
         FileDiff newDiff = new FileDiffChange(newMsg, fdiff.getFirstLocation().getStart(), fromLocRg.getEnd(), fdiff.getSecondLocation().getStart(), toLocRg.getEnd());
         
-        getFileDiffs().remove(fdiff);
-        
-        add(newDiff);
+        differences.getFileDiffs().remove(fdiff);
+        differences.add(newDiff);
 
         return newDiff;
     }
@@ -73,7 +74,7 @@ public class CodeDiff extends DiffComparator {
             fdiff = new FileDiffChange(str, fromLocRg, toLocRg);
         }                    
 
-        add(fdiff);
+        differences.add(fdiff);
 
         return fdiff;
     }

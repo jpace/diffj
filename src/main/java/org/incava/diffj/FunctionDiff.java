@@ -29,7 +29,7 @@ public class FunctionDiff extends ItemDiff {
     }
     
     protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
-        ThrowsDiff td = new ThrowsDiff(getFileDiffs());
-        td.compareThrows(fromNode, fromNameList, toNode, toNameList);
+        Throws thrws = new Throws(getFileDiffs());
+        thrws.compareThrows(fromNode, fromNameList, toNode, toNameList);
     }
 }

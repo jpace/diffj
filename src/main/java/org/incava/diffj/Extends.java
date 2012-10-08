@@ -8,8 +8,8 @@ import org.incava.analysis.FileDiffs;
 /**
  * Compares extends.
  */
-public class ExtendsDiff extends SuperDiff {
-    public ExtendsDiff(FileDiffs differences) {
+public class Extends extends Super {
+    public Extends(FileDiffs differences) {
         super(differences);
     }
 
@@ -22,14 +22,14 @@ public class ExtendsDiff extends SuperDiff {
     }
 
     protected void superTypeChanged(ASTClassOrInterfaceType a, String aName, ASTClassOrInterfaceType b, String bName) {
-        changed(a, b, Messages.EXTENDED_TYPE_CHANGED, aName, bName);
+        differences.changed(a, b, Messages.EXTENDED_TYPE_CHANGED, aName, bName);
     }
 
     protected void superTypeAdded(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceType bType, String typeName) {
-        changed(at, bType, Messages.EXTENDED_TYPE_ADDED, typeName);
+        differences.changed(at, bType, Messages.EXTENDED_TYPE_ADDED, typeName);
     }
 
     protected void superTypeRemoved(ASTClassOrInterfaceType aType, ASTClassOrInterfaceDeclaration bt, String typeName) {
-        changed(aType, bt, Messages.EXTENDED_TYPE_REMOVED, typeName);
+        differences.changed(aType, bt, Messages.EXTENDED_TYPE_REMOVED, typeName);
     }
 }

@@ -14,15 +14,15 @@ import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public abstract class AbstractTypeItemDiff<Type extends SimpleNode> extends DiffComparator {
+public abstract class TypeItem<Type extends SimpleNode> extends DiffComparator {
     private final String clsName;
 
-    public AbstractTypeItemDiff(FileDiffs differences, String clsName) {
+    public TypeItem(FileDiffs differences, String clsName) {
         super(differences);
         this.clsName = clsName;
     }
 
-    public AbstractTypeItemDiff(FileDiffs differences, Class<Type> cls) {
+    public TypeItem(FileDiffs differences, Class<Type> cls) {
         this(differences, cls == null ? (String)null : cls.getName());
     }
 

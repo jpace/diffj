@@ -53,22 +53,19 @@ public class TypeDiff extends ItemDiff {
         SimpleNode btParent = SimpleNodeUtil.getParent(bt);
 
         compareAccess(atParent, btParent);
-
         compareModifiers(atParent, btParent, VALID_TYPE_MODIFIERS);
-
         compareExtends(at, bt);
         compareImplements(at, bt);
-
         compareDeclarations(at, bt);
     }
 
     protected void compareExtends(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        ExtendsDiff ed = new ExtendsDiff(getFileDiffs());
+        Extends ed = new Extends(getFileDiffs());
         ed.compareExtends(at, bt);
     }
 
     protected void compareImplements(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        ImplementsDiff id = new ImplementsDiff(getFileDiffs());
+        Implements id = new Implements(getFileDiffs());
         id.compareImplements(at, bt);
     }
 

@@ -15,30 +15,11 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class ImportsDiff extends DiffComparator {
-    public static final String IMPORT_REMOVED = "import removed: {0}";
-    public static final String IMPORT_ADDED = "import added: {0}";
-    public static final String IMPORT_SECTION_REMOVED = "import section removed";
-    public static final String IMPORT_SECTION_ADDED = "import section added";
+public class Imports {
+    private final DiffComparator differences;
 
-    public ImportsDiff(FileDiffs differences) {
-        super(differences);
-    }
-
-    protected void markImportSectionAdded(ASTCompilationUnit a, List<ASTImportDeclaration> bImports) {
-        Token a0 = getFirstTypeToken(a);
-        Token a1 = a0;
-        Token b0 = getFirstToken(bImports);
-        Token b1 = getLastToken(bImports);
-        added(a0, a1, b0, b1, IMPORT_SECTION_ADDED);
-    }
-
-    protected void markImportSectionRemoved(List<ASTImportDeclaration> aImports, ASTCompilationUnit b) {
-        Token a0 = getFirstToken(aImports);
-        Token a1 = getLastToken(aImports);
-        Token b0 = getFirstTypeToken(b);
-        Token b1 = b0;
-        deleted(a0, a1, b0, b1, IMPORT_SECTION_REMOVED);
+    public Imports(FileDiffs fileDiffs) {
+        this.differences = new DiffComparator(fileDiffs);
     }
 
     public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
@@ -66,13 +47,29 @@ public class ImportsDiff extends DiffComparator {
                 ASTImportDeclaration bimp = bNamesToImp.get(name);
             
                 if (aimp == null) {
-                    added(aImports.get(0), bimp, IMPORT_ADDED, name);
+                    differences.added(aImports.get(0), bimp, Messages.IMPORT_ADDED, name);
                 }
                 else if (bimp == null) {
-                    deleted(aimp, bImports.get(0), IMPORT_REMOVED, name);
+                    differences.deleted(aimp, bImports.get(0), Messages.IMPORT_REMOVED, name);
                 }
             }
         }
+    }
+
+    protected void markImportSectionAdded(ASTCompilationUnit a, List<ASTImportDeclaration> bImports) {
+        Token a0 = getFirstTypeToken(a);
+        Token a1 = a0;
+        Token b0 = getFirstToken(bImports);
+        Token b1 = getLastToken(bImports);
+        differences.added(a0, a1, b0, b1, Messages.IMPORT_SECTION_ADDED);
+    }
+
+    protected void markImportSectionRemoved(List<ASTImportDeclaration> aImports, ASTCompilationUnit b) {
+        Token a0 = getFirstToken(aImports);
+        Token a1 = getLastToken(aImports);
+        Token b0 = getFirstTypeToken(b);
+        Token b1 = b0;
+        differences.deleted(a0, a1, b0, b1, Messages.IMPORT_SECTION_REMOVED);
     }
 
     protected String getImportAsString(ASTImportDeclaration imp) {

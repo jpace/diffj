@@ -6,8 +6,8 @@ import org.incava.analysis.FileDiffDelete;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.java.Java;
 
-public class TestImportsDiff extends DiffJTest {
-    public TestImportsDiff(String name) {
+public class TestImports extends DiffJTest {
+    public TestImports(String name) {
         super(name);
     }
 
@@ -61,7 +61,7 @@ public class TestImportsDiff extends DiffJTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(ImportsDiff.IMPORT_SECTION_REMOVED, loc(1, 1), loc(1, 18), loc(1, 1), loc(1, 5)));
+                 new FileDiffDelete(Messages.IMPORT_SECTION_REMOVED, loc(1, 1), loc(1, 18), loc(1, 1), loc(1, 5)));
     }
 
     public void testImportsSectionRemovedTwo() {
@@ -75,7 +75,7 @@ public class TestImportsDiff extends DiffJTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(ImportsDiff.IMPORT_SECTION_REMOVED, loc(1, 1), loc(2, 23), loc(1, 1), loc(1, 5)));
+                 new FileDiffDelete(Messages.IMPORT_SECTION_REMOVED, loc(1, 1), loc(2, 23), loc(1, 1), loc(1, 5)));
     }
 
     public void testImportsSectionAddedOne() {
@@ -88,7 +88,7 @@ public class TestImportsDiff extends DiffJTest {
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(ImportsDiff.IMPORT_SECTION_ADDED, loc(1, 1), loc(1, 5), loc(1, 1), loc(1, 18)));
+                 new FileDiffAdd(Messages.IMPORT_SECTION_ADDED, loc(1, 1), loc(1, 5), loc(1, 1), loc(1, 18)));
     }
 
     public void testImportsSectionAddedTwo() {
@@ -102,7 +102,7 @@ public class TestImportsDiff extends DiffJTest {
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(ImportsDiff.IMPORT_SECTION_ADDED, loc(1, 1), loc(1, 5), loc(1, 1), loc(2, 23)));
+                 new FileDiffAdd(Messages.IMPORT_SECTION_ADDED, loc(1, 1), loc(1, 5), loc(1, 1), loc(2, 23)));
     }
 
     public void testImportsBlockAddedNoClassDefined() {
@@ -118,7 +118,7 @@ public class TestImportsDiff extends DiffJTest {
 
                  Java.SOURCE_1_3,
                  makeDetailedReport(writer),
-                 new FileDiffAdd(ImportsDiff.IMPORT_SECTION_ADDED, loc(1, 1), loc(1, 7), loc(3, 1), loc(4, 23)));
+                 new FileDiffAdd(Messages.IMPORT_SECTION_ADDED, loc(1, 1), loc(1, 7), loc(3, 1), loc(4, 23)));
         
         tr.Ace.setVerbose(true);
         tr.Ace.red("*******************************************************");
