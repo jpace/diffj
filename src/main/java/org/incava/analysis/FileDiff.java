@@ -223,6 +223,10 @@ public abstract class FileDiff implements Comparable<FileDiff> {
         return type;
     }
 
+    public boolean isOnSameLine(LocationRange loc) {
+        return getFirstLocation().getStart().getLine() == loc.getStart().getLine();
+    }
+
     /**
      * Returns "x:y".
      */

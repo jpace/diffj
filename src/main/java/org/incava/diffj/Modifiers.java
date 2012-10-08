@@ -8,11 +8,34 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.*;
 
-public class Modifiers {    
-    private final Differences differences;
+public class Modifiers {
+    private final SimpleNode node;
 
-    public Modifiers(FileDiffs fileDiffs) {
-        this.differences = new Differences(fileDiffs);
+    public Modifiers(SimpleNode node) {
+        this.node = node;
+    }
+
+    public void diff(SimpleNode toNode, int[] modifierTypes, Differences differences) {
+        List<Token> fromMods = SimpleNodeUtil.getLeadingTokens(node);
+        List<Token> toMods = SimpleNodeUtil.getLeadingTokens(toNode);
+
+        Map<Integer, Token> fromByKind = getModifierMap(node);
+        Map<Integer, Token> toByKind = getModifierMap(toNode);
+        
+        for (int mi = 0; mi < modifierTypes.length; ++mi) {
+            Integer modInt  = Integer.valueOf(modifierTypes[mi]);
+            Token   fromMod = fromByKind.get(modInt);
+            Token   toMod   = toByKind.get(modInt);
+
+            if (fromMod == null) {
+                if (toMod != null) {
+                    differences.changed(node.getFirstToken(), toMod, Messages.MODIFIER_ADDED, toMod.image);
+                }
+            }
+            else if (toMod == null) {
+                differences.changed(fromMod, toNode.getFirstToken(), Messages.MODIFIER_REMOVED, fromMod.image);
+            }
+        }
     }
 
     /**
@@ -29,28 +52,5 @@ public class Modifiers {
         }
 
         return byKind;
-    }
-
-    public void compareModifiers(SimpleNode aNode, SimpleNode bNode, int[] modifierTypes) {
-        List<Token> aMods = SimpleNodeUtil.getLeadingTokens(aNode);
-        List<Token> bMods = SimpleNodeUtil.getLeadingTokens(bNode);
-
-        Map<Integer, Token> aByKind = getModifierMap(aNode);
-        Map<Integer, Token> bByKind = getModifierMap(bNode);
-        
-        for (int mi = 0; mi < modifierTypes.length; ++mi) {
-            Integer modInt = Integer.valueOf(modifierTypes[mi]);
-            Token   aMod   = aByKind.get(modInt);
-            Token   bMod   = bByKind.get(modInt);
-
-            if (aMod == null) {
-                if (bMod != null) {
-                    differences.changed(aNode.getFirstToken(), bMod, Messages.MODIFIER_ADDED, bMod.image);
-                }
-            }
-            else if (bMod == null) {
-                differences.changed(aMod, bNode.getFirstToken(), Messages.MODIFIER_REMOVED, aMod.image);
-            }
-        }
     }
 }

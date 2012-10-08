@@ -16,18 +16,18 @@ public class Items {
         this.differences = differences;
     }
 
-    public void compareModifiers(SimpleNode aNode, SimpleNode bNode, int[] modifierTypes) {
-        Modifiers mods = new Modifiers(differences.getFileDiffs());
-        mods.compareModifiers(aNode, bNode, modifierTypes);
+    public void compareModifiers(SimpleNode fromNode, SimpleNode toNode, int[] modifierTypes) {
+        Modifiers mods = new Modifiers(fromNode);
+        mods.diff(toNode, modifierTypes, differences);
     }
 
-    public void compareAccess(SimpleNode aNode, SimpleNode bNode) {
-        Access acc = new Access(aNode);
-        acc.diff(bNode, differences);
+    public void compareAccess(SimpleNode fromNode, SimpleNode toNode) {
+        Access acc = new Access(fromNode);
+        acc.diff(toNode, differences);
     }
 
-    public void compareCode(String fromName, List<Token> fromList, List<Token> toList) {
-        Code code = new Code(fromName, fromList);
+    public void compareCode(String fromName, List<Token> fromTokens, List<Token> toList) {
+        Code code = new Code(fromName, fromTokens);
         code.diff(toList, differences);
     }
 }

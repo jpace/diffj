@@ -17,24 +17,24 @@ public class Ctors extends Functions {
         super(differences);
     }
 
-    public void compare(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
-        tr.Ace.log("a: " + a + "; b: " + b);
+    public void compare(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
+        tr.Ace.log("from: " + from + "; to: " + to);
         
-        compareParameters(a, b);
-        compareThrows(a, b);
-        compareBodies(a, b);
+        compareParameters(from, to);
+        compareThrows(from, to);
+        compareBodies(from, to);
     }
     
-    protected void compareParameters(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
-        ASTFormalParameters afp = CtorUtil.getParameters(a);
-        ASTFormalParameters bfp = CtorUtil.getParameters(b);
-        compareParameters(afp, bfp);
+    protected void compareParameters(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
+        ASTFormalParameters fromParam = CtorUtil.getParameters(from);
+        ASTFormalParameters toParams = CtorUtil.getParameters(to);
+        compareParameters(fromParam, toParams);
     }
 
-    protected void compareThrows(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
-        ASTNameList at = CtorUtil.getThrowsList(a);
-        ASTNameList bt = CtorUtil.getThrowsList(b);
-        compareThrows(a, at, b, bt);
+    protected void compareThrows(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
+        ASTNameList fromThrows = CtorUtil.getThrowsList(from);
+        ASTNameList toThrows = CtorUtil.getThrowsList(to);
+        compareThrows(from, fromThrows, to, toThrows);
     }
 
     protected List<Token> getCodeSerially(ASTConstructorDeclaration ctor) {
@@ -57,11 +57,11 @@ public class Ctors extends Functions {
         return children;
     }
 
-    protected void compareBodies(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
-        List<Token> aCode = getCodeSerially(a);
-        List<Token> bCode = getCodeSerially(b);
-        String aName = CtorUtil.getFullName(a);
-        String bName = CtorUtil.getFullName(b);
-        compareCode(aName, aCode, bCode);
+    protected void compareBodies(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
+        List<Token> fromCode = getCodeSerially(from);
+        List<Token> toCode = getCodeSerially(to);
+        String fromName = CtorUtil.getFullName(from);
+        String toName = CtorUtil.getFullName(to);
+        compareCode(fromName, fromCode, toCode);
     }
 }
