@@ -14,11 +14,12 @@ import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public abstract class TypeItem<Type extends SimpleNode> extends DiffComparator {
+public abstract class TypeItem<Type extends SimpleNode> {
+    protected final DiffComparator differences;
     private final String clsName;
 
-    public TypeItem(FileDiffs differences, String clsName) {
-        super(differences);
+    public TypeItem(FileDiffs fileDiffs, String clsName) {
+        this.differences = new DiffComparator(fileDiffs);
         this.clsName = clsName;
     }
 
@@ -29,6 +30,31 @@ public abstract class TypeItem<Type extends SimpleNode> extends DiffComparator {
     public String getClassName() {
         return clsName;
     }
+
+    public void compare(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
+        List<Type> amds = getDeclarationsOfClassType(aNode);
+        List<Type> bmds = getDeclarationsOfClassType(bNode);
+
+        TypeMatches<Type> matches = getTypeMatches(amds, bmds);
+
+        List<Type> unprocA = new ArrayList<Type>(amds);        
+        List<Type> unprocB = new ArrayList<Type>(bmds);
+
+        compareMatches(matches, unprocA, unprocB);
+
+        addRemoved(unprocA, bNode);        
+        addAdded(unprocB, aNode);
+    }
+
+    public abstract String getName(Type t);
+
+    public abstract String getAddedMessage(Type t);
+
+    public abstract String getRemovedMessage(Type t);
+
+    public abstract double getScore(Type amd, Type bmd);
+
+    public abstract void doCompare(Type amd, Type bmd);
 
     @SuppressWarnings("unchecked")
     public <Type extends SimpleNode> List<Type> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls) {
@@ -90,42 +116,17 @@ public abstract class TypeItem<Type extends SimpleNode> extends DiffComparator {
         return getDeclarationsOfClass(decls);
     }
 
-    public void compare(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
-        List<Type> amds = getDeclarationsOfClassType(aNode);
-        List<Type> bmds = getDeclarationsOfClassType(bNode);
-
-        TypeMatches<Type> matches = getTypeMatches(amds, bmds);
-
-        List<Type> unprocA = new ArrayList<Type>(amds);        
-        List<Type> unprocB = new ArrayList<Type>(bmds);
-
-        compareMatches(matches, unprocA, unprocB);
-
-        addRemoved(unprocA, bNode);        
-        addAdded(unprocB, aNode);
-    }
-
-    public abstract double getScore(Type amd, Type bmd);
-
-    public abstract void doCompare(Type amd, Type bmd);
-
     public void addAdded(List<Type> bs, ASTClassOrInterfaceDeclaration aNode) {
         for (Type b : bs) {
             String name = getName(b);
-            added(aNode, b, getAddedMessage(b), name);
+            differences.added(aNode, b, getAddedMessage(b), name);
         }
     }
 
     public void addRemoved(List<Type> as, ASTClassOrInterfaceDeclaration bNode) {
         for (Type a : as) {
             String name = getName(a);
-            deleted(a, bNode, getRemovedMessage(a), name);
+            differences.deleted(a, bNode, getRemovedMessage(a), name);
         }
     }
-
-    public abstract String getName(Type t);
-
-    public abstract String getAddedMessage(Type t);
-
-    public abstract String getRemovedMessage(Type t);
 }

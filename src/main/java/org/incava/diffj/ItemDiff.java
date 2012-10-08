@@ -7,7 +7,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 import org.incava.pmdx.*;
 
-public class ItemDiff extends DiffComparator {    
+public class ItemDiff extends DiffComparator {
     public ItemDiff(Report report) {
         super(report);
     }
