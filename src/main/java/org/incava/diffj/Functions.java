@@ -7,8 +7,8 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Function extends Item {
-    public Function(FileDiffs differences) {
+public class Functions extends Items {
+    public Functions(FileDiffs differences) {
         super(differences);
     }
 

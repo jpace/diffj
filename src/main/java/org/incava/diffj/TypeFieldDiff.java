@@ -6,7 +6,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class TypeFieldDiff extends TypeItem<ASTFieldDeclaration> {
+public class TypeFieldDiff extends TypeItems<ASTFieldDeclaration> {
     private final FileDiffs fileDiffs;
 
     public TypeFieldDiff(FileDiffs fileDiffs) {
@@ -15,7 +15,7 @@ public class TypeFieldDiff extends TypeItem<ASTFieldDeclaration> {
     }    
 
     public void doCompare(ASTFieldDeclaration a, ASTFieldDeclaration b) {
-        Field field = new Field(fileDiffs);
+        Fields field = new Fields(fileDiffs);
         field.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
         field.compare(a, b);
     }

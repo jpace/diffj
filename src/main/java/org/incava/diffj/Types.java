@@ -8,12 +8,11 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class Types extends Item {
+public class Types extends Items {
     public Types(FileDiffs differences) {
         super(differences);
     }

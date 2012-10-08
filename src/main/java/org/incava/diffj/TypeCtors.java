@@ -7,16 +7,16 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class TypeCtor extends TypeItem<ASTConstructorDeclaration> {
+public class TypeCtors extends TypeItems<ASTConstructorDeclaration> {
     private final FileDiffs fileDiffs;
 
-    public TypeCtor(FileDiffs fileDiffs) {
+    public TypeCtors(FileDiffs fileDiffs) {
         super(fileDiffs, "net.sourceforge.pmd.ast.ASTConstructorDeclaration");
         this.fileDiffs = fileDiffs;
     }    
 
     public void doCompare(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
-        Ctor ctor = new Ctor(fileDiffs);
+        Ctors ctor = new Ctors(fileDiffs);
         ctor.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
         ctor.compare(a, b);
     }

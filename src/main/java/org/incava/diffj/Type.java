@@ -9,7 +9,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class Type extends Item {
+public class Type extends Items {
     public static final int[] VALID_TYPE_MODIFIERS = new int[] {
         JavaParserConstants.ABSTRACT,
         JavaParserConstants.FINAL,
@@ -72,7 +72,7 @@ public class Type extends Item {
         TypeFieldDiff tfd = new TypeFieldDiff(diffs);
         tfd.compare(aNode, bNode);
         
-        TypeCtor ctd = new TypeCtor(diffs);
+        TypeCtors ctd = new TypeCtors(diffs);
         ctd.compare(aNode, bNode);
         
         TypeInnerTypeDiff titd = new TypeInnerTypeDiff(diffs, this);

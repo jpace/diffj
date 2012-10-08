@@ -12,8 +12,8 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Ctor extends Function {
-    public Ctor(FileDiffs differences) {
+public class Ctors extends Functions {
+    public Ctors(FileDiffs differences) {
         super(differences);
     }
 

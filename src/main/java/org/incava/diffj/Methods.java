@@ -13,7 +13,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Method extends Function {
+public class Methods extends Functions {
     protected static final int[] VALID_MODIFIERS = new int[] {
         JavaParserConstants.ABSTRACT,
         JavaParserConstants.FINAL,
@@ -22,7 +22,7 @@ public class Method extends Function {
         JavaParserConstants.STRICTFP
     };
 
-    public Method(FileDiffs differences) {
+    public Methods(FileDiffs differences) {
         super(differences);
     }
 

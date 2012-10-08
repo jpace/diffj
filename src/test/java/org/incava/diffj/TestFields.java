@@ -2,8 +2,8 @@ package org.incava.diffj;
 
 import org.incava.analysis.FileDiffChange;
 
-public class TestField extends ItemTest {
-    public TestField(String name) {
+public class TestFields extends ItemTest {
+    public TestFields(String name) {
         super(name);
         tr.Ace.setVerbose(true);
     }

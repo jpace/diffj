@@ -16,13 +16,13 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Field extends Item {
+public class Fields extends Items {
     protected static final int[] VALID_MODIFIERS = new int[] {
         JavaParserConstants.FINAL,
         JavaParserConstants.STATIC,
     };
 
-    public Field(FileDiffs differences) {
+    public Fields(FileDiffs differences) {
         super(differences);
     }
 

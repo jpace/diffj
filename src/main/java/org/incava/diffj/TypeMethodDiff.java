@@ -5,7 +5,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class TypeMethodDiff extends TypeItem<ASTMethodDeclaration> {
+public class TypeMethodDiff extends TypeItems<ASTMethodDeclaration> {
     private final FileDiffs fileDiffs;
     private final MethodUtil methodUtil;
 
@@ -16,7 +16,7 @@ public class TypeMethodDiff extends TypeItem<ASTMethodDeclaration> {
     }    
 
     public void doCompare(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        Method method = new Method(fileDiffs);
+        Methods method = new Methods(fileDiffs);
         method.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
         method.compare(a, b);
     }
