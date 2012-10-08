@@ -28,27 +28,29 @@ public class Code {
         }
     }
 
-    private final Differences differences;
+    private final String name;
+    private final List<Token> tokens;
 
-    public Code(FileDiffs fileDiffs) {
-        this.differences = new Differences(fileDiffs);
+    public Code(String name, List<Token> tokens) {
+        this.name = name;
+        this.tokens = tokens;
     }
 
-    public void compareCode(String fromName, List<Token> fromList, String toName, List<Token> toList) {
-        Diff<Token> d = new Diff<Token>(fromList, toList, new TokenComparator());
+    public void diff(List<Token> toTokens, Differences differences) {
+        Diff<Token> d = new Diff<Token>(tokens, toTokens, new TokenComparator());
         
         FileDiff fdiff = null;
         List<Difference> diffList = d.diff();
 
         for (Difference diff : diffList) {
-            fdiff = processDifference(diff, fromName, fromList, toList, fdiff);
+            fdiff = processDifference(diff, toTokens, fdiff, differences);
             if (fdiff == null) {
                 return;
             }
         }
     }
 
-    protected FileDiff replaceReference(String name, FileDiff fdiff, LocationRange fromLocRg, LocationRange toLocRg) {
+    protected FileDiff replaceReference(FileDiff fdiff, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
         String   newMsg  = MessageFormat.format(Messages.CODE_CHANGED, name);
         FileDiff newDiff = new FileDiffChange(newMsg, fdiff.getFirstLocation().getStart(), fromLocRg.getEnd(), fdiff.getSecondLocation().getStart(), toLocRg.getEnd());
         
@@ -58,7 +60,7 @@ public class Code {
         return newDiff;
     }
 
-    protected FileDiff addReference(String name, String msg, LocationRange fromLocRg, LocationRange toLocRg) {
+    protected FileDiff addReference(String msg, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
         String str = MessageFormat.format(msg, name);
 
         FileDiff fdiff = null;
@@ -95,7 +97,7 @@ public class Code {
         return fdiff != null && fdiff.getFirstLocation().getStart().getLine() == loc.getStart().getLine();
     }
 
-    protected FileDiff processDifference(Difference diff, String fromName, List<Token> fromList, List<Token> toList, FileDiff prevFdiff) {
+    protected FileDiff processDifference(Difference diff, List<Token> toTokens, FileDiff prevFdiff, Differences differences) {
         int delStart = diff.getDeletedStart();
         int delEnd   = diff.getDeletedEnd();
         int addStart = diff.getAddedStart();
@@ -106,14 +108,12 @@ public class Code {
             return null;
         }
 
-        LocationRange fromLocRg = getLocationRange(fromList, delStart, delEnd);
-        LocationRange toLocRg = getLocationRange(toList, addStart, addEnd);
+        LocationRange fromLocRg = getLocationRange(tokens, delStart, delEnd);
+        LocationRange toLocRg = getLocationRange(toTokens, addStart, addEnd);
 
         String msg = delEnd == Difference.NONE ? Messages.CODE_ADDED : (addEnd == Difference.NONE ? Messages.CODE_REMOVED : Messages.CODE_CHANGED);
 
-        prevFdiff = isOnSameLine(prevFdiff, fromLocRg) ? 
-            replaceReference(fromName, prevFdiff, fromLocRg, toLocRg) : 
-            addReference(fromName, msg, fromLocRg, toLocRg);
+        prevFdiff = isOnSameLine(prevFdiff, fromLocRg) ? replaceReference(prevFdiff, fromLocRg, toLocRg, differences) : addReference(msg, fromLocRg, toLocRg, differences);
         
         return prevFdiff;
     }

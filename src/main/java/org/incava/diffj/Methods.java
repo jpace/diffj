@@ -67,8 +67,7 @@ public class Methods extends Functions {
         }
         else {
             String fromName = MethodUtil.getFullName(from);
-            String toName = MethodUtil.getFullName(to);
-            compareBlocks(fromName, fromBlock, toName, toBlock);
+            compareBlocks(fromName, fromBlock, toBlock);
         }
     }
 
@@ -83,9 +82,9 @@ public class Methods extends Functions {
     //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(toBlock));        
     // }
 
-    protected void compareBlocks(String fromName, ASTBlock fromBlock, String toName, ASTBlock toBlock) {
+    protected void compareBlocks(String fromName, ASTBlock fromBlock, ASTBlock toBlock) {
         List<Token> from = SimpleNodeUtil.getChildTokens(fromBlock);
         List<Token> to = SimpleNodeUtil.getChildTokens(toBlock);
-        compareCode(fromName, from, toName, to);
+        compareCode(fromName, from, to);
     }
 }
