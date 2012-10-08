@@ -159,10 +159,11 @@ public class JavaFile extends JavaFSElement {
             ASTCompilationUnit toCu   = toFile.compile();
             
             report.reset(getLabel(), getContents(), toFile.getLabel(), toFile.getContents());
-        
-            CompilationUnits cud = new CompilationUnits(report);
-            // chew the cud here ...
-            cud.compare(fromCu, toCu);
+
+            if (fromCu != null && toCu != null) {
+                CompilationUnit cu = new CompilationUnit(fromCu);
+                cu.diff(toCu, report);
+            }
         }
         catch (DiffJException de) {
             tr.Ace.red("de", de);
