@@ -2,7 +2,7 @@ package org.incava.diffj;
 
 import org.incava.java.Java;
 
-public class TestAnnotatedMethods extends ItemTest {
+public class TestAnnotatedMethods extends ItemsTest {
     protected final static String[] METHOD_MSGS = TestType.METHOD_MSGS;
 
     public TestAnnotatedMethods(String name) {

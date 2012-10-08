@@ -1,6 +1,6 @@
 package org.incava.diffj;
 
-public class OutputTest extends ItemTest {
+public class OutputTest extends ItemsTest {
     public OutputTest(String name) {
         super(name);
     }

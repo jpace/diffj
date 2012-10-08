@@ -1,6 +1,6 @@
 package org.incava.diffj;
 
-public class TestMethodCodeChange extends ItemTest {
+public class TestMethodCodeChange extends ItemsTest {
     public TestMethodCodeChange(String name) {
         super(name);
     }

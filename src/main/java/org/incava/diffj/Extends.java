@@ -8,7 +8,7 @@ import org.incava.analysis.FileDiffs;
 /**
  * Compares extends.
  */
-public class Extends extends Super {
+public class Extends extends Supers {
     public Extends(FileDiffs differences) {
         super(differences);
     }

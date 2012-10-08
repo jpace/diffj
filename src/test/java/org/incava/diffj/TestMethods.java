@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
 import org.incava.ijdk.text.Location;
 
-public class TestMethods extends ItemTest {
+public class TestMethods extends ItemsTest {
     protected final static String[] PARAM_MSGS = new String[] {
         Messages.PARAMETER_REMOVED,
         null,

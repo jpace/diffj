@@ -4,7 +4,6 @@ import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
-import org.incava.pmdx.SimpleNode;
 
 public class Items {
     protected final DiffComparator differences;

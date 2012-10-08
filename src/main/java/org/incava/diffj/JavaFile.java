@@ -160,7 +160,7 @@ public class JavaFile extends JavaFSElement {
             
             report.reset(getLabel(), getContents(), toFile.getLabel(), toFile.getContents());
         
-            CompilationUnit cud = new CompilationUnit(report);
+            CompilationUnits cud = new CompilationUnits(report);
             // chew the cud here ...
             cud.compare(fromCu, toCu);
         }

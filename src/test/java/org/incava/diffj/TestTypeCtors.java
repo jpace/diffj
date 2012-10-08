@@ -1,7 +1,7 @@
 package org.incava.diffj;
 
-public class TestTypeCtor extends ItemTest {
-    public TestTypeCtor(String name) {
+public class TestTypeCtors extends ItemsTest {
+    public TestTypeCtors(String name) {
         super(name);
     }
 

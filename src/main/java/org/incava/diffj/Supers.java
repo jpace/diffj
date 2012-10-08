@@ -14,10 +14,10 @@ import org.incava.pmdx.SimpleNodeUtil;
 /**
  * Compares super (extends or implements).
  */
-public abstract class Super {
+public abstract class Supers {
     protected final DiffComparator differences;
 
-    public Super(FileDiffs fileDiffs) {
+    public Supers(FileDiffs fileDiffs) {
         this.differences = new DiffComparator(fileDiffs);
     }
 

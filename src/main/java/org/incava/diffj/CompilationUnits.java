@@ -4,10 +4,10 @@ import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
 
-public class CompilationUnit {
+public class CompilationUnits {
     private final DiffComparator differences;
 
-    public CompilationUnit(Report report) {
+    public CompilationUnits(Report report) {
         this.differences = new DiffComparator(report);
     }
 
@@ -16,7 +16,7 @@ public class CompilationUnit {
         tr.Ace.log("diffs", diffs);
         
         if (a != null && b != null) {
-            Package pd = new Package(diffs);
+            Packages pd = new Packages(diffs);
             pd.compare(a, b);
             
             Imports imps = new Imports(diffs);

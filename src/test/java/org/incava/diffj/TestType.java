@@ -2,7 +2,7 @@ package org.incava.diffj;
 
 import org.incava.analysis.FileDiffChange;
 
-public class TestType extends ItemTest {
+public class TestType extends ItemsTest {
     public TestType(String name) {
         super(name);
     }

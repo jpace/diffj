@@ -10,10 +10,10 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Package {
+public class Packages {
     private final DiffComparator differences;
 
-    public Package(FileDiffs fileDiffs) {
+    public Packages(FileDiffs fileDiffs) {
         this.differences = new DiffComparator(fileDiffs);
     }
 
