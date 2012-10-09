@@ -1,15 +1,15 @@
 package org.incava.diffj;
 
+import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Methods extends Items<ASTMethodDeclaration> {
     private final MethodUtil methodUtil;
 
-    public Methods(FileDiffs fileDiffs) {
-        super(fileDiffs, "net.sourceforge.pmd.ast.ASTMethodDeclaration");
+    public Methods(ASTClassOrInterfaceDeclaration type, Differences differences) {
+        super(type, "net.sourceforge.pmd.ast.ASTMethodDeclaration", differences);
         methodUtil = new MethodUtil();
     }    
 

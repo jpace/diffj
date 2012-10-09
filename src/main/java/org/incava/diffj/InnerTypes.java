@@ -5,12 +5,13 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.ClassUtil;
 
 public class InnerTypes extends Items<ASTClassOrInterfaceDeclaration> {
-    public InnerTypes(FileDiffs differences) {
-        super(differences, "net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration");
+    public InnerTypes(ASTClassOrInterfaceDeclaration type, Differences differences) {
+        super(type, "net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration", differences);
     }
 
     public void doCompare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
         Type type = new Type(fromDecl);
+        // $$$ type compares access, as should the other item types ...
         type.diff(toDecl, differences);
     }
 

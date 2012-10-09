@@ -4,8 +4,6 @@ import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.analysis.FileDiff;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
@@ -50,18 +48,16 @@ public class Type extends Item {
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        FileDiffs diffs = differences.getFileDiffs();
-
-        Methods tmd = new Methods(diffs);
-        tmd.compare(decl, toDecl);
+        Methods methods = new Methods(decl, differences);
+        methods.diff(toDecl, differences);
         
-        Fields tfd = new Fields(decl, differences);
-        tfd.diff(toDecl, differences);
+        Fields fields = new Fields(decl, differences);
+        fields.diff(toDecl, differences);
         
-        Ctors ctd = new Ctors(diffs);
-        ctd.compare(decl, toDecl);
+        Ctors ctors = new Ctors(decl, differences);
+        ctors.diff(toDecl, differences);
         
-        InnerTypes titd = new InnerTypes(diffs);
-        titd.compare(decl, toDecl);
+        InnerTypes innerTypes = new InnerTypes(decl, differences);
+        innerTypes.diff(toDecl, differences);
     }
 }
