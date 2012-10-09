@@ -14,37 +14,37 @@ public class Type extends Items {
         super(differences);
     }
 
-    public void compare(ASTTypeDeclaration a, ASTTypeDeclaration b) {
-        // should have only one child, the type itself, either an interface or a
+    public void compare(ASTTypeDeclaration fromType, ASTTypeDeclaration toType) {
+        // should have only one child, the type itself, either an interface or fromType
         // class declaration
 
-        ASTClassOrInterfaceDeclaration at = TypeDeclarationUtil.getType(a);
-        ASTClassOrInterfaceDeclaration bt = TypeDeclarationUtil.getType(b);
+        ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromType);
+        ASTClassOrInterfaceDeclaration toDecl = TypeDeclarationUtil.getType(toType);
 
-        if (at == null && bt == null) {
+        if (fromDecl == null && toDecl == null) {
             tr.Ace.log("skipping 'semicolon declarations'");
         }
         else {
-            compare(at, bt);
+            compare(fromDecl, toDecl);
         }
     }
 
-    public void compare(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        if (!at.isInterface() && bt.isInterface()) {
-            differences.changed(at, bt, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
+    public void compare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+        if (!fromDecl.isInterface() && toDecl.isInterface()) {
+            differences.changed(fromDecl, toDecl, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
-        else if (at.isInterface() && !bt.isInterface()) {
-            differences.changed(at, bt, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
+        else if (fromDecl.isInterface() && !toDecl.isInterface()) {
+            differences.changed(fromDecl, toDecl, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
         }
         
-        SimpleNode atParent = SimpleNodeUtil.getParent(at);
-        SimpleNode btParent = SimpleNodeUtil.getParent(bt);
+        SimpleNode atParent = SimpleNodeUtil.getParent(fromDecl);
+        SimpleNode btParent = SimpleNodeUtil.getParent(toDecl);
 
         compareAccess(atParent, btParent, differences);
         compareModifiers(atParent, btParent);
-        compareExtends(at, bt);
-        compareImplements(at, bt);
-        compareDeclarations(at, bt);
+        compareExtends(fromDecl, toDecl);
+        compareImplements(fromDecl, toDecl);
+        compareDeclarations(fromDecl, toDecl);
     }
 
     protected void compareModifiers(SimpleNode fromNode, SimpleNode toNode) {
@@ -52,14 +52,14 @@ public class Type extends Items {
         typeMods.diff(toNode, differences);
     }
 
-    protected void compareExtends(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
+    protected void compareExtends(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
         Extends ed = new Extends(differences.getFileDiffs());
-        ed.compareExtends(at, bt);
+        ed.compareExtends(fromDecl, toDecl);
     }
 
-    protected void compareImplements(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
+    protected void compareImplements(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
         Implements id = new Implements(differences.getFileDiffs());
-        id.compareImplements(at, bt);
+        id.compareImplements(fromDecl, toDecl);
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
