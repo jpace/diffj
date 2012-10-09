@@ -1,7 +1,7 @@
 package org.incava.diffj;
 
-public class TestPackages extends ItemsTest {
-    public TestPackages(String name) {
+public class TestPackage extends ItemsTest {
+    public TestPackage(String name) {
         super(name);
     }
 

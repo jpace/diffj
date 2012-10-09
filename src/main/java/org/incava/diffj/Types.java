@@ -8,41 +8,42 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class Types extends Items {
-    public Types(FileDiffs differences) {
-        super(differences);
+public class Types {
+    private final ASTCompilationUnit compUnit;
+
+    public Types(ASTCompilationUnit compUnit) {
+        this.compUnit = compUnit;
     }
 
-    public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
-        List<ASTTypeDeclaration> aTypes = CompilationUnitUtil.getTypeDeclarations(a);
-        List<ASTTypeDeclaration> bTypes = CompilationUnitUtil.getTypeDeclarations(b);
+    public void diff(ASTCompilationUnit toCompUnit, Differences differences) {
+        List<ASTTypeDeclaration> fromTypes = CompilationUnitUtil.getTypeDeclarations(compUnit);
+        List<ASTTypeDeclaration> toTypes = CompilationUnitUtil.getTypeDeclarations(toCompUnit);
 
-        Map<String, ASTTypeDeclaration> aNamesToTD = makeTDMap(aTypes);
-        Map<String, ASTTypeDeclaration> bNamesToTD = makeTDMap(bTypes);
+        Map<String, ASTTypeDeclaration> fromNamesToTD = makeTDMap(fromTypes);
+        Map<String, ASTTypeDeclaration> toNamesToTD = makeTDMap(toTypes);
 
         Collection<String> names = new TreeSet<String>();
-        names.addAll(aNamesToTD.keySet());
-        names.addAll(bNamesToTD.keySet());
+        names.addAll(fromNamesToTD.keySet());
+        names.addAll(toNamesToTD.keySet());
 
         for (String name : names) {
-            ASTTypeDeclaration atd  = aNamesToTD.get(name);
-            ASTTypeDeclaration btd  = bNamesToTD.get(name);
+            ASTTypeDeclaration fromTypeDecl  = fromNamesToTD.get(name);
+            ASTTypeDeclaration toTypeDecl  = toNamesToTD.get(name);
 
-            if (atd == null) {
-                Token bName = TypeDeclarationUtil.getName(btd);
-                differences.added(a, btd, Messages.TYPE_DECLARATION_ADDED, bName.image);
+            if (fromTypeDecl == null) {
+                Token toName = TypeDeclarationUtil.getName(toTypeDecl);
+                differences.added(compUnit, toTypeDecl, Messages.TYPE_DECLARATION_ADDED, toName.image);
             }
-            else if (btd == null) {
-                Token aName = TypeDeclarationUtil.getName(atd);
-                differences.deleted(atd, b, Messages.TYPE_DECLARATION_REMOVED, aName.image);
+            else if (toTypeDecl == null) {
+                Token toName = TypeDeclarationUtil.getName(fromTypeDecl);
+                differences.deleted(fromTypeDecl, toCompUnit, Messages.TYPE_DECLARATION_REMOVED, toName.image);
             }
             else {
                 Type type = new Type(differences.getFileDiffs());
-                type.compare(atd, btd);
+                type.compare(fromTypeDecl, toTypeDecl);
             }
         }
     }

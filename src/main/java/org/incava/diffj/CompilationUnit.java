@@ -3,6 +3,7 @@ package org.incava.diffj;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
+import org.incava.pmdx.CompilationUnitUtil;
 
 public class CompilationUnit {
     private final ASTCompilationUnit compUnit;
@@ -11,8 +12,8 @@ public class CompilationUnit {
         this.compUnit = compUnit;
     }
 
-    public void diff(ASTCompilationUnit other, Report report) {
-        if (other == null) {
+    public void diff(ASTCompilationUnit toCompUnit, Report report) {
+        if (toCompUnit == null) {
             return;
         }
 
@@ -21,13 +22,13 @@ public class CompilationUnit {
         
         tr.Ace.log("fileDiffs", fileDiffs);
         
-        Packages pd = new Packages(fileDiffs);
-        pd.compare(compUnit, other);
+        Package pd = new Package(compUnit);
+        pd.diff(toCompUnit, differences);
             
         Imports imps = new Imports(fileDiffs);
-        imps.compare(compUnit, other);
+        imps.compare(compUnit, toCompUnit);
 
-        Types td = new Types(fileDiffs);
-        td.compare(compUnit, other);
+        Types types = new Types(compUnit);
+        types.diff(toCompUnit, differences);
     }
 }
