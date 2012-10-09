@@ -9,27 +9,23 @@ import org.incava.analysis.FileDiffs;
  * Compares extends.
  */
 public class Extends extends Supers {
-    public Extends(FileDiffs differences) {
-        super(differences);
-    }
-
-    public void compareExtends(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
-        compare(fromDecl, toDecl);
+    public Extends(ASTClassOrInterfaceDeclaration decl) {
+        super(decl);
     }
 
     protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid) {
         return getMap(coid, "net.sourceforge.pmd.ast.ASTExtendsList");
     }
 
-    protected void superTypeChanged(ASTClassOrInterfaceType a, String aName, ASTClassOrInterfaceType b, String bName) {
-        differences.changed(a, b, Messages.EXTENDED_TYPE_CHANGED, aName, bName);
+    protected void superTypeChanged(ASTClassOrInterfaceType fromType, String fromName, ASTClassOrInterfaceType toType, String toName, Differences differences) {
+        differences.changed(fromType, toType, Messages.EXTENDED_TYPE_CHANGED, fromName, toName);
     }
 
-    protected void superTypeAdded(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceType bType, String typeName) {
-        differences.changed(at, bType, Messages.EXTENDED_TYPE_ADDED, typeName);
+    protected void superTypeAdded(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceType toType, String typeName, Differences differences) {
+        differences.changed(fromDecl, toType, Messages.EXTENDED_TYPE_ADDED, typeName);
     }
 
-    protected void superTypeRemoved(ASTClassOrInterfaceType aType, ASTClassOrInterfaceDeclaration bt, String typeName) {
-        differences.changed(aType, bt, Messages.EXTENDED_TYPE_REMOVED, typeName);
+    protected void superTypeRemoved(ASTClassOrInterfaceType fromType, ASTClassOrInterfaceDeclaration toDecl, String typeName, Differences differences) {
+        differences.changed(fromType, toDecl, Messages.EXTENDED_TYPE_REMOVED, typeName);
     }
 }

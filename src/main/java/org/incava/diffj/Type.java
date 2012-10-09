@@ -40,13 +40,13 @@ public class Type extends Item {
     }
 
     protected void compareExtends(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Extends ed = new Extends(differences.getFileDiffs());
-        ed.compareExtends(decl, toDecl);
+        Extends ed = new Extends(decl);
+        ed.diff(toDecl, differences);
     }
 
     protected void compareImplements(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Implements id = new Implements(differences.getFileDiffs());
-        id.compareImplements(decl, toDecl);
+        Implements id = new Implements(decl);
+        id.diff(toDecl, differences);
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {

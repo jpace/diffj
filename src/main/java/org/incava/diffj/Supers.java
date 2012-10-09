@@ -15,25 +15,27 @@ import org.incava.pmdx.SimpleNodeUtil;
  * Compares super (extends or implements).
  */
 public abstract class Supers {
-    protected final Differences differences;
+    private final ASTClassOrInterfaceDeclaration decl;
 
-    public Supers(FileDiffs fileDiffs) {
-        this.differences = new Differences(fileDiffs);
+    public Supers(ASTClassOrInterfaceDeclaration decl) {
+        this.decl = decl;
     }
 
     abstract protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid);    
     
-    abstract protected void superTypeChanged(ASTClassOrInterfaceType a, String aName, ASTClassOrInterfaceType b, String bName);
+    abstract protected void superTypeChanged(ASTClassOrInterfaceType a, String aName, ASTClassOrInterfaceType b, String bName, Differences differences);
 
-    abstract protected void superTypeAdded(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceType bType, String typeName);
+    abstract protected void superTypeAdded(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceType bType, String typeName, Differences differences);
 
-    abstract protected void superTypeRemoved(ASTClassOrInterfaceType aType, ASTClassOrInterfaceDeclaration bt, String typeName);
+    abstract protected void superTypeRemoved(ASTClassOrInterfaceType aType, ASTClassOrInterfaceDeclaration bt, String typeName, Differences differences);
 
     protected <K, V> K getFirstKey(Map<K, V> map) {
         return map.keySet().iterator().next();
     }
     
-    protected void compare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+    public void diff(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
+        ASTClassOrInterfaceDeclaration fromDecl = decl;
+        
         Map<String, ASTClassOrInterfaceType> fromMap = getMap(fromDecl);
         Map<String, ASTClassOrInterfaceType> toMap = getMap(toDecl);
 
@@ -45,10 +47,10 @@ public abstract class Supers {
             String toName = getFirstKey(toMap);
 
             if (!fromName.equals(toName)) {
-                ASTClassOrInterfaceType a = fromMap.get(fromName);
-                ASTClassOrInterfaceType b = toMap.get(toName);
+                ASTClassOrInterfaceType fromType = fromMap.get(fromName);
+                ASTClassOrInterfaceType toType = toMap.get(toName);
                 
-                superTypeChanged(a, fromName, b, toName);
+                superTypeChanged(fromType, fromName, toType, toName, differences);
             }
         }
         else {
@@ -59,14 +61,14 @@ public abstract class Supers {
             // tr.Ace.log("typeNames", typeNames);
 
             for (String typeName : typeNames) {
-                ASTClassOrInterfaceType aType = fromMap.get(typeName);
-                ASTClassOrInterfaceType bType = toMap.get(typeName);
+                ASTClassOrInterfaceType fromType = fromMap.get(typeName);
+                ASTClassOrInterfaceType toType = toMap.get(typeName);
 
-                if (aType == null) {
-                    superTypeAdded(fromDecl, bType, typeName);
+                if (fromType == null) {
+                    superTypeAdded(fromDecl, toType, typeName, differences);
                 }
-                else if (bType == null) {
-                    superTypeRemoved(aType, toDecl, typeName);
+                else if (toType == null) {
+                    superTypeRemoved(fromType, toDecl, typeName, differences);
                 }
             }
         }
