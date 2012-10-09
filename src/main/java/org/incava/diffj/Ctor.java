@@ -12,29 +12,31 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Ctors extends Functions {
-    public Ctors(FileDiffs differences) {
-        super(differences);
+public class Ctor extends Functions {
+    private final ASTConstructorDeclaration ctor;
+
+    public Ctor(ASTConstructorDeclaration ctor) {
+        this.ctor = ctor;
     }
 
-    public void compare(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
-        tr.Ace.log("from: " + from + "; to: " + to);
+    public void diff(ASTConstructorDeclaration toCtor, Differences differences) {
+        tr.Ace.log("this.ctor: " + this.ctor + "; toCtor: " + toCtor);
         
-        compareParameters(from, to);
-        compareThrows(from, to);
-        compareBodies(from, to);
+        compareParameters(toCtor, differences);
+        compareThrows(toCtor, differences);
+        compareBodies(toCtor, differences);
     }
     
-    protected void compareParameters(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
-        ASTFormalParameters fromParam = CtorUtil.getParameters(from);
-        ASTFormalParameters toParams = CtorUtil.getParameters(to);
+    protected void compareParameters(ASTConstructorDeclaration toCtor, Differences differences) {
+        ASTFormalParameters fromParam = CtorUtil.getParameters(ctor);
+        ASTFormalParameters toParams = CtorUtil.getParameters(toCtor);
         compareParameters(fromParam, toParams, differences);
     }
 
-    protected void compareThrows(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
-        ASTNameList fromThrows = CtorUtil.getThrowsList(from);
-        ASTNameList toThrows = CtorUtil.getThrowsList(to);
-        compareThrows(from, fromThrows, to, toThrows, differences);
+    protected void compareThrows(ASTConstructorDeclaration toCtor, Differences differences) {
+        ASTNameList fromThrows = CtorUtil.getThrowsList(ctor);
+        ASTNameList toThrows = CtorUtil.getThrowsList(toCtor);
+        compareThrows(ctor, fromThrows, toCtor, toThrows, differences);
     }
 
     protected List<Token> getCodeSerially(ASTConstructorDeclaration ctor) {
@@ -57,10 +59,10 @@ public class Ctors extends Functions {
         return children;
     }
 
-    protected void compareBodies(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
-        List<Token> fromCode = getCodeSerially(from);
-        List<Token> toCode = getCodeSerially(to);
-        String fromName = CtorUtil.getFullName(from);
+    protected void compareBodies(ASTConstructorDeclaration toCtor, Differences differences) {
+        List<Token> fromCode = getCodeSerially(ctor);
+        List<Token> toCode = getCodeSerially(toCtor);
+        String fromName = CtorUtil.getFullName(ctor);
         compareCode(fromName, fromCode, toCode, differences);
     }
 }

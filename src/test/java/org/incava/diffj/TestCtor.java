@@ -6,7 +6,7 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
 
-public class TestCtors extends ItemsTest {
+public class TestCtor extends ItemsTest {
     protected final static String[] PARAMETER_MSGS = new String[] {
         Messages.PARAMETER_REMOVED,
         null,
@@ -19,7 +19,7 @@ public class TestCtors extends ItemsTest {
         Messages.THROWS_ADDED,
     };
 
-    public TestCtors(String name) {
+    public TestCtor(String name) {
         super(name);
     }
 

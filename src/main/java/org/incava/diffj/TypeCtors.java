@@ -15,10 +15,10 @@ public class TypeCtors extends TypeItems<ASTConstructorDeclaration> {
         this.fileDiffs = fileDiffs;
     }    
 
-    public void doCompare(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
-        Ctors ctor = new Ctors(fileDiffs);
-        ctor.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b), differences);
-        ctor.compare(a, b);
+    public void doCompare(ASTConstructorDeclaration fromCtor, ASTConstructorDeclaration toCtor) {
+        Ctor ctor = new Ctor(fromCtor);
+        ctor.compareAccess(SimpleNodeUtil.getParent(fromCtor), SimpleNodeUtil.getParent(toCtor), differences);
+        ctor.diff(toCtor, differences);
     }
 
     public double getScore(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {

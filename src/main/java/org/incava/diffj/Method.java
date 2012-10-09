@@ -21,50 +21,50 @@ public class Method extends Functions {
         this.method = method;
     }
 
-    public void diff(ASTMethodDeclaration to, Differences differences) {
-        compareModifiers(this.method, to, differences);
-        compareReturnTypes(this.method, to, differences);
-        compareParameters(this.method, to, differences);
-        compareThrows(this.method, to, differences);
-        compareBodies(this.method, to, differences);
+    public void diff(ASTMethodDeclaration toMethod, Differences differences) {
+        compareModifiers(toMethod, differences);
+        compareReturnTypes(toMethod, differences);
+        compareParameters(toMethod, differences);
+        compareThrows(toMethod, differences);
+        compareBodies(toMethod, differences);
     }
 
-    protected void compareModifiers(ASTMethodDeclaration from, ASTMethodDeclaration to, Differences differences) {
-        SimpleNode fromParent = SimpleNodeUtil.getParent(from);
-        SimpleNode toParent = SimpleNodeUtil.getParent(to);
+    protected void compareModifiers(ASTMethodDeclaration toMethod, Differences differences) {
+        SimpleNode fromParent = SimpleNodeUtil.getParent(method);
+        SimpleNode toParent = SimpleNodeUtil.getParent(toMethod);
         MethodModifiers mods = new MethodModifiers(fromParent);
         mods.diff(toParent, differences);
     }
 
-    protected void compareParameters(ASTMethodDeclaration from, ASTMethodDeclaration to, Differences differences) {
-        ASTFormalParameters fromFormalParams = MethodUtil.getParameters(from);
-        ASTFormalParameters toFormalParams = MethodUtil.getParameters(to);
+    protected void compareParameters(ASTMethodDeclaration toMethod, Differences differences) {
+        ASTFormalParameters fromFormalParams = MethodUtil.getParameters(method);
+        ASTFormalParameters toFormalParams = MethodUtil.getParameters(toMethod);
         compareParameters(fromFormalParams, toFormalParams, differences);
     }
 
-    protected void compareThrows(ASTMethodDeclaration from, ASTMethodDeclaration to, Differences differences) {
-        ASTNameList fromThrowsList = MethodUtil.getThrowsList(from);
-        ASTNameList toThrowsList = MethodUtil.getThrowsList(to);
-        compareThrows(from, fromThrowsList, to, toThrowsList, differences);
+    protected void compareThrows(ASTMethodDeclaration toMethod, Differences differences) {
+        ASTNameList fromThrowsList = MethodUtil.getThrowsList(method);
+        ASTNameList toThrowsList = MethodUtil.getThrowsList(toMethod);
+        compareThrows(method, fromThrowsList, toMethod, toThrowsList, differences);
     }
 
-    protected void compareBodies(ASTMethodDeclaration from, ASTMethodDeclaration to, Differences differences) {
-        // tr.Ace.log("from", from);
-        // tr.Ace.log("to", to);
+    protected void compareBodies(ASTMethodDeclaration toMethod, Differences differences) {
+        // tr.Ace.log("method", method);
+        // tr.Ace.log("toMethod", toMethod);
 
-        ASTBlock fromBlock = (ASTBlock)SimpleNodeUtil.findChild(from, "net.sourceforge.pmd.ast.ASTBlock");
-        ASTBlock toBlock = (ASTBlock)SimpleNodeUtil.findChild(to, "net.sourceforge.pmd.ast.ASTBlock");
+        ASTBlock fromBlock = (ASTBlock)SimpleNodeUtil.findChild(method, "net.sourceforge.pmd.ast.ASTBlock");
+        ASTBlock toBlock = (ASTBlock)SimpleNodeUtil.findChild(toMethod, "net.sourceforge.pmd.ast.ASTBlock");
 
         if (fromBlock == null) {
             if (toBlock != null) {
-                differences.changed(from, to, Messages.METHOD_BLOCK_ADDED);
+                differences.changed(method, toMethod, Messages.METHOD_BLOCK_ADDED);
             }
         }
         else if (toBlock == null) {
-            differences.changed(from, to, Messages.METHOD_BLOCK_REMOVED);
+            differences.changed(method, toMethod, Messages.METHOD_BLOCK_REMOVED);
         }
         else {
-            String fromName = MethodUtil.getFullName(from);
+            String fromName = MethodUtil.getFullName(method);
             compareBlocks(fromName, fromBlock, toBlock, differences);
         }
     }
@@ -81,8 +81,20 @@ public class Method extends Functions {
     // }
 
     protected void compareBlocks(String fromName, ASTBlock fromBlock, ASTBlock toBlock, Differences differences) {
-        List<Token> from = SimpleNodeUtil.getChildTokens(fromBlock);
-        List<Token> to = SimpleNodeUtil.getChildTokens(toBlock);
-        compareCode(fromName, from, to, differences);
+        List<Token> method = SimpleNodeUtil.getChildTokens(fromBlock);
+        List<Token> toMethod = SimpleNodeUtil.getChildTokens(toBlock);
+        compareCode(fromName, method, toMethod, differences);
     }
+
+    protected void compareReturnTypes(ASTMethodDeclaration toMethod, Differences differences) {
+        SimpleNode fromRetType    = SimpleNodeUtil.findChild(method);
+        SimpleNode toRetType      = SimpleNodeUtil.findChild(toMethod);
+        String     fromRetTypeStr = SimpleNodeUtil.toString(fromRetType);
+        String     toRetTypeStr   = SimpleNodeUtil.toString(toRetType);
+
+        if (!fromRetTypeStr.equals(toRetTypeStr)) {
+            differences.changed(fromRetType, toRetType, Messages.RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
+        }
+    }
+
 }

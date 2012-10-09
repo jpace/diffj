@@ -4,14 +4,14 @@ import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
 import org.incava.ijdk.text.Location;
 
-public class TestMethods extends ItemsTest {
+public class TestMethod extends ItemsTest {
     protected final static String[] PARAM_MSGS = new String[] {
         Messages.PARAMETER_REMOVED,
         null,
         Messages.PARAMETER_ADDED,
     };
 
-    public TestMethods(String name) {
+    public TestMethod(String name) {
         super(name);
     }
 

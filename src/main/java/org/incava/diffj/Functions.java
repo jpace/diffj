@@ -14,17 +14,6 @@ public class Functions extends Items {
     public Functions() {
     }
 
-    protected void compareReturnTypes(SimpleNode fromNode, SimpleNode toNode, Differences differences) {
-        SimpleNode fromRetType    = SimpleNodeUtil.findChild(fromNode);
-        SimpleNode toRetType      = SimpleNodeUtil.findChild(toNode);
-        String     fromRetTypeStr = SimpleNodeUtil.toString(fromRetType);
-        String     toRetTypeStr   = SimpleNodeUtil.toString(toRetType);
-
-        if (!fromRetTypeStr.equals(toRetTypeStr)) {
-            differences.changed(fromRetType, toRetType, Messages.RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
-        }
-    }
-
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, Differences differences) {
         Parameters params = new Parameters(differences.getFileDiffs(), fromFormalParams, toFormalParams);
         params.compare();
