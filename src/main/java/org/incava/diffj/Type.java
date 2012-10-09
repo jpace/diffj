@@ -50,14 +50,15 @@ public class Type extends Item {
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        FileDiffs diffs = differences.getFileDiffs();        
-        TypeMethods tmd = new TypeMethods(diffs);
+        FileDiffs diffs = differences.getFileDiffs();
+
+        Methods tmd = new Methods(diffs);
         tmd.compare(decl, toDecl);
         
-        TypeFields tfd = new TypeFields(diffs);
-        tfd.compare(decl, toDecl);
+        Fields tfd = new Fields(decl, differences);
+        tfd.diff(toDecl, differences);
         
-        TypeCtors ctd = new TypeCtors(diffs);
+        Ctors ctd = new Ctors(diffs);
         ctd.compare(decl, toDecl);
         
         InnerTypes titd = new InnerTypes(diffs);

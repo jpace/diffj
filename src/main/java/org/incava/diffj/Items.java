@@ -13,14 +13,39 @@ import org.incava.pmdx.TypeDeclarationUtil;
 public abstract class Items<ItemType extends SimpleNode> {
     protected final Differences differences;
     private final String clsName;
+    private final ASTClassOrInterfaceDeclaration type;
 
     public Items(FileDiffs fileDiffs, String clsName) {
         this.differences = new Differences(fileDiffs);
         this.clsName = clsName;
+        this.type = null;
     }
 
     public Items(FileDiffs differences, Class<ItemType> cls) {
         this(differences, cls == null ? (String)null : cls.getName());
+    }
+
+    public Items(ASTClassOrInterfaceDeclaration type, String clsName, Differences differences) {
+        this.differences = differences;
+        this.clsName = clsName;
+        this.type = type;
+    }
+
+    public void diff(ASTClassOrInterfaceDeclaration toType, Differences differences) {
+        ASTClassOrInterfaceDeclaration fromType = type;
+        
+        List<ItemType> fromDecls = getDeclarationsOfClassType(fromType);
+        List<ItemType> toDecls = getDeclarationsOfClassType(toType);
+
+        TypeMatches<ItemType> matches = getTypeMatches(fromDecls, toDecls);
+
+        List<ItemType> unprocFromDecls = new ArrayList<ItemType>(fromDecls);
+        List<ItemType> unprocToDecls = new ArrayList<ItemType>(toDecls);
+
+        compareMatches(matches, unprocFromDecls, unprocToDecls, differences);
+
+        addRemoved(unprocFromDecls, toType, differences);        
+        addAdded(fromType, unprocToDecls, differences);
     }
 
     public void compare(ASTClassOrInterfaceDeclaration fromType, ASTClassOrInterfaceDeclaration toType) {
@@ -32,10 +57,10 @@ public abstract class Items<ItemType extends SimpleNode> {
         List<ItemType> unprocFromDecls = new ArrayList<ItemType>(fromDecls);        
         List<ItemType> unprocToDecls = new ArrayList<ItemType>(toDecls);
 
-        compareMatches(matches, unprocFromDecls, unprocToDecls);
+        compareMatches(matches, unprocFromDecls, unprocToDecls, differences);
 
-        addRemoved(unprocFromDecls, toType);        
-        addAdded(fromType, unprocToDecls);
+        addRemoved(unprocFromDecls, toType, differences);
+        addAdded(fromType, unprocToDecls, differences);
     }
 
     public abstract String getName(ItemType item);
@@ -77,7 +102,7 @@ public abstract class Items<ItemType extends SimpleNode> {
         return matches;
     }
 
-    public void compareMatches(TypeMatches<ItemType> matches, List<ItemType> unprocFromItems, List<ItemType> unprocToItems) {
+    public void compareMatches(TypeMatches<ItemType> matches, List<ItemType> unprocFromItems, List<ItemType> unprocToItems, Differences differences) {
         List<Double> descendingScores = matches.getDescendingScores();
         
         for (Double score : descendingScores) {
@@ -108,14 +133,14 @@ public abstract class Items<ItemType extends SimpleNode> {
         return getDeclarationsOfClass(decls);
     }
 
-    public void addAdded(ASTClassOrInterfaceDeclaration fromDecl, List<ItemType> toItems) {
+    public void addAdded(ASTClassOrInterfaceDeclaration fromDecl, List<ItemType> toItems, Differences differences) {
         for (ItemType toItem : toItems) {
             String name = getName(toItem);
             differences.added(fromDecl, toItem, getAddedMessage(toItem), name);
         }
     }
 
-    public void addRemoved(List<ItemType> fromItems, ASTClassOrInterfaceDeclaration toDecl) {
+    public void addRemoved(List<ItemType> fromItems, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
         for (ItemType fromItem : fromItems) {
             String name = getName(fromItem);
             differences.deleted(fromItem, toDecl, getRemovedMessage(fromItem), name);

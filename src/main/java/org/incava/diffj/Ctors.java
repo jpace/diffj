@@ -7,10 +7,10 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class TypeCtors extends Items<ASTConstructorDeclaration> {
+public class Ctors extends Items<ASTConstructorDeclaration> {
     private final FileDiffs fileDiffs;
 
-    public TypeCtors(FileDiffs fileDiffs) {
+    public Ctors(FileDiffs fileDiffs) {
         super(fileDiffs, "net.sourceforge.pmd.ast.ASTConstructorDeclaration");
         this.fileDiffs = fileDiffs;
     }    
