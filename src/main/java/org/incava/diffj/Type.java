@@ -64,16 +64,16 @@ public class Type extends Items {
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
         FileDiffs diffs = differences.getFileDiffs();        
-        TypeMethodDiff tmd = new TypeMethodDiff(diffs);
+        TypeMethods tmd = new TypeMethods(diffs);
         tmd.compare(aNode, bNode);
         
-        TypeFieldDiff tfd = new TypeFieldDiff(diffs);
+        TypeFields tfd = new TypeFields(diffs);
         tfd.compare(aNode, bNode);
         
         TypeCtors ctd = new TypeCtors(diffs);
         ctd.compare(aNode, bNode);
         
-        TypeInnerTypeDiff titd = new TypeInnerTypeDiff(diffs, this);
+        InnerTypes titd = new InnerTypes(diffs, this);
         titd.compare(aNode, bNode);
     }
 }

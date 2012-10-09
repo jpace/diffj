@@ -1,7 +1,7 @@
 package org.incava.diffj;
 
-public class TestTypeFieldDiff extends ItemsTest {
-    public TestTypeFieldDiff(String name) {
+public class TestTypeFields extends ItemsTest {
+    public TestTypeFields(String name) {
         super(name);
     }
 
