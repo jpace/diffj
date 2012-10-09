@@ -16,60 +16,60 @@ import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Imports {
-    private final Differences differences;
+    private final ASTCompilationUnit compUnit;
 
-    public Imports(FileDiffs fileDiffs) {
-        this.differences = new Differences(fileDiffs);
+    public Imports(ASTCompilationUnit compUnit) {
+        this.compUnit = compUnit;
     }
 
-    public void compare(ASTCompilationUnit a, ASTCompilationUnit b) {
-        List<ASTImportDeclaration> aImports = CompilationUnitUtil.getImports(a);
-        List<ASTImportDeclaration> bImports = CompilationUnitUtil.getImports(b);
+    public void diff(ASTCompilationUnit toCompUnit, Differences differences) {
+        List<ASTImportDeclaration> fromImports = CompilationUnitUtil.getImports(compUnit);
+        List<ASTImportDeclaration> toImports = CompilationUnitUtil.getImports(toCompUnit);
 
-        if (aImports.size() == 0) {
-            if (bImports.size() != 0) {
-                markImportSectionAdded(a, bImports);
+        if (fromImports.size() == 0) {
+            if (toImports.size() != 0) {
+                markImportSectionAdded(toImports, differences);
             }
         }
-        else if (bImports.size() == 0) {
-            markImportSectionRemoved(aImports, b);
+        else if (toImports.size() == 0) {
+            markImportSectionRemoved(fromImports, toCompUnit, differences);
         }
         else {
-            Map<String, ASTImportDeclaration> aNamesToImp = makeImportMap(aImports);
-            Map<String, ASTImportDeclaration> bNamesToImp = makeImportMap(bImports);
+            Map<String, ASTImportDeclaration> fromNamesToImp = makeImportMap(fromImports);
+            Map<String, ASTImportDeclaration> toNamesToImp = makeImportMap(toImports);
             
             Collection<String> names = new TreeSet<String>();
-            names.addAll(aNamesToImp.keySet());
-            names.addAll(bNamesToImp.keySet());
+            names.addAll(fromNamesToImp.keySet());
+            names.addAll(toNamesToImp.keySet());
 
             for (String name : names) {
-                ASTImportDeclaration aimp = aNamesToImp.get(name);
-                ASTImportDeclaration bimp = bNamesToImp.get(name);
+                ASTImportDeclaration fromImp = fromNamesToImp.get(name);
+                ASTImportDeclaration toImp = toNamesToImp.get(name);
             
-                if (aimp == null) {
-                    differences.added(aImports.get(0), bimp, Messages.IMPORT_ADDED, name);
+                if (fromImp == null) {
+                    differences.added(fromImports.get(0), toImp, Messages.IMPORT_ADDED, name);
                 }
-                else if (bimp == null) {
-                    differences.deleted(aimp, bImports.get(0), Messages.IMPORT_REMOVED, name);
+                else if (toImp == null) {
+                    differences.deleted(fromImp, toImports.get(0), Messages.IMPORT_REMOVED, name);
                 }
             }
         }
     }
 
-    protected void markImportSectionAdded(ASTCompilationUnit a, List<ASTImportDeclaration> bImports) {
-        Token a0 = getFirstTypeToken(a);
-        Token a1 = a0;
-        Token b0 = getFirstToken(bImports);
-        Token b1 = getLastToken(bImports);
-        differences.added(a0, a1, b0, b1, Messages.IMPORT_SECTION_ADDED);
+    protected void markImportSectionAdded(List<ASTImportDeclaration> toImports, Differences differences) {
+        Token fromStart = getFirstTypeToken(compUnit);
+        Token fromEnd = fromStart;
+        Token toStart = getFirstToken(toImports);
+        Token toEnd = getLastToken(toImports);
+        differences.added(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_ADDED);
     }
 
-    protected void markImportSectionRemoved(List<ASTImportDeclaration> aImports, ASTCompilationUnit b) {
-        Token a0 = getFirstToken(aImports);
-        Token a1 = getLastToken(aImports);
-        Token b0 = getFirstTypeToken(b);
-        Token b1 = b0;
-        differences.deleted(a0, a1, b0, b1, Messages.IMPORT_SECTION_REMOVED);
+    protected void markImportSectionRemoved(List<ASTImportDeclaration> fromImports, ASTCompilationUnit b, Differences differences) {
+        Token fromStart = getFirstToken(fromImports);
+        Token fromEnd = getLastToken(fromImports);
+        Token toStart = getFirstTypeToken(b);
+        Token toEnd = toStart;
+        differences.deleted(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_REMOVED);
     }
 
     protected String getImportAsString(ASTImportDeclaration imp) {
