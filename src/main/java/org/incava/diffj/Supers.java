@@ -21,22 +21,36 @@ public abstract class Supers {
         this.decl = decl;
     }
 
-    abstract protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid);    
-    
-    abstract protected void superTypeChanged(ASTClassOrInterfaceType a, String aName, ASTClassOrInterfaceType b, String bName, Differences differences);
+    protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid) {
+        return getMap(coid, getAstClassName());
+    }
 
-    abstract protected void superTypeAdded(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceType bType, String typeName, Differences differences);
+    protected void superTypeAdded(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceType toType, String typeName, Differences differences) {
+        differences.changed(fromDecl, toType, getAddedMessage(), typeName);
+    }
 
-    abstract protected void superTypeRemoved(ASTClassOrInterfaceType aType, ASTClassOrInterfaceDeclaration bt, String typeName, Differences differences);
+    protected void superTypeChanged(ASTClassOrInterfaceType fromType, String fromName, ASTClassOrInterfaceType toType, String toName, Differences differences) {
+        differences.changed(fromType, toType, getChangedMessage(), fromName, toName);
+    }
+
+    protected void superTypeRemoved(ASTClassOrInterfaceType fromType, ASTClassOrInterfaceDeclaration toDecl, String typeName, Differences differences) {
+        differences.changed(fromType, toDecl, getRemovedMessage(), typeName);
+    }
+
+    abstract protected String getAstClassName();
+
+    abstract protected String getAddedMessage();
+
+    abstract protected String getChangedMessage();
+
+    abstract protected String getRemovedMessage();
 
     protected <K, V> K getFirstKey(Map<K, V> map) {
         return map.keySet().iterator().next();
     }
     
     public void diff(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        ASTClassOrInterfaceDeclaration fromDecl = decl;
-        
-        Map<String, ASTClassOrInterfaceType> fromMap = getMap(fromDecl);
+        Map<String, ASTClassOrInterfaceType> fromMap = getMap(decl);
         Map<String, ASTClassOrInterfaceType> toMap = getMap(toDecl);
 
         // I don't like this special case, but it is better than two separate
@@ -65,7 +79,7 @@ public abstract class Supers {
                 ASTClassOrInterfaceType toType = toMap.get(typeName);
 
                 if (fromType == null) {
-                    superTypeAdded(fromDecl, toType, typeName, differences);
+                    superTypeAdded(decl, toType, typeName, differences);
                 }
                 else if (toType == null) {
                     superTypeRemoved(fromType, toDecl, typeName, differences);

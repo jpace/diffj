@@ -1,9 +1,6 @@
 package org.incava.diffj;
 
-import java.util.Map;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceType;
-import org.incava.analysis.FileDiffs;
 
 /**
  * Compares extends.
@@ -13,19 +10,19 @@ public class Extends extends Supers {
         super(decl);
     }
 
-    protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid) {
-        return getMap(coid, "net.sourceforge.pmd.ast.ASTExtendsList");
+    protected String getAstClassName() {
+        return "net.sourceforge.pmd.ast.ASTExtendsList";
     }
 
-    protected void superTypeChanged(ASTClassOrInterfaceType fromType, String fromName, ASTClassOrInterfaceType toType, String toName, Differences differences) {
-        differences.changed(fromType, toType, Messages.EXTENDED_TYPE_CHANGED, fromName, toName);
+    protected String getAddedMessage() {
+        return Messages.EXTENDED_TYPE_ADDED;
     }
 
-    protected void superTypeAdded(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceType toType, String typeName, Differences differences) {
-        differences.changed(fromDecl, toType, Messages.EXTENDED_TYPE_ADDED, typeName);
+    protected String getChangedMessage() {
+        return Messages.EXTENDED_TYPE_CHANGED;
     }
 
-    protected void superTypeRemoved(ASTClassOrInterfaceType fromType, ASTClassOrInterfaceDeclaration toDecl, String typeName, Differences differences) {
-        differences.changed(fromType, toDecl, Messages.EXTENDED_TYPE_REMOVED, typeName);
+    protected String getRemovedMessage() {
+        return Messages.EXTENDED_TYPE_REMOVED;
     }
 }
