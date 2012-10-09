@@ -3,15 +3,10 @@ package org.incava.diffj;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Functions extends Items {
-    public Functions(FileDiffs differences) {
-        super(differences);
-    }
-
-    public Functions() {
+public class Function extends Items {
+    public Function() {
     }
 
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, Differences differences) {

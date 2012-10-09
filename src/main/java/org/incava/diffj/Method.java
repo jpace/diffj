@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.util.Collection;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlock;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
@@ -14,7 +13,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Method extends Functions {
+public class Method extends Function {
     private final ASTMethodDeclaration method;
 
     public Method(ASTMethodDeclaration method) {

@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
@@ -8,11 +7,10 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Ctor extends Functions {
+public class Ctor extends Function {
     private final ASTConstructorDeclaration ctor;
 
     public Ctor(ASTConstructorDeclaration ctor) {
