@@ -64,10 +64,10 @@ public class Imports {
         differences.added(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_ADDED);
     }
 
-    protected void markImportSectionRemoved(List<ASTImportDeclaration> fromImports, ASTCompilationUnit b, Differences differences) {
+    protected void markImportSectionRemoved(List<ASTImportDeclaration> fromImports, ASTCompilationUnit toCompUnit, Differences differences) {
         Token fromStart = getFirstToken(fromImports);
         Token fromEnd = getLastToken(fromImports);
-        Token toStart = getFirstTypeToken(b);
+        Token toStart = getFirstTypeToken(toCompUnit);
         Token toEnd = toStart;
         differences.deleted(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_REMOVED);
     }
