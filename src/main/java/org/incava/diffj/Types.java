@@ -13,17 +13,18 @@ import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Types {
     private final ASTCompilationUnit compUnit;
+    private final List<ASTTypeDeclaration> types;
 
     public Types(ASTCompilationUnit compUnit) {
         this.compUnit = compUnit;
+        this.types = CompilationUnitUtil.getTypeDeclarations(compUnit);
     }
 
     public void diff(ASTCompilationUnit toCompUnit, Differences differences) {
-        List<ASTTypeDeclaration> fromTypes = CompilationUnitUtil.getTypeDeclarations(compUnit);
-        List<ASTTypeDeclaration> toTypes = CompilationUnitUtil.getTypeDeclarations(toCompUnit);
+        Types toTypes = new Types(toCompUnit);
 
-        Map<String, ASTTypeDeclaration> fromNamesToTD = makeTDMap(fromTypes);
-        Map<String, ASTTypeDeclaration> toNamesToTD = makeTDMap(toTypes);
+        Map<String, ASTTypeDeclaration> fromNamesToTD = getNamesToDeclarations();
+        Map<String, ASTTypeDeclaration> toNamesToTD = toTypes.getNamesToDeclarations();
 
         Collection<String> names = new TreeSet<String>();
         names.addAll(fromNamesToTD.keySet());
@@ -48,7 +49,7 @@ public class Types {
         }
     }
 
-    protected Map<String, ASTTypeDeclaration> makeTDMap(List<ASTTypeDeclaration> types) {
+    protected Map<String, ASTTypeDeclaration> getNamesToDeclarations() {
         Map<String, ASTTypeDeclaration> namesToTD = new HashMap<String, ASTTypeDeclaration>();
         for (ASTTypeDeclaration type : types) {
             Token tk = TypeDeclarationUtil.getName(type);

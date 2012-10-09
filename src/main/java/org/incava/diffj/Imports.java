@@ -17,56 +17,61 @@ import org.incava.pmdx.SimpleNodeUtil;
 
 public class Imports {
     private final ASTCompilationUnit compUnit;
+    private final ImportsList imports;
 
     public Imports(ASTCompilationUnit compUnit) {
         this.compUnit = compUnit;
+        this.imports = new ImportsList(compUnit);
     }
 
     public void diff(ASTCompilationUnit toCompUnit, Differences differences) {
-        List<ASTImportDeclaration> fromImports = CompilationUnitUtil.getImports(compUnit);
-        List<ASTImportDeclaration> toImports = CompilationUnitUtil.getImports(toCompUnit);
+        ImportsList toImports = new ImportsList(toCompUnit);
 
-        if (fromImports.size() == 0) {
-            if (toImports.size() != 0) {
+        if (imports.isEmpty()) {
+            if (!toImports.isEmpty()) {
                 markImportSectionAdded(toImports, differences);
             }
         }
-        else if (toImports.size() == 0) {
-            markImportSectionRemoved(fromImports, toCompUnit, differences);
+        else if (toImports.isEmpty()) {
+            markImportSectionRemoved(toCompUnit, differences);
         }
         else {
-            Map<String, ASTImportDeclaration> fromNamesToImp = makeImportMap(fromImports);
-            Map<String, ASTImportDeclaration> toNamesToImp = makeImportMap(toImports);
-            
-            Collection<String> names = new TreeSet<String>();
-            names.addAll(fromNamesToImp.keySet());
-            names.addAll(toNamesToImp.keySet());
+            compareEachImport(toImports, differences);
+        }
+    }
 
-            for (String name : names) {
-                ASTImportDeclaration fromImp = fromNamesToImp.get(name);
-                ASTImportDeclaration toImp = toNamesToImp.get(name);
+    protected void compareEachImport(ImportsList toImports, Differences differences) {
+        Map<String, ASTImportDeclaration> fromNamesToImp = imports.getNamesToDeclarations();
+        Map<String, ASTImportDeclaration> toNamesToImp = toImports.getNamesToDeclarations();
             
-                if (fromImp == null) {
-                    differences.added(fromImports.get(0), toImp, Messages.IMPORT_ADDED, name);
-                }
-                else if (toImp == null) {
-                    differences.deleted(fromImp, toImports.get(0), Messages.IMPORT_REMOVED, name);
-                }
+        Collection<String> names = new TreeSet<String>();
+        names.addAll(fromNamesToImp.keySet());
+        names.addAll(toNamesToImp.keySet());
+
+        for (String name : names) {
+            ASTImportDeclaration fromImp = fromNamesToImp.get(name);
+            ASTImportDeclaration toImp = toNamesToImp.get(name);
+            
+            if (fromImp == null) {
+                differences.added(imports.getFirstDeclaration(), toImp, Messages.IMPORT_ADDED, name);
+            }
+            else if (toImp == null) {
+                differences.deleted(fromImp, toImports.getFirstDeclaration(), Messages.IMPORT_REMOVED, name);
             }
         }
     }
 
-    protected void markImportSectionAdded(List<ASTImportDeclaration> toImports, Differences differences) {
+    protected void markImportSectionAdded(ImportsList toImports, Differences differences) {
         Token fromStart = getFirstTypeToken(compUnit);
         Token fromEnd = fromStart;
-        Token toStart = getFirstToken(toImports);
-        Token toEnd = getLastToken(toImports);
+        Token toStart = toImports.getFirstToken();
+        Token toEnd = toImports.getLastToken();
         differences.added(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_ADDED);
     }
 
-    protected void markImportSectionRemoved(List<ASTImportDeclaration> fromImports, ASTCompilationUnit toCompUnit, Differences differences) {
-        Token fromStart = getFirstToken(fromImports);
-        Token fromEnd = getLastToken(fromImports);
+    protected void markImportSectionRemoved(ASTCompilationUnit toCompUnit, Differences differences) {
+        Token fromStart = imports.getFirstToken();
+        Token fromEnd = imports.getLastToken();
         Token toStart = getFirstTypeToken(toCompUnit);
         Token toEnd = toStart;
         differences.deleted(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_REMOVED);
@@ -87,25 +92,6 @@ public class Imports {
         }
 
         return sb.toString();
-    }
-
-    protected Map<String, ASTImportDeclaration> makeImportMap(List<ASTImportDeclaration> imports) {
-        Map<String, ASTImportDeclaration> namesToImp = new HashMap<String, ASTImportDeclaration>();
-
-        for (ASTImportDeclaration imp : imports) {
-            String str = getImportAsString(imp);
-            namesToImp.put(str, imp);
-        }
-        
-        return namesToImp;
-    }
-
-    protected Token getFirstToken(List<ASTImportDeclaration> imports) {
-        return imports.get(0).getFirstToken();
-    }
-
-    protected Token getLastToken(List<ASTImportDeclaration> imports) {
-        return imports.get(imports.size() - 1).getLastToken();
     }
 
     protected Token getFirstTypeToken(ASTCompilationUnit cu) {
