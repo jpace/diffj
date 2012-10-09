@@ -1,14 +1,10 @@
 package org.incava.diffj;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffs;
 import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
@@ -39,7 +35,7 @@ public abstract class TypeItems<Type extends SimpleNode> {
         compareMatches(matches, unprocA, unprocB);
 
         addRemoved(unprocA, bNode);        
-        addAdded(unprocB, aNode);
+        addAdded(aNode, unprocB);
     }
 
     public abstract String getName(Type t);
@@ -112,7 +108,7 @@ public abstract class TypeItems<Type extends SimpleNode> {
         return getDeclarationsOfClass(decls);
     }
 
-    public void addAdded(List<Type> bs, ASTClassOrInterfaceDeclaration aNode) {
+    public void addAdded(ASTClassOrInterfaceDeclaration aNode, List<Type> bs) {
         for (Type b : bs) {
             String name = getName(b);
             differences.added(aNode, b, getAddedMessage(b), name);

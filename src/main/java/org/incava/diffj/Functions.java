@@ -3,7 +3,6 @@ package org.incava.diffj;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 
