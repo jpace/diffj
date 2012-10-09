@@ -10,63 +10,59 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.ParameterUtil;
 
 public class Parameters {
-    private final Differences differences;
-    private final ASTFormalParameters fromFormalParams;
-    private final ASTFormalParameters toFormalParams;
+    private final ASTFormalParameters params;
     
-    public Parameters(FileDiffs fileDiffs, ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
-        this.differences = new Differences(fileDiffs);
-        this.fromFormalParams = fromFormalParams;
-        this.toFormalParams = toFormalParams;
+    public Parameters(ASTFormalParameters params) {
+        this.params = params;
     }
 
-    public void compare() {
-        List<String> fromParamTypes = ParameterUtil.getParameterTypes(fromFormalParams);
-        List<String> toParamTypes = ParameterUtil.getParameterTypes(toFormalParams);
+    public void diff(ASTFormalParameters toParams, Differences differences) {
+        List<String> fromParamTypes = ParameterUtil.getParameterTypes(params);
+        List<String> toParamTypes = ParameterUtil.getParameterTypes(toParams);
 
         int fromSize = fromParamTypes.size();
         int toSize = toParamTypes.size();
         
         if (fromSize > 0) {
             if (toSize > 0) {
-                compareEachParameter(fromFormalParams, toFormalParams, fromSize);
+                compareEachParameter(toParams, fromSize, differences);
             }
             else {
-                markParametersRemoved(fromFormalParams, toFormalParams);
+                markParametersRemoved(toParams, differences);
             }
         }
         else if (toSize > 0) {
-            markParametersAdded(fromFormalParams, toFormalParams);
+            markParametersAdded(toParams, differences);
         }
     }
 
-    protected void markParametersAdded(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
+    protected void markParametersAdded(ASTFormalParameters toFormalParams, Differences differences) {
         List<Token> names = ParameterUtil.getParameterNames(toFormalParams);
         for (Token name : names) {
-            differences.changed(fromFormalParams, name, Messages.PARAMETER_ADDED, name.image);
+            differences.changed(params, name, Messages.PARAMETER_ADDED, name.image);
         }
     }
 
-    protected void markParametersRemoved(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
-        List<Token> names = ParameterUtil.getParameterNames(fromFormalParams);
+    protected void markParametersRemoved(ASTFormalParameters toFormalParams, Differences differences) {
+        List<Token> names = ParameterUtil.getParameterNames(params);
         for (Token name : names) {
             differences.changed(name, toFormalParams, Messages.PARAMETER_REMOVED, name.image);
         }
     }
 
-    protected void markParameterTypeChanged(ASTFormalParameter fromParam, ASTFormalParameters toFormalParams, int idx) {
+    protected void markParameterTypeChanged(ASTFormalParameter fromParam, ASTFormalParameters toFormalParams, int idx, Differences differences) {
         ASTFormalParameter toParam = ParameterUtil.getParameter(toFormalParams, idx);
         String toType = ParameterUtil.getParameterType(toParam);
         differences.changed(fromParam, toParam, Messages.PARAMETER_TYPE_CHANGED, ParameterUtil.getParameterType(fromParam), toType);
     }
 
-    protected void markParameterNameChanged(ASTFormalParameter fromParam, ASTFormalParameters toFormalParams, int idx) {
+    protected void markParameterNameChanged(ASTFormalParameter fromParam, ASTFormalParameters toFormalParams, int idx, Differences differences) {
         Token fromNameTk = ParameterUtil.getParameterName(fromParam);
         Token toNameTk = ParameterUtil.getParameterName(toFormalParams, idx);
         differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_NAME_CHANGED, fromNameTk.image, toNameTk.image);
     }
 
-    protected void checkForReorder(ASTFormalParameter fromParam, int fromIdx, ASTFormalParameters toFormalParams, int toIdx) {
+    protected void checkForReorder(ASTFormalParameter fromParam, int fromIdx, ASTFormalParameters toFormalParams, int toIdx, Differences differences) {
         Token fromNameTk = ParameterUtil.getParameterName(fromParam);
         Token toNameTk = ParameterUtil.getParameterName(toFormalParams, toIdx);
         if (fromNameTk.image.equals(toNameTk.image)) {
@@ -77,13 +73,13 @@ public class Parameters {
         }
     }
 
-    protected void markReordered(ASTFormalParameter fromParam, int fromIdx, ASTFormalParameters toParams, int toIdx) {
+    protected void markReordered(ASTFormalParameter fromParam, int fromIdx, ASTFormalParameters toParams, int toIdx, Differences differences) {
         Token fromNameTk = ParameterUtil.getParameterName(fromParam);
         ASTFormalParameter toParam = ParameterUtil.getParameter(toParams, toIdx);
         differences.changed(fromParam, toParam, Messages.PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
     }
 
-    protected void markRemoved(ASTFormalParameter fromParam, ASTFormalParameters toParams) {
+    protected void markRemoved(ASTFormalParameter fromParam, ASTFormalParameters toParams, Differences differences) {
         Token fromNameTk = ParameterUtil.getParameterName(fromParam);
         differences.changed(fromParam, toParams, Messages.PARAMETER_REMOVED, fromNameTk.image);
     }
@@ -91,8 +87,8 @@ public class Parameters {
     /**
      * Compares each parameter. Assumes that the lists are the same size.
      */
-    public void compareEachParameter(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, int size) {
-        List<ASTFormalParameter> fromFormalParamList = ParameterUtil.getParameters(fromFormalParams);
+    public void compareEachParameter(ASTFormalParameters toFormalParams, int size, Differences differences) {
+        List<ASTFormalParameter> fromFormalParamList = ParameterUtil.getParameters(params);
         List<ASTFormalParameter> toFormalParamList = ParameterUtil.getParameters(toFormalParams);
 
         for (int idx = 0; idx < size; ++idx) {
@@ -103,19 +99,19 @@ public class Parameters {
                 continue;
             }
             else if (paramMatch[0] == idx) {
-                markParameterNameChanged(fromFormalParam, toFormalParams, idx);
+                markParameterNameChanged(fromFormalParam, toFormalParams, idx, differences);
             }
             else if (paramMatch[1] == idx) {
-                markParameterTypeChanged(fromFormalParam, toFormalParams, idx);
+                markParameterTypeChanged(fromFormalParam, toFormalParams, idx, differences);
             }
             else if (paramMatch[0] >= 0) {
-                checkForReorder(fromFormalParam, idx, toFormalParams, paramMatch[0]);
+                checkForReorder(fromFormalParam, idx, toFormalParams, paramMatch[0], differences);
             }
             else if (paramMatch[1] >= 0) {
-                markReordered(fromFormalParam, idx, toFormalParams, paramMatch[1]);
+                markReordered(fromFormalParam, idx, toFormalParams, paramMatch[1], differences);
             }
             else {
-                markRemoved(fromFormalParam, toFormalParams);
+                markRemoved(fromFormalParam, toFormalParams, differences);
             }
         }
 
@@ -125,7 +121,7 @@ public class Parameters {
             if (toParam != null) {
                 ASTFormalParameter toFormalParam = ParameterUtil.getParameter(toFormalParams, toIdx);
                 Token toName = ParameterUtil.getParameterName(toFormalParam);
-                differences.changed(fromFormalParams, toFormalParam, Messages.PARAMETER_ADDED, toName.image);
+                differences.changed(params, toFormalParam, Messages.PARAMETER_ADDED, toName.image);
             }
         }
     }

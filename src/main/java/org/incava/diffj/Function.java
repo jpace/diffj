@@ -10,8 +10,8 @@ public class Function extends Items {
     }
 
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, Differences differences) {
-        Parameters params = new Parameters(differences.getFileDiffs(), fromFormalParams, toFormalParams);
-        params.compare();
+        Parameters params = new Parameters(fromFormalParams);
+        params.diff(toFormalParams, differences);
     }
     
     protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList, Differences differences) {
