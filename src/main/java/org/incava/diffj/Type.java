@@ -10,26 +10,28 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Type extends Items {
-    public Type(FileDiffs differences) {
-        super(differences);
+    private final ASTClassOrInterfaceDeclaration fromDecl;
+    
+    public Type(ASTClassOrInterfaceDeclaration decl) {
+        this.fromDecl = decl;
     }
 
-    public void compare(ASTTypeDeclaration fromType, ASTTypeDeclaration toType) {
-        // should have only one child, the type itself, either an interface or fromType
-        // class declaration
+    public void diff(ASTTypeDeclaration fromType, ASTTypeDeclaration toType, Differences differences) {
+         // should have only one child, the type itself, either an interface or type
+         // class declaration
 
-        ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromType);
-        ASTClassOrInterfaceDeclaration toDecl = TypeDeclarationUtil.getType(toType);
+         ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromType);
+         ASTClassOrInterfaceDeclaration toDecl = TypeDeclarationUtil.getType(toType);
 
-        if (fromDecl == null && toDecl == null) {
-            tr.Ace.log("skipping 'semicolon declarations'");
-        }
-        else {
-            compare(fromDecl, toDecl);
-        }
-    }
+         if (fromDecl == null && toDecl == null) {
+             tr.Ace.onRed("skipping 'semicolon declarations'");
+         }
+         else {
+             diff(fromDecl, toDecl, differences);
+         }
+     }
 
-    public void compare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+    public void diff(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
         if (!fromDecl.isInterface() && toDecl.isInterface()) {
             differences.changed(fromDecl, toDecl, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
@@ -41,39 +43,39 @@ public class Type extends Items {
         SimpleNode btParent = SimpleNodeUtil.getParent(toDecl);
 
         compareAccess(atParent, btParent, differences);
-        compareModifiers(atParent, btParent);
-        compareExtends(fromDecl, toDecl);
-        compareImplements(fromDecl, toDecl);
-        compareDeclarations(fromDecl, toDecl);
+        compareModifiers(atParent, btParent, differences);
+        compareExtends(fromDecl, toDecl, differences);
+        compareImplements(fromDecl, toDecl, differences);
+        compareDeclarations(fromDecl, toDecl, differences);
     }
 
-    protected void compareModifiers(SimpleNode fromNode, SimpleNode toNode) {
+    protected void compareModifiers(SimpleNode fromNode, SimpleNode toNode, Differences differences) {
         TypeModifiers typeMods = new TypeModifiers(fromNode);
         typeMods.diff(toNode, differences);
     }
 
-    protected void compareExtends(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+    protected void compareExtends(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
         Extends ed = new Extends(differences.getFileDiffs());
         ed.compareExtends(fromDecl, toDecl);
     }
 
-    protected void compareImplements(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+    protected void compareImplements(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
         Implements id = new Implements(differences.getFileDiffs());
         id.compareImplements(fromDecl, toDecl);
     }
 
-    protected void compareDeclarations(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
+    protected void compareDeclarations(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
         FileDiffs diffs = differences.getFileDiffs();        
         TypeMethods tmd = new TypeMethods(diffs);
-        tmd.compare(aNode, bNode);
+        tmd.compare(fromDecl, toDecl);
         
         TypeFields tfd = new TypeFields(diffs);
-        tfd.compare(aNode, bNode);
+        tfd.compare(fromDecl, toDecl);
         
         TypeCtors ctd = new TypeCtors(diffs);
-        ctd.compare(aNode, bNode);
+        ctd.compare(fromDecl, toDecl);
         
         InnerTypes titd = new InnerTypes(diffs, this);
-        titd.compare(aNode, bNode);
+        titd.compare(fromDecl, toDecl);
     }
 }

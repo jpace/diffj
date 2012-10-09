@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
@@ -43,8 +44,15 @@ public class Types {
                 differences.deleted(fromTypeDecl, toCompUnit, Messages.TYPE_DECLARATION_REMOVED, toName.image);
             }
             else {
-                Type type = new Type(differences.getFileDiffs());
-                type.compare(fromTypeDecl, toTypeDecl);
+                ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromTypeDecl);
+                ASTClassOrInterfaceDeclaration toDecl = TypeDeclarationUtil.getType(toTypeDecl);
+
+                // either is null 
+                if (fromDecl != null && toDecl != null) {
+                    // Type type = new Type(fromDecl);
+                    Type type = new Type(fromDecl);
+                    type.diff(fromDecl, toDecl, differences);
+                }
             }
         }
     }

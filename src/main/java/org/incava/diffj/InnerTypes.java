@@ -13,8 +13,9 @@ public class InnerTypes extends TypeItems<ASTClassOrInterfaceDeclaration> {
         this.typeDiff = typeDiff;
     }
 
-    public void doCompare(ASTClassOrInterfaceDeclaration a, ASTClassOrInterfaceDeclaration b) {
-        typeDiff.compare(a, b);
+    public void doCompare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+        Type type = new Type(fromDecl);
+        typeDiff.diff(fromDecl, toDecl, differences);
     }
 
     public String getName(ASTClassOrInterfaceDeclaration coid) {
