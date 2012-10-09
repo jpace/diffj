@@ -14,10 +14,10 @@ public class TypeFields extends TypeItems<ASTFieldDeclaration> {
         this.fileDiffs = fileDiffs;
     }    
 
-    public void doCompare(ASTFieldDeclaration a, ASTFieldDeclaration b) {
-        Fields field = new Fields(fileDiffs);
-        field.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b), differences);
-        field.compare(a, b);
+    public void doCompare(ASTFieldDeclaration fromField, ASTFieldDeclaration toField) {
+        Field field = new Field(fromField);
+        field.compareAccess(SimpleNodeUtil.getParent(fromField), SimpleNodeUtil.getParent(toField), differences);
+        field.diff(toField, differences);
     }
 
     public String getName(ASTFieldDeclaration fd) {
