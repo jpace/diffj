@@ -49,9 +49,8 @@ public class Types {
 
                 // either is null 
                 if (fromDecl != null && toDecl != null) {
-                    // Type type = new Type(fromDecl);
                     Type type = new Type(fromDecl);
-                    type.diff(fromDecl, toDecl, differences);
+                    type.diff(toDecl, differences);
                 }
             }
         }

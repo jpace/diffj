@@ -6,16 +6,13 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.ClassUtil;
 
 public class InnerTypes extends TypeItems<ASTClassOrInterfaceDeclaration> {
-    private final Type typeDiff;
-
-    public InnerTypes(FileDiffs differences, Type typeDiff) {
+    public InnerTypes(FileDiffs differences) {
         super(differences, "net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration");
-        this.typeDiff = typeDiff;
     }
 
     public void doCompare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
         Type type = new Type(fromDecl);
-        typeDiff.diff(fromDecl, toDecl, differences);
+        type.diff(toDecl, differences);
     }
 
     public String getName(ASTClassOrInterfaceDeclaration coid) {

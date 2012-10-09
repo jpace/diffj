@@ -10,43 +10,28 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Type extends Items {
-    private final ASTClassOrInterfaceDeclaration fromDecl;
+    private final ASTClassOrInterfaceDeclaration decl;
     
     public Type(ASTClassOrInterfaceDeclaration decl) {
-        this.fromDecl = decl;
+        this.decl = decl;
     }
 
-    public void diff(ASTTypeDeclaration fromType, ASTTypeDeclaration toType, Differences differences) {
-         // should have only one child, the type itself, either an interface or type
-         // class declaration
-
-         ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromType);
-         ASTClassOrInterfaceDeclaration toDecl = TypeDeclarationUtil.getType(toType);
-
-         if (fromDecl == null && toDecl == null) {
-             tr.Ace.onRed("skipping 'semicolon declarations'");
-         }
-         else {
-             diff(fromDecl, toDecl, differences);
-         }
-     }
-
-    public void diff(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        if (!fromDecl.isInterface() && toDecl.isInterface()) {
-            differences.changed(fromDecl, toDecl, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
+    public void diff(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
+        if (!decl.isInterface() && toDecl.isInterface()) {
+            differences.changed(decl, toDecl, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
-        else if (fromDecl.isInterface() && !toDecl.isInterface()) {
-            differences.changed(fromDecl, toDecl, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
+        else if (decl.isInterface() && !toDecl.isInterface()) {
+            differences.changed(decl, toDecl, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
         }
         
-        SimpleNode atParent = SimpleNodeUtil.getParent(fromDecl);
-        SimpleNode btParent = SimpleNodeUtil.getParent(toDecl);
+        SimpleNode fromParent = SimpleNodeUtil.getParent(decl);
+        SimpleNode toParent = SimpleNodeUtil.getParent(toDecl);
 
-        compareAccess(atParent, btParent, differences);
-        compareModifiers(atParent, btParent, differences);
-        compareExtends(fromDecl, toDecl, differences);
-        compareImplements(fromDecl, toDecl, differences);
-        compareDeclarations(fromDecl, toDecl, differences);
+        compareAccess(fromParent, toParent, differences);
+        compareModifiers(fromParent, toParent, differences);
+        compareExtends(decl, toDecl, differences);
+        compareImplements(decl, toDecl, differences);
+        compareDeclarations(decl, toDecl, differences);
     }
 
     protected void compareModifiers(SimpleNode fromNode, SimpleNode toNode, Differences differences) {
@@ -75,7 +60,7 @@ public class Type extends Items {
         TypeCtors ctd = new TypeCtors(diffs);
         ctd.compare(fromDecl, toDecl);
         
-        InnerTypes titd = new InnerTypes(diffs, this);
+        InnerTypes titd = new InnerTypes(diffs);
         titd.compare(fromDecl, toDecl);
     }
 }
