@@ -39,7 +39,7 @@ public class Code {
 
     protected FileDiff replaceReference(FileDiff fileDiff, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
         String   newMsg  = MessageFormat.format(Messages.CODE_CHANGED, name);
-        FileDiff newDiff = new FileDiffChange(newMsg, fileDiff.getFirstLocation().getStart(), fromLocRg.getEnd(), fileDiff.getSecondLocation().getStart(), toLocRg.getEnd());
+        FileDiff newDiff = new FileDiffChange(newMsg, fileDiff, fromLocRg, toLocRg);
         
         differences.getFileDiffs().remove(fileDiff);
         differences.add(newDiff);

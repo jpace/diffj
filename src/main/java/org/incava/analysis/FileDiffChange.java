@@ -28,6 +28,13 @@ public class FileDiffChange extends FileDiff {
         super(Type.CHANGED, message, fromStart, fromEnd, toStart, toEnd);
     }
 
+    /**
+     * Expands a file diff for the given ranges.
+     */
+    public FileDiffChange(String message, FileDiff fileDiff, LocationRange fromLocRg, LocationRange toLocRg) {
+        this(message, fileDiff.getFirstLocation().getStart(), fromLocRg.getEnd(), fileDiff.getSecondLocation().getStart(), toLocRg.getEnd());
+    }
+
     public void printContext(DiffWriter dw, StringBuilder sb) {
         dw.printFrom(sb, this);
         sb.append(DiffWriter.EOLN);
