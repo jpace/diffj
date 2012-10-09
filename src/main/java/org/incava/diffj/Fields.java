@@ -1,9 +1,7 @@
 package org.incava.diffj;
 
-import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTFieldDeclaration;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 

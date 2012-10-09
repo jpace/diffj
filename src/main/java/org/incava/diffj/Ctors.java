@@ -1,18 +1,13 @@
 package org.incava.diffj;
 
-import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
-import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Ctors extends Items<ASTConstructorDeclaration> {
-    private final FileDiffs fileDiffs;
-
     public Ctors(FileDiffs fileDiffs) {
         super(fileDiffs, "net.sourceforge.pmd.ast.ASTConstructorDeclaration");
-        this.fileDiffs = fileDiffs;
     }    
 
     public void doCompare(ASTConstructorDeclaration fromCtor, ASTConstructorDeclaration toCtor) {

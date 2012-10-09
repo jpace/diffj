@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.ClassUtil;
