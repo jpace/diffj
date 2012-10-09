@@ -9,7 +9,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class Type extends Items {
+public class Type extends Item {
     private final ASTClassOrInterfaceDeclaration decl;
     
     public Type(ASTClassOrInterfaceDeclaration decl) {

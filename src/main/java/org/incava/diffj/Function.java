@@ -5,7 +5,7 @@ import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Function extends Items {
+public class Function extends Item {
     public Function() {
     }
 

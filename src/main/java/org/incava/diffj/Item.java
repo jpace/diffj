@@ -5,18 +5,18 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 
-public class Items {
+public class Item {
     protected final Differences differences;
     
-    public Items(FileDiffs fileDiffs) {
+    public Item(FileDiffs fileDiffs) {
         this.differences = new Differences(fileDiffs);
     }
     
-    public Items(Differences differences) {
+    public Item(Differences differences) {
         this.differences = differences;
     }
 
-    public Items() {
+    public Item() {
         this.differences = null;
     }
 

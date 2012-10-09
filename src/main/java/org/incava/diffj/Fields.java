@@ -16,7 +16,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Fields extends Items {
+public class Fields extends Item {
     public Fields(FileDiffs differences) {
         super(differences);
     }
