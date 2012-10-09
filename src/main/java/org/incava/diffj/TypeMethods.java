@@ -5,7 +5,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class TypeMethods extends TypeItems<ASTMethodDeclaration> {
+public class TypeMethods extends Items<ASTMethodDeclaration> {
     private final MethodUtil methodUtil;
 
     public TypeMethods(FileDiffs fileDiffs) {

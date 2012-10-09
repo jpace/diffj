@@ -10,16 +10,16 @@ import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public abstract class TypeItems<ItemType extends SimpleNode> {
+public abstract class Items<ItemType extends SimpleNode> {
     protected final Differences differences;
     private final String clsName;
 
-    public TypeItems(FileDiffs fileDiffs, String clsName) {
+    public Items(FileDiffs fileDiffs, String clsName) {
         this.differences = new Differences(fileDiffs);
         this.clsName = clsName;
     }
 
-    public TypeItems(FileDiffs differences, Class<ItemType> cls) {
+    public Items(FileDiffs differences, Class<ItemType> cls) {
         this(differences, cls == null ? (String)null : cls.getName());
     }
 

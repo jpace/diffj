@@ -6,7 +6,7 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class TypeFields extends TypeItems<ASTFieldDeclaration> {
+public class TypeFields extends Items<ASTFieldDeclaration> {
     private final FileDiffs fileDiffs;
 
     public TypeFields(FileDiffs fileDiffs) {
