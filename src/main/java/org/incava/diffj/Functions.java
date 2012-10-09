@@ -29,7 +29,7 @@ public class Functions extends Items {
     }
     
     protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
-        Throws thrws = new Throws(differences.getFileDiffs());
-        thrws.compareThrows(fromNode, fromNameList, toNode, toNameList);
+        Throws thrws = new Throws(fromNode, fromNameList);
+        thrws.diff(toNode, toNameList, differences);
     }
 }

@@ -9,23 +9,25 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.ThrowsUtil;
 
 public class Throws {
-    private final Differences differences;
-
-    public Throws(FileDiffs fileDiffs) {
-        this.differences = new Differences(fileDiffs);
+    private final SimpleNode node;
+    private final ASTNameList nameList;
+    
+    public Throws(SimpleNode node, ASTNameList nameList) {
+        this.node = node;
+        this.nameList = nameList;
     }
     
-    public void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
-        if (fromNameList == null) {
+    public void diff(SimpleNode toNode, ASTNameList toNameList, Differences differences) {
+        if (nameList == null) {
             if (toNameList != null) {
-                addAllThrows(fromNode, toNameList);
+                addAllThrows(toNameList, differences);
             }
         }
         else if (toNameList == null) {
-            removeAllThrows(fromNameList, toNode);
+            removeAllThrows(toNode, differences);
         }
         else {
-            compareEachThrow(fromNameList, toNameList);
+            compareEachThrow(toNameList, differences);
         }
     }
 
@@ -33,26 +35,26 @@ public class Throws {
         return SimpleNodeUtil.snatchChildren(nameList, "net.sourceforge.pmd.ast.ASTName");
     }
 
-    protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, String msg, ASTName name) {
+    protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, String msg, ASTName name, Differences differences) {
         differences.changed(fromNode, toNode, msg, SimpleNodeUtil.toString(name));
     }
 
-    protected void addAllThrows(SimpleNode fromNode, ASTNameList toNameList) {
+    protected void addAllThrows(ASTNameList toNameList, Differences differences) {
         List<ASTName> names = getChildNames(toNameList);
         for (ASTName name : names) {
-            changeThrows(fromNode, name, Messages.THROWS_ADDED, name);
+            changeThrows(node, name, Messages.THROWS_ADDED, name, differences);
         }
     }
 
-    protected void removeAllThrows(ASTNameList fromNameList, SimpleNode toNode) {
-        List<ASTName> names = getChildNames(fromNameList);
+    protected void removeAllThrows(SimpleNode toNode, Differences differences) {
+        List<ASTName> names = getChildNames(nameList);
         for (ASTName name : names) {
-            changeThrows(name, toNode, Messages.THROWS_REMOVED, name);
+            changeThrows(name, toNode, Messages.THROWS_REMOVED, name, differences);
         }
     }
 
-    protected void compareEachThrow(ASTNameList fromNameList, ASTNameList toNameList) {
-        List<ASTName> fromNames = getChildNames(fromNameList);
+    protected void compareEachThrow(ASTNameList toNameList, Differences differences) {
+        List<ASTName> fromNames = getChildNames(nameList);
         List<ASTName> toNames = getChildNames(toNameList);
 
         for (int fromIdx = 0; fromIdx < fromNames.size(); ++fromIdx) {
@@ -71,14 +73,14 @@ public class Throws {
                 differences.changed(fromName, toName, Messages.THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
             }
             else {
-                changeThrows(fromName, toNameList, Messages.THROWS_REMOVED, fromName);
+                changeThrows(fromName, toNameList, Messages.THROWS_REMOVED, fromName, differences);
             }
         }
 
         for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
             if (toNames.get(toIdx) != null) {
                 ASTName toName = ThrowsUtil.getNameNode(toNameList, toIdx);
-                changeThrows(fromNameList, toName, Messages.THROWS_ADDED, toName);
+                changeThrows(nameList, toName, Messages.THROWS_ADDED, toName, differences);
             }
         }
     }
