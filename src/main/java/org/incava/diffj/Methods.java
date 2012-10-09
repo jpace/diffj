@@ -7,6 +7,7 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
+import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffs;
@@ -14,14 +15,6 @@ import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Methods extends Functions {
-    protected static final int[] VALID_MODIFIERS = new int[] {
-        JavaParserConstants.ABSTRACT,
-        JavaParserConstants.FINAL,
-        JavaParserConstants.NATIVE,
-        JavaParserConstants.STATIC,
-        JavaParserConstants.STRICTFP
-    };
-
     public Methods(FileDiffs differences) {
         super(differences);
     }
@@ -35,7 +28,10 @@ public class Methods extends Functions {
     }
 
     protected void compareModifiers(ASTMethodDeclaration from, ASTMethodDeclaration to) {
-        compareModifiers(SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to), VALID_MODIFIERS);
+        SimpleNode fromParent = SimpleNodeUtil.getParent(from);
+        SimpleNode toParent = SimpleNodeUtil.getParent(to);
+        MethodModifiers mods = new MethodModifiers(fromParent);
+        mods.diff(toParent, differences);
     }
 
     protected void compareParameters(ASTMethodDeclaration from, ASTMethodDeclaration to) {

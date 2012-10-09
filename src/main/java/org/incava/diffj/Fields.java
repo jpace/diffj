@@ -17,11 +17,6 @@ import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Fields extends Items {
-    protected static final int[] VALID_MODIFIERS = new int[] {
-        JavaParserConstants.FINAL,
-        JavaParserConstants.STATIC,
-    };
-
     public Fields(FileDiffs differences) {
         super(differences);
     }
@@ -32,7 +27,10 @@ public class Fields extends Items {
     }
 
     protected void compareModifiers(ASTFieldDeclaration from, ASTFieldDeclaration to) {
-        compareModifiers(SimpleNodeUtil.getParent(from), SimpleNodeUtil.getParent(to), VALID_MODIFIERS);
+        SimpleNode fromParent = SimpleNodeUtil.getParent(from);
+        SimpleNode toParent = SimpleNodeUtil.getParent(to);
+        MethodModifiers mods = new MethodModifiers(fromParent);
+        mods.diff(toParent, differences);
     }
 
     protected void compareInitCode(String fromName, ASTVariableInitializer fromInit, String toName, ASTVariableInitializer toInit) {

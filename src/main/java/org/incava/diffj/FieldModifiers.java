@@ -1,0 +1,19 @@
+package org.incava.diffj;
+
+import net.sourceforge.pmd.ast.JavaParserConstants;
+import net.sourceforge.pmd.ast.SimpleNode;
+
+public class FieldModifiers extends Modifiers {
+    public static final int[] MODIFIERS = new int[] {
+        JavaParserConstants.FINAL,
+        JavaParserConstants.STATIC,
+    };
+
+    public FieldModifiers(SimpleNode node) {
+        super(node);
+    }
+
+    public int[] getModifierTypes() {
+        return MODIFIERS;
+    }
+}

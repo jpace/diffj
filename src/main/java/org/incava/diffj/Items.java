@@ -16,11 +16,6 @@ public class Items {
         this.differences = differences;
     }
 
-    public void compareModifiers(SimpleNode fromNode, SimpleNode toNode, int[] modifierTypes) {
-        Modifiers mods = new Modifiers(fromNode);
-        mods.diff(toNode, modifierTypes, differences);
-    }
-
     public void compareAccess(SimpleNode fromNode, SimpleNode toNode) {
         Access acc = new Access(fromNode);
         acc.diff(toNode, differences);

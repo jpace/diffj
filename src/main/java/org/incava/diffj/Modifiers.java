@@ -8,14 +8,17 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.*;
 
-public class Modifiers {
+public abstract class Modifiers {
     private final SimpleNode node;
 
     public Modifiers(SimpleNode node) {
         this.node = node;
     }
 
-    public void diff(SimpleNode toNode, int[] modifierTypes, Differences differences) {
+    public abstract int[] getModifierTypes();
+
+    public void diff(SimpleNode toNode, Differences differences) {
+        int[] modifierTypes = getModifierTypes();
         List<Token> fromMods = SimpleNodeUtil.getLeadingTokens(node);
         List<Token> toMods = SimpleNodeUtil.getLeadingTokens(toNode);
 
@@ -39,17 +42,19 @@ public class Modifiers {
     }
 
     /**
-     * Returns a map from token types ("kinds", as java.lang.Integers), to the
-     * token. This assumes that there are no leading tokens of the same type for
-     * the given node.
+     * Returns a map from token types ("kinds", as integers), to the token. This
+     * assumes that there are no leading tokens of the same type for the given
+     * node.
      */
     protected Map<Integer, Token> getModifierMap(SimpleNode node) {
-        List<Token> mods = SimpleNodeUtil.getLeadingTokens(node);        
+        List<Token> mods = SimpleNodeUtil.getLeadingTokens(node);
         Map<Integer, Token> byKind = new TreeMap<Integer, Token>();
 
         for (Token tk : mods) {
-            byKind.put(Integer.valueOf(tk.kind), tk);
+            byKind.put(tk.kind, tk);
         }
+
+        tr.Ace.onBlue("byKind", byKind);
 
         return byKind;
     }

@@ -10,13 +10,6 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Type extends Items {
-    public static final int[] VALID_TYPE_MODIFIERS = new int[] {
-        JavaParserConstants.ABSTRACT,
-        JavaParserConstants.FINAL,
-        JavaParserConstants.STATIC, // valid only for inner types
-        JavaParserConstants.STRICTFP
-    };
-
     public Type(FileDiffs differences) {
         super(differences);
     }
@@ -48,10 +41,15 @@ public class Type extends Items {
         SimpleNode btParent = SimpleNodeUtil.getParent(bt);
 
         compareAccess(atParent, btParent);
-        compareModifiers(atParent, btParent, VALID_TYPE_MODIFIERS);
+        compareModifiers(atParent, btParent);
         compareExtends(at, bt);
         compareImplements(at, bt);
         compareDeclarations(at, bt);
+    }
+
+    protected void compareModifiers(SimpleNode fromNode, SimpleNode toNode) {
+        TypeModifiers typeMods = new TypeModifiers(fromNode);
+        typeMods.diff(toNode, differences);
     }
 
     protected void compareExtends(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {

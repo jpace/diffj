@@ -48,7 +48,7 @@ public class TokenList {
     
     public Token getStart(int start) {
         Token stToken = ListExt.get(tokens, start);
-        if (stToken == null && tokens.size() > 0) {
+        if (stToken == null && !tokens.isEmpty()) {
             stToken = ListExt.get(tokens, -1);
             stToken = stToken.next;
         }

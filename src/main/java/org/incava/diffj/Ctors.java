@@ -61,7 +61,6 @@ public class Ctors extends Functions {
         List<Token> fromCode = getCodeSerially(from);
         List<Token> toCode = getCodeSerially(to);
         String fromName = CtorUtil.getFullName(from);
-        String toName = CtorUtil.getFullName(to);
         compareCode(fromName, fromCode, toCode);
     }
 }
