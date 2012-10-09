@@ -29,9 +29,9 @@ public class Type extends Items {
 
         compareAccess(fromParent, toParent, differences);
         compareModifiers(fromParent, toParent, differences);
-        compareExtends(decl, toDecl, differences);
-        compareImplements(decl, toDecl, differences);
-        compareDeclarations(decl, toDecl, differences);
+        compareExtends(toDecl, differences);
+        compareImplements(toDecl, differences);
+        compareDeclarations(toDecl, differences);
     }
 
     protected void compareModifiers(SimpleNode fromNode, SimpleNode toNode, Differences differences) {
@@ -39,28 +39,28 @@ public class Type extends Items {
         typeMods.diff(toNode, differences);
     }
 
-    protected void compareExtends(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
+    protected void compareExtends(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
         Extends ed = new Extends(differences.getFileDiffs());
-        ed.compareExtends(fromDecl, toDecl);
+        ed.compareExtends(decl, toDecl);
     }
 
-    protected void compareImplements(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
+    protected void compareImplements(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
         Implements id = new Implements(differences.getFileDiffs());
-        id.compareImplements(fromDecl, toDecl);
+        id.compareImplements(decl, toDecl);
     }
 
-    protected void compareDeclarations(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
+    protected void compareDeclarations(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
         FileDiffs diffs = differences.getFileDiffs();        
         TypeMethods tmd = new TypeMethods(diffs);
-        tmd.compare(fromDecl, toDecl);
+        tmd.compare(decl, toDecl);
         
         TypeFields tfd = new TypeFields(diffs);
-        tfd.compare(fromDecl, toDecl);
+        tfd.compare(decl, toDecl);
         
         TypeCtors ctd = new TypeCtors(diffs);
-        ctd.compare(fromDecl, toDecl);
+        ctd.compare(decl, toDecl);
         
         InnerTypes titd = new InnerTypes(diffs);
-        titd.compare(fromDecl, toDecl);
+        titd.compare(decl, toDecl);
     }
 }

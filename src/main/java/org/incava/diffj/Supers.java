@@ -33,40 +33,40 @@ public abstract class Supers {
         return map.keySet().iterator().next();
     }
     
-    protected void compare(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        Map<String, ASTClassOrInterfaceType> aMap = getMap(at);
-        Map<String, ASTClassOrInterfaceType> bMap = getMap(bt);
+    protected void compare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+        Map<String, ASTClassOrInterfaceType> fromMap = getMap(fromDecl);
+        Map<String, ASTClassOrInterfaceType> toMap = getMap(toDecl);
 
         // I don't like this special case, but it is better than two separate
         // "add" and "remove" messages.
 
-        if (aMap.size() == 1 && bMap.size() == 1) {
-            String aName = getFirstKey(aMap);
-            String bName = getFirstKey(bMap);
+        if (fromMap.size() == 1 && toMap.size() == 1) {
+            String fromName = getFirstKey(fromMap);
+            String toName = getFirstKey(toMap);
 
-            if (!aName.equals(bName)) {
-                ASTClassOrInterfaceType a = aMap.get(aName);
-                ASTClassOrInterfaceType b = bMap.get(bName);
+            if (!fromName.equals(toName)) {
+                ASTClassOrInterfaceType a = fromMap.get(fromName);
+                ASTClassOrInterfaceType b = toMap.get(toName);
                 
-                superTypeChanged(a, aName, b, bName);
+                superTypeChanged(a, fromName, b, toName);
             }
         }
         else {
             List<String> typeNames = new ArrayList<String>();
-            typeNames.addAll(aMap.keySet());
-            typeNames.addAll(bMap.keySet());
+            typeNames.addAll(fromMap.keySet());
+            typeNames.addAll(toMap.keySet());
 
             // tr.Ace.log("typeNames", typeNames);
 
             for (String typeName : typeNames) {
-                ASTClassOrInterfaceType aType = aMap.get(typeName);
-                ASTClassOrInterfaceType bType = bMap.get(typeName);
+                ASTClassOrInterfaceType aType = fromMap.get(typeName);
+                ASTClassOrInterfaceType bType = toMap.get(typeName);
 
                 if (aType == null) {
-                    superTypeAdded(at, bType, typeName);
+                    superTypeAdded(fromDecl, bType, typeName);
                 }
                 else if (bType == null) {
-                    superTypeRemoved(aType, bt, typeName);
+                    superTypeRemoved(aType, toDecl, typeName);
                 }
             }
         }

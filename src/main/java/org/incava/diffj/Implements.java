@@ -13,23 +13,23 @@ public class Implements extends Supers {
         super(differences);
     }
 
-    public void compareImplements(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        compare(at, bt);
+    public void compareImplements(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+        compare(fromDecl, toDecl);
     }
 
     protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid) {
         return getMap(coid, "net.sourceforge.pmd.ast.ASTImplementsList");
     }
 
-    protected void superTypeChanged(ASTClassOrInterfaceType a, String aName, ASTClassOrInterfaceType b, String bName) {
-        differences.changed(a, b, Messages.IMPLEMENTED_TYPE_CHANGED, aName, bName);
+    protected void superTypeChanged(ASTClassOrInterfaceType fromType, String fromName, ASTClassOrInterfaceType toDecl, String toName) {
+        differences.changed(fromType, toDecl, Messages.IMPLEMENTED_TYPE_CHANGED, fromName, toName);
     }
 
-    protected void superTypeAdded(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceType bType, String typeName) {
-        differences.changed(at, bType, Messages.IMPLEMENTED_TYPE_ADDED, typeName);
+    protected void superTypeAdded(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceType toType, String typeName) {
+        differences.changed(fromDecl, toType, Messages.IMPLEMENTED_TYPE_ADDED, typeName);
     }
 
-    protected void superTypeRemoved(ASTClassOrInterfaceType aType, ASTClassOrInterfaceDeclaration bt, String typeName) {
-        differences.changed(aType, bt, Messages.IMPLEMENTED_TYPE_REMOVED, typeName);
+    protected void superTypeRemoved(ASTClassOrInterfaceType fromType, ASTClassOrInterfaceDeclaration toDecl, String typeName) {
+        differences.changed(fromType, toDecl, Messages.IMPLEMENTED_TYPE_REMOVED, typeName);
     }
 }

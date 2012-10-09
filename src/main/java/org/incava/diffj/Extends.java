@@ -13,8 +13,8 @@ public class Extends extends Supers {
         super(differences);
     }
 
-    public void compareExtends(ASTClassOrInterfaceDeclaration at, ASTClassOrInterfaceDeclaration bt) {
-        compare(at, bt);
+    public void compareExtends(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+        compare(fromDecl, toDecl);
     }
 
     protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid) {
