@@ -28,13 +28,13 @@ public class Ctors extends Functions {
     protected void compareParameters(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
         ASTFormalParameters fromParam = CtorUtil.getParameters(from);
         ASTFormalParameters toParams = CtorUtil.getParameters(to);
-        compareParameters(fromParam, toParams);
+        compareParameters(fromParam, toParams, differences);
     }
 
     protected void compareThrows(ASTConstructorDeclaration from, ASTConstructorDeclaration to) {
         ASTNameList fromThrows = CtorUtil.getThrowsList(from);
         ASTNameList toThrows = CtorUtil.getThrowsList(to);
-        compareThrows(from, fromThrows, to, toThrows);
+        compareThrows(from, fromThrows, to, toThrows, differences);
     }
 
     protected List<Token> getCodeSerially(ASTConstructorDeclaration ctor) {
@@ -61,6 +61,6 @@ public class Ctors extends Functions {
         List<Token> fromCode = getCodeSerially(from);
         List<Token> toCode = getCodeSerially(to);
         String fromName = CtorUtil.getFullName(from);
-        compareCode(fromName, fromCode, toCode);
+        compareCode(fromName, fromCode, toCode, differences);
     }
 }

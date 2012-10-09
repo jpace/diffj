@@ -16,12 +16,16 @@ public class Items {
         this.differences = differences;
     }
 
-    public void compareAccess(SimpleNode fromNode, SimpleNode toNode) {
+    public Items() {
+        this.differences = null;
+    }
+
+    public void compareAccess(SimpleNode fromNode, SimpleNode toNode, Differences differences) {
         Access acc = new Access(fromNode);
         acc.diff(toNode, differences);
     }
 
-    public void compareCode(String fromName, List<Token> fromTokens, List<Token> toList) {
+    public void compareCode(String fromName, List<Token> fromTokens, List<Token> toList, Differences differences) {
         Code code = new Code(fromName, fromTokens);
         code.diff(toList, differences);
     }

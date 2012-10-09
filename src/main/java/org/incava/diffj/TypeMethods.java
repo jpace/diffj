@@ -15,10 +15,10 @@ public class TypeMethods extends TypeItems<ASTMethodDeclaration> {
         methodUtil = new MethodUtil();
     }    
 
-    public void doCompare(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        Methods method = new Methods(fileDiffs);
-        method.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
-        method.compare(a, b);
+    public void doCompare(ASTMethodDeclaration fromMethod, ASTMethodDeclaration toMethod) {
+        Method method = new Method(fromMethod);
+        method.compareAccess(SimpleNodeUtil.getParent(fromMethod), SimpleNodeUtil.getParent(toMethod), differences);
+        method.diff(toMethod, differences);
     }
 
     public double getScore(ASTMethodDeclaration a, ASTMethodDeclaration b) {

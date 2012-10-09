@@ -40,7 +40,7 @@ public class Type extends Items {
         SimpleNode atParent = SimpleNodeUtil.getParent(at);
         SimpleNode btParent = SimpleNodeUtil.getParent(bt);
 
-        compareAccess(atParent, btParent);
+        compareAccess(atParent, btParent, differences);
         compareModifiers(atParent, btParent);
         compareExtends(at, bt);
         compareImplements(at, bt);

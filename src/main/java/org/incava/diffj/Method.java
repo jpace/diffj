@@ -14,39 +14,41 @@ import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Methods extends Functions {
-    public Methods(FileDiffs differences) {
-        super(differences);
+public class Method extends Functions {
+    private final ASTMethodDeclaration method;
+
+    public Method(ASTMethodDeclaration method) {
+        this.method = method;
     }
 
-    public void compare(ASTMethodDeclaration from, ASTMethodDeclaration to) {
-        compareModifiers(from, to);
-        compareReturnTypes(from, to);
-        compareParameters(from, to);
-        compareThrows(from, to);
-        compareBodies(from, to);
+    public void diff(ASTMethodDeclaration to, Differences differences) {
+        compareModifiers(this.method, to, differences);
+        compareReturnTypes(this.method, to, differences);
+        compareParameters(this.method, to, differences);
+        compareThrows(this.method, to, differences);
+        compareBodies(this.method, to, differences);
     }
 
-    protected void compareModifiers(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+    protected void compareModifiers(ASTMethodDeclaration from, ASTMethodDeclaration to, Differences differences) {
         SimpleNode fromParent = SimpleNodeUtil.getParent(from);
         SimpleNode toParent = SimpleNodeUtil.getParent(to);
         MethodModifiers mods = new MethodModifiers(fromParent);
         mods.diff(toParent, differences);
     }
 
-    protected void compareParameters(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+    protected void compareParameters(ASTMethodDeclaration from, ASTMethodDeclaration to, Differences differences) {
         ASTFormalParameters fromFormalParams = MethodUtil.getParameters(from);
         ASTFormalParameters toFormalParams = MethodUtil.getParameters(to);
-        compareParameters(fromFormalParams, toFormalParams);
+        compareParameters(fromFormalParams, toFormalParams, differences);
     }
 
-    protected void compareThrows(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+    protected void compareThrows(ASTMethodDeclaration from, ASTMethodDeclaration to, Differences differences) {
         ASTNameList fromThrowsList = MethodUtil.getThrowsList(from);
         ASTNameList toThrowsList = MethodUtil.getThrowsList(to);
-        compareThrows(from, fromThrowsList, to, toThrowsList);
+        compareThrows(from, fromThrowsList, to, toThrowsList, differences);
     }
 
-    protected void compareBodies(ASTMethodDeclaration from, ASTMethodDeclaration to) {
+    protected void compareBodies(ASTMethodDeclaration from, ASTMethodDeclaration to, Differences differences) {
         // tr.Ace.log("from", from);
         // tr.Ace.log("to", to);
 
@@ -63,7 +65,7 @@ public class Methods extends Functions {
         }
         else {
             String fromName = MethodUtil.getFullName(from);
-            compareBlocks(fromName, fromBlock, toBlock);
+            compareBlocks(fromName, fromBlock, toBlock, differences);
         }
     }
 
@@ -78,9 +80,9 @@ public class Methods extends Functions {
     //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(toBlock));        
     // }
 
-    protected void compareBlocks(String fromName, ASTBlock fromBlock, ASTBlock toBlock) {
+    protected void compareBlocks(String fromName, ASTBlock fromBlock, ASTBlock toBlock, Differences differences) {
         List<Token> from = SimpleNodeUtil.getChildTokens(fromBlock);
         List<Token> to = SimpleNodeUtil.getChildTokens(toBlock);
-        compareCode(fromName, from, to);
+        compareCode(fromName, from, to, differences);
     }
 }

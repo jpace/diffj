@@ -16,7 +16,7 @@ public class TypeFields extends TypeItems<ASTFieldDeclaration> {
 
     public void doCompare(ASTFieldDeclaration a, ASTFieldDeclaration b) {
         Fields field = new Fields(fileDiffs);
-        field.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
+        field.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b), differences);
         field.compare(a, b);
     }
 

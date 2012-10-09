@@ -11,7 +11,10 @@ public class Functions extends Items {
         super(differences);
     }
 
-    protected void compareReturnTypes(SimpleNode fromNode, SimpleNode toNode) {
+    public Functions() {
+    }
+
+    protected void compareReturnTypes(SimpleNode fromNode, SimpleNode toNode, Differences differences) {
         SimpleNode fromRetType    = SimpleNodeUtil.findChild(fromNode);
         SimpleNode toRetType      = SimpleNodeUtil.findChild(toNode);
         String     fromRetTypeStr = SimpleNodeUtil.toString(fromRetType);
@@ -22,12 +25,12 @@ public class Functions extends Items {
         }
     }
 
-    protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams) {
+    protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, Differences differences) {
         Parameters params = new Parameters(differences.getFileDiffs(), fromFormalParams, toFormalParams);
         params.compare();
     }
     
-    protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList) {
+    protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList, Differences differences) {
         Throws thrws = new Throws(fromNode, fromNameList);
         thrws.diff(toNode, toNameList, differences);
     }

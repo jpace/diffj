@@ -42,7 +42,7 @@ public class Fields extends Items {
         // would have matched "to.name" in the first loop of
         // compareVariableLists
         
-        compareCode(fromName, aCode, bCode);
+        compareCode(fromName, aCode, bCode, differences);
     }
 
     protected void compareVariableInits(ASTVariableDeclarator from, ASTVariableDeclarator to) {

@@ -17,7 +17,7 @@ public class TypeCtors extends TypeItems<ASTConstructorDeclaration> {
 
     public void doCompare(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
         Ctors ctor = new Ctors(fileDiffs);
-        ctor.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b));
+        ctor.compareAccess(SimpleNodeUtil.getParent(a), SimpleNodeUtil.getParent(b), differences);
         ctor.compare(a, b);
     }
 
