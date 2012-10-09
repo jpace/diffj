@@ -6,12 +6,10 @@ import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class TypeMethods extends TypeItems<ASTMethodDeclaration> {
-    private final FileDiffs fileDiffs;
     private final MethodUtil methodUtil;
 
     public TypeMethods(FileDiffs fileDiffs) {
         super(fileDiffs, "net.sourceforge.pmd.ast.ASTMethodDeclaration");
-        this.fileDiffs = fileDiffs;
         methodUtil = new MethodUtil();
     }    
 

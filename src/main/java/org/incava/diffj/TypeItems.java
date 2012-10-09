@@ -23,30 +23,30 @@ public abstract class TypeItems<Type extends SimpleNode> {
         this(differences, cls == null ? (String)null : cls.getName());
     }
 
-    public void compare(ASTClassOrInterfaceDeclaration aNode, ASTClassOrInterfaceDeclaration bNode) {
-        List<Type> amds = getDeclarationsOfClassType(aNode);
-        List<Type> bmds = getDeclarationsOfClassType(bNode);
+    public void compare(ASTClassOrInterfaceDeclaration fromType, ASTClassOrInterfaceDeclaration toType) {
+        List<Type> fromDecls = getDeclarationsOfClassType(fromType);
+        List<Type> toDecls = getDeclarationsOfClassType(toType);
 
-        TypeMatches<Type> matches = getTypeMatches(amds, bmds);
+        TypeMatches<Type> matches = getTypeMatches(fromDecls, toDecls);
 
-        List<Type> unprocA = new ArrayList<Type>(amds);        
-        List<Type> unprocB = new ArrayList<Type>(bmds);
+        List<Type> unprocFromDecls = new ArrayList<Type>(fromDecls);        
+        List<Type> unprocToDecls = new ArrayList<Type>(toDecls);
 
-        compareMatches(matches, unprocA, unprocB);
+        compareMatches(matches, unprocFromDecls, unprocToDecls);
 
-        addRemoved(unprocA, bNode);        
-        addAdded(aNode, unprocB);
+        addRemoved(unprocFromDecls, toType);        
+        addAdded(fromType, unprocToDecls);
     }
 
-    public abstract String getName(Type t);
+    public abstract String getName(Type item);
 
-    public abstract String getAddedMessage(Type t);
+    public abstract String getAddedMessage(Type item);
 
-    public abstract String getRemovedMessage(Type t);
+    public abstract String getRemovedMessage(Type item);
 
-    public abstract double getScore(Type amd, Type bmd);
+    public abstract double getScore(Type fromItem, Type toItem);
 
-    public abstract void doCompare(Type amd, Type bmd);
+    public abstract void doCompare(Type fromItem, Type toItem);
 
     @SuppressWarnings("unchecked")
     public <Type extends SimpleNode> List<Type> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls) {
@@ -63,11 +63,11 @@ public abstract class TypeItems<Type extends SimpleNode> {
         return declList;
     }
 
-    public TypeMatches<Type> getTypeMatches(List<Type> amds, List<Type> bmds) {
+    public TypeMatches<Type> getTypeMatches(List<Type> fromItems, List<Type> toItems) {
         TypeMatches<Type> matches = new TypeMatches<Type>();
 
-        for (Type amd : amds) {
-            for (Type bmd : bmds) {
+        for (Type amd : fromItems) {
+            for (Type bmd : toItems) {
                 double score = getScore(amd, bmd);
                 if (score > 0.0) {
                     matches.add(score, amd, bmd);
@@ -77,29 +77,29 @@ public abstract class TypeItems<Type extends SimpleNode> {
         return matches;
     }
 
-    public void compareMatches(TypeMatches<Type> matches, List<Type> unprocA, List<Type> unprocB) {
+    public void compareMatches(TypeMatches<Type> matches, List<Type> unprocFromItems, List<Type> unprocToItems) {
         List<Double> descendingScores = matches.getDescendingScores();
         
         for (Double score : descendingScores) {
             // don't repeat comparisons ...
 
-            List<Type> procA = new ArrayList<Type>();
-            List<Type> procB = new ArrayList<Type>();
+            List<Type> procFromItems = new ArrayList<Type>();
+            List<Type> procToItems = new ArrayList<Type>();
 
             for (Pair<Type, Type> declPair : matches.get(score)) {
-                Type amd = declPair.getFirst();
-                Type bmd = declPair.getSecond();
+                Type fromItem = declPair.getFirst();
+                Type toItem = declPair.getSecond();
 
-                if (unprocA.contains(amd) && unprocB.contains(bmd)) {
-                    doCompare(amd, bmd);
+                if (unprocFromItems.contains(fromItem) && unprocToItems.contains(toItem)) {
+                    doCompare(fromItem, toItem);
                     
-                    procA.add(amd);
-                    procB.add(bmd);
+                    procFromItems.add(fromItem);
+                    procToItems.add(toItem);
                 }
             }
 
-            unprocA.removeAll(procA);
-            unprocB.removeAll(procB);
+            unprocFromItems.removeAll(procFromItems);
+            unprocToItems.removeAll(procToItems);
         }
     }
 
@@ -108,17 +108,17 @@ public abstract class TypeItems<Type extends SimpleNode> {
         return getDeclarationsOfClass(decls);
     }
 
-    public void addAdded(ASTClassOrInterfaceDeclaration aNode, List<Type> bs) {
-        for (Type b : bs) {
-            String name = getName(b);
-            differences.added(aNode, b, getAddedMessage(b), name);
+    public void addAdded(ASTClassOrInterfaceDeclaration fromDecl, List<Type> toItems) {
+        for (Type toItem : toItems) {
+            String name = getName(toItem);
+            differences.added(fromDecl, toItem, getAddedMessage(toItem), name);
         }
     }
 
-    public void addRemoved(List<Type> as, ASTClassOrInterfaceDeclaration bNode) {
-        for (Type a : as) {
-            String name = getName(a);
-            differences.deleted(a, bNode, getRemovedMessage(a), name);
+    public void addRemoved(List<Type> fromItems, ASTClassOrInterfaceDeclaration toDecl) {
+        for (Type fromItem : fromItems) {
+            String name = getName(fromItem);
+            differences.deleted(fromItem, toDecl, getRemovedMessage(fromItem), name);
         }
     }
 }

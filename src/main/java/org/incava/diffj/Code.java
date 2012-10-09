@@ -42,9 +42,7 @@ public class Code {
         FileDiff newDiff = new FileDiffChange(newMsg, fileDiff, fromLocRg, toLocRg);
         
         differences.getFileDiffs().remove(fileDiff);
-        differences.add(newDiff);
-
-        return newDiff;
+        return addFileDiff(newDiff, differences);
     }
 
     protected FileDiff addFileDiff(FileDiff fileDiff, Differences differences) {

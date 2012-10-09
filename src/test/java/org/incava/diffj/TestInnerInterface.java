@@ -1,84 +1,84 @@
 package org.incava.diffj;
 
-public class TestInnerClassDiff extends ItemsTest {
-    public TestInnerClassDiff(String name) {
+public class TestInnerInterface extends ItemsTest {
+    public TestInnerInterface(String name) {
         super(name);
     }
 
     public void testMethodAdded() {
         evaluate(new Lines("class Test {",
-                           "    class ITest {",
+                           "    interface ITest {",
                            "    }",
                            "",
                            "}"),
 
                  new Lines("class Test {",
                            "",
-                           "    class ITest {",
-                           "        void foo() {}",
+                           "    interface ITest {",
+                           "        void foo();",
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", loc(2, 5), loc(3, 5), loc(4, 9), loc(4, 21)));
+                 makeMethodRef(null, "foo()", loc(2, 5), loc(3, 5), loc(4, 9), loc(4, 19)));
     }
 
     public void testMethodRemoved() {
         evaluate(new Lines("class Test {",
-                           "    class ITest {",
-                           "        void foo() {}",
+                           "    interface ITest {",
+                           "        void foo();",
                            "    }",
                            "",
                            "}"),
 
                  new Lines("class Test {",
                            "",
-                           "    class ITest {",
+                           "    interface ITest {",
                            "    }",
                            "}"),
-
-                 makeMethodRef("foo()", null, loc(3, 9), loc(3, 21), loc(3, 5), loc(4, 5)));
+                 
+                 makeMethodRef("foo()", null, loc(3, 9), loc(3, 19), loc(3, 5), loc(4, 5)));
     }
 
-    public void testInnerClassAdded() {
+    public void testInnerInterfaceAdded() {
         evaluate(new Lines("class Test {",
-                           "    class ITest {",
+                           "    interface ITest {",
                            "    }",
                            "",
                            "}"),
 
                  new Lines("class Test {",
                            "",
-                           "    class ITest {",
-                           "        class I2Test {",
+                           "    interface ITest {",
+                           "        interface I2Test {",
                            "        }",
                            "    }",
                            "}"),
                  
-                 makeClassRef(null, "I2Test", loc(2, 5), loc(3, 5), loc(4, 9), loc(5, 9)));
+                 makeInterfaceRef(null, "I2Test", loc(2, 5), loc(3, 5), loc(4, 9), loc(5, 9)));
     }
 
-    public void testInnerClassRemoved() {
+    public void testInnerInterfaceRemoved() {
         evaluate(new Lines("class Test {",
-                           "    class ITest {",
-                           "        class I2Test {",
+                           "    interface ITest {",
+                           "        interface I2Test {",
                            "        }",
                            "    }",
                            "",
                            "}"),
 
                  new Lines("class Test {",
-                           "    class ITest {",
+                           "    interface ITest {",
                            "    }",
                            "}"),
                  
-                 makeClassRef("I2Test", null, loc(3, 9), loc(4, 9), loc(2, 5), loc(3, 5)));
+                 makeInterfaceRef("I2Test", null, loc(3, 9), loc(4, 9), loc(2, 5), loc(3, 5)));
     }
 
-    public void testInnerClassMethodAdded() {
+    public void testInnerInterfaceMethodAdded() {
         // all hail recursion!
         evaluate(new Lines("class Test {",
-                           "    class ITest {",
-                           "        class I2Test {",
+                           "    interface ITest {",
+                           "        interface I2Test {",
                            "        }",
                            "    }",
                            "",
@@ -86,21 +86,21 @@ public class TestInnerClassDiff extends ItemsTest {
 
                  new Lines("class Test {",
                            "",
-                           "    class ITest {",
-                           "        class I2Test {",
-                           "            void foo() {}",
+                           "    interface ITest {",
+                           "        interface I2Test {",
+                           "            void foo();",
                            "        }",
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", loc(3, 9), loc(4, 9), loc(5, 13), loc(5, 25)));
+                 makeMethodRef(null, "foo()", loc(3, 9), loc(4, 9), loc(5, 13), loc(5, 23)));
     }
 
-    public void testInnerClassMethodRemoved() {
+    public void testInnerInterfaceMethodRemoved() {
         evaluate(new Lines("class Test {",
-                           "    class ITest {",
-                           "        class I2Test {",
-                           "            void foo(  String s) {}",
+                           "    interface ITest {",
+                           "        interface I2Test {",
+                           "            void foo();",
                            "        }",
                            "    }",
                            "",
@@ -108,12 +108,13 @@ public class TestInnerClassDiff extends ItemsTest {
 
                  new Lines("class Test {",
                            "",
-                           "    class ITest {",
-                           "        class I2Test {",
+                           "    interface ITest {",
+                           "        interface I2Test {",
                            "        }",
                            "    }",
                            "}"),
                  
-                 makeMethodRef("foo(String)", null, loc(4, 13), loc(4, 35), loc(4, 9), loc(5, 9)));
+                 makeMethodRef("foo()", null, loc(4, 13), loc(4, 23), loc(4, 9), loc(5, 9)));
     }
+
 }
