@@ -26,8 +26,9 @@ public class CompilationUnit {
         Package toPackage = new Package(toCompUnit);
         fromPackage.diff(toPackage, differences);
             
-        Imports imps = new Imports(compUnit);
-        imps.diff(toCompUnit, differences);
+        Imports fromImports = new Imports(compUnit);
+        Imports toImports = new Imports(toCompUnit);
+        fromImports.diff(toImports, differences);
 
         Types fromTypes = new Types(compUnit);
         Types toTypes = new Types(toCompUnit);

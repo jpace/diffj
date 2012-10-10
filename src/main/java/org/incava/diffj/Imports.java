@@ -15,31 +15,73 @@ import org.incava.pmdx.SimpleNodeUtil;
 
 public class Imports {
     private final ASTCompilationUnit compUnit;
-    private final ImportsList imports;
+    private final List<ASTImportDeclaration> imports;
 
     public Imports(ASTCompilationUnit compUnit) {
         this.compUnit = compUnit;
-        this.imports = new ImportsList(compUnit);
+        this.imports = CompilationUnitUtil.getImports(compUnit);
     }
 
-    public void diff(ASTCompilationUnit toCompUnit, Differences differences) {
-        ImportsList toImports = new ImportsList(toCompUnit);
+    public boolean isEmpty() {
+        return imports.isEmpty();
+    }
 
-        if (imports.isEmpty()) {
+    public Map<String, ASTImportDeclaration> getNamesToDeclarations() {
+        Map<String, ASTImportDeclaration> namesToImp = new HashMap<String, ASTImportDeclaration>();
+        for (ASTImportDeclaration imp : imports) {
+            String str = getImportAsString(imp);
+            namesToImp.put(str, imp);
+        }
+        
+        return namesToImp;
+    }        
+
+    public ASTImportDeclaration getFirstDeclaration() {
+        return imports.get(0);
+    }
+
+    public Token getFirstToken() {
+        return imports.get(0).getFirstToken();
+    }
+
+    public Token getLastToken() {
+        return imports.get(imports.size() - 1).getLastToken();
+    }
+
+    public String getImportAsString(ASTImportDeclaration imp) {
+        StringBuilder sb = new StringBuilder();   
+        Token tk  = imp.getFirstToken().next;
+        
+        while (tk != null) {
+            if (tk == imp.getLastToken()) {
+                break;
+            }
+            else {
+                sb.append(tk.image);
+                tk = tk.next;
+            }
+        }
+
+        return sb.toString();
+    }
+
+
+    public void diff(Imports toImports, Differences differences) {
+        if (isEmpty()) {
             if (!toImports.isEmpty()) {
                 markImportSectionAdded(toImports, differences);
             }
         }
         else if (toImports.isEmpty()) {
-            markImportSectionRemoved(toCompUnit, differences);
+            markImportSectionRemoved(toImports, differences);
         }
         else {
             compareEachImport(toImports, differences);
         }
     }
 
-    protected void compareEachImport(ImportsList toImports, Differences differences) {
-        Map<String, ASTImportDeclaration> fromNamesToImp = imports.getNamesToDeclarations();
+    protected void compareEachImport(Imports toImports, Differences differences) {
+        Map<String, ASTImportDeclaration> fromNamesToImp = getNamesToDeclarations();
         Map<String, ASTImportDeclaration> toNamesToImp = toImports.getNamesToDeclarations();
             
         Collection<String> names = new TreeSet<String>();
@@ -51,7 +93,7 @@ public class Imports {
             ASTImportDeclaration toImp = toNamesToImp.get(name);
             
             if (fromImp == null) {
-                differences.added(imports.getFirstDeclaration(), toImp, Messages.IMPORT_ADDED, name);
+                differences.added(getFirstDeclaration(), toImp, Messages.IMPORT_ADDED, name);
             }
             else if (toImp == null) {
                 differences.deleted(fromImp, toImports.getFirstDeclaration(), Messages.IMPORT_REMOVED, name);
@@ -59,24 +101,24 @@ public class Imports {
         }
     }
 
-    protected void markImportSectionAdded(ImportsList toImports, Differences differences) {
-        Token fromStart = getFirstTypeToken(compUnit);
+    protected void markImportSectionAdded(Imports toImports, Differences differences) {
+        Token fromStart = getFirstTypeToken();
         Token fromEnd = fromStart;
         Token toStart = toImports.getFirstToken();
         Token toEnd = toImports.getLastToken();
         differences.added(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_ADDED);
     }
 
-    protected void markImportSectionRemoved(ASTCompilationUnit toCompUnit, Differences differences) {
-        Token fromStart = imports.getFirstToken();
-        Token fromEnd = imports.getLastToken();
-        Token toStart = getFirstTypeToken(toCompUnit);
+    protected void markImportSectionRemoved(Imports toImports, Differences differences) {
+        Token fromStart = getFirstToken();
+        Token fromEnd = getLastToken();
+        Token toStart = toImports.getFirstTypeToken();
         Token toEnd = toStart;
         differences.deleted(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_REMOVED);
     }
 
-    protected Token getFirstTypeToken(ASTCompilationUnit cu) {
-        List<ASTTypeDeclaration> types = CompilationUnitUtil.getTypeDeclarations(cu);
+    protected Token getFirstTypeToken() {
+        List<ASTTypeDeclaration> types = CompilationUnitUtil.getTypeDeclarations(compUnit);
         Token t = types.size() > 0 ? types.get(0).getFirstToken() : null;
 
         // if there are no types (ie. the file has only a package and/or import
@@ -84,7 +126,7 @@ public class Imports {
         // unit.
 
         if (t == null) {
-            t = cu.getFirstToken();
+            t = compUnit.getFirstToken();
         }
         return t;
     }
