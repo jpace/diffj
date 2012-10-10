@@ -22,8 +22,8 @@ public class Code {
         this.tokenList = new TokenList(tokens);
     }
 
-    public void diff(List<Token> toTokens, Differences differences) {
-        TokenList toTokenList = new TokenList(toTokens);
+    public void diff(Code toCode, Differences differences) {
+        TokenList toTokenList = toCode.tokenList;
         Diff<Token> tokenDiff = tokenList.diff(toTokenList);
         
         FileDiff currFileDiff = null;
@@ -38,9 +38,8 @@ public class Code {
     }
 
     protected FileDiff replaceReference(FileDiff fileDiff, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        String   newMsg  = MessageFormat.format(Messages.CODE_CHANGED, name);
+        String newMsg = MessageFormat.format(Messages.CODE_CHANGED, name);
         FileDiff newDiff = new FileDiffChange(newMsg, fileDiff, fromLocRg, toLocRg);
-        
         differences.getFileDiffs().remove(fileDiff);
         return addFileDiff(newDiff, differences);
     }

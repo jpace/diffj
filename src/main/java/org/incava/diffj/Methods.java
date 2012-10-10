@@ -13,9 +13,10 @@ public class Methods extends Items<ASTMethodDeclaration> {
         methodUtil = new MethodUtil();
     }    
 
-    public void doCompare(ASTMethodDeclaration fromMethod, ASTMethodDeclaration toMethod) {
-        Method method = new Method(fromMethod);
-        method.diff(toMethod, differences);
+    public void doCompare(ASTMethodDeclaration fromMethodDecl, ASTMethodDeclaration toMethodDecl) {
+        Method fromMethod = new Method(fromMethodDecl);
+        Method toMethod = new Method(toMethodDecl);
+        fromMethod.diff(toMethod, differences);
     }
 
     public double getScore(ASTMethodDeclaration a, ASTMethodDeclaration b) {
