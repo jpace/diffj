@@ -24,15 +24,19 @@ public class Field extends Item {
     }
 
     public void diff(ASTFieldDeclaration toFieldDecl, Differences differences) {
-        Field field = new Field(toFieldDecl);
+        Field toField = new Field(toFieldDecl);
         compareAccess(SimpleNodeUtil.getParent(field), SimpleNodeUtil.getParent(toFieldDecl), differences);
-        compareModifiers(toFieldDecl, differences);
-        compareVariables(toFieldDecl, differences);
+        compareModifiers(toField, differences);
+        compareVariables(toField, differences);
     }
 
-    protected void compareModifiers(ASTFieldDeclaration toField, Differences differences) {
-        SimpleNode fromParent = SimpleNodeUtil.getParent(field);
-        SimpleNode toParent = SimpleNodeUtil.getParent(toField);
+    protected SimpleNode getParent() {
+        return SimpleNodeUtil.getParent(field);
+    }
+
+    protected void compareModifiers(Field toField, Differences differences) {
+        SimpleNode fromParent = getParent();
+        SimpleNode toParent = toField.getParent();
         FieldModifiers mods = new FieldModifiers(fromParent);
         mods.diff(toParent, differences);
     }
@@ -81,10 +85,10 @@ public class Field extends Item {
 
     protected void compareVariableTypes(String name, 
                                         ASTVariableDeclarator fromVarDecl, 
-                                        ASTFieldDeclaration toFieldDecl, ASTVariableDeclarator toVarDecl, 
+                                        Field toField, ASTVariableDeclarator toVarDecl, 
                                         Differences differences) {
-        ASTType fromType = (ASTType)SimpleNodeUtil.findChild(field, "net.sourceforge.pmd.ast.ASTType");
-        ASTType toType = (ASTType)SimpleNodeUtil.findChild(toFieldDecl, "net.sourceforge.pmd.ast.ASTType");
+        ASTType fromType = getType();
+        ASTType toType = toField.getType();
 
         String fromTypeStr = SimpleNodeUtil.toString(fromType);
         String toTypeStr = SimpleNodeUtil.toString(toType);
@@ -109,9 +113,17 @@ public class Field extends Item {
         differences.changed(fromTk, toTk, msg, name);
     }
 
-    protected void compareVariables(ASTFieldDeclaration toField, Differences differences) {
-        List<ASTVariableDeclarator> fromVarDecls = SimpleNodeUtil.snatchChildren(field, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
-        List<ASTVariableDeclarator> toVarDecls = SimpleNodeUtil.snatchChildren(toField, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+    protected ASTType getType() {
+        return (ASTType)SimpleNodeUtil.findChild(field, "net.sourceforge.pmd.ast.ASTType");
+    }
+
+    protected List<ASTVariableDeclarator> getVariables() {
+        return SimpleNodeUtil.snatchChildren(field, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+    }
+
+    protected void compareVariables(Field toField, Differences differences) {
+        List<ASTVariableDeclarator> fromVarDecls = getVariables();
+        List<ASTVariableDeclarator> toVarDecls = toField.getVariables();
 
         Map<String, ASTVariableDeclarator> fromNamesToVD = makeVDMap(fromVarDecls);
         Map<String, ASTVariableDeclarator> toNamesToVD = makeVDMap(toVarDecls);
