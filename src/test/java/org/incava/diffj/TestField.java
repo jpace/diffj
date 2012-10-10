@@ -195,8 +195,9 @@ public class TestField extends ItemsTest {
                            "    int j;",
                            "",
                            "}"),
-                 
-                 makeVariableRef("i", "j", loc(2, 9), loc(2,  9), loc(4, 9), loc(4, 9)));
+
+                 makeChangedRef(null, "j", VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(4, 9), loc(4, 9)),
+                 makeChangedRef("i", null, VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(4, 9), loc(4, 9)));
     }
 
     public void testVariableWithInitializerChanged() {
@@ -210,7 +211,8 @@ public class TestField extends ItemsTest {
                            "    int j = 4;",
                            "}"),
                  
-                 makeVariableRef("i", "j", loc(2, 9), loc(2, 9), loc(3, 9), loc(3, 9)));
+                 makeChangedRef(null, "j", VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(3, 9), loc(3, 9)),
+                 makeChangedRef("i", null, VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(3, 9), loc(3, 9)));
     }
 
     public void testVariableTypeChanged() {
@@ -229,5 +231,19 @@ public class TestField extends ItemsTest {
                  new FileDiffChange(getFromToMessage(Messages.VARIABLE_TYPE_CHANGED, "s", "Set", "HashSet"),
                                           loc(2, 5), loc(2, 5, "Set"), 
                                           loc(4, 5), loc(4, 5, "HashSet")));
+    }
+
+    public void testMultipleVariables() {
+        evaluate(new Lines("class Test {",
+                           "    String s, t;",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "    String s;",
+                           "}"),
+                 
+                 new FileDiffChange(getFromToMessage(Messages.VARIABLE_REMOVED, "t"),
+                                    loc(2, 15), loc(2, 15, "t"), 
+                                    loc(2, 12), loc(2, 12, "t")));
     }
 }

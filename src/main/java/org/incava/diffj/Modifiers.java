@@ -54,8 +54,6 @@ public abstract class Modifiers {
             byKind.put(tk.kind, tk);
         }
 
-        tr.Ace.onBlue("byKind", byKind);
-
         return byKind;
     }
 }
