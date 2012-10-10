@@ -21,20 +21,16 @@ public abstract class Supers {
         this.decl = decl;
     }
 
-    protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid) {
-        return getMap(coid, getAstClassName());
-    }
-
-    protected void superTypeAdded(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceType toType, String typeName, Differences differences) {
-        differences.changed(fromDecl, toType, getAddedMessage(), typeName);
+    protected void superTypeAdded(ASTClassOrInterfaceType toType, String typeName, Differences differences) {
+        differences.changed(decl, toType, getAddedMessage(), typeName);
     }
 
     protected void superTypeChanged(ASTClassOrInterfaceType fromType, String fromName, ASTClassOrInterfaceType toType, String toName, Differences differences) {
         differences.changed(fromType, toType, getChangedMessage(), fromName, toName);
     }
 
-    protected void superTypeRemoved(ASTClassOrInterfaceType fromType, ASTClassOrInterfaceDeclaration toDecl, String typeName, Differences differences) {
-        differences.changed(fromType, toDecl, getRemovedMessage(), typeName);
+    protected void superTypeRemoved(ASTClassOrInterfaceType fromType, String typeName, Differences differences) {
+        differences.changed(fromType, decl, getRemovedMessage(), typeName);
     }
 
     abstract protected String getAstClassName();
@@ -49,9 +45,11 @@ public abstract class Supers {
         return map.keySet().iterator().next();
     }
     
-    public void diff(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Map<String, ASTClassOrInterfaceType> fromMap = getMap(decl);
-        Map<String, ASTClassOrInterfaceType> toMap = getMap(toDecl);
+    public void diff(Supers toSupers, Differences differences) {
+        ASTClassOrInterfaceDeclaration toDecl = toSupers.decl;
+
+        Map<String, ASTClassOrInterfaceType> fromMap = getMap();
+        Map<String, ASTClassOrInterfaceType> toMap = toSupers.getMap();
 
         // I don't like this special case, but it is better than two separate
         // "add" and "remove" messages.
@@ -79,18 +77,19 @@ public abstract class Supers {
                 ASTClassOrInterfaceType toType = toMap.get(typeName);
 
                 if (fromType == null) {
-                    superTypeAdded(decl, toType, typeName, differences);
+                    superTypeAdded(toType, typeName, differences);
                 }
                 else if (toType == null) {
-                    superTypeRemoved(fromType, toDecl, typeName, differences);
+                    toSupers.superTypeRemoved(fromType, typeName, differences);
                 }
             }
         }
     }
 
-    protected Map<String, ASTClassOrInterfaceType> getMap(ASTClassOrInterfaceDeclaration coid, String extImpClassName) {
+    protected Map<String, ASTClassOrInterfaceType> getMap() {
+        String extImpClassName = getAstClassName();
         Map<String, ASTClassOrInterfaceType> map = new HashMap<String, ASTClassOrInterfaceType>();
-        SimpleNode list = SimpleNodeUtil.findChild(coid, extImpClassName);
+        SimpleNode list = SimpleNodeUtil.findChild(decl, extImpClassName);
 
         if (list == null) {
             return map;

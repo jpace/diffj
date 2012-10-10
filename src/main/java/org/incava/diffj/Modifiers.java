@@ -5,8 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiffs;
-import org.incava.pmdx.*;
+import org.incava.pmdx.SimpleNodeUtil;
 
 public abstract class Modifiers {
     private final SimpleNode node;
@@ -17,26 +16,31 @@ public abstract class Modifiers {
 
     public abstract int[] getModifierTypes();
 
-    public void diff(SimpleNode toNode, Differences differences) {
+    public List<Token> getLeadingTokens() { 
+        return SimpleNodeUtil.getLeadingTokens(node);
+    }
+
+    public Token getFirstToken() {
+        return node.getFirstToken();
+    }
+
+    public void diff(Modifiers toModifiers, Differences differences) {
         int[] modifierTypes = getModifierTypes();
-        List<Token> fromMods = SimpleNodeUtil.getLeadingTokens(node);
-        List<Token> toMods = SimpleNodeUtil.getLeadingTokens(toNode);
 
-        Map<Integer, Token> fromByKind = getModifierMap(node);
-        Map<Integer, Token> toByKind = getModifierMap(toNode);
-        
-        for (int mi = 0; mi < modifierTypes.length; ++mi) {
-            Integer modInt  = Integer.valueOf(modifierTypes[mi]);
-            Token   fromMod = fromByKind.get(modInt);
-            Token   toMod   = toByKind.get(modInt);
+        Map<Integer, Token> fromByKind = getModifierMap();
+        Map<Integer, Token> toByKind = toModifiers.getModifierMap();
 
+        for (int modType : modifierTypes) {
+            Token fromMod = fromByKind.get(modType);
+            Token toMod = toByKind.get(modType);
+            
             if (fromMod == null) {
                 if (toMod != null) {
-                    differences.changed(node.getFirstToken(), toMod, Messages.MODIFIER_ADDED, toMod.image);
+                    differences.changed(getFirstToken(), toMod, Messages.MODIFIER_ADDED, toMod.image);
                 }
             }
             else if (toMod == null) {
-                differences.changed(fromMod, toNode.getFirstToken(), Messages.MODIFIER_REMOVED, fromMod.image);
+                differences.changed(fromMod, toModifiers.getFirstToken(), Messages.MODIFIER_REMOVED, fromMod.image);
             }
         }
     }
@@ -46,8 +50,8 @@ public abstract class Modifiers {
      * assumes that there are no leading tokens of the same type for the given
      * node.
      */
-    protected Map<Integer, Token> getModifierMap(SimpleNode node) {
-        List<Token> mods = SimpleNodeUtil.getLeadingTokens(node);
+    protected Map<Integer, Token> getModifierMap() {
+        List<Token> mods = getLeadingTokens();
         Map<Integer, Token> byKind = new TreeMap<Integer, Token>();
 
         for (Token tk : mods) {

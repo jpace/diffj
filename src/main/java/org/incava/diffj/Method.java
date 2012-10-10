@@ -52,8 +52,9 @@ public class Method extends Function {
     protected void compareModifiers(Method toMethod, Differences differences) {
         SimpleNode fromParent = getParent();
         SimpleNode toParent = toMethod.getParent();
-        MethodModifiers mods = new MethodModifiers(fromParent);
-        mods.diff(toParent, differences);
+        MethodModifiers fromMods = new MethodModifiers(fromParent);
+        MethodModifiers toMods = new MethodModifiers(toParent);
+        fromMods.diff(toMods, differences);
     }
 
     protected void compareParameters(Method toMethod, Differences differences) {

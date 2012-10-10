@@ -10,8 +10,6 @@ import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiff;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -75,23 +73,6 @@ public class Imports {
         Token toStart = getFirstTypeToken(toCompUnit);
         Token toEnd = toStart;
         differences.deleted(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_REMOVED);
-    }
-
-    protected String getImportAsString(ASTImportDeclaration imp) {
-        StringBuilder sb = new StringBuilder();   
-        Token tk  = imp.getFirstToken().next;
-        
-        while (tk != null) {
-            if (tk == imp.getLastToken()) {
-                break;
-            }
-            else {
-                sb.append(tk.image);
-                tk = tk.next;
-            }
-        }
-
-        return sb.toString();
     }
 
     protected Token getFirstTypeToken(ASTCompilationUnit cu) {

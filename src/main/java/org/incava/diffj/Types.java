@@ -21,9 +21,7 @@ public class Types {
         this.types = CompilationUnitUtil.getTypeDeclarations(compUnit);
     }
 
-    public void diff(ASTCompilationUnit toCompUnit, Differences differences) {
-        Types toTypes = new Types(toCompUnit);
-
+    public void diff(Types toTypes, Differences differences) {
         Map<String, ASTTypeDeclaration> fromNamesToTD = getNamesToDeclarations();
         Map<String, ASTTypeDeclaration> toNamesToTD = toTypes.getNamesToDeclarations();
 
@@ -32,8 +30,8 @@ public class Types {
         names.addAll(toNamesToTD.keySet());
 
         for (String name : names) {
-            ASTTypeDeclaration fromTypeDecl  = fromNamesToTD.get(name);
-            ASTTypeDeclaration toTypeDecl  = toNamesToTD.get(name);
+            ASTTypeDeclaration fromTypeDecl = fromNamesToTD.get(name);
+            ASTTypeDeclaration toTypeDecl = toNamesToTD.get(name);
 
             if (fromTypeDecl == null) {
                 Token toName = TypeDeclarationUtil.getName(toTypeDecl);
@@ -41,7 +39,7 @@ public class Types {
             }
             else if (toTypeDecl == null) {
                 Token toName = TypeDeclarationUtil.getName(fromTypeDecl);
-                differences.deleted(fromTypeDecl, toCompUnit, Messages.TYPE_DECLARATION_REMOVED, toName.image);
+                differences.deleted(fromTypeDecl, toTypes.compUnit, Messages.TYPE_DECLARATION_REMOVED, toName.image);
             }
             else {
                 ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromTypeDecl);

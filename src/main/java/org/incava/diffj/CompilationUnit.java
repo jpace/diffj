@@ -22,13 +22,15 @@ public class CompilationUnit {
         
         tr.Ace.log("fileDiffs", fileDiffs);
         
-        Package pd = new Package(compUnit);
-        pd.diff(toCompUnit, differences);
+        Package fromPackage = new Package(compUnit);
+        Package toPackage = new Package(toCompUnit);
+        fromPackage.diff(toPackage, differences);
             
         Imports imps = new Imports(compUnit);
         imps.diff(toCompUnit, differences);
 
-        Types types = new Types(compUnit);
-        types.diff(toCompUnit, differences);
+        Types fromTypes = new Types(compUnit);
+        Types toTypes = new Types(toCompUnit);
+        fromTypes.diff(toTypes, differences);
     }
 }

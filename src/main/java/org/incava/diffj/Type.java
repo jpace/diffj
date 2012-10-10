@@ -15,11 +15,13 @@ public class Type extends Item {
     }
 
     public void diff(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        if (!decl.isInterface() && toDecl.isInterface()) {
-            differences.changed(decl, toDecl, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
+        Type toType = new Type(toDecl);
+        
+        if (!isInterface() && toType.isInterface()) {
+            differences.changed(decl, toType.decl, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
-        else if (decl.isInterface() && !toDecl.isInterface()) {
-            differences.changed(decl, toDecl, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
+        else if (isInterface() && !toType.isInterface()) {
+            differences.changed(decl, toType.decl, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
         }
         
         SimpleNode fromParent = SimpleNodeUtil.getParent(decl);
@@ -32,19 +34,26 @@ public class Type extends Item {
         compareDeclarations(toDecl, differences);
     }
 
+    protected boolean isInterface() {
+        return decl.isInterface();
+    }
+
     protected void compareModifiers(SimpleNode fromNode, SimpleNode toNode, Differences differences) {
-        TypeModifiers typeMods = new TypeModifiers(fromNode);
-        typeMods.diff(toNode, differences);
+        TypeModifiers fromMods = new TypeModifiers(fromNode);
+        TypeModifiers toMods = new TypeModifiers(toNode);
+        fromMods.diff(toMods, differences);
     }
 
     protected void compareExtends(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Extends ed = new Extends(decl);
-        ed.diff(toDecl, differences);
+        Extends fromExtends = new Extends(decl);
+        Extends toExtends = new Extends(toDecl);
+        fromExtends.diff(toExtends, differences);
     }
 
     protected void compareImplements(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Implements id = new Implements(decl);
-        id.diff(toDecl, differences);
+        Implements fromImplements = new Implements(decl);
+        Implements toImplements = new Implements(toDecl);
+        fromImplements.diff(toImplements, differences);
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {

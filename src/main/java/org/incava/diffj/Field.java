@@ -27,8 +27,9 @@ public class Field extends Item {
     protected void compareModifiers(Field toField, Differences differences) {
         SimpleNode fromParent = getParent();
         SimpleNode toParent = toField.getParent();
-        FieldModifiers mods = new FieldModifiers(fromParent);
-        mods.diff(toParent, differences);
+        FieldModifiers fromMods = new FieldModifiers(fromParent);
+        FieldModifiers toMods = new FieldModifiers(toParent);
+        fromMods.diff(toMods, differences);
     }
 
     protected ASTType getType() {
