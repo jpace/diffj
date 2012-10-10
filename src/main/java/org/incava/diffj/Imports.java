@@ -11,7 +11,6 @@ import net.sourceforge.pmd.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.pmdx.CompilationUnitUtil;
-import org.incava.pmdx.SimpleNodeUtil;
 
 public class Imports {
     private final ASTCompilationUnit compUnit;

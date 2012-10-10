@@ -10,19 +10,20 @@ import org.incava.ijdk.util.MultiMap;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public abstract class Items<ItemType extends SimpleNode> {
-    protected final Differences differences;
     private final String clsName;
     private final ASTClassOrInterfaceDeclaration type;
 
-    public Items(ASTClassOrInterfaceDeclaration type, String clsName, Differences differences) {
-        this.differences = differences;
+    public Items(ASTClassOrInterfaceDeclaration type, String clsName) {
         this.clsName = clsName;
         this.type = type;
     }
 
-    public void diff(ASTClassOrInterfaceDeclaration toType, Differences differences) {
-        List<ItemType> fromDecls = getDeclarationsOfClassType(type);
-        List<ItemType> toDecls = getDeclarationsOfClassType(toType);
+    public void diff(ASTClassOrInterfaceDeclaration toTypeDecl, Differences differences) {
+        Type fromType = new Type(type);
+        Type toType = new Type(toTypeDecl);
+
+        List<ItemType> fromDecls = fromType.getDeclarationsOfClassType(clsName);
+        List<ItemType> toDecls = toType.getDeclarationsOfClassType(clsName);
 
         TypeMatches<ItemType> matches = getTypeMatches(fromDecls, toDecls);
 
@@ -31,7 +32,7 @@ public abstract class Items<ItemType extends SimpleNode> {
 
         compareMatches(matches, unprocFromDecls, unprocToDecls, differences);
 
-        addRemoved(unprocFromDecls, toType, differences);
+        addRemoved(unprocFromDecls, toTypeDecl, differences);
         addAdded(unprocToDecls, differences);
     }
 
@@ -43,22 +44,7 @@ public abstract class Items<ItemType extends SimpleNode> {
 
     public abstract double getScore(ItemType fromItem, ItemType toItem);
 
-    public abstract void doCompare(ItemType fromItem, ItemType toItem);
-
-    @SuppressWarnings("unchecked")
-    public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls) {
-        List<ItemType> declList = new ArrayList<ItemType>();
-
-        for (ASTClassOrInterfaceBodyDeclaration decl : decls) {
-            SimpleNode dec = TypeDeclarationUtil.getDeclaration(decl, clsName);
-
-            if (dec != null) {
-                declList.add((ItemType)dec);
-            }   
-        }
-        
-        return declList;
-    }
+    public abstract void doCompare(ItemType fromItem, ItemType toItem, Differences differences);
 
     public TypeMatches<ItemType> getTypeMatches(List<ItemType> fromItems, List<ItemType> toItems) {
         TypeMatches<ItemType> matches = new TypeMatches<ItemType>();
@@ -88,7 +74,7 @@ public abstract class Items<ItemType extends SimpleNode> {
                 ItemType toItem = declPair.getSecond();
 
                 if (unprocFromItems.contains(fromItem) && unprocToItems.contains(toItem)) {
-                    doCompare(fromItem, toItem);
+                    doCompare(fromItem, toItem, differences);
                     
                     procFromItems.add(fromItem);
                     procToItems.add(toItem);
@@ -98,11 +84,6 @@ public abstract class Items<ItemType extends SimpleNode> {
             unprocFromItems.removeAll(procFromItems);
             unprocToItems.removeAll(procToItems);
         }
-    }
-
-    public List<ItemType> getDeclarationsOfClassType(ASTClassOrInterfaceDeclaration coid) {
-        List<ASTClassOrInterfaceBodyDeclaration> decls = TypeDeclarationUtil.getDeclarations(coid);
-        return getDeclarationsOfClass(decls);
     }
 
     public void addAdded(List<ItemType> toItems, Differences differences) {

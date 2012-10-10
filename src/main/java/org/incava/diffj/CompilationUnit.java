@@ -1,9 +1,7 @@
 package org.incava.diffj;
 
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
-import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
-import org.incava.pmdx.CompilationUnitUtil;
 
 public class CompilationUnit {
     private final ASTCompilationUnit compUnit;
@@ -18,9 +16,6 @@ public class CompilationUnit {
         }
 
         Differences differences = new Differences(report);
-        FileDiffs fileDiffs = differences.getFileDiffs();
-        
-        tr.Ace.log("fileDiffs", fileDiffs);
         
         Package fromPackage = new Package(compUnit);
         Package toPackage = new Package(toCompUnit);

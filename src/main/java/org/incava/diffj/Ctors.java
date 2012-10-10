@@ -6,11 +6,11 @@ import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Ctors extends Items<ASTConstructorDeclaration> {
-    public Ctors(ASTClassOrInterfaceDeclaration type, Differences differences) {
-        super(type, "net.sourceforge.pmd.ast.ASTConstructorDeclaration", differences);
+    public Ctors(ASTClassOrInterfaceDeclaration type) {
+        super(type, "net.sourceforge.pmd.ast.ASTConstructorDeclaration");
     }    
 
-    public void doCompare(ASTConstructorDeclaration fromCtor, ASTConstructorDeclaration toCtor) {
+    public void doCompare(ASTConstructorDeclaration fromCtor, ASTConstructorDeclaration toCtor, Differences differences) {
         Ctor ctor = new Ctor(fromCtor);
         ctor.diff(toCtor, differences);
     }

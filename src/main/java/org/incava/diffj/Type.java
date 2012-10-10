@@ -1,5 +1,8 @@
 package org.incava.diffj;
 
+import java.util.ArrayList;
+import java.util.List;
+import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.JavaParserConstants;
@@ -34,6 +37,26 @@ public class Type extends Item {
         compareDeclarations(toDecl, differences);
     }
 
+    public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClassType(String clsName) {
+        List<ASTClassOrInterfaceBodyDeclaration> decls = TypeDeclarationUtil.getDeclarations(decl);
+        return getDeclarationsOfClass(decls, clsName);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls, String clsName) {
+        List<ItemType> declList = new ArrayList<ItemType>();
+
+        for (ASTClassOrInterfaceBodyDeclaration decl : decls) {
+            SimpleNode dec = TypeDeclarationUtil.getDeclaration(decl, clsName);
+
+            if (dec != null) {
+                declList.add((ItemType)dec);
+            }   
+        }
+        
+        return declList;
+    }
+
     protected boolean isInterface() {
         return decl.isInterface();
     }
@@ -57,16 +80,16 @@ public class Type extends Item {
     }
 
     protected void compareDeclarations(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Methods methods = new Methods(decl, differences);
+        Methods methods = new Methods(decl);
         methods.diff(toDecl, differences);
         
-        Fields fields = new Fields(decl, differences);
+        Fields fields = new Fields(decl);
         fields.diff(toDecl, differences);
         
-        Ctors ctors = new Ctors(decl, differences);
+        Ctors ctors = new Ctors(decl);
         ctors.diff(toDecl, differences);
         
-        InnerTypes innerTypes = new InnerTypes(decl, differences);
+        InnerTypes innerTypes = new InnerTypes(decl);
         innerTypes.diff(toDecl, differences);
     }
 }
