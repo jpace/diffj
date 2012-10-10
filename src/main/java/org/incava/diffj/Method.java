@@ -21,6 +21,7 @@ public class Method extends Function {
     }
 
     public void diff(ASTMethodDeclaration toMethod, Differences differences) {
+        compareAccess(SimpleNodeUtil.getParent(method), SimpleNodeUtil.getParent(toMethod), differences);
         compareModifiers(toMethod, differences);
         compareReturnTypes(toMethod, differences);
         compareParameters(toMethod, differences);

@@ -20,6 +20,7 @@ public class Ctor extends Function {
     public void diff(ASTConstructorDeclaration toCtor, Differences differences) {
         tr.Ace.log("this.ctor: " + this.ctor + "; toCtor: " + toCtor);
         
+        compareAccess(SimpleNodeUtil.getParent(ctor), SimpleNodeUtil.getParent(toCtor), differences);
         compareParameters(toCtor, differences);
         compareThrows(toCtor, differences);
         compareBodies(toCtor, differences);

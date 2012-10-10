@@ -12,7 +12,6 @@ public class Ctors extends Items<ASTConstructorDeclaration> {
 
     public void doCompare(ASTConstructorDeclaration fromCtor, ASTConstructorDeclaration toCtor) {
         Ctor ctor = new Ctor(fromCtor);
-        ctor.compareAccess(SimpleNodeUtil.getParent(fromCtor), SimpleNodeUtil.getParent(toCtor), differences);
         ctor.diff(toCtor, differences);
     }
 

@@ -12,7 +12,6 @@ public class Fields extends Items<ASTFieldDeclaration> {
 
     public void doCompare(ASTFieldDeclaration fromField, ASTFieldDeclaration toField) {
         Field field = new Field(fromField);
-        field.compareAccess(SimpleNodeUtil.getParent(fromField), SimpleNodeUtil.getParent(toField), differences);
         field.diff(toField, differences);
     }
 

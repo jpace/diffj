@@ -23,7 +23,7 @@ public class TestCtor extends ItemsTest {
         super(name);
     }
 
-    public void xtestAccessAdded() {
+    public void testAccessAdded() {
         evaluate(new Lines("class Test {",
                            "    Test() {}",
                            "",
@@ -37,7 +37,7 @@ public class TestCtor extends ItemsTest {
                  makeAccessRef(null, "public", loc(2, 5), loc(2, 8), loc(3, 5), loc(3, 10)));
     }
 
-    public void xtestAccessRemoved() {
+    public void testAccessRemoved() {
         evaluate(new Lines("class Test {",
                            "    public Test() {}",
                            "",
@@ -67,7 +67,7 @@ public class TestCtor extends ItemsTest {
     //              makeAccessRef("public", null, loc(2, 5), loc(2, 10), loc(3, 5), loc(3, 8)));
     // }
 
-    public void xtestAccessChanged() {
+    public void testAccessChanged() {
         evaluate(new Lines("class Test {",
                            "    private Test() {}",
                            "",
@@ -81,7 +81,7 @@ public class TestCtor extends ItemsTest {
                  makeAccessRef("private", "public", loc(2, 5), loc(3, 5)));
     }
 
-    public void xtestParameterAddedNoneToOne() {
+    public void testParameterAddedNoneToOne() {
         evaluate(new Lines("class Test {",
                            "    Test() {}",
                            "",
@@ -95,7 +95,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.PARAMETER_ADDED, "i", loc(2, 9), loc(2, 10), loc(3, 18), loc(3, 18)));
     }
 
-    public void xtestParameterAddedOneToTwo() {
+    public void testParameterAddedOneToTwo() {
         evaluate(new Lines("class Test {",
                            "    Test(String s) {}",
                            "",
@@ -109,7 +109,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.PARAMETER_ADDED, "i", loc(2, 9), loc(2, 18), loc(3, 20), loc(3, 28)));
     }
 
-    public void xtestParameterAddedOneToThree() {
+    public void testParameterAddedOneToThree() {
         evaluate(new Lines("class Test {",
                            "    Test(String s) {}",
                            "",
@@ -125,7 +125,7 @@ public class TestCtor extends ItemsTest {
                  new FileDiffChange(paramReordMsg("s", 0, 1), loc(2, 17), loc(2, 17), loc(3, 29), loc(3, 29)));
     }
 
-    public void xtestParameterRemovedOneToNone() {
+    public void testParameterRemovedOneToNone() {
         evaluate(new Lines("class Test {",
                            "    Test(Integer i[][][][]) {}",
                            "",
@@ -139,7 +139,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.PARAMETER_REMOVED, "i", loc(2, 18), loc(2, 18), loc(3, 9), loc(3, 10)));
     }
 
-    public void xtestParameterRemovedTwoToOne() {
+    public void testParameterRemovedTwoToOne() {
         evaluate(new Lines("class Test {",
                            "    Test(String s, Integer i) {}",
                            "",
@@ -153,7 +153,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.PARAMETER_REMOVED, "i", loc(2, 20), loc(2, 28), loc(2, 9), loc(2, 18)));
     }
 
-    public void xtestParameterRemovedThreeToOne() {
+    public void testParameterRemovedThreeToOne() {
         evaluate(new Lines("class Test {",
                            "    Test(List[] ary, String s, Integer i) {}",
                            "",
@@ -169,7 +169,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.PARAMETER_REMOVED, "i",   loc(2, 32), loc(2, 40), loc(2,  9), loc(2, 18)));
     }
 
-    public void xtestParameterChangedType() {
+    public void testParameterChangedType() {
         evaluate(new Lines("class Test {",
                            "    Test(int i) {}",
                            "",
@@ -184,7 +184,7 @@ public class TestCtor extends ItemsTest {
                                           loc(2, 10), loc(2, 14), loc(3, 10), loc(3, 18)));
     }
 
-    public void xtestParameterChangedName() {
+    public void testParameterChangedName() {
         evaluate(new Lines("class Test {",
                            "    Test(int i) {}",
                            "",
@@ -198,7 +198,7 @@ public class TestCtor extends ItemsTest {
                  makeChangedRef(Messages.PARAMETER_NAME_CHANGED, "i", "x", loc(2, 14), loc(3, 14)));
     }
 
-    public void xtestParameterReordered() {
+    public void testParameterReordered() {
         evaluate(new Lines("class Test {",
                            "    Test(int i, double d) {}",
                            "",
@@ -213,7 +213,7 @@ public class TestCtor extends ItemsTest {
                  new FileDiffChange(paramReordMsg("d", 1, 0), loc(2, 24), loc(2, 24), loc(3, 17), loc(3, 17)));
     }
 
-    public void xtestParameterReorderedAndRenamed() {
+    public void testParameterReorderedAndRenamed() {
         evaluate(new Lines("class Test {",
                            "    Test(int i, double d) {}",
                            "",
@@ -228,7 +228,7 @@ public class TestCtor extends ItemsTest {
                  new FileDiffChange(paramReordRenamedMsg("d", 1, "dbl", 0), loc(2, 24), loc(2, 24), loc(3, 17), loc(3, 19)));
     }
 
-    public void xtestParameterOneAddedOneReordered() {
+    public void testParameterOneAddedOneReordered() {
         evaluate(new Lines("class Test {",
                            "    Test(int i) {}",
                            "",
@@ -243,7 +243,7 @@ public class TestCtor extends ItemsTest {
                  new FileDiffChange(paramReordMsg("i", 0, 1), loc(2, 14), loc(2, 14), loc(3, 22), loc(3, 22)));
     }
 
-    public void xtestThrowsAddedNoneToOne() {
+    public void testThrowsAddedNoneToOne() {
         evaluate(new Lines("class Test {",
                            "    Test() {}",
                            "",
@@ -257,7 +257,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.THROWS_ADDED, "Exception", loc(2, 5), loc(2, 13), loc(3, 19), loc(3, 27)));
     }
 
-    public void xtestThrowsAddedOneToTwo() {
+    public void testThrowsAddedOneToTwo() {
         evaluate(new Lines("class Test {",
                            "    Test() throws IOException {}",
                            "",
@@ -271,7 +271,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.THROWS_ADDED, "NullPointerException", loc(2, 19), loc(2, 29), loc(3, 32), loc(3, 51)));
     }
 
-    public void xtestThrowsAddedOneToThree() {
+    public void testThrowsAddedOneToThree() {
         evaluate(new Lines("class Test {",
                            "    Test() throws IOException {}",
                            "",
@@ -287,7 +287,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.THROWS_ADDED, "NullPointerException", loc(2, 19), loc(2, 29), loc(3, 64), loc(3, 83)));
     }
 
-    public void xtestThrowsRemovedOneToNone() {
+    public void testThrowsRemovedOneToNone() {
         evaluate(new Lines("class Test {",
                            "    Test() throws IOException {}",
                            "",
@@ -301,7 +301,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.THROWS_REMOVED, "IOException", loc(2, 19), loc(2, 29), loc(3, 5), loc(3, 13)));
     }
 
-    public void xtestThrowsRemovedTwoToOne() {
+    public void testThrowsRemovedTwoToOne() {
         evaluate(new Lines("class Test {",
                            "    Test() throws IOException, NullPointerException {}",
                            "",
@@ -315,7 +315,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.THROWS_REMOVED, "NullPointerException", loc(2, 32), loc(2, 51), loc(2, 19), loc(2, 29)));
     }
 
-    public void xtestThrowsRemovedThreeToOne() {
+    public void testThrowsRemovedThreeToOne() {
         evaluate(new Lines("class Test {",
                            "    Test() throws ArrayIndexOutOfBoundsException, IOException, NullPointerException {}",
                            "",
@@ -331,7 +331,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeChangedRef(Messages.THROWS_REMOVED, "NullPointerException", loc(2, 64), loc(2, 83), loc(2, 19), loc(2, 29)));
     }
 
-    public void xtestThrowsReordered() {
+    public void testThrowsReordered() {
         evaluate(new Lines("class Test {",
                            "    Test() throws ArrayIndexOutOfBoundsException, IOException {}",
                            "",
@@ -345,7 +345,7 @@ public class TestCtor extends ItemsTest {
                  new FileDiffChange(throwsReordMsg("IOException",                    1, 0), loc(2, 51), loc(2, 61), loc(2, 19), loc(2, 29)));
     }
 
-    public void xtestCodeNotChanged() {
+    public void testCodeNotChanged() {
         evaluate(new Lines("class Test {",
                            "    Test() { i = -1; }",
                            "",
@@ -362,7 +362,7 @@ public class TestCtor extends ItemsTest {
                  NO_CHANGES);
     }
 
-    public void xtestCodeChanged() {
+    public void testCodeChanged() {
         evaluate(new Lines("class Test {",
                            "    Test() { int i = -1; }",
                            "",
@@ -395,7 +395,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeAddedRef(Messages.CODE_ADDED, "Test()", loc(2, 18), loc(2, 18), loc(4, 13), loc(5, 11)));
     }
 
-    public void xtestCodeAddedOwnLine() {
+    public void testCodeAddedOwnLine() {
         evaluate(new Lines("class Test {",
                            "    Test() { ",
                            "        char ch;",
@@ -416,7 +416,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeAddedRef(Messages.CODE_ADDED, "Test()", loc(4, 9), loc(4, 11), loc(5, 9), loc(5, 21)));
     }
 
-    public void xtestCodeDeleted() {
+    public void testCodeDeleted() {
         evaluate(new Lines("class Test {",
                            "    Test() { ",
                            "        int j = 0;",
@@ -433,7 +433,7 @@ public class TestCtor extends ItemsTest {
                  makeCodeDeletedRef(Messages.CODE_REMOVED, "Test()", loc(3, 13), loc(4, 11), loc(3, 18), loc(3, 18)));
     }
     
-    public void xtestCodeInsertedAndChanged() {
+    public void testCodeInsertedAndChanged() {
         evaluate(new Lines("class Test {",
                            "    Test(int i) { i = 1; }",
                            "",

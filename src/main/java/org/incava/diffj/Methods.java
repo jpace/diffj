@@ -15,7 +15,6 @@ public class Methods extends Items<ASTMethodDeclaration> {
 
     public void doCompare(ASTMethodDeclaration fromMethod, ASTMethodDeclaration toMethod) {
         Method method = new Method(fromMethod);
-        method.compareAccess(SimpleNodeUtil.getParent(fromMethod), SimpleNodeUtil.getParent(toMethod), differences);
         method.diff(toMethod, differences);
     }
 

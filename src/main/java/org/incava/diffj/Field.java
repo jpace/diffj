@@ -24,6 +24,7 @@ public class Field extends Item {
     }
 
     public void diff(ASTFieldDeclaration toField, Differences differences) {
+        compareAccess(SimpleNodeUtil.getParent(field), SimpleNodeUtil.getParent(toField), differences);
         compareModifiers(toField, differences);
         compareVariables(toField, differences);
     }
