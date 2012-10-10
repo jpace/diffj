@@ -23,15 +23,16 @@ public class Field extends Item {
         this.field = field;
     }
 
-    public void diff(ASTFieldDeclaration toField, Differences differences) {
-        compareAccess(SimpleNodeUtil.getParent(field), SimpleNodeUtil.getParent(toField), differences);
-        compareModifiers(toField, differences);
-        compareVariables(toField, differences);
+    public void diff(ASTFieldDeclaration toFieldDecl, Differences differences) {
+        Field field = new Field(toFieldDecl);
+        compareAccess(SimpleNodeUtil.getParent(field), SimpleNodeUtil.getParent(toFieldDecl), differences);
+        compareModifiers(toFieldDecl, differences);
+        compareVariables(toFieldDecl, differences);
     }
 
-    protected void compareModifiers(ASTFieldDeclaration to, Differences differences) {
+    protected void compareModifiers(ASTFieldDeclaration toField, Differences differences) {
         SimpleNode fromParent = SimpleNodeUtil.getParent(field);
-        SimpleNode toParent = SimpleNodeUtil.getParent(to);
+        SimpleNode toParent = SimpleNodeUtil.getParent(toField);
         FieldModifiers mods = new FieldModifiers(fromParent);
         mods.diff(toParent, differences);
     }
