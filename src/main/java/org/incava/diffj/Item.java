@@ -16,9 +16,8 @@ public class Item {
         this(null);
     }
 
-    public void compareAccess(SimpleNode toNode, Differences differences) {
-        Access acc = new Access(getParent());
-        acc.diff(toNode, differences);
+    public SimpleNode getNode() {
+        return node;
     }
 
     public void compareAccess(Item toItem, Differences differences) {

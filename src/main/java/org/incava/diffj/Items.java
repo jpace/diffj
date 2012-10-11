@@ -20,6 +20,9 @@ public abstract class Items<ItemType extends SimpleNode> {
         this.clsName = clsName;
     }
 
+    public void diff(Items<ItemType> toItems, Differences differences) {
+    }
+
     public void diff(Type toType, Differences differences) {
         List<ItemType> fromDecls = type.getDeclarationsOfClassType(clsName);
         List<ItemType> toDecls = toType.getDeclarationsOfClassType(clsName);
