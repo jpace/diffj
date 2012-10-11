@@ -76,20 +76,22 @@ public class Parameters {
         }
     }
 
-    protected void markParameterTypeChanged(ASTFormalParameter fromParam, Parameters toParams, int idx, Differences differences) {
+    protected void markParameterTypeChanged(ASTFormalParameter fromFormalParam, Parameters toParams, int idx, Differences differences) {
         ASTFormalParameter toParam = toParams.getParameter(idx);
         String toType = getParameterType(toParam);
-        differences.changed(fromParam, toParam, Messages.PARAMETER_TYPE_CHANGED, getParameterType(fromParam), toType);
+        differences.changed(fromFormalParam, toParam, Messages.PARAMETER_TYPE_CHANGED, getParameterType(fromFormalParam), toType);
     }
 
-    protected void markParameterNameChanged(ASTFormalParameter fromParam, Parameters toParams, int idx, Differences differences) {
-        Token fromNameTk = getParameterName(fromParam);
+    protected void markParameterNameChanged(ASTFormalParameter fromFormalParam, Parameters toParams, int idx, Differences differences) {
+        Parameter fromParam = new Parameter(fromFormalParam);
+        Token fromNameTk = fromParam.getParameterName();
         Token toNameTk = toParams.getParameterName(idx);
         differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_NAME_CHANGED, fromNameTk.image, toNameTk.image);
     }
 
-    protected void checkForReorder(ASTFormalParameter fromParam, int fromIdx, Parameters toParams, int toIdx, Differences differences) {
-        Token fromNameTk = getParameterName(fromParam);
+    protected void checkForReorder(ASTFormalParameter fromFormalParam, int fromIdx, Parameters toParams, int toIdx, Differences differences) {
+        Parameter fromParam = new Parameter(fromFormalParam);
+        Token fromNameTk = fromParam.getParameterName();
         Token toNameTk = toParams.getParameterName(toIdx);
         if (fromNameTk.image.equals(toNameTk.image)) {
             differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
@@ -99,15 +101,16 @@ public class Parameters {
         }
     }
 
-    protected void markReordered(ASTFormalParameter fromParam, int fromIdx, Parameters toParams, int toIdx, Differences differences) {
-        Token fromNameTk = getParameterName(fromParam);
+    protected void markReordered(ASTFormalParameter fromFormalParam, int fromIdx, Parameters toParams, int toIdx, Differences differences) {
+        Token fromNameTk = getParameterName(fromFormalParam);
         ASTFormalParameter toParam = toParams.getParameter(toIdx);
-        differences.changed(fromParam, toParam, Messages.PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
+        differences.changed(fromFormalParam, toParam, Messages.PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
     }
 
-    protected void markRemoved(ASTFormalParameter fromParam, Parameters toParams, Differences differences) {
-        Token fromNameTk = getParameterName(fromParam);
-        differences.changed(fromParam, toParams.params, Messages.PARAMETER_REMOVED, fromNameTk.image);
+    protected void markRemoved(ASTFormalParameter fromFormalParam, Parameters toParams, Differences differences) {
+        Parameter fromParam = new Parameter(fromFormalParam);
+        Token fromNameTk = fromParam.getParameterName();
+        differences.changed(fromFormalParam, toParams.params, Messages.PARAMETER_REMOVED, fromNameTk.image);
     }
 
     /**

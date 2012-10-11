@@ -7,7 +7,7 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public abstract class Function extends Item {
+public abstract class Function extends CodedItem {
     private final SimpleNode node;
     
     public Function(SimpleNode node) {
@@ -28,12 +28,6 @@ public abstract class Function extends Item {
         Parameters toParams = toFunction.getParameters();
         fromParams.diff(toParams, differences);
     }
-
-    protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, Differences differences) {
-        Parameters fromParams = getParameters();
-        Parameters toParams = new Parameters(toFormalParams);
-        fromParams.diff(toParams, differences);
-    }
     
     protected void compareThrows(Function toFunction, Differences differences) {
         Throws fromThrows = getThrows();
@@ -45,14 +39,7 @@ public abstract class Function extends Item {
         return new Throws(node, getThrowsList());
     }
 
-    abstract protected List<Token> getCodeTokens();
-
-    abstract protected String getName();
-
-    protected void compareBlocks(Function toFunction, Differences differences) {
-        String fromName = getName();
-        List<Token> fromTokens = getCodeTokens();
-        List<Token> toTokens = toFunction.getCodeTokens();
-        compareCode(fromName, fromTokens, toTokens, differences);
+    protected Code getCode() {
+        return new Code(getName(), getCodeTokens());
     }
 }

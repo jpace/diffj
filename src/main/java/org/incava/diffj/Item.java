@@ -21,13 +21,6 @@ public class Item {
         acc.diff(toItem.getParent(), differences);
     }
 
-    public void compareCode(String fromName, List<Token> fromTokens, List<Token> toTokens, Differences differences) {
-        // the from and to names are the same
-        Code toCode = new Code(fromName, toTokens);
-        Code fromCode = new Code(fromName, fromTokens);
-        fromCode.diff(toCode, differences);
-    }
-
     public SimpleNode getParent() {
         return SimpleNodeUtil.getParent(node);
     }

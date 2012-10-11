@@ -16,7 +16,7 @@ import org.incava.pmdx.SimpleNodeUtil;
  *     String s = "foo", t = "bar", u = null;
  * </pre>
  */
-public class Variable extends Item {
+public class Variable extends CodedItem {
     private final ASTType type;
     private final ASTVariableDeclarator variable;
     private final ASTVariableInitializer init;
@@ -55,23 +55,10 @@ public class Variable extends Item {
 
     public List<Token> getCodeTokens() {
         return SimpleNodeUtil.getChildTokens(init);
-    }
+    }    
     
     public String getTypeName() {
         return SimpleNodeUtil.toString(type);
-    }
-
-    protected void compareInitCode(Variable toVariable, Differences differences) {
-        String      fromName = getName();
-        List<Token> fromCode = getCodeTokens();
-        List<Token> toCode   = toVariable.getCodeTokens();
-        
-        // It is logically impossible for this to execute where "to"
-        // represents the from-file, and "from" the to-file, since "from.name"
-        // would have matched "to.name" in the first loop of
-        // compareVariableLists
-        
-        compareCode(fromName, fromCode, toCode, differences);
     }
 
     protected void compareVariableInits(Variable toVariable, Differences differences) {
@@ -80,7 +67,7 @@ public class Variable extends Item {
 
         if (hasInitializer()) {
             if (toVariable.hasInitializer()) {
-                compareInitCode(toVariable, differences);
+                compareCode(toVariable, differences);
             }
             else {
                 differences.changed(init, toVariable.variable, Messages.INITIALIZER_REMOVED);

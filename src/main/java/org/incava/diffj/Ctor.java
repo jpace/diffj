@@ -22,7 +22,7 @@ public class Ctor extends Function {
         compareAccess(toCtor, differences);
         compareParameters(toCtor, differences);
         compareThrows(toCtor, differences);
-        compareBlocks(toCtor, differences);
+        compareCode(toCtor, differences);
     }
 
     protected ASTFormalParameters getFormalParameters() {

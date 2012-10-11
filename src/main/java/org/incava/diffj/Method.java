@@ -70,7 +70,7 @@ public class Method extends Function {
 
         if (hasBlock()) {
             if (toMethod.hasBlock()) {
-                compareBlocks(toMethod, differences);
+                compareCode(toMethod, differences);
             }
             else {
                 differences.changed(method, toMethod.method, Messages.METHOD_BLOCK_REMOVED);
