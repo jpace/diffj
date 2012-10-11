@@ -19,10 +19,14 @@ import org.incava.pmdx.SimpleNodeUtil;
 public class Variable extends Item {
     private final ASTType type;
     private final ASTVariableDeclarator variable;
+    private final ASTVariableInitializer init;
 
     public Variable(ASTType type, ASTVariableDeclarator variable) {
+        super(variable);
+        
         this.type = type;
         this.variable = variable;
+        this.init = (ASTVariableInitializer)SimpleNodeUtil.findChild(variable, "net.sourceforge.pmd.ast.ASTVariableInitializer");;
     }
 
     public void diff(Variable toVariable, Differences differences) {
@@ -42,11 +46,14 @@ public class Variable extends Item {
     }
 
     public ASTVariableInitializer getInitializer() {
-        return (ASTVariableInitializer)SimpleNodeUtil.findChild(variable, "net.sourceforge.pmd.ast.ASTVariableInitializer");
+        return init;
     }
 
-    public List<Token> getInitializerCode() {
-        ASTVariableInitializer init = getInitializer();
+    public boolean hasInitializer() {
+        return init != null;
+    }
+
+    public List<Token> getCodeTokens() {
         return SimpleNodeUtil.getChildTokens(init);
     }
     
@@ -55,11 +62,9 @@ public class Variable extends Item {
     }
 
     protected void compareInitCode(Variable toVariable, Differences differences) {
-        String fromName = getName();
-        String toName = toVariable.getName();
-
-        List<Token> fromCode = getInitializerCode();
-        List<Token> toCode = toVariable.getInitializerCode();
+        String      fromName = getName();
+        List<Token> fromCode = getCodeTokens();
+        List<Token> toCode   = toVariable.getCodeTokens();
         
         // It is logically impossible for this to execute where "to"
         // represents the from-file, and "from" the to-file, since "from.name"
@@ -72,17 +77,17 @@ public class Variable extends Item {
     protected void compareVariableInits(Variable toVariable, Differences differences) {
         ASTVariableInitializer fromInit = getInitializer();
         ASTVariableInitializer toInit = toVariable.getInitializer();
-        
-        if (fromInit == null) {
-            if (toInit != null) {
-                differences.changed(variable, toInit, Messages.INITIALIZER_ADDED);
+
+        if (hasInitializer()) {
+            if (toVariable.hasInitializer()) {
+                compareInitCode(toVariable, differences);
+            }
+            else {
+                differences.changed(init, toVariable.variable, Messages.INITIALIZER_REMOVED);
             }
         }
-        else if (toInit == null) {
-            differences.changed(fromInit, toVariable.variable, Messages.INITIALIZER_REMOVED);
-        }
-        else {
-            compareInitCode(toVariable, differences);
+        else if (toVariable.hasInitializer()) {
+            differences.changed(variable, toVariable.getInitializer(), Messages.INITIALIZER_ADDED);
         }
     }
 }

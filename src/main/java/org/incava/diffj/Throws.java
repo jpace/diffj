@@ -16,22 +16,26 @@ public class Throws {
         this.node = node;
         this.nameList = nameList;
     }
-    
-    public void diff(SimpleNode toNode, ASTNameList toNameList, Differences differences) {
-        if (nameList == null) {
-            if (toNameList != null) {
-                addAllThrows(toNameList, differences);
+
+    public boolean isEmpty() {
+        return nameList == null;
+    }
+
+    public void diff(Throws toThrows, Differences differences) {
+        if (isEmpty()) {
+            if (!toThrows.isEmpty()) {
+                addAllThrows(toThrows, differences);
             }
         }
-        else if (toNameList == null) {
-            removeAllThrows(toNode, differences);
+        else if (toThrows.isEmpty()) {
+            removeAllThrows(toThrows, differences);
         }
         else {
-            compareEachThrow(toNameList, differences);
+            compareEachThrow(toThrows, differences);
         }
     }
 
-    public List<ASTName> getChildNames(ASTNameList nameList) {
+    public List<ASTName> getChildNames() {
         return SimpleNodeUtil.snatchChildren(nameList, "net.sourceforge.pmd.ast.ASTName");
     }
 
@@ -39,47 +43,50 @@ public class Throws {
         differences.changed(fromNode, toNode, msg, SimpleNodeUtil.toString(name));
     }
 
-    protected void addAllThrows(ASTNameList toNameList, Differences differences) {
-        List<ASTName> names = getChildNames(toNameList);
+    protected void addAllThrows(Throws toThrows, Differences differences) {
+        List<ASTName> names = toThrows.getChildNames();
         for (ASTName name : names) {
             changeThrows(node, name, Messages.THROWS_ADDED, name, differences);
         }
     }
 
-    protected void removeAllThrows(SimpleNode toNode, Differences differences) {
-        List<ASTName> names = getChildNames(nameList);
+    protected void removeAllThrows(Throws toThrows, Differences differences) {
+        List<ASTName> names = getChildNames();
         for (ASTName name : names) {
-            changeThrows(name, toNode, Messages.THROWS_REMOVED, name, differences);
+            changeThrows(name, toThrows.node, Messages.THROWS_REMOVED, name, differences);
         }
     }
 
-    protected void compareEachThrow(ASTNameList toNameList, Differences differences) {
-        List<ASTName> fromNames = getChildNames(nameList);
-        List<ASTName> toNames = getChildNames(toNameList);
+    protected ASTName getName(int idx) {
+        return ThrowsUtil.getNameNode(nameList, idx);
+    }
+
+    protected void compareEachThrow(Throws toThrows, Differences differences) {
+        List<ASTName> fromNames = getChildNames();
+        List<ASTName> toNames = toThrows.getChildNames();
 
         for (int fromIdx = 0; fromIdx < fromNames.size(); ++fromIdx) {
             // save a reference to the name here, in case it gets removed
             // from the array in getMatch.
             ASTName fromName = fromNames.get(fromIdx);
-
             int throwsMatch = getMatch(fromNames, fromIdx, toNames);
-
+            
             if (throwsMatch == fromIdx) {
                 continue;
             }
             else if (throwsMatch >= 0) {
-                ASTName toName = ThrowsUtil.getNameNode(toNameList, throwsMatch);
+                ASTName toName = toThrows.getName(throwsMatch);
                 String fromNameStr = SimpleNodeUtil.toString(fromName);
                 differences.changed(fromName, toName, Messages.THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
             }
             else {
-                changeThrows(fromName, toNameList, Messages.THROWS_REMOVED, fromName, differences);
+                changeThrows(fromName, toThrows.nameList, Messages.THROWS_REMOVED, fromName, differences);
             }
         }
 
         for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
             if (toNames.get(toIdx) != null) {
-                ASTName toName = ThrowsUtil.getNameNode(toNameList, toIdx);
+                ASTName toName = toThrows.getName(toIdx);
                 changeThrows(nameList, toName, Messages.THROWS_ADDED, toName, differences);
             }
         }

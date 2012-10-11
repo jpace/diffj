@@ -17,7 +17,7 @@ import org.incava.pmdx.FieldUtil;
  *     String s = "foo", t = "bar", u = null;
  * </pre>
  */
-public class Variables extends Item {
+public class Variables {
     private final ASTType type;
     private final List<ASTVariableDeclarator> variables;
 

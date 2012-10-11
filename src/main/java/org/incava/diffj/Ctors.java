@@ -10,9 +10,10 @@ public class Ctors extends Items<ASTConstructorDeclaration> {
         super(type, "net.sourceforge.pmd.ast.ASTConstructorDeclaration");
     }    
 
-    public void doCompare(ASTConstructorDeclaration fromCtor, ASTConstructorDeclaration toCtor, Differences differences) {
-        Ctor ctor = new Ctor(fromCtor);
-        ctor.diff(toCtor, differences);
+    public void doCompare(ASTConstructorDeclaration fromCtorDecl, ASTConstructorDeclaration toCtorDecl, Differences differences) {
+        Ctor fromCtor = new Ctor(fromCtorDecl);
+        Ctor toCtor = new Ctor(toCtorDecl);
+        fromCtor.diff(toCtor, differences);
     }
 
     public double getScore(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {

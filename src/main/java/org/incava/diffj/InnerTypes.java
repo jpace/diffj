@@ -14,19 +14,19 @@ public class InnerTypes extends Items<ASTClassOrInterfaceDeclaration> {
         fromType.diff(toType, differences);
     }
 
-    public String getName(ASTClassOrInterfaceDeclaration coid) {
-        return ClassUtil.getName(coid).image;
+    public String getName(ASTClassOrInterfaceDeclaration decl) {
+        return ClassUtil.getName(decl).image;
     }
 
-    public String getAddedMessage(ASTClassOrInterfaceDeclaration coid) {
-        return coid.isInterface() ? Messages.INNER_INTERFACE_ADDED : Messages.INNER_CLASS_ADDED;
+    public String getAddedMessage(ASTClassOrInterfaceDeclaration decl) {
+        return decl.isInterface() ? Messages.INNER_INTERFACE_ADDED : Messages.INNER_CLASS_ADDED;
     }
 
-    public String getRemovedMessage(ASTClassOrInterfaceDeclaration coid) {
-        return coid.isInterface() ? Messages.INNER_INTERFACE_REMOVED : Messages.INNER_CLASS_REMOVED;
+    public String getRemovedMessage(ASTClassOrInterfaceDeclaration decl) {
+        return decl.isInterface() ? Messages.INNER_INTERFACE_REMOVED : Messages.INNER_CLASS_REMOVED;
     }
 
-    public double getScore(ASTClassOrInterfaceDeclaration a, ASTClassOrInterfaceDeclaration b) {
-        return ClassUtil.getMatchScore(a, b);
+    public double getScore(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
+        return ClassUtil.getMatchScore(fromDecl, toDecl);
     }
 }

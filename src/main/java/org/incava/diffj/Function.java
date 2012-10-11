@@ -5,12 +5,12 @@ import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Function extends Item {
+public abstract class Function extends Item {
+    private final SimpleNode node;
+    
     public Function(SimpleNode node) {
         super(node);
-    }
-
-    public Function() {
+        this.node = node;
     }
 
     protected void compareParameters(ASTFormalParameters fromFormalParams, ASTFormalParameters toFormalParams, Differences differences) {
@@ -18,8 +18,15 @@ public class Function extends Item {
         params.diff(toFormalParams, differences);
     }
     
-    protected void compareThrows(SimpleNode fromNode, ASTNameList fromNameList, SimpleNode toNode, ASTNameList toNameList, Differences differences) {
-        Throws thrws = new Throws(fromNode, fromNameList);
-        thrws.diff(toNode, toNameList, differences);
+    protected void compareThrows(Function toFunction, Differences differences) {
+        Throws fromThrows = getThrows();
+        Throws toThrows = toFunction.getThrows();
+        fromThrows.diff(toThrows, differences);
     }
+
+    protected Throws getThrows() {
+        return new Throws(node, getThrowsList());
+    }
+
+    abstract protected ASTNameList getThrowsList();
 }

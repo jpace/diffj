@@ -11,10 +11,6 @@ public class Item {
     public Item(SimpleNode node) {
         this.node = node;
     }
-    
-    public Item() {
-        this(null);
-    }
 
     public SimpleNode getNode() {
         return node;

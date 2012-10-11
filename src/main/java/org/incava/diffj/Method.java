@@ -15,10 +15,12 @@ import org.incava.pmdx.SimpleNodeUtil;
 
 public class Method extends Function {
     private final ASTMethodDeclaration method;
+    private final ASTBlock block;
 
     public Method(ASTMethodDeclaration method) {
         super(method);
         this.method = method;
+        this.block = (ASTBlock)SimpleNodeUtil.findChild(method, "net.sourceforge.pmd.ast.ASTBlock");
     }
 
     public void diff(Method toMethod, Differences differences) {
@@ -39,11 +41,15 @@ public class Method extends Function {
     }
 
     protected ASTBlock getBlock() {
-        return (ASTBlock)SimpleNodeUtil.findChild(method, "net.sourceforge.pmd.ast.ASTBlock");
+        return block;
     }
 
     protected SimpleNode getReturnType() {
         return SimpleNodeUtil.findChild(method);
+    }
+
+    protected String getName() {
+        return MethodUtil.getFullName(method);
     }
 
     protected void compareModifiers(Method toMethod, Differences differences) {
@@ -60,30 +66,24 @@ public class Method extends Function {
         compareParameters(fromFormalParams, toFormalParams, differences);
     }
 
-    protected void compareThrows(Method toMethod, Differences differences) {
-        ASTNameList fromThrowsList = getThrowsList();
-        ASTNameList toThrowsList = toMethod.getThrowsList();
-        compareThrows(method, fromThrowsList, toMethod.method, toThrowsList, differences);
+    protected boolean hasBlock() {
+        return block != null;
     }
 
     protected void compareBodies(Method toMethod, Differences differences) {
         // tr.Ace.log("method", method);
         // tr.Ace.log("toMethod", toMethod);
 
-        ASTBlock fromBlock = getBlock();
-        ASTBlock toBlock = toMethod.getBlock();
-
-        if (fromBlock == null) {
-            if (toBlock != null) {
-                differences.changed(method, toMethod.method, Messages.METHOD_BLOCK_ADDED);
+        if (hasBlock()) {
+            if (toMethod.hasBlock()) {
+                compareBlocks(toMethod, differences);
+            }
+            else {
+                differences.changed(method, toMethod.method, Messages.METHOD_BLOCK_REMOVED);
             }
         }
-        else if (toBlock == null) {
-            differences.changed(method, toMethod.method, Messages.METHOD_BLOCK_REMOVED);
-        }
-        else {
-            String fromName = MethodUtil.getFullName(method);
-            compareBlocks(fromName, fromBlock, toBlock, differences);
+        else if (toMethod.hasBlock()) {
+            differences.changed(method, toMethod.method, Messages.METHOD_BLOCK_ADDED);
         }
     }
 
@@ -98,9 +98,14 @@ public class Method extends Function {
     //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(toBlock));        
     // }
 
-    protected void compareBlocks(String fromName, ASTBlock fromBlock, ASTBlock toBlock, Differences differences) {
-        List<Token> fromTokens = SimpleNodeUtil.getChildTokens(fromBlock);
-        List<Token> toTokens = SimpleNodeUtil.getChildTokens(toBlock);
+    protected List<Token> getCodeTokens() {
+        return SimpleNodeUtil.getChildTokens(block);
+    }
+
+    protected void compareBlocks(Method toMethod, Differences differences) {
+        String fromName = getName();
+        List<Token> fromTokens = getCodeTokens();
+        List<Token> toTokens = toMethod.getCodeTokens();
         compareCode(fromName, fromTokens, toTokens, differences);
     }
 
@@ -114,5 +119,4 @@ public class Method extends Function {
             differences.changed(fromRetType, toRetType, Messages.RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
         }
     }
-
 }

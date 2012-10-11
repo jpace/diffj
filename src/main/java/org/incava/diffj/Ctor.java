@@ -19,11 +19,7 @@ public class Ctor extends Function {
         this.ctor = ctor;
     }
 
-    public void diff(ASTConstructorDeclaration toCtorDecl, Differences differences) {
-        tr.Ace.log("this.ctor: " + this.ctor + "; toCtorDecl: " + toCtorDecl);
-
-        Ctor toCtor = new Ctor(toCtorDecl);
-        
+    public void diff(Ctor toCtor, Differences differences) {
         compareAccess(toCtor, differences);
         compareParameters(toCtor, differences);
         compareThrows(toCtor, differences);
@@ -48,13 +44,7 @@ public class Ctor extends Function {
         compareParameters(fromParam, toParams, differences);
     }
 
-    protected void compareThrows(Ctor toCtor, Differences differences) {
-        ASTNameList fromThrows = getThrowsList();
-        ASTNameList toThrows = toCtor.getThrowsList();
-        compareThrows(ctor, fromThrows, toCtor.ctor, toThrows, differences);
-    }
-
-    protected List<Token> getCodeSerially() {
+    protected List<Token> getCodeTokens() {
         // removes all tokens up to the first left brace. This is because ctors
         // don't have their own blocks, unlike methods.
         
@@ -75,8 +65,8 @@ public class Ctor extends Function {
     }
 
     protected void compareBodies(Ctor toCtor, Differences differences) {
-        List<Token> fromCode = getCodeSerially();
-        List<Token> toCode = toCtor.getCodeSerially();
+        List<Token> fromCode = getCodeTokens();
+        List<Token> toCode = toCtor.getCodeTokens();
         String fromName = getName();
         compareCode(fromName, fromCode, toCode, differences);
     }
