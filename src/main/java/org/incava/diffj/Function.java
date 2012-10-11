@@ -6,6 +6,10 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Function extends Item {
+    public Function(SimpleNode node) {
+        super(node);
+    }
+
     public Function() {
     }
 

@@ -11,17 +11,14 @@ public class Field extends Item {
     private final ASTFieldDeclaration field;
 
     public Field(ASTFieldDeclaration field) {
+        super(field);
         this.field = field;
     }
 
     public void diff(Field toField, Differences differences) {
-        compareAccess(SimpleNodeUtil.getParent(field), toField.getParent(), differences);
+        compareAccess(toField, differences);
         compareModifiers(toField, differences);
         compareVariables(toField, differences);
-    }
-
-    protected SimpleNode getParent() {
-        return SimpleNodeUtil.getParent(field);
     }
 
     protected void compareModifiers(Field toField, Differences differences) {

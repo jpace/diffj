@@ -7,22 +7,21 @@ import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
-import org.incava.pmdx.TypeDeclarationUtil;
 
+/**
+ * Items represents the methods, ctors, fields and inner types of a parent type.
+ */
 public abstract class Items<ItemType extends SimpleNode> {
     private final String clsName;
-    private final ASTClassOrInterfaceDeclaration type;
+    private final Type type;
 
-    public Items(ASTClassOrInterfaceDeclaration type, String clsName) {
+    public Items(ASTClassOrInterfaceDeclaration decl, String clsName) {
+        this.type = new Type(decl);
         this.clsName = clsName;
-        this.type = type;
     }
 
-    public void diff(ASTClassOrInterfaceDeclaration toTypeDecl, Differences differences) {
-        Type fromType = new Type(type);
-        Type toType = new Type(toTypeDecl);
-
-        List<ItemType> fromDecls = fromType.getDeclarationsOfClassType(clsName);
+    public void diff(Type toType, Differences differences) {
+        List<ItemType> fromDecls = type.getDeclarationsOfClassType(clsName);
         List<ItemType> toDecls = toType.getDeclarationsOfClassType(clsName);
 
         TypeMatches<ItemType> matches = getTypeMatches(fromDecls, toDecls);
@@ -32,7 +31,7 @@ public abstract class Items<ItemType extends SimpleNode> {
 
         compareMatches(matches, unprocFromDecls, unprocToDecls, differences);
 
-        addRemoved(unprocFromDecls, toTypeDecl, differences);
+        addRemoved(unprocFromDecls, toType, differences);
         addAdded(unprocToDecls, differences);
     }
 
@@ -89,14 +88,14 @@ public abstract class Items<ItemType extends SimpleNode> {
     public void addAdded(List<ItemType> toItems, Differences differences) {
         for (ItemType toItem : toItems) {
             String name = getName(toItem);
-            differences.added(type, toItem, getAddedMessage(toItem), name);
+            differences.added(type.getDeclaration(), toItem, getAddedMessage(toItem), name);
         }
     }
 
-    public void addRemoved(List<ItemType> fromItems, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
+    public void addRemoved(List<ItemType> fromItems, Type toType, Differences differences) {
         for (ItemType fromItem : fromItems) {
             String name = getName(fromItem);
-            differences.deleted(fromItem, toDecl, getRemovedMessage(fromItem), name);
+            differences.deleted(fromItem, toType.getDeclaration(), getRemovedMessage(fromItem), name);
         }
     }
 }

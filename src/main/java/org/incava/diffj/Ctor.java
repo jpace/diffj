@@ -15,6 +15,7 @@ public class Ctor extends Function {
     private final ASTConstructorDeclaration ctor;
 
     public Ctor(ASTConstructorDeclaration ctor) {
+        super(ctor);
         this.ctor = ctor;
     }
 
@@ -23,14 +24,10 @@ public class Ctor extends Function {
 
         Ctor toCtor = new Ctor(toCtorDecl);
         
-        compareAccess(getParent(), toCtor.getParent(), differences);
+        compareAccess(toCtor, differences);
         compareParameters(toCtor, differences);
         compareThrows(toCtor, differences);
         compareBodies(toCtor, differences);
-    }
-
-    protected SimpleNode getParent() {
-        return SimpleNodeUtil.getParent(ctor);
     }
 
     protected ASTFormalParameters getParameters() {

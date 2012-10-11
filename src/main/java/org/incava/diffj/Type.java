@@ -4,22 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.ast.ASTTypeDeclaration;
-import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Type extends Item {
     private final ASTClassOrInterfaceDeclaration decl;
     
     public Type(ASTClassOrInterfaceDeclaration decl) {
+        super(decl);
         this.decl = decl;
     }
 
-    public void diff(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Type toType = new Type(toDecl);
-        
+    public void diff(Type toType, Differences differences) {
         if (!isInterface() && toType.isInterface()) {
             differences.changed(decl, toType.decl, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
@@ -27,14 +23,15 @@ public class Type extends Item {
             differences.changed(decl, toType.decl, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
         }
         
-        SimpleNode fromParent = SimpleNodeUtil.getParent(decl);
-        SimpleNode toParent = SimpleNodeUtil.getParent(toDecl);
+        compareAccess(toType, differences);
+        compareModifiers(toType, differences);
+        compareExtends(toType, differences);
+        compareImplements(toType, differences);
+        compareDeclarations(toType, differences);
+    }
 
-        compareAccess(fromParent, toParent, differences);
-        compareModifiers(fromParent, toParent, differences);
-        compareExtends(toDecl, differences);
-        compareImplements(toDecl, differences);
-        compareDeclarations(toDecl, differences);
+    public ASTClassOrInterfaceDeclaration getDeclaration() {
+        return decl;
     }
 
     public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClassType(String clsName) {
@@ -61,35 +58,63 @@ public class Type extends Item {
         return decl.isInterface();
     }
 
-    protected void compareModifiers(SimpleNode fromNode, SimpleNode toNode, Differences differences) {
-        TypeModifiers fromMods = new TypeModifiers(fromNode);
-        TypeModifiers toMods = new TypeModifiers(toNode);
+    protected TypeModifiers getModifiers() {
+        return new TypeModifiers(getParent());
+    }
+
+    protected Extends getExtends() {
+        return new Extends(decl);
+    }
+
+    protected Implements getImplements() {
+        return new Implements(decl);
+    }
+
+    protected Methods getMethods() {
+        return new Methods(decl);
+    }
+
+    protected Fields getFields() {
+        return new Fields(decl);
+    }
+
+    protected Ctors getCtors() {
+        return new Ctors(decl);
+    }
+
+    protected InnerTypes getInnerTypes() {
+        return new InnerTypes(decl);
+    }
+
+    protected void compareModifiers(Type toType, Differences differences) {
+        TypeModifiers fromMods = getModifiers();
+        TypeModifiers toMods = toType.getModifiers();
         fromMods.diff(toMods, differences);
     }
 
-    protected void compareExtends(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Extends fromExtends = new Extends(decl);
-        Extends toExtends = new Extends(toDecl);
+    protected void compareExtends(Type toType, Differences differences) {
+        Extends fromExtends = getExtends();
+        Extends toExtends = toType.getExtends();
         fromExtends.diff(toExtends, differences);
     }
 
-    protected void compareImplements(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Implements fromImplements = new Implements(decl);
-        Implements toImplements = new Implements(toDecl);
+    protected void compareImplements(Type toType, Differences differences) {
+        Implements fromImplements = getImplements();
+        Implements toImplements = toType.getImplements();
         fromImplements.diff(toImplements, differences);
     }
 
-    protected void compareDeclarations(ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Methods methods = new Methods(decl);
-        methods.diff(toDecl, differences);
+    protected void compareDeclarations(Type toType, Differences differences) {
+        Methods fromMethods = getMethods();
+        fromMethods.diff(toType, differences);
         
-        Fields fields = new Fields(decl);
-        fields.diff(toDecl, differences);
+        Fields fromFields = getFields();
+        fromFields.diff(toType, differences);
         
-        Ctors ctors = new Ctors(decl);
-        ctors.diff(toDecl, differences);
+        Ctors fromCtors = getCtors();
+        fromCtors.diff(toType, differences);
         
-        InnerTypes innerTypes = new InnerTypes(decl);
-        innerTypes.diff(toDecl, differences);
+        InnerTypes fromInnerTypes = getInnerTypes();
+        fromInnerTypes.diff(toType, differences);
     }
 }

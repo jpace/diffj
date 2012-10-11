@@ -3,7 +3,6 @@ package org.incava.diffj;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import org.incava.pmdx.MethodUtil;
-import org.incava.pmdx.SimpleNodeUtil;
 
 public class Methods extends Items<ASTMethodDeclaration> {
     private final MethodUtil methodUtil;

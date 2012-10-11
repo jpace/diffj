@@ -17,20 +17,17 @@ public class Method extends Function {
     private final ASTMethodDeclaration method;
 
     public Method(ASTMethodDeclaration method) {
+        super(method);
         this.method = method;
     }
 
     public void diff(Method toMethod, Differences differences) {
-        compareAccess(getParent(), toMethod.getParent(), differences);
+        compareAccess(toMethod, differences);
         compareModifiers(toMethod, differences);
         compareReturnTypes(toMethod, differences);
         compareParameters(toMethod, differences);
         compareThrows(toMethod, differences);
         compareBodies(toMethod, differences);
-    }
-
-    protected SimpleNode getParent() {
-        return SimpleNodeUtil.getParent(method);
     }
 
     protected ASTFormalParameters getParameters() {
