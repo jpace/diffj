@@ -6,7 +6,6 @@ import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
-import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
@@ -23,10 +22,10 @@ public class Ctor extends Function {
         compareAccess(toCtor, differences);
         compareParameters(toCtor, differences);
         compareThrows(toCtor, differences);
-        compareBodies(toCtor, differences);
+        compareBlocks(toCtor, differences);
     }
 
-    protected ASTFormalParameters getParameters() {
+    protected ASTFormalParameters getFormalParameters() {
         return CtorUtil.getParameters(ctor);
     }
 
@@ -36,13 +35,7 @@ public class Ctor extends Function {
 
     protected String getName() {
         return CtorUtil.getFullName(ctor);
-    }
-    
-    protected void compareParameters(Ctor toCtor, Differences differences) {
-        ASTFormalParameters fromParam = getParameters();
-        ASTFormalParameters toParams = toCtor.getParameters();
-        compareParameters(fromParam, toParams, differences);
-    }
+    }    
 
     protected List<Token> getCodeTokens() {
         // removes all tokens up to the first left brace. This is because ctors
@@ -62,12 +55,5 @@ public class Ctor extends Function {
         }
 
         return children;
-    }
-
-    protected void compareBodies(Ctor toCtor, Differences differences) {
-        List<Token> fromCode = getCodeTokens();
-        List<Token> toCode = toCtor.getCodeTokens();
-        String fromName = getName();
-        compareCode(fromName, fromCode, toCode, differences);
     }
 }

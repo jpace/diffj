@@ -8,8 +8,6 @@ import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiff;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -32,7 +30,7 @@ public class Method extends Function {
         compareBodies(toMethod, differences);
     }
 
-    protected ASTFormalParameters getParameters() {
+    protected ASTFormalParameters getFormalParameters() {
         return MethodUtil.getParameters(method);
     }
 
@@ -52,18 +50,14 @@ public class Method extends Function {
         return MethodUtil.getFullName(method);
     }
 
-    protected void compareModifiers(Method toMethod, Differences differences) {
-        SimpleNode fromParent = getParent();
-        SimpleNode toParent = toMethod.getParent();
-        MethodModifiers fromMods = new MethodModifiers(fromParent);
-        MethodModifiers toMods = new MethodModifiers(toParent);
-        fromMods.diff(toMods, differences);
+    protected MethodModifiers getModifiers() {
+        return new MethodModifiers(getParent());
     }
 
-    protected void compareParameters(Method toMethod, Differences differences) {
-        ASTFormalParameters fromFormalParams = getParameters();
-        ASTFormalParameters toFormalParams = toMethod.getParameters();
-        compareParameters(fromFormalParams, toFormalParams, differences);
+    protected void compareModifiers(Method toMethod, Differences differences) {
+        MethodModifiers fromMods = getModifiers();
+        MethodModifiers toMods = toMethod.getModifiers();
+        fromMods.diff(toMods, differences);
     }
 
     protected boolean hasBlock() {
@@ -100,13 +94,6 @@ public class Method extends Function {
 
     protected List<Token> getCodeTokens() {
         return SimpleNodeUtil.getChildTokens(block);
-    }
-
-    protected void compareBlocks(Method toMethod, Differences differences) {
-        String fromName = getName();
-        List<Token> fromTokens = getCodeTokens();
-        List<Token> toTokens = toMethod.getCodeTokens();
-        compareCode(fromName, fromTokens, toTokens, differences);
     }
 
     protected void compareReturnTypes(Method toMethod, Differences differences) {

@@ -8,7 +8,6 @@ import java.util.Map;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 
 /**

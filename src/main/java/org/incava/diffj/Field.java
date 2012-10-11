@@ -21,11 +21,13 @@ public class Field extends Item {
         compareVariables(toField, differences);
     }
 
+    protected FieldModifiers getModifiers() {
+        return new FieldModifiers(getParent());
+    }
+
     protected void compareModifiers(Field toField, Differences differences) {
-        SimpleNode fromParent = getParent();
-        SimpleNode toParent = toField.getParent();
-        FieldModifiers fromMods = new FieldModifiers(fromParent);
-        FieldModifiers toMods = new FieldModifiers(toParent);
+        FieldModifiers fromMods = getModifiers();
+        FieldModifiers toMods = toField.getModifiers();
         fromMods.diff(toMods, differences);
     }
 
@@ -33,13 +35,14 @@ public class Field extends Item {
         return (ASTType)SimpleNodeUtil.findChild(field, "net.sourceforge.pmd.ast.ASTType");
     }
 
-    protected List<ASTVariableDeclarator> getVariables() {
-        return SimpleNodeUtil.snatchChildren(field, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+    protected Variables getVariables() {
+        List<ASTVariableDeclarator> varDecls = SimpleNodeUtil.snatchChildren(field, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+        return new Variables(getType(), varDecls);
     }
 
     protected void compareVariables(Field toField, Differences differences) {
-        Variables fromVariables = new Variables(getType(), getVariables());
-        Variables toVariables = new Variables(toField.getType(), toField.getVariables());
+        Variables fromVariables = getVariables();
+        Variables toVariables = toField.getVariables();
         fromVariables.diff(toVariables, differences);
     }
 }

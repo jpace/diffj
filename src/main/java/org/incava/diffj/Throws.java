@@ -4,7 +4,6 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTName;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.analysis.FileDiffs;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.ThrowsUtil;
 
