@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.io;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -14,6 +14,8 @@ import net.sourceforge.pmd.ast.JavaParser;
 import net.sourceforge.pmd.ast.ParseException;
 import net.sourceforge.pmd.ast.TokenMgrError;
 import org.incava.analysis.Report;
+import org.incava.diffj.CompilationUnit;
+import org.incava.diffj.DiffJException;
 import org.incava.ijdk.io.ReadOptionType;
 import org.incava.ijdk.io.ReaderExt;
 import org.incava.java.Java;

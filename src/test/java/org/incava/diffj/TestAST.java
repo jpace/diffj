@@ -6,6 +6,7 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
 import org.incava.pmdx.SimpleNodeUtil;

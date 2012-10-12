@@ -1,7 +1,8 @@
-package org.incava.diffj;
+package org.incava.diffj.io;
 
 import java.io.File;
 import org.incava.analysis.Report;
+import org.incava.diffj.DiffJException;
 
 /**
  * Creates Java filesystem elements (files and directories).

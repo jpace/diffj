@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.io;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.incava.analysis.Report;
+import org.incava.diffj.DiffJException;
 
 /**
  * A directory that may or not have Java files.

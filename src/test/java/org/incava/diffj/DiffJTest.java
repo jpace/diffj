@@ -8,6 +8,7 @@ import org.incava.analysis.BriefReport;
 import org.incava.analysis.DetailedReport;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.Report;
+import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;

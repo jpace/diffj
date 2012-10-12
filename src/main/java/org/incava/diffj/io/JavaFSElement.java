@@ -1,7 +1,8 @@
-package org.incava.diffj;
+package org.incava.diffj.io;
 
 import java.io.File;
 import org.incava.analysis.Report;
+import org.incava.diffj.DiffJException;
 
 /**
  * A filesystem element, such as a directory or a file.
