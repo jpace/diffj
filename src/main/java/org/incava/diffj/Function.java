@@ -5,6 +5,7 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.params.Parameters;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public abstract class Function extends CodedItem {

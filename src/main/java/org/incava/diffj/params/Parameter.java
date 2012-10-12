@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.params;
 
 import net.sourceforge.pmd.ast.ASTFormalParameter;
 import net.sourceforge.pmd.ast.Token;

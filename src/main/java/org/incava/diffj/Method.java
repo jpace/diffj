@@ -9,6 +9,7 @@ import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.params.Parameters;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
