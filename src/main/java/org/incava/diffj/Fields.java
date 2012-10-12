@@ -27,7 +27,9 @@ public class Fields extends Items<ASTFieldDeclaration> {
         return Messages.FIELD_REMOVED;
     }
 
-    public double getScore(ASTFieldDeclaration fromField, ASTFieldDeclaration toField) {
-        return FieldUtil.getMatchScore(fromField, toField);
+    public double getScore(ASTFieldDeclaration fromFieldDecl, ASTFieldDeclaration toFieldDecl) {
+        Field fromField = new Field(fromFieldDecl);
+        Field toField = new Field(toFieldDecl);
+        return fromField.getMatchScore(toField);
     }
 }

@@ -5,11 +5,8 @@ import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import org.incava.pmdx.MethodUtil;
 
 public class Methods extends Items<ASTMethodDeclaration> {
-    private final MethodUtil methodUtil;
-
     public Methods(ASTClassOrInterfaceDeclaration type) {
         super(type, "net.sourceforge.pmd.ast.ASTMethodDeclaration");
-        methodUtil = new MethodUtil();
     }    
 
     public void doCompare(ASTMethodDeclaration fromMethodDecl, ASTMethodDeclaration toMethodDecl, Differences differences) {
