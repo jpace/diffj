@@ -3,7 +3,7 @@ apply plugin: 'application'
 
 group = 'org.incava.diffj'
 version ='1.4.0'
-mainClassName = 'org.incava.diffj.DiffJ'
+mainClassName = 'org.incava.diffj.app.DiffJ'
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ allprojects {
 
 jar { 
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } 
-    manifest { attributes 'Main-Class' : 'org.incava.diffj.DiffJ' }
+    manifest { attributes 'Main-Class' : 'org.incava.diffj.app.DiffJ' }
 }
 
 test {

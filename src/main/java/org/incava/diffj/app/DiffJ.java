@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.app;
 
 import java.io.File;
 import java.io.OutputStreamWriter;
@@ -9,6 +9,7 @@ import org.incava.analysis.BriefReport;
 import org.incava.analysis.DetailedReport;
 import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
+import org.incava.diffj.*;
 import org.incava.ijdk.util.ListExt;
 import org.incava.qualog.Qualog;
 

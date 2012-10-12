@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.app;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.incava.jagol.StringOption;
 import org.incava.java.Java;
 
 public class Options extends OptionSet {
-    public static final String VERSION = "1.2.1";
+    public static final String VERSION = "1.4.0";
 
     public static final String DEFAULT_SOURCE = Java.SOURCE_1_5;
 
