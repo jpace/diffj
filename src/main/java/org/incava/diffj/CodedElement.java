@@ -4,8 +4,8 @@ import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 
-public abstract class CodedItem extends Item {
-    public CodedItem(SimpleNode node) {
+public abstract class CodedElement extends Element {
+    public CodedElement(SimpleNode node) {
         super(node);
     }
 
@@ -21,9 +21,9 @@ public abstract class CodedItem extends Item {
         fromCode.diff(toCode, differences);
     }
 
-    public void compareCode(CodedItem toCodedItem, Differences differences) {
+    public void compareCode(CodedElement toCodedElement, Differences differences) {
         Code fromCode = getCode();
-        Code toCode = toCodedItem.getCode();
+        Code toCode = toCodedElement.getCode();
         fromCode.diff(toCode, differences);
     }
 }

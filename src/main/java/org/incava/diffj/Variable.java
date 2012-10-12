@@ -16,7 +16,7 @@ import org.incava.pmdx.SimpleNodeUtil;
  *     String s = "foo", t = "bar", u = null;
  * </pre>
  */
-public class Variable extends CodedItem {
+public class Variable extends CodedElement {
     private final ASTType type;
     private final ASTVariableDeclarator variable;
     private final ASTVariableInitializer init;

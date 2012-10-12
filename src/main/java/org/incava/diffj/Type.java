@@ -10,7 +10,7 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class Type extends Item {
+public class Type extends Element {
     private final ASTClassOrInterfaceDeclaration decl;
     
     public Type(ASTClassOrInterfaceDeclaration decl) {

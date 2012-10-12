@@ -5,10 +5,10 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Item {
+public class Element {
     private final SimpleNode node;
     
-    public Item(SimpleNode node) {
+    public Element(SimpleNode node) {
         this.node = node;
     }
 
@@ -16,9 +16,9 @@ public class Item {
         return node;
     }
 
-    public void compareAccess(Item toItem, Differences differences) {
+    public void compareAccess(Element toElement, Differences differences) {
         Access acc = new Access(getParent());
-        acc.diff(toItem.getParent(), differences);
+        acc.diff(toElement.getParent(), differences);
     }
 
     public SimpleNode getParent() {

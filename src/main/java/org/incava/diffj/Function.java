@@ -8,7 +8,7 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.params.Parameters;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public abstract class Function extends CodedItem {
+public abstract class Function extends CodedElement {
     private final SimpleNode node;
     
     public Function(SimpleNode node) {
