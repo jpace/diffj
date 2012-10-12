@@ -4,11 +4,13 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlock;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
+import net.sourceforge.pmd.ast.ASTMethodDeclarator;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.pmdx.MethodUtil;
+import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Method extends Function {
@@ -46,6 +48,9 @@ public class Method extends Function {
         return SimpleNodeUtil.findChild(method);
     }
 
+    /**
+     * This returns the full method name/signature, including parameters.
+     */
     protected String getName() {
         return MethodUtil.getFullName(method);
     }
@@ -105,5 +110,27 @@ public class Method extends Function {
         if (!fromRetTypeStr.equals(toRetTypeStr)) {
             differences.changed(fromRetType, toRetType, Messages.RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
         }
+    }
+
+    /**
+     * This returns only the method name, without the parameters.
+     */
+    public String getMethodName() {
+        ASTMethodDeclarator decl = MethodUtil.getDeclarator(method);
+        return decl.getFirstToken().image;
+    }
+
+    public double getMatchScore(Method toMethod) {
+        String fromName = getMethodName();
+        String toName = toMethod.getMethodName();
+
+        if (!fromName.equals(toName)) {
+            return 0;
+        }
+
+        Parameters fromParams = getParameters();
+        Parameters toParams = toMethod.getParameters();
+
+        return fromParams.getMatchScore(toParams);
     }
 }

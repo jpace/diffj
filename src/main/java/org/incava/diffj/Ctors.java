@@ -2,8 +2,10 @@ package org.incava.diffj;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
+import net.sourceforge.pmd.ast.ASTFormalParameters;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.ParameterUtil;
 
 public class Ctors extends Items<ASTConstructorDeclaration> {
     public Ctors(ASTClassOrInterfaceDeclaration type) {
@@ -16,8 +18,14 @@ public class Ctors extends Items<ASTConstructorDeclaration> {
         fromCtor.diff(toCtor, differences);
     }
 
-    public double getScore(ASTConstructorDeclaration a, ASTConstructorDeclaration b) {
-        return CtorUtil.getMatchScore(a, b);
+    public double getScore(ASTConstructorDeclaration fromDecl, ASTConstructorDeclaration toDecl) {
+        Ctor fromCtor = new Ctor(fromDecl);
+        Ctor toCtor = new Ctor(toDecl);
+
+        ASTFormalParameters fromParams = fromCtor.getFormalParameters();
+        ASTFormalParameters toParams = toCtor.getFormalParameters();
+
+        return ParameterUtil.getMatchScore(fromParams, toParams);
     }
 
     public String getName(ASTConstructorDeclaration md) {

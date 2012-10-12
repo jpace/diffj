@@ -18,4 +18,12 @@ public class Parameter {
     protected String getParameterType() {
         return ParameterUtil.getParameterType(param);
     }
+
+    public boolean isTypeEqual(Parameter toParam) {
+        return getParameterType().equals(toParam.getParameterType());
+    }
+
+    public boolean isNameEqual(Parameter toParam) {
+        return getParameterName().equals(toParam.getParameterName());
+    }
 }
