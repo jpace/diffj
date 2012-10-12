@@ -9,7 +9,23 @@ public class ParameterMatch {
         this.score = score;
     }
 
+    public ParameterMatch(int typeMatch, int nameMatch) {
+        this.score = new Integer[] { typeMatch, nameMatch };
+    }
+
     public Integer[] getScore() {
         return score;
+    }
+
+    public int getTypeMatch() {
+        return score[0];
+    }
+
+    public int getNameMatch() {
+        return score[1];
+    }
+    
+    public boolean isExactMatch() {
+        return getTypeMatch() == getNameMatch();
     }
 }

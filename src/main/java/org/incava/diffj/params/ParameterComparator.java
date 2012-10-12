@@ -18,13 +18,17 @@ public class ParameterComparator {
         this.toFormalParamList = toFormalParamList;
     }
 
-    public Integer[] getMatch(int fromIdx) {
-        final Integer[] noMatch = new Integer[] { -1, -1 };
+    public ParameterMatch toMatch(Integer[] score) {
+        return new ParameterMatch(score);
+    }
 
-        Integer[] typeAndNameMatch = getParamMatches(fromIdx);
+    public ParameterMatch getMatch(int fromIdx) {
+        final ParameterMatch noMatch = new ParameterMatch(-1, -1);
+
+        Integer[] typeAndNameMatch = getParamMatch(fromIdx);
         if (typeAndNameMatch[0] >= 0 && typeAndNameMatch[0] == typeAndNameMatch[1]) {
             clearFromLists(fromIdx, typeAndNameMatch[1]);
-            return typeAndNameMatch;
+            return toMatch(typeAndNameMatch);
         }
 
         Integer bestMatch = typeAndNameMatch[0] >= 0 ? typeAndNameMatch[0] : typeAndNameMatch[1];
@@ -44,10 +48,13 @@ public class ParameterComparator {
         }
         
         clearFromLists(fromIdx, bestMatch);
-        return typeAndNameMatch;
+        return toMatch(typeAndNameMatch);
     }
 
-    private Integer[] getParamMatches(int fromIdx) {
+    private Integer[] getParamMatch(int fromIdx) {
+        int typeMatch = -1;
+        int nameMatch = -1;
+
         Integer[] typeAndNameMatch = new Integer[] { -1, -1 };
         ASTFormalParameter fromParam = fromFormalParamList.get(fromIdx);
 
@@ -60,13 +67,15 @@ public class ParameterComparator {
 
             if (areTypesEqual(fromParam, toParam)) {
                 typeAndNameMatch[0] = toIdx;
+                typeMatch = toIdx;
             }
 
             if (areNamesEqual(fromParam, toParam)) {
                 typeAndNameMatch[1] = toIdx;
+                nameMatch = toIdx;
             }
 
-            if (typeAndNameMatch[0] == toIdx && typeAndNameMatch[1] == toIdx) {
+            if (typeMatch == toIdx && nameMatch == toIdx) {
                 return typeAndNameMatch;
             }
         }
