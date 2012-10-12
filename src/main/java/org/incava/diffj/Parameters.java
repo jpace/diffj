@@ -118,7 +118,7 @@ public class Parameters {
 
         for (int idx = 0; idx < size; ++idx) {
             ASTFormalParameter fromFormalParam = fromFormalParamList.get(idx);
-            Integer[] paramMatch = ParameterUtil.getMatch(fromFormalParamList, idx, toFormalParamList);
+            Integer[] paramMatch = getMatch(fromFormalParamList, idx, toFormalParamList);
 
             if (paramMatch[0] == idx && paramMatch[1] == idx) {
                 continue;

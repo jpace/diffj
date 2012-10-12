@@ -22,10 +22,10 @@ public class Ctors extends Items<ASTConstructorDeclaration> {
         Ctor fromCtor = new Ctor(fromDecl);
         Ctor toCtor = new Ctor(toDecl);
 
-        ASTFormalParameters fromParams = fromCtor.getFormalParameters();
-        ASTFormalParameters toParams = toCtor.getFormalParameters();
+        Parameters fromParams = fromCtor.getParameters();
+        Parameters toParams = toCtor.getParameters();
 
-        return ParameterUtil.getMatchScore(fromParams, toParams);
+        return fromParams.getMatchScore(toParams);
     }
 
     public String getName(ASTConstructorDeclaration md) {

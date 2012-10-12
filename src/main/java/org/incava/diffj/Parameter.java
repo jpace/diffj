@@ -24,6 +24,6 @@ public class Parameter {
     }
 
     public boolean isNameEqual(Parameter toParam) {
-        return getParameterName().equals(toParam.getParameterName());
+        return getParameterName().image.equals(toParam.getParameterName().image);
     }
 }
