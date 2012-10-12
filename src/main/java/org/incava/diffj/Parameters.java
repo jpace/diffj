@@ -18,18 +18,21 @@ public class Parameters {
         List<String> fromParamTypes = getParameterTypes();
         List<String> toParamTypes = toParams.getParameterTypes();
 
-        if (fromParamTypes.isEmpty()) {
-            if (!toParamTypes.isEmpty()) {
-                markParametersAdded(toParams, differences);
+        if (hasParameters()) {
+            if (toParams.hasParameters()) {
+                compareEachParameter(toParams, differences);
+            }
+            else {
+                markParametersRemoved(toParams, differences);
             }
         }
-        else if (toParamTypes.isEmpty()) {
-            markParametersRemoved(toParams, differences);
+        else if (toParams.hasParameters()) {
+            markParametersAdded(toParams, differences);
         }
-        else {
-            int fromSize = fromParamTypes.size();
-            compareEachParameter(toParams, fromSize, differences);
-        }
+    }
+
+    protected boolean hasParameters() {
+        return !getParameterTypes().isEmpty();
     }
 
     protected List<String> getParameterTypes() {
@@ -52,16 +55,6 @@ public class Parameters {
         return ParameterUtil.getParameterName(params, idx);
     }
 
-    // $$$ this belongs in a Parameter class.
-    protected Token getParameterName(ASTFormalParameter param) {
-        return ParameterUtil.getParameterName(param);
-    }
-
-    // $$$ this belongs in a Parameter class.
-    protected String getParameterType(ASTFormalParameter param) {
-        return ParameterUtil.getParameterType(param);
-    }
-
     protected void markParametersAdded(Parameters toParams, Differences differences) {
         List<Token> names = toParams.getParameterNames();
         for (Token name : names) {
@@ -77,9 +70,12 @@ public class Parameters {
     }
 
     protected void markParameterTypeChanged(ASTFormalParameter fromFormalParam, Parameters toParams, int idx, Differences differences) {
-        ASTFormalParameter toParam = toParams.getParameter(idx);
-        String toType = getParameterType(toParam);
-        differences.changed(fromFormalParam, toParam, Messages.PARAMETER_TYPE_CHANGED, getParameterType(fromFormalParam), toType);
+        Parameter fromParam = new Parameter(fromFormalParam);
+        ASTFormalParameter toFormalParam = toParams.getParameter(idx);
+        Parameter toParam = new Parameter(toFormalParam);
+        String fromType = fromParam.getParameterType();
+        String toType = toParam.getParameterType();
+        differences.changed(fromFormalParam, toFormalParam, Messages.PARAMETER_TYPE_CHANGED, fromType, toType);
     }
 
     protected void markParameterNameChanged(ASTFormalParameter fromFormalParam, Parameters toParams, int idx, Differences differences) {
@@ -102,7 +98,8 @@ public class Parameters {
     }
 
     protected void markReordered(ASTFormalParameter fromFormalParam, int fromIdx, Parameters toParams, int toIdx, Differences differences) {
-        Token fromNameTk = getParameterName(fromFormalParam);
+        Parameter fromParam = new Parameter(fromFormalParam);
+        Token fromNameTk = fromParam.getParameterName();
         ASTFormalParameter toParam = toParams.getParameter(toIdx);
         differences.changed(fromFormalParam, toParam, Messages.PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
     }
@@ -114,11 +111,13 @@ public class Parameters {
     }
 
     /**
-     * Compares each parameter. Assumes that the lists are the same size.
+     * Compares each parameter.
      */
-    public void compareEachParameter(Parameters toParams, int size, Differences differences) {
+    public void compareEachParameter(Parameters toParams, Differences differences) {
         List<ASTFormalParameter> fromFormalParamList = getParameterList();
         List<ASTFormalParameter> toFormalParamList = toParams.getParameterList();
+
+        int size = fromFormalParamList.size();
 
         for (int idx = 0; idx < size; ++idx) {
             ASTFormalParameter fromFormalParam = fromFormalParamList.get(idx);
@@ -146,13 +145,14 @@ public class Parameters {
 
         Iterator<ASTFormalParameter> toIt = toFormalParamList.iterator();
         for (int toIdx = 0; toIt.hasNext(); ++toIdx) {
-            ASTFormalParameter toParam = toIt.next();
-            if (toParam == null) {
+            ASTFormalParameter toParm = toIt.next();
+            if (toParm == null) {
                 continue;
             }
 
             ASTFormalParameter toFormalParam = toParams.getParameter(toIdx);
-            Token toName = getParameterName(toFormalParam);
+            Parameter toParam = new Parameter(toFormalParam);
+            Token toName = toParam.getParameterName();
             differences.changed(params, toFormalParam, Messages.PARAMETER_ADDED, toName.image);
         }
     }
