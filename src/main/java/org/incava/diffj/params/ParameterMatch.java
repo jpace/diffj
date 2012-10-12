@@ -26,6 +26,12 @@ public class ParameterMatch {
     }
     
     public boolean isExactMatch() {
-        return getTypeMatch() == getNameMatch();
+        int typeMatch = getTypeMatch();
+        return typeMatch >= 0 && getTypeMatch() == getNameMatch();
+    }
+
+    public int getFirstMatch() {
+        int typeMatch = getTypeMatch();
+        return typeMatch >= 0 ? typeMatch : getNameMatch();
     }
 }

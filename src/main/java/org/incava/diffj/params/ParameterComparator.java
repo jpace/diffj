@@ -26,12 +26,14 @@ public class ParameterComparator {
         final ParameterMatch noMatch = new ParameterMatch(-1, -1);
 
         Integer[] typeAndNameMatch = getParamMatch(fromIdx);
-        if (typeAndNameMatch[0] >= 0 && typeAndNameMatch[0] == typeAndNameMatch[1]) {
+        ParameterMatch paramMatch = new ParameterMatch(typeAndNameMatch);
+
+        if (paramMatch.isExactMatch()) {
             clearFromLists(fromIdx, typeAndNameMatch[1]);
-            return toMatch(typeAndNameMatch);
+            return paramMatch;
         }
 
-        Integer bestMatch = typeAndNameMatch[0] >= 0 ? typeAndNameMatch[0] : typeAndNameMatch[1];
+        Integer bestMatch = paramMatch.getFirstMatch();
         
         if (bestMatch < 0) {
             return noMatch;
@@ -39,16 +41,14 @@ public class ParameterComparator {
 
         // make sure there isn't an exact match for this somewhere else in
         // fromParameters
+        // $$$ this apparently isn't reached
         ASTFormalParameter to = toFormalParamList.get(bestMatch);
-
-        int fromMatch = getExactMatch(to);
-
-        if (fromMatch >= 0) {
+        if (hasExactMatch(to)) {
             return noMatch;
         }
         
         clearFromLists(fromIdx, bestMatch);
-        return toMatch(typeAndNameMatch);
+        return paramMatch;
     }
 
     private Integer[] getParamMatch(int fromIdx) {
@@ -61,7 +61,7 @@ public class ParameterComparator {
         for (int toIdx = 0; toIdx < toFormalParamList.size(); ++toIdx) {
             ASTFormalParameter toParam = toFormalParamList.get(toIdx);
 
-            if (toParam == null) {
+            if (fromParam == null || toParam == null) {
                 continue;
             }
 
@@ -82,35 +82,31 @@ public class ParameterComparator {
         return typeAndNameMatch;
     }
 
-    private int getExactMatch(ASTFormalParameter toFormalParam) {
+    /**
+     * Returns whether there is an exact match for the given parameter in this
+     * list.
+     */
+    private boolean hasExactMatch(ASTFormalParameter toFormalParam) {
         Parameter toParam = new Parameter(toFormalParam);
 
-        int idx = 0;
         for (ASTFormalParameter from : fromFormalParamList) {
             if (from != null) {
                 Parameter fromParam = new Parameter(from);
                 if (fromParam.isTypeEqual(toParam) && fromParam.isNameEqual(toParam)) {
-                    return idx;
+                    return true;
                 }
             }
-            ++idx;
         }
-        return -1;
+        return false;
     }
 
     private boolean areTypesEqual(ASTFormalParameter fromFormalParam, ASTFormalParameter toFormalParam) {
-        if (fromFormalParam == null) {
-            return false;
-        }
         Parameter fromParam = new Parameter(fromFormalParam);
         Parameter toParam = new Parameter(toFormalParam);
         return fromParam.isTypeEqual(toParam);
     }
 
     private boolean areNamesEqual(ASTFormalParameter fromFormalParam, ASTFormalParameter toFormalParam) {
-        if (fromFormalParam == null) {
-            return false;
-        }
         Parameter fromParam = new Parameter(fromFormalParam);
         Parameter toParam = new Parameter(toFormalParam);
         return fromParam.isNameEqual(toParam);
