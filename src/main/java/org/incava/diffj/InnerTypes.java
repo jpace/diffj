@@ -1,7 +1,6 @@
 package org.incava.diffj;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import org.incava.pmdx.ClassUtil;
 
 public class InnerTypes extends Items<ASTClassOrInterfaceDeclaration> {
     public InnerTypes(ASTClassOrInterfaceDeclaration type) {
@@ -15,7 +14,8 @@ public class InnerTypes extends Items<ASTClassOrInterfaceDeclaration> {
     }
 
     public String getName(ASTClassOrInterfaceDeclaration decl) {
-        return ClassUtil.getName(decl).image;
+        Type type = new Type(decl);
+        return type.getName().image;
     }
 
     public String getAddedMessage(ASTClassOrInterfaceDeclaration decl) {
@@ -27,6 +27,8 @@ public class InnerTypes extends Items<ASTClassOrInterfaceDeclaration> {
     }
 
     public double getScore(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
-        return ClassUtil.getMatchScore(fromDecl, toDecl);
+        Type fromType = new Type(fromDecl);
+        Type toType = new Type(toDecl);
+        return fromType.getMatchScore(toType);
     }
 }

@@ -18,8 +18,10 @@ public class Methods extends Items<ASTMethodDeclaration> {
         fromMethod.diff(toMethod, differences);
     }
 
-    public double getScore(ASTMethodDeclaration a, ASTMethodDeclaration b) {
-        return MethodUtil.getMatchScore(a, b);
+    public double getScore(ASTMethodDeclaration fromMethodDecl, ASTMethodDeclaration toMethodDecl) {
+        Method fromMethod = new Method(fromMethodDecl);
+        Method toMethod = new Method(toMethodDecl);
+        return fromMethod.getMatchScore(toMethod);
     }
 
     public String getName(ASTMethodDeclaration md) {

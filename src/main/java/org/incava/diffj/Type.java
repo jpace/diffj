@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.ast.Token;
+import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Type extends Item {
@@ -116,5 +119,13 @@ public class Type extends Item {
         
         InnerTypes fromInnerTypes = getInnerTypes();
         fromInnerTypes.diff(toType, differences);
+    }
+
+    public Token getName() {
+        return SimpleNodeUtil.findToken(decl, JavaParserConstants.IDENTIFIER);
+    }
+
+    public double getMatchScore(Type toType) {
+        return getName().image.equals(toType.getName().image) ? 1.0 : 0.0;
     }
 }
