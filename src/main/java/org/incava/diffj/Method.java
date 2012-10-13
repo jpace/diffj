@@ -52,7 +52,7 @@ public class Method extends Function implements Diffable<Method> {
     /**
      * This returns the full method name/signature, including parameters.
      */
-    protected String getName() {
+    public String getName() {
         return MethodUtil.getFullName(method);
     }
 

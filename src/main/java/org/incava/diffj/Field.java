@@ -27,6 +27,18 @@ public class Field extends Element implements Diffable<Field> {
         compareVariables(toField, differences);
     }
 
+    public String getName() {
+        return FieldUtil.getNames(field);
+    }
+
+    public String getAddedMessage() {
+        return Messages.FIELD_ADDED;
+    }
+
+    public String getRemovedMessage() {
+        return Messages.FIELD_REMOVED;
+    }
+
     protected FieldModifiers getModifiers() {
         return new FieldModifiers(getParent());
     }

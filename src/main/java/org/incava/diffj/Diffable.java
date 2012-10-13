@@ -7,4 +7,10 @@ public interface Diffable<DiffType extends Diffable> {
     public double getMatchScore(DiffType toDiffable);
 
     public void diff(DiffType toDiffable, Differences differences);
+
+    public String getName();
+
+    public String getAddedMessage();
+
+    public String getRemovedMessage();
 }

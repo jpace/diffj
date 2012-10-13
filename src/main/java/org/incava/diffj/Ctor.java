@@ -34,7 +34,7 @@ public class Ctor extends Function implements Diffable<Ctor> {
         return CtorUtil.getThrowsList(ctor);
     }
 
-    protected String getName() {
+    public String getName() {
         return CtorUtil.getFullName(ctor);
     }    
 

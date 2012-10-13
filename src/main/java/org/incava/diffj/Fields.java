@@ -2,7 +2,6 @@ package org.incava.diffj;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTFieldDeclaration;
-import org.incava.pmdx.FieldUtil;
 
 public class Fields extends Items<Field, ASTFieldDeclaration> {
     public Fields(ASTClassOrInterfaceDeclaration type) {
@@ -13,15 +12,18 @@ public class Fields extends Items<Field, ASTFieldDeclaration> {
         return new Field(fieldDecl);
     }
 
-    public String getName(ASTFieldDeclaration field) {
-        return FieldUtil.getNames(field);
+    public String getName(ASTFieldDeclaration fieldDecl) {
+        Field field = new Field(fieldDecl);
+        return field.getName();
     }
 
-    public String getAddedMessage(ASTFieldDeclaration field) {
-        return Messages.FIELD_ADDED;
+    public String getAddedMessage(ASTFieldDeclaration fieldDecl) {
+        Field field = new Field(fieldDecl);
+        return field.getAddedMessage();
     }
 
-    public String getRemovedMessage(ASTFieldDeclaration field) {
-        return Messages.FIELD_REMOVED;
+    public String getRemovedMessage(ASTFieldDeclaration fieldDecl) {
+        Field field = new Field(fieldDecl);
+        return field.getRemovedMessage();
     }
 }
