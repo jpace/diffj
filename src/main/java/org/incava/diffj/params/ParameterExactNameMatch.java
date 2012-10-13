@@ -1,7 +1,6 @@
 package org.incava.diffj.params;
 
 import net.sourceforge.pmd.ast.ASTFormalParameter;
-import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.Differences;
 import org.incava.diffj.Messages;
 

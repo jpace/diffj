@@ -13,6 +13,8 @@ public class TestMethodParameters extends ItemsTest {
 
     public TestMethodParameters(String name) {
         super(name);
+
+        tr.Ace.setVerbose(true);
     }
 
     public void testParameterAddedNoneToOne() {

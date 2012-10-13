@@ -9,6 +9,6 @@ public class ParameterExactMatch extends ParameterMatch {
     }
 
     public void diff(Differences differences) {
-        tr.Ace.onGreen("differences", differences);
+        // no difference.
     }
 }

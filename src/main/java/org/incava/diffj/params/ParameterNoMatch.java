@@ -8,12 +8,9 @@ import org.incava.diffj.Messages;
 public class ParameterNoMatch extends ParameterMatch {
     public ParameterNoMatch(ASTFormalParameter fromFormalParam, int index, int typeMatch, int nameMatch, Parameters toParams) {
         super(fromFormalParam, index, typeMatch, nameMatch, toParams);
-        tr.Ace.onWhite("index", index);
     }
 
     public void diff(Differences differences) {
-        tr.Ace.onMagenta("differences", differences);
-
         Token fromNameTk = getParameterName();
         differences.changed(fromFormalParam, toParams.getFormalParameters(), Messages.PARAMETER_REMOVED, fromNameTk.image);
     }
