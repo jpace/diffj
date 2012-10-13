@@ -1,11 +1,7 @@
 package org.incava.diffj.params;
 
-import java.util.Iterator;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTFormalParameter;
-import net.sourceforge.pmd.ast.ASTFormalParameters;
-import net.sourceforge.pmd.ast.Token;
-import org.incava.pmdx.ParameterUtil;
 
 public class ParameterComparator {
     public enum StatusType { NAME_CHANGED, TYPE_CHANGED, REORDERED, REMOVED, ADDED };
@@ -37,15 +33,6 @@ public class ParameterComparator {
         if (bestMatch < 0) {
             return noMatch;
         }
-
-        // make sure there isn't an exact match for this somewhere else in
-        // fromParameters
-        // $$$ this apparently isn't reached
-        ASTFormalParameter to = toFormalParamList.get(bestMatch);
-        tr.Ace.onRed("to", to);
-        if (hasExactMatch(to)) {
-            return noMatch;
-        }
         
         clearFromLists(fromIdx, bestMatch);
         return paramMatch;
@@ -55,20 +42,26 @@ public class ParameterComparator {
         int typeMatch = -1;
         int nameMatch = -1;
 
-        ASTFormalParameter fromParam = fromFormalParamList.get(fromIdx);
+        ASTFormalParameter fromFormalParam = fromFormalParamList.get(fromIdx);
+        if (fromFormalParam == null) {
+            return new ParameterMatch(typeMatch, nameMatch);
+        }
+
+        Parameter fromParam = new Parameter(fromFormalParam);
 
         for (int toIdx = 0; toIdx < toFormalParamList.size(); ++toIdx) {
-            ASTFormalParameter toParam = toFormalParamList.get(toIdx);
-
-            if (fromParam == null || toParam == null) {
+            ASTFormalParameter toFormalParam = toFormalParamList.get(toIdx);
+            if (toFormalParam == null) {
                 continue;
             }
 
-            if (areTypesEqual(fromParam, toParam)) {
+            Parameter toParam = new Parameter(toFormalParam);
+
+            if (fromParam.isTypeEqual(toParam)) {
                 typeMatch = toIdx;
             }
 
-            if (areNamesEqual(fromParam, toParam)) {
+            if (fromParam.isNameEqual(toParam)) {
                 nameMatch = toIdx;
             }
 
@@ -77,36 +70,6 @@ public class ParameterComparator {
             }
         }
         return new ParameterMatch(typeMatch, nameMatch);
-    }
-
-    /**
-     * Returns whether there is an exact match for the given parameter in this
-     * list.
-     */
-    private boolean hasExactMatch(ASTFormalParameter toFormalParam) {
-        Parameter toParam = new Parameter(toFormalParam);
-
-        for (ASTFormalParameter from : fromFormalParamList) {
-            if (from != null) {
-                Parameter fromParam = new Parameter(from);
-                if (fromParam.isTypeEqual(toParam) && fromParam.isNameEqual(toParam)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean areTypesEqual(ASTFormalParameter fromFormalParam, ASTFormalParameter toFormalParam) {
-        Parameter fromParam = new Parameter(fromFormalParam);
-        Parameter toParam = new Parameter(toFormalParam);
-        return fromParam.isTypeEqual(toParam);
-    }
-
-    private boolean areNamesEqual(ASTFormalParameter fromFormalParam, ASTFormalParameter toFormalParam) {
-        Parameter fromParam = new Parameter(fromFormalParam);
-        Parameter toParam = new Parameter(toFormalParam);
-        return fromParam.isNameEqual(toParam);
     }
 
     private void clearFromLists(int fromIdx, int toIdx) {

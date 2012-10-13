@@ -19,6 +19,10 @@ public class ParameterMatch {
         return nameMatch;
     }
     
+    public boolean isMatch(int idx) {
+        return typeMatch == idx && nameMatch == idx;
+    }
+
     public boolean isExactMatch() {
         int typeMatch = getTypeMatch();
         return typeMatch >= 0 && getTypeMatch() == getNameMatch();

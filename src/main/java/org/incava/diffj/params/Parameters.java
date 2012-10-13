@@ -123,22 +123,21 @@ public class Parameters {
         for (int idx = 0; idx < size; ++idx) {
             ASTFormalParameter fromFormalParam = fromFormalParamList.get(idx);
             ParameterMatch paramMatch = pc.getMatch(idx);
-            Integer[] paramScore = new Integer[] { paramMatch.getTypeMatch(), paramMatch.getNameMatch() };
 
-            if (paramScore[0] == idx && paramScore[1] == idx) {
+            if (paramMatch.isMatch(idx)) {
                 continue;
             }
-            else if (paramScore[0] == idx) {
+            else if (paramMatch.getTypeMatch() == idx) {
                 markParameterNameChanged(fromFormalParam, toParams, idx, differences);
             }
-            else if (paramScore[1] == idx) {
+            else if (paramMatch.getNameMatch() == idx) {
                 markParameterTypeChanged(fromFormalParam, toParams, idx, differences);
             }
-            else if (paramScore[0] >= 0) {
-                checkForReorder(fromFormalParam, idx, toParams, paramScore[0], differences);
+            else if (paramMatch.getTypeMatch() >= 0) {
+                checkForReorder(fromFormalParam, idx, toParams, paramMatch.getTypeMatch(), differences);
             }
-            else if (paramScore[1] >= 0) {
-                markReordered(fromFormalParam, idx, toParams, paramScore[1], differences);
+            else if (paramMatch.getNameMatch() >= 0) {
+                markReordered(fromFormalParam, idx, toParams, paramMatch.getNameMatch(), differences);
             }
             else {
                 markRemoved(fromFormalParam, toParams, differences);
