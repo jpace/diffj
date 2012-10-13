@@ -1,11 +1,7 @@
 package org.incava.diffj;
 
 import java.text.MessageFormat;
-import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
-import org.incava.diffj.io.JavaFile;
-import org.incava.ijdk.text.Location;
-import org.incava.java.Java;
 
 public class TestCtorThrows extends ItemsTest {
     protected final static String[] THROWS_MSGS = new String[] {

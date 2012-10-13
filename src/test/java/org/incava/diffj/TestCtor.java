@@ -8,12 +8,6 @@ import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
 
 public class TestCtor extends ItemsTest {
-    protected final static String[] THROWS_MSGS = new String[] {
-        Messages.THROWS_REMOVED,
-        null,
-        Messages.THROWS_ADDED,
-    };
-
     public TestCtor(String name) {
         super(name);
     }
@@ -184,10 +178,6 @@ public class TestCtor extends ItemsTest {
 
     protected String paramReordRenamedMsg(String oldName, int oldPosition, String newName, int newPosition) {
         return MessageFormat.format(Messages.PARAMETER_REORDERED_AND_RENAMED, oldName, Integer.valueOf(oldPosition), Integer.valueOf(newPosition), newName);
-    }
-
-    protected String throwsReordMsg(String throwsName, int oldPosition, int newPosition) {
-        return MessageFormat.format(Messages.THROWS_REORDERED, throwsName, Integer.valueOf(oldPosition), Integer.valueOf(newPosition));
     }
 
     protected FileDiff makeChangedRef(String msg, 
