@@ -8,8 +8,10 @@ public class InnerTypes extends Items<ASTClassOrInterfaceDeclaration> {
     }
 
     public void doCompare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        Type fromType = new Type(fromDecl);
-        Type toType = new Type(toDecl);
+        doCompare(new Type(fromDecl), new Type(toDecl), differences);
+    }
+
+    public void doCompare(Type fromType, Type toType, Differences differences) {
         fromType.diff(toType, differences);
     }
 

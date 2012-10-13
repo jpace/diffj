@@ -10,14 +10,20 @@ public class Methods extends Items<ASTMethodDeclaration> {
     }    
 
     public void doCompare(ASTMethodDeclaration fromMethodDecl, ASTMethodDeclaration toMethodDecl, Differences differences) {
-        Method fromMethod = new Method(fromMethodDecl);
-        Method toMethod = new Method(toMethodDecl);
+        doCompare(new Method(fromMethodDecl), new Method(toMethodDecl), differences);
+    }
+
+    public void doCompare(Method fromMethod, Method toMethod, Differences differences) {
         fromMethod.diff(toMethod, differences);
     }
 
     public double getScore(ASTMethodDeclaration fromMethodDecl, ASTMethodDeclaration toMethodDecl) {
         Method fromMethod = new Method(fromMethodDecl);
         Method toMethod = new Method(toMethodDecl);
+        return fromMethod.getMatchScore(toMethod);
+    }
+
+    public double getScore(Method fromMethod, Method toMethod) {
         return fromMethod.getMatchScore(toMethod);
     }
 

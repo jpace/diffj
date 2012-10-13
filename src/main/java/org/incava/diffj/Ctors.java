@@ -14,18 +14,20 @@ public class Ctors extends Items<ASTConstructorDeclaration> {
     }    
 
     public void doCompare(ASTConstructorDeclaration fromCtorDecl, ASTConstructorDeclaration toCtorDecl, Differences differences) {
-        Ctor fromCtor = new Ctor(fromCtorDecl);
-        Ctor toCtor = new Ctor(toCtorDecl);
+        doCompare(new Ctor(fromCtorDecl), new Ctor(toCtorDecl), differences);
+    }
+
+    public void doCompare(Ctor fromCtor, Ctor toCtor, Differences differences) {
         fromCtor.diff(toCtor, differences);
     }
 
     public double getScore(ASTConstructorDeclaration fromDecl, ASTConstructorDeclaration toDecl) {
-        Ctor fromCtor = new Ctor(fromDecl);
-        Ctor toCtor = new Ctor(toDecl);
+        return getScore(new Ctor(fromDecl), new Ctor(toDecl));
+    }
 
+    public double getScore(Ctor fromCtor, Ctor toCtor) {
         Parameters fromParams = fromCtor.getParameters();
         Parameters toParams = toCtor.getParameters();
-
         return fromParams.getMatchScore(toParams);
     }
 

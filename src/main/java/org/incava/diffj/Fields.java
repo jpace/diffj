@@ -10,9 +10,19 @@ public class Fields extends Items<ASTFieldDeclaration> {
     }
 
     public void doCompare(ASTFieldDeclaration fromFieldDecl, ASTFieldDeclaration toFieldDecl, Differences differences) {
-        Field fromField = new Field(fromFieldDecl);
-        Field toField = new Field(toFieldDecl);
+        doCompare(new Field(fromFieldDecl), new Field(toFieldDecl), differences);
+    }
+
+    public void doCompare(Field fromField, Field toField, Differences differences) {
         fromField.diff(toField, differences);
+    }
+
+    public double getScore(ASTFieldDeclaration fromFieldDecl, ASTFieldDeclaration toFieldDecl) {
+        return getScore(new Field(fromFieldDecl), new Field(toFieldDecl));
+    }
+
+    public double getScore(Field fromField, Field toField) {
+        return fromField.getMatchScore(toField);
     }
 
     public String getName(ASTFieldDeclaration field) {
@@ -25,11 +35,5 @@ public class Fields extends Items<ASTFieldDeclaration> {
 
     public String getRemovedMessage(ASTFieldDeclaration field) {
         return Messages.FIELD_REMOVED;
-    }
-
-    public double getScore(ASTFieldDeclaration fromFieldDecl, ASTFieldDeclaration toFieldDecl) {
-        Field fromField = new Field(fromFieldDecl);
-        Field toField = new Field(toFieldDecl);
-        return fromField.getMatchScore(toField);
     }
 }
