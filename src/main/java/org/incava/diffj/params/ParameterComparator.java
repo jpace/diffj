@@ -1,5 +1,6 @@
 package org.incava.diffj.params;
 
+import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTFormalParameter;
 
@@ -12,6 +13,14 @@ public class ParameterComparator {
     public ParameterComparator(List<ASTFormalParameter> fromFormalParamList, List<ASTFormalParameter> toFormalParamList) {
         this.fromFormalParamList = fromFormalParamList;
         this.toFormalParamList = toFormalParamList;
+    }
+
+    public List<ParameterMatch> getMatches() {
+        List<ParameterMatch> matches = new ArrayList<ParameterMatch>();
+        for (int idx = 0; idx < fromFormalParamList.size(); ++idx) {
+            matches.add(getMatch(idx));
+        }
+        return matches;
     }
 
     public ParameterMatch getMatch(int fromIdx) {

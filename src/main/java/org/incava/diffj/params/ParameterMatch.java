@@ -23,6 +23,22 @@ public class ParameterMatch {
         return typeMatch == idx && nameMatch == idx;
     }
 
+    public boolean isTypeMatch(int idx) {
+        return typeMatch == idx;
+    }
+
+    public boolean isNameMatch(int idx) {
+        return nameMatch == idx;
+    }
+
+    public boolean hasTypeMatch() {
+        return typeMatch >= 0;
+    }
+
+    public boolean hasNameMatch() {
+        return nameMatch >= 0;
+    }
+
     public boolean isExactMatch() {
         int typeMatch = getTypeMatch();
         return typeMatch >= 0 && getTypeMatch() == getNameMatch();

@@ -123,20 +123,24 @@ public class Parameters {
         for (int idx = 0; idx < size; ++idx) {
             ASTFormalParameter fromFormalParam = fromFormalParamList.get(idx);
             ParameterMatch paramMatch = pc.getMatch(idx);
+            tr.Ace.cyan("idx", idx);
+            tr.Ace.cyan("paramMatch", paramMatch);
+            tr.Ace.onRed("isMatch", paramMatch.isMatch(idx));
+            tr.Ace.onRed("isExactMatch", paramMatch.isExactMatch());
 
             if (paramMatch.isMatch(idx)) {
                 continue;
             }
-            else if (paramMatch.getTypeMatch() == idx) {
+            else if (paramMatch.isTypeMatch(idx)) {
                 markParameterNameChanged(fromFormalParam, toParams, idx, differences);
             }
-            else if (paramMatch.getNameMatch() == idx) {
+            else if (paramMatch.isNameMatch(idx)) {
                 markParameterTypeChanged(fromFormalParam, toParams, idx, differences);
             }
-            else if (paramMatch.getTypeMatch() >= 0) {
+            else if (paramMatch.hasTypeMatch()) {
                 checkForReorder(fromFormalParam, idx, toParams, paramMatch.getTypeMatch(), differences);
             }
-            else if (paramMatch.getNameMatch() >= 0) {
+            else if (paramMatch.hasNameMatch()) {
                 markReordered(fromFormalParam, idx, toParams, paramMatch.getNameMatch(), differences);
             }
             else {
@@ -161,7 +165,6 @@ public class Parameters {
     public double getMatchScore(Parameters toParams) {
         ParameterTypes fromTypes = new ParameterTypes(getParameterTypes());
         ParameterTypes toTypes = new ParameterTypes(toParams.getParameterTypes());
-
         return fromTypes.getMatchScore(toTypes);
     }
 }

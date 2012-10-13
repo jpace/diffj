@@ -115,8 +115,6 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * @return -1, 0, or 1, for less than, equivalent to, or greater than.
      */
     public int compareTo(FileDiff other) {
-        tr.Ace.cyan("other", other);
-
         if (this == other) {
             return 0;
         }
@@ -145,8 +143,6 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * @return Whether the other reference is equal to this one.
      */
     public boolean equals(Object obj) {
-        tr.Ace.cyan("obj", obj);
-
         if (obj instanceof FileDiff) {
             FileDiff fdiff = (FileDiff)obj;
             return compareTo(fdiff) == 0;
