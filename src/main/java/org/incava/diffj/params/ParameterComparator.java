@@ -1,8 +1,14 @@
 package org.incava.diffj.params;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTFormalParameter;
+=======
+import java.util.List;
+import net.sourceforge.pmd.ast.ASTFormalParameter;
+import org.incava.pmdx.ParameterUtil;
+>>>>>>> 356c9a7fb142e4cc5f65aa1c9deeb00598e7eaa7
 
 public class ParameterComparator {
     public enum StatusType { NAME_CHANGED, TYPE_CHANGED, REORDERED, REMOVED, ADDED };
