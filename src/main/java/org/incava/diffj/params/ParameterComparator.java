@@ -1,14 +1,9 @@
 package org.incava.diffj.params;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTFormalParameter;
-=======
-import java.util.List;
-import net.sourceforge.pmd.ast.ASTFormalParameter;
 import org.incava.pmdx.ParameterUtil;
->>>>>>> 356c9a7fb142e4cc5f65aa1c9deeb00598e7eaa7
 
 public class ParameterComparator {
     public enum StatusType { NAME_CHANGED, TYPE_CHANGED, REORDERED, REMOVED, ADDED };
@@ -40,21 +35,15 @@ public class ParameterComparator {
     public ParameterMatch getMatch(int fromIdx) {
         ASTFormalParameter fromFormalParam = fromFormalParamList.get(fromIdx);        
 
-        tr.Ace.setVerbose(true);
-
         ParameterMatch paramMatch = getParamMatch(fromIdx);
-        tr.Ace.onRed("paramMatch", paramMatch);
-
         if (paramMatch.isExactMatch()) {
             clearFromLists(fromIdx, paramMatch.getNameMatch());
             return paramMatch;
         }
 
         Integer bestMatch = paramMatch.getFirstMatch();
-        tr.Ace.onRed("bestMatch", bestMatch);
-        
         if (bestMatch < 0) {
-            return new ParameterMatch(fromFormalParam, fromIdx, -1, -1);
+            return ParameterMatch.create(fromFormalParam, fromIdx, -1, -1, toParams);
         }
         
         clearFromLists(fromIdx, bestMatch);
@@ -67,7 +56,7 @@ public class ParameterComparator {
 
         ASTFormalParameter fromFormalParam = fromFormalParamList.get(fromIdx);
         if (fromFormalParam == null) {
-            return new ParameterMatch(null, fromIdx, -1, -1);
+            return ParameterMatch.create(null, fromIdx, -1, -1, toParams);
         }
 
         Parameter fromParam = new Parameter(fromFormalParam);
@@ -92,7 +81,7 @@ public class ParameterComparator {
                 break;
             }
         }
-        return new ParameterMatch(fromFormalParam, fromIdx, typeMatch, nameMatch);
+        return ParameterMatch.create(fromFormalParam, fromIdx, typeMatch, nameMatch, toParams);
     }
 
     private void clearFromLists(int fromIdx, int toIdx) {

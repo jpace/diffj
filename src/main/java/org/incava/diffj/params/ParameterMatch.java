@@ -10,16 +10,41 @@ import org.incava.diffj.Messages;
 public class ParameterMatch {
     public enum StatusType { NAME_CHANGED, TYPE_CHANGED, REORDERED, REMOVED, ADDED };
 
-    private final ASTFormalParameter fromFormalParam;
-    private final int index;
-    private final int typeMatch;
-    private final int nameMatch;
+    public static ParameterMatch create(ASTFormalParameter fromFormalParam, int index, int typeMatch, int nameMatch, Parameters toParams) {
+        if (typeMatch == index) {
+            if (nameMatch == index) {
+                return new ParameterExactMatch(fromFormalParam, index, typeMatch, nameMatch, toParams);
+            }
+            else {
+                return new ParameterExactTypeMatch(fromFormalParam, index, typeMatch, nameMatch, toParams);
+            }
+        }
+        else if (nameMatch == index) {
+            return new ParameterExactNameMatch(fromFormalParam, index, typeMatch, nameMatch, toParams);
+        }
+        else if (typeMatch >= 0) {
+            return new ParameterTypeMatch(fromFormalParam, index, typeMatch, nameMatch, toParams);
+        }
+        else if (nameMatch >= 0) {
+            return new ParameterNameMatch(fromFormalParam, index, typeMatch, nameMatch, toParams);
+        }
+        return new ParameterMatch(fromFormalParam, index, typeMatch, nameMatch, toParams);
+    }
 
-    public ParameterMatch(ASTFormalParameter fromFormalParam, int index, int typeMatch, int nameMatch) {
+    protected final ASTFormalParameter fromFormalParam;
+    protected final Parameter fromParam;
+    protected final int index;
+    protected final int typeMatch;
+    protected final int nameMatch;
+    protected final Parameters toParams;
+
+    public ParameterMatch(ASTFormalParameter fromFormalParam, int index, int typeMatch, int nameMatch, Parameters toParams) {
         this.fromFormalParam = fromFormalParam;
+        this.fromParam = new Parameter(fromFormalParam);
         this.index = index;
         this.typeMatch = typeMatch;
         this.nameMatch = nameMatch;
+        this.toParams = toParams;
     }
 
     public int getTypeMatch() {
@@ -30,16 +55,16 @@ public class ParameterMatch {
         return nameMatch;
     }
     
-    public boolean isMatch(int idx) {
-        return typeMatch == idx && nameMatch == idx;
+    public boolean isMatch() {
+        return typeMatch == index && nameMatch == index;
     }
 
-    public boolean isTypeMatch(int idx) {
-        return typeMatch == idx;
+    public boolean isTypeMatch() {
+        return typeMatch == index;
     }
 
-    public boolean isNameMatch(int idx) {
-        return nameMatch == idx;
+    public boolean isNameMatch() {
+        return nameMatch == index;
     }    
 
     public boolean hasTypeMatch() {
@@ -64,74 +89,66 @@ public class ParameterMatch {
         return String.valueOf(typeMatch) + ", " + nameMatch;
     }
 
-    public void diff(int idx, Parameters toParams, Differences differences) {
-        if (isMatch(idx)) {
+    public void diff(Differences differences) {
+        if (isMatch()) {
             return;
         }
-        else if (isTypeMatch(idx)) {
-            markParameterNameChanged(idx, toParams, differences);
+        else if (isTypeMatch()) {
+            markParameterNameChanged(differences);
         }
-        else if (isNameMatch(idx)) {
-            markParameterTypeChanged(idx, toParams, differences);
+        else if (isNameMatch()) {
+            markParameterTypeChanged(differences);
         }
         else if (hasTypeMatch()) {
-            tr.Ace.onBlue("getTypeMatch()", getTypeMatch());
-            checkForReorder(idx, toParams, differences);
+            checkForReorder(differences);
         }
         else if (hasNameMatch()) {
-            markReordered(idx, toParams, differences);
+            markReordered(differences);
         }
         else {
-            markRemoved(idx, toParams, differences);
+            markRemoved(differences);
         }
     }
 
-    public void markReordered(int fromIdx, Parameters toParams, Differences differences) {
-        tr.Ace.bold("-------------------------------------------------------");
-        tr.Ace.bold("fromIdx", fromIdx);
-        tr.Ace.bold("typeMatch", typeMatch);
-        tr.Ace.bold("nameMatch", nameMatch);
-        int toIdx = getNameMatch();
-        tr.Ace.bold("toIdx", toIdx);
-        
-        Parameter fromParam = new Parameter(fromFormalParam);
-        Token fromNameTk = fromParam.getParameterName();
-        ASTFormalParameter toParam = toParams.getParameter(toIdx);
-        differences.changed(fromFormalParam, toParam, Messages.PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
+    protected Token getParameterName() {
+        return fromParam.getParameterName();
     }
 
-    public void checkForReorder(int fromIdx, Parameters toParams, Differences differences) {
+    public void markReordered(Differences differences) {
+        int toIdx = getNameMatch();
+        Token fromNameTk = getParameterName();
+        ASTFormalParameter toParam = toParams.getParameter(toIdx);
+        differences.changed(fromFormalParam, toParam, Messages.PARAMETER_REORDERED, fromNameTk.image, index, toIdx);
+    }
+
+    public void checkForReorder(Differences differences) {
         int toIdx = getTypeMatch();
-        Parameter fromParam = new Parameter(fromFormalParam);
-        Token fromNameTk = fromParam.getParameterName();
+        Token fromNameTk = getParameterName();
         Token toNameTk = toParams.getParameterName(toIdx);
         if (fromNameTk.image.equals(toNameTk.image)) {
-            differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_REORDERED, fromNameTk.image, fromIdx, toIdx);
+            differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_REORDERED, fromNameTk.image, index, toIdx);
         }
         else {
-            differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_REORDERED_AND_RENAMED, fromNameTk.image, fromIdx, toIdx, toNameTk.image);
+            differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_REORDERED_AND_RENAMED, fromNameTk.image, index, toIdx, toNameTk.image);
         }
     }
 
-    public void markRemoved(int idx, Parameters toParams, Differences differences) {
-        Parameter fromParam = new Parameter(fromFormalParam);
-        Token fromNameTk = fromParam.getParameterName();
+    public void markRemoved(Differences differences) {
+        Token fromNameTk = getParameterName();
         differences.changed(fromFormalParam, toParams.getFormalParameters(), Messages.PARAMETER_REMOVED, fromNameTk.image);
     }
 
-    public void markParameterTypeChanged(int idx, Parameters toParams, Differences differences) {
-        Parameter fromParam = new Parameter(fromFormalParam);
-        ASTFormalParameter toFormalParam = toParams.getParameter(idx);
+    public void markParameterTypeChanged(Differences differences) {
+        ASTFormalParameter toFormalParam = toParams.getParameter(index);
         Parameter toParam = new Parameter(toFormalParam);
         String fromType = fromParam.getParameterType();
         String toType = toParam.getParameterType();
         differences.changed(fromFormalParam, toFormalParam, Messages.PARAMETER_TYPE_CHANGED, fromType, toType);
     }
 
-    public void markParameterNameChanged(int idx, Parameters toParams, Differences differences) {
-        Parameter fromParam = new Parameter(fromFormalParam);
-        Token fromNameTk = fromParam.getParameterName();
-        Token toNameTk = toParams.getParameterName(idx);
+    public void markParameterNameChanged(Differences differences) {
+        Token fromNameTk = getParameterName();
+        Token toNameTk = toParams.getParameterName(index);
         differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_NAME_CHANGED, fromNameTk.image, toNameTk.image);
     }
 }

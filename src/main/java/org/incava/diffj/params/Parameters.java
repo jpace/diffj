@@ -85,14 +85,11 @@ public class Parameters {
             ParameterMatch paramMatch = matches.get(idx);
             tr.Ace.cyan("idx", idx);
             tr.Ace.cyan("paramMatch", paramMatch);
-            paramMatch.diff(idx, toParams, differences);
+            paramMatch.diff(differences);
         }
-
-        tr.Ace.yellow("getUnmatchedToParameters()", pc.getUnmatchedToParameters());
 
         List<ASTFormalParameter> unmatchedParams = pc.getUnmatchedToParameters();
         for (ASTFormalParameter unmatchedParam : unmatchedParams) {
-            tr.Ace.bold("unmatchedParam", unmatchedParam);
             if (unmatchedParam == null) {
                 continue;
             }
@@ -101,7 +98,6 @@ public class Parameters {
             // tr.Ace.bold("toFormalParam", toFormalParam);
             Parameter toParam = new Parameter(unmatchedParam);
             Token toName = toParam.getParameterName();
-            tr.Ace.bold("toName", toName);
             differences.changed(params, unmatchedParam, Messages.PARAMETER_ADDED, toName.image);
         }
     }
