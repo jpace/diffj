@@ -8,27 +8,13 @@ import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Ctors extends Items<ASTConstructorDeclaration> {
+public class Ctors extends Items<Ctor, ASTConstructorDeclaration> {
     public Ctors(ASTClassOrInterfaceDeclaration type) {
         super(type, "net.sourceforge.pmd.ast.ASTConstructorDeclaration");
     }    
 
-    public void doCompare(ASTConstructorDeclaration fromCtorDecl, ASTConstructorDeclaration toCtorDecl, Differences differences) {
-        doCompare(new Ctor(fromCtorDecl), new Ctor(toCtorDecl), differences);
-    }
-
-    public void doCompare(Ctor fromCtor, Ctor toCtor, Differences differences) {
-        fromCtor.diff(toCtor, differences);
-    }
-
-    public double getScore(ASTConstructorDeclaration fromDecl, ASTConstructorDeclaration toDecl) {
-        return getScore(new Ctor(fromDecl), new Ctor(toDecl));
-    }
-
-    public double getScore(Ctor fromCtor, Ctor toCtor) {
-        Parameters fromParams = fromCtor.getParameters();
-        Parameters toParams = toCtor.getParameters();
-        return fromParams.getMatchScore(toParams);
+    public Ctor getAstType(ASTConstructorDeclaration ctorDecl) {
+        return new Ctor(ctorDecl);
     }
 
     public String getName(ASTConstructorDeclaration md) {

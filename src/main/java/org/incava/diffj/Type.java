@@ -10,7 +10,7 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class Type extends Element {
+public class Type extends Element implements Diffable<Type> {
     private final ASTClassOrInterfaceDeclaration decl;
     
     public Type(ASTClassOrInterfaceDeclaration decl) {

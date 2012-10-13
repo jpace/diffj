@@ -14,7 +14,7 @@ import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Method extends Function {
+public class Method extends Function implements Diffable<Method> {
     private final ASTMethodDeclaration method;
     private final ASTBlock block;
 

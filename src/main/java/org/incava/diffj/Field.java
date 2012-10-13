@@ -13,7 +13,7 @@ import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.VariableUtil;
 
-public class Field extends Element {
+public class Field extends Element implements Diffable<Field> {
     private final ASTFieldDeclaration field;
 
     public Field(ASTFieldDeclaration field) {

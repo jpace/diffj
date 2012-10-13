@@ -2,17 +2,13 @@ package org.incava.diffj;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 
-public class InnerTypes extends Items<ASTClassOrInterfaceDeclaration> {
+public class InnerTypes extends Items<Type, ASTClassOrInterfaceDeclaration> {
     public InnerTypes(ASTClassOrInterfaceDeclaration type) {
         super(type, "net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration");
     }
 
-    public void doCompare(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl, Differences differences) {
-        doCompare(new Type(fromDecl), new Type(toDecl), differences);
-    }
-
-    public void doCompare(Type fromType, Type toType, Differences differences) {
-        fromType.diff(toType, differences);
+    public Type getAstType(ASTClassOrInterfaceDeclaration decl) {
+        return new Type(decl);
     }
 
     public String getName(ASTClassOrInterfaceDeclaration decl) {
@@ -26,11 +22,5 @@ public class InnerTypes extends Items<ASTClassOrInterfaceDeclaration> {
 
     public String getRemovedMessage(ASTClassOrInterfaceDeclaration decl) {
         return decl.isInterface() ? Messages.INNER_INTERFACE_REMOVED : Messages.INNER_CLASS_REMOVED;
-    }
-
-    public double getScore(ASTClassOrInterfaceDeclaration fromDecl, ASTClassOrInterfaceDeclaration toDecl) {
-        Type fromType = new Type(fromDecl);
-        Type toType = new Type(toDecl);
-        return fromType.getMatchScore(toType);
     }
 }

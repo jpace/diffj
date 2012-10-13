@@ -8,7 +8,6 @@ import org.incava.ijdk.util.DefaultComparator;
 import org.incava.ijdk.util.ListExt;
 import org.incava.ijdk.util.diff.Diff;
 import org.incava.ijdk.util.diff.Difference;
-import org.incava.pmdx.*;
 
 /**
  * A list of tokens. Essentially code, but that class is not yet renamed.

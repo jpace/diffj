@@ -11,7 +11,7 @@ import org.incava.ijdk.util.MultiMap;
 /**
  * Items represents the methods, ctors, fields and inner types of a parent type.
  */
-public abstract class Items<ItemType extends SimpleNode> {
+public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends SimpleNode> {
     private final String clsName;
     private final Type type;
 
@@ -20,7 +20,7 @@ public abstract class Items<ItemType extends SimpleNode> {
         this.clsName = clsName;
     }
 
-    public void diff(Items<ItemType> toItems, Differences differences) {
+    public void diff(Items<ASTType, ItemType> toItems, Differences differences) {
     }
 
     public void diff(Type toType, Differences differences) {
@@ -38,24 +38,24 @@ public abstract class Items<ItemType extends SimpleNode> {
         addAdded(unprocToDecls, differences);
     }
 
+    public abstract ASTType getAstType(ItemType item);
+
     public abstract String getName(ItemType item);
 
     public abstract String getAddedMessage(ItemType item);
 
     public abstract String getRemovedMessage(ItemType item);
 
-    public abstract double getScore(ItemType fromItem, ItemType toItem);
-
-    public abstract void doCompare(ItemType fromItem, ItemType toItem, Differences differences);
-
     public TypeMatches<ItemType> getTypeMatches(List<ItemType> fromItems, List<ItemType> toItems) {
         TypeMatches<ItemType> matches = new TypeMatches<ItemType>();
 
         for (ItemType fromItem : fromItems) {
+            ASTType fromType = getAstType(fromItem);
             for (ItemType toItem : toItems) {
-                double score = getScore(fromItem, toItem);
-                if (score > 0.0) {
-                    matches.add(score, fromItem, toItem);
+                ASTType toType = getAstType(toItem);
+                double matchScore = fromType.getMatchScore(toType);
+                if (matchScore > 0.0) {
+                    matches.add(matchScore, fromItem, toItem);
                 }
             }
         }
@@ -76,7 +76,10 @@ public abstract class Items<ItemType extends SimpleNode> {
                 ItemType toItem = declPair.getSecond();
 
                 if (unprocFromItems.contains(fromItem) && unprocToItems.contains(toItem)) {
-                    doCompare(fromItem, toItem, differences);
+                    ASTType fromType = getAstType(fromItem);
+                    ASTType toType = getAstType(toItem);
+
+                    fromType.diff(toType, differences);
                     
                     procFromItems.add(fromItem);
                     procToItems.add(toItem);

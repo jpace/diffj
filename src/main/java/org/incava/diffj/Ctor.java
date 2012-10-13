@@ -7,10 +7,11 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.params.Parameters;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
-public class Ctor extends Function {
+public class Ctor extends Function implements Diffable<Ctor> {
     private final ASTConstructorDeclaration ctor;
 
     public Ctor(ASTConstructorDeclaration ctor) {
@@ -55,5 +56,11 @@ public class Ctor extends Function {
         }
 
         return children;
+    }
+
+    public double getMatchScore(Ctor toCtor) {
+        Parameters fromParams = getParameters();
+        Parameters toParams = toCtor.getParameters();
+        return fromParams.getMatchScore(toParams);
     }
 }
