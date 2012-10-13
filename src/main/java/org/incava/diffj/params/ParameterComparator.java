@@ -8,11 +8,15 @@ public class ParameterComparator {
     public enum StatusType { NAME_CHANGED, TYPE_CHANGED, REORDERED, REMOVED, ADDED };
     
     private final List<ASTFormalParameter> fromFormalParamList;
-    private final List<ASTFormalParameter> toFormalParamList;
+    private final List<ASTFormalParameter> unmatchedToParams;
+    private final Parameters fromParams;
+    private final Parameters toParams;
     
-    public ParameterComparator(List<ASTFormalParameter> fromFormalParamList, List<ASTFormalParameter> toFormalParamList) {
-        this.fromFormalParamList = fromFormalParamList;
-        this.toFormalParamList = toFormalParamList;
+    public ParameterComparator(Parameters fromParams, Parameters toParams) {
+        this.fromFormalParamList = new ArrayList<ASTFormalParameter>(fromParams.getParameterList());
+        this.unmatchedToParams = new ArrayList<ASTFormalParameter>(toParams.getParameterList());
+        this.fromParams = fromParams;
+        this.toParams = toParams;
     }
 
     public List<ParameterMatch> getMatches() {
@@ -23,8 +27,12 @@ public class ParameterComparator {
         return matches;
     }
 
+    public List<ASTFormalParameter> getUnmatchedToParameters() {
+        return unmatchedToParams;
+    }
+
     public ParameterMatch getMatch(int fromIdx) {
-        final ParameterMatch noMatch = new ParameterMatch(-1, -1);
+        ASTFormalParameter fromFormalParam = fromFormalParamList.get(fromIdx);        
 
         tr.Ace.setVerbose(true);
 
@@ -40,7 +48,7 @@ public class ParameterComparator {
         tr.Ace.onRed("bestMatch", bestMatch);
         
         if (bestMatch < 0) {
-            return noMatch;
+            return new ParameterMatch(fromFormalParam, -1, -1);
         }
         
         clearFromLists(fromIdx, bestMatch);
@@ -53,13 +61,13 @@ public class ParameterComparator {
 
         ASTFormalParameter fromFormalParam = fromFormalParamList.get(fromIdx);
         if (fromFormalParam == null) {
-            return new ParameterMatch(typeMatch, nameMatch);
+            return new ParameterMatch(null, -1, -1);
         }
 
         Parameter fromParam = new Parameter(fromFormalParam);
 
-        for (int toIdx = 0; toIdx < toFormalParamList.size(); ++toIdx) {
-            ASTFormalParameter toFormalParam = toFormalParamList.get(toIdx);
+        for (int toIdx = 0; toIdx < unmatchedToParams.size(); ++toIdx) {
+            ASTFormalParameter toFormalParam = unmatchedToParams.get(toIdx);
             if (toFormalParam == null) {
                 continue;
             }
@@ -78,11 +86,11 @@ public class ParameterComparator {
                 break;
             }
         }
-        return new ParameterMatch(typeMatch, nameMatch);
+        return new ParameterMatch(fromFormalParam, typeMatch, nameMatch);
     }
 
     private void clearFromLists(int fromIdx, int toIdx) {
         fromFormalParamList.set(fromIdx, null);
-        toFormalParamList.set(toIdx, null);
+        unmatchedToParams.set(toIdx, null);
     }
 }
