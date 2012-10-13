@@ -48,7 +48,7 @@ public class ParameterComparator {
         tr.Ace.onRed("bestMatch", bestMatch);
         
         if (bestMatch < 0) {
-            return new ParameterMatch(fromFormalParam, -1, -1);
+            return new ParameterMatch(fromFormalParam, fromIdx, -1, -1);
         }
         
         clearFromLists(fromIdx, bestMatch);
@@ -61,7 +61,7 @@ public class ParameterComparator {
 
         ASTFormalParameter fromFormalParam = fromFormalParamList.get(fromIdx);
         if (fromFormalParam == null) {
-            return new ParameterMatch(null, -1, -1);
+            return new ParameterMatch(null, fromIdx, -1, -1);
         }
 
         Parameter fromParam = new Parameter(fromFormalParam);
@@ -86,7 +86,7 @@ public class ParameterComparator {
                 break;
             }
         }
-        return new ParameterMatch(fromFormalParam, typeMatch, nameMatch);
+        return new ParameterMatch(fromFormalParam, fromIdx, typeMatch, nameMatch);
     }
 
     private void clearFromLists(int fromIdx, int toIdx) {

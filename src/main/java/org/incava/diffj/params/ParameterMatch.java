@@ -11,11 +11,13 @@ public class ParameterMatch {
     public enum StatusType { NAME_CHANGED, TYPE_CHANGED, REORDERED, REMOVED, ADDED };
 
     private final ASTFormalParameter fromFormalParam;
+    private final int index;
     private final int typeMatch;
     private final int nameMatch;
 
-    public ParameterMatch(ASTFormalParameter fromFormalParam, int typeMatch, int nameMatch) {
+    public ParameterMatch(ASTFormalParameter fromFormalParam, int index, int typeMatch, int nameMatch) {
         this.fromFormalParam = fromFormalParam;
+        this.index = index;
         this.typeMatch = typeMatch;
         this.nameMatch = nameMatch;
     }
