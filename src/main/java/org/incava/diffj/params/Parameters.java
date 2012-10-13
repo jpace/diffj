@@ -119,10 +119,11 @@ public class Parameters {
         int size = fromFormalParamList.size();
 
         ParameterComparator pc = new ParameterComparator(fromFormalParamList, toFormalParamList);
+        List<ParameterMatch> matches = pc.getMatches();
 
         for (int idx = 0; idx < size; ++idx) {
             ASTFormalParameter fromFormalParam = fromFormalParamList.get(idx);
-            ParameterMatch paramMatch = pc.getMatch(idx);
+            ParameterMatch paramMatch = matches.get(idx);
             tr.Ace.cyan("idx", idx);
             tr.Ace.cyan("paramMatch", paramMatch);
             tr.Ace.onRed("isMatch", paramMatch.isMatch(idx));
