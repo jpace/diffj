@@ -123,7 +123,7 @@ public class Parameters {
         for (int idx = 0; idx < size; ++idx) {
             ASTFormalParameter fromFormalParam = fromFormalParamList.get(idx);
             ParameterMatch paramMatch = pc.getMatch(idx);
-            Integer[] paramScore = paramMatch.getScore();
+            Integer[] paramScore = new Integer[] { paramMatch.getTypeMatch(), paramMatch.getNameMatch() };
 
             if (paramScore[0] == idx && paramScore[1] == idx) {
                 continue;

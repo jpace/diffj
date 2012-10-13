@@ -18,22 +18,21 @@ public class ParameterComparator {
         this.toFormalParamList = toFormalParamList;
     }
 
-    public ParameterMatch toMatch(Integer[] score) {
-        return new ParameterMatch(score);
-    }
-
     public ParameterMatch getMatch(int fromIdx) {
         final ParameterMatch noMatch = new ParameterMatch(-1, -1);
 
-        Integer[] typeAndNameMatch = getParamMatch(fromIdx);
-        ParameterMatch paramMatch = new ParameterMatch(typeAndNameMatch);
+        tr.Ace.setVerbose(true);
+
+        ParameterMatch paramMatch = getParamMatch(fromIdx);
+        tr.Ace.onRed("paramMatch", paramMatch);
 
         if (paramMatch.isExactMatch()) {
-            clearFromLists(fromIdx, typeAndNameMatch[1]);
+            clearFromLists(fromIdx, paramMatch.getNameMatch());
             return paramMatch;
         }
 
         Integer bestMatch = paramMatch.getFirstMatch();
+        tr.Ace.onRed("bestMatch", bestMatch);
         
         if (bestMatch < 0) {
             return noMatch;
@@ -43,6 +42,7 @@ public class ParameterComparator {
         // fromParameters
         // $$$ this apparently isn't reached
         ASTFormalParameter to = toFormalParamList.get(bestMatch);
+        tr.Ace.onRed("to", to);
         if (hasExactMatch(to)) {
             return noMatch;
         }
@@ -51,11 +51,10 @@ public class ParameterComparator {
         return paramMatch;
     }
 
-    private Integer[] getParamMatch(int fromIdx) {
+    private ParameterMatch getParamMatch(int fromIdx) {
         int typeMatch = -1;
         int nameMatch = -1;
 
-        Integer[] typeAndNameMatch = new Integer[] { -1, -1 };
         ASTFormalParameter fromParam = fromFormalParamList.get(fromIdx);
 
         for (int toIdx = 0; toIdx < toFormalParamList.size(); ++toIdx) {
@@ -66,20 +65,18 @@ public class ParameterComparator {
             }
 
             if (areTypesEqual(fromParam, toParam)) {
-                typeAndNameMatch[0] = toIdx;
                 typeMatch = toIdx;
             }
 
             if (areNamesEqual(fromParam, toParam)) {
-                typeAndNameMatch[1] = toIdx;
                 nameMatch = toIdx;
             }
 
             if (typeMatch == toIdx && nameMatch == toIdx) {
-                return typeAndNameMatch;
+                break;
             }
         }
-        return typeAndNameMatch;
+        return new ParameterMatch(typeMatch, nameMatch);
     }
 
     /**

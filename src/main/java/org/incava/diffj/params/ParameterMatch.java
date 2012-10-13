@@ -3,26 +3,20 @@ package org.incava.diffj.params;
 public class ParameterMatch {
     public enum StatusType { NAME_CHANGED, TYPE_CHANGED, REORDERED, REMOVED, ADDED };
 
-    private final Integer[] score;
-
-    public ParameterMatch(Integer[] score) {
-        this.score = score;
-    }
+    private final int typeMatch;
+    private final int nameMatch;
 
     public ParameterMatch(int typeMatch, int nameMatch) {
-        this.score = new Integer[] { typeMatch, nameMatch };
-    }
-
-    public Integer[] getScore() {
-        return score;
+        this.typeMatch = typeMatch;
+        this.nameMatch = nameMatch;
     }
 
     public int getTypeMatch() {
-        return score[0];
+        return typeMatch;
     }
 
     public int getNameMatch() {
-        return score[1];
+        return nameMatch;
     }
     
     public boolean isExactMatch() {
@@ -33,5 +27,9 @@ public class ParameterMatch {
     public int getFirstMatch() {
         int typeMatch = getTypeMatch();
         return typeMatch >= 0 ? typeMatch : getNameMatch();
+    }
+
+    public String toString() {
+        return String.valueOf(typeMatch) + ", " + nameMatch;
     }
 }
