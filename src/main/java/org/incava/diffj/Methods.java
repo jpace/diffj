@@ -13,15 +13,18 @@ public class Methods extends Items<Method, ASTMethodDeclaration> {
         return new Method(methodDecl);
     }
 
-    public String getName(ASTMethodDeclaration md) {
-        return MethodUtil.getFullName(md);
+    public String getName(ASTMethodDeclaration methodDecl) {
+        Method meth = new Method(methodDecl);
+        return meth.getName();
     }
 
-    public String getAddedMessage(ASTMethodDeclaration md) {
-        return Messages.METHOD_ADDED;
+    public String getAddedMessage(ASTMethodDeclaration methodDecl) {
+        Method meth = new Method(methodDecl);
+        return meth.getAddedMessage();
     }
 
-    public String getRemovedMessage(ASTMethodDeclaration md) {
-        return Messages.METHOD_REMOVED;
+    public String getRemovedMessage(ASTMethodDeclaration methodDecl) {
+        Method meth = new Method(methodDecl);
+        return meth.getRemovedMessage();
     }
 }

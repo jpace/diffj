@@ -17,15 +17,19 @@ public class Ctors extends Items<Ctor, ASTConstructorDeclaration> {
         return new Ctor(ctorDecl);
     }
 
-    public String getName(ASTConstructorDeclaration md) {
-        return CtorUtil.getFullName(md);
+    public String getName(ASTConstructorDeclaration ctorDecl) {
+        Ctor ctor = new Ctor(ctorDecl);
+        return ctor.getName();
     }
 
-    public String getAddedMessage(ASTConstructorDeclaration md) {
-        return Messages.CONSTRUCTOR_ADDED;
+
+    public String getAddedMessage(ASTConstructorDeclaration ctorDecl) {
+        Ctor ctor = new Ctor(ctorDecl);
+        return ctor.getAddedMessage();
     }
 
-    public String getRemovedMessage(ASTConstructorDeclaration md) {
-        return Messages.CONSTRUCTOR_REMOVED;
+    public String getRemovedMessage(ASTConstructorDeclaration ctorDecl) {
+        Ctor ctor = new Ctor(ctorDecl);
+        return ctor.getRemovedMessage();
     }
 }

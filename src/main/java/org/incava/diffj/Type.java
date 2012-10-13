@@ -121,11 +121,19 @@ public class Type extends Element implements Diffable<Type> {
         fromInnerTypes.diff(toType, differences);
     }
 
-    public Token getName() {
-        return SimpleNodeUtil.findToken(decl, JavaParserConstants.IDENTIFIER);
+    public String getName() {
+        return SimpleNodeUtil.findToken(decl, JavaParserConstants.IDENTIFIER).image;
     }
 
     public double getMatchScore(Type toType) {
-        return getName().image.equals(toType.getName().image) ? 1.0 : 0.0;
+        return getName().equals(toType.getName()) ? 1.0 : 0.0;
+    }
+
+    public String getAddedMessage() {
+        return isInterface() ? Messages.INNER_INTERFACE_ADDED : Messages.INNER_CLASS_ADDED;
+    }
+
+    public String getRemovedMessage() {
+        return isInterface() ? Messages.INNER_INTERFACE_REMOVED : Messages.INNER_CLASS_REMOVED;
     }
 }

@@ -13,14 +13,16 @@ public class InnerTypes extends Items<Type, ASTClassOrInterfaceDeclaration> {
 
     public String getName(ASTClassOrInterfaceDeclaration decl) {
         Type type = new Type(decl);
-        return type.getName().image;
+        return type.getName();
     }
 
     public String getAddedMessage(ASTClassOrInterfaceDeclaration decl) {
-        return decl.isInterface() ? Messages.INNER_INTERFACE_ADDED : Messages.INNER_CLASS_ADDED;
+        Type type = new Type(decl);
+        return type.getAddedMessage();
     }
 
     public String getRemovedMessage(ASTClassOrInterfaceDeclaration decl) {
-        return decl.isInterface() ? Messages.INNER_INTERFACE_REMOVED : Messages.INNER_CLASS_REMOVED;
+        Type type = new Type(decl);
+        return type.getRemovedMessage();
     }
 }

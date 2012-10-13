@@ -63,4 +63,12 @@ public class Ctor extends Function implements Diffable<Ctor> {
         Parameters toParams = toCtor.getParameters();
         return fromParams.getMatchScore(toParams);
     }
+
+    public String getAddedMessage() {
+        return Messages.CONSTRUCTOR_ADDED;
+    }
+
+    public String getRemovedMessage() {
+        return Messages.CONSTRUCTOR_REMOVED;
+    }
 }

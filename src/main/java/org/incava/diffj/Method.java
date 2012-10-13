@@ -134,4 +134,12 @@ public class Method extends Function implements Diffable<Method> {
 
         return fromParams.getMatchScore(toParams);
     }
+
+    public String getAddedMessage() {
+        return Messages.METHOD_ADDED;
+    }
+
+    public String getRemovedMessage() {
+        return Messages.METHOD_REMOVED;
+    }
 }
