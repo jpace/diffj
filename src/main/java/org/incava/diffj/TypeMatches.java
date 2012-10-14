@@ -9,19 +9,17 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
 
-public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends SimpleNode> {
+public class TypeMatches<ASTType extends Diffable<ASTType>> {
     private final MultiMap<Double, Pair<ASTType, ASTType>> matches;
-    private final Items<ASTType, ItemType> items;
     private final List<ASTType> unprocFromItems;
     private final List<ASTType> unprocToItems;
     private final List<ASTType> decls;
 
-    public TypeMatches(Items<ASTType, ItemType> items, List<ItemType> decls) {
-        this.items = items;
+    public TypeMatches(List<ASTType> decls) {
         this.matches = new MultiMap<Double, Pair<ASTType, ASTType>>();
         this.unprocFromItems = new ArrayList<ASTType>();
         this.unprocToItems = new ArrayList<ASTType>();
-        this.decls = toAstTypeList(decls);
+        this.decls = decls;
     }
 
     public List<ASTType> getRemoved() {
@@ -40,24 +38,15 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
         return matches.get(score);
     }
 
-    public List<ASTType> toAstTypeList(List<ItemType> its) {
-        List<ASTType> astList = new ArrayList<ASTType>();
-        for (ItemType it : its) {
-            astList.add(items.getAstType(it));
-        }
-        return astList;
-    }
-
     public List<Double> getDescendingScores() {
         List<Double> descendingScores = new ArrayList<Double>(new TreeSet<Double>(matches.keySet()));
         Collections.reverse(descendingScores);
         return descendingScores;
     }
 
-    public void diff(List<ItemType> toItems, Differences differences) {
-        List<ASTType> astTypes = toAstTypeList(toItems);
-        getScores(astTypes);
-        compareMatches(astTypes, differences);
+    public void diff(List<ASTType> toTypes, Differences differences) {
+        getScores(toTypes);
+        compareMatches(toTypes, differences);
     }
 
     private void getScores(List<ASTType> toTypes) {

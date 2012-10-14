@@ -5,8 +5,6 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.ijdk.lang.Pair;
-import org.incava.ijdk.util.MultiMap;
 
 /**
  * Items represents the methods, ctors, fields and inner types of a parent type.
@@ -38,8 +36,8 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         List<ASTType> fromTypes = toAstTypeList(fromDecls);
         List<ASTType> toTypes = toAstTypeList(toDecls);
 
-        TypeMatches<ASTType, ItemType> matches = new TypeMatches<ASTType, ItemType>(this, fromDecls);
-        matches.diff(toDecls, differences);
+        TypeMatches<ASTType> matches = new TypeMatches<ASTType>(fromTypes);
+        matches.diff(toTypes, differences);
 
         List<ASTType> removed = matches.getRemoved();
         List<ASTType> added = matches.getAdded();
@@ -51,16 +49,14 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
     public abstract ASTType getAstType(ItemType item);
 
     public void addAdded(List<ASTType> added, Differences differences) {
-        for (ASTType toType : added) {
-            tr.Ace.onMagenta("toType", toType);
-            String name = toType.getName();
-            differences.added(type.getDeclaration(), toType.getNode(), toType.getAddedMessage(), name);
+        for (ASTType toAdd : added) {
+            String name = toAdd.getName();
+            differences.added(type.getDeclaration(), toAdd.getNode(), toAdd.getAddedMessage(), name);
         }
     }
 
     public void addRemoved(List<ASTType> removed, Type toType, Differences differences) {
         for (ASTType goner : removed) {
-            tr.Ace.onRed("goner", goner);
             String name = goner.getName();
             differences.deleted(goner.getNode(), toType.getDeclaration(), goner.getRemovedMessage(), name);
         }
