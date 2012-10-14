@@ -46,6 +46,11 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
         return descendingScores;
     }
 
+    public void diff(List<ItemType> toItems, Differences differences) {
+        addMatches(toItems);
+        compareMatches(toItems, differences);
+    }
+
     public void addMatches(List<ItemType> toItems) {
         for (ItemType fromItem : decls) {
             ASTType fromType = items.getAstType(fromItem);
@@ -70,27 +75,30 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
         
         for (Double score : descendingScores) {
             // don't repeat comparisons ...
-
-            List<ItemType> procFromItems = new ArrayList<ItemType>();
-            List<ItemType> procToItems = new ArrayList<ItemType>();
-
-            for (Pair<ItemType, ItemType> declPair : get(score)) {
-                ItemType fromItem = declPair.getFirst();
-                ItemType toItem = declPair.getSecond();
-
-                if (unprocFromItems.contains(fromItem) && unprocToItems.contains(toItem)) {
-                    ASTType fromType = items.getAstType(fromItem);
-                    ASTType toType = items.getAstType(toItem);
-
-                    fromType.diff(toType, differences);
-                    
-                    procFromItems.add(fromItem);
-                    procToItems.add(toItem);
-                }
-            }
-
-            unprocFromItems.removeAll(procFromItems);
-            unprocToItems.removeAll(procToItems);
+            diffAtScore(score, differences);
         }
+    }
+
+    private void diffAtScore(double score, Differences differences) {
+        List<ItemType> procFromItems = new ArrayList<ItemType>();
+        List<ItemType> procToItems = new ArrayList<ItemType>();
+
+        for (Pair<ItemType, ItemType> declPair : get(score)) {
+            ItemType fromItem = declPair.getFirst();
+            ItemType toItem = declPair.getSecond();
+
+            if (unprocFromItems.contains(fromItem) && unprocToItems.contains(toItem)) {
+                ASTType fromType = items.getAstType(fromItem);
+                ASTType toType = items.getAstType(toItem);
+
+                fromType.diff(toType, differences);
+                    
+                procFromItems.add(fromItem);
+                procToItems.add(toItem);
+            }
+        }
+
+        unprocFromItems.removeAll(procFromItems);
+        unprocToItems.removeAll(procToItems);
     }
 }

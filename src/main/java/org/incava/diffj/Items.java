@@ -28,9 +28,7 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         List<ItemType> toDecls = toType.getDeclarationsOfClassType(clsName);
 
         TypeMatches<ASTType, ItemType> matches = new TypeMatches<ASTType, ItemType>(this, fromDecls);
-        matches.addMatches(toDecls);
-
-        matches.compareMatches(toDecls, differences);
+        matches.diff(toDecls, differences);
 
         List<ItemType> unprocFromDecls = matches.getUndiffedFromElements();
         List<ItemType> unprocToDecls = matches.getUndiffedToElements();
