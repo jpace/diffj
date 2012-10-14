@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.field;
 
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTType;
@@ -6,6 +6,9 @@ import net.sourceforge.pmd.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.ast.ASTVariableInitializer;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.CodedElement;
+import org.incava.diffj.Differences;
+import org.incava.diffj.Messages;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 

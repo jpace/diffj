@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.field;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTType;
 import net.sourceforge.pmd.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.Messages;
 import org.incava.pmdx.FieldUtil;
 
 /**
