@@ -23,9 +23,20 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
     public void diff(Items<ASTType, ItemType> toItems, Differences differences) {
     }
 
+    public List<ASTType> toAstTypeList(List<ItemType> its) {
+        List<ASTType> astList = new ArrayList<ASTType>();
+        for (ItemType it : its) {
+            astList.add(getAstType(it));
+        }
+        return astList;
+    }
+
     public void diff(Type toType, Differences differences) {
         List<ItemType> fromDecls = type.getDeclarationsOfClassType(clsName);
         List<ItemType> toDecls = toType.getDeclarationsOfClassType(clsName);
+
+        List<ASTType> fromTypes = toAstTypeList(fromDecls);
+        List<ASTType> toTypes = toAstTypeList(toDecls);
 
         TypeMatches<ASTType, ItemType> matches = new TypeMatches<ASTType, ItemType>(this, fromDecls);
         matches.diff(toDecls, differences);
@@ -41,6 +52,7 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
 
     public void addAdded(List<ASTType> added, Differences differences) {
         for (ASTType toType : added) {
+            tr.Ace.onMagenta("toType", toType);
             String name = toType.getName();
             differences.added(type.getDeclaration(), toType.getNode(), toType.getAddedMessage(), name);
         }
@@ -48,7 +60,7 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
 
     public void addRemoved(List<ASTType> removed, Type toType, Differences differences) {
         for (ASTType goner : removed) {
-            tr.Ace.log("goner", goner);
+            tr.Ace.onRed("goner", goner);
             String name = goner.getName();
             differences.deleted(goner.getNode(), toType.getDeclaration(), goner.getRemovedMessage(), name);
         }

@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 public class TestCtorCode extends ItemsTest {
     public TestCtorCode(String name) {
         super(name);
+        tr.Ace.setVerbose(true);
     }
 
     public void testCodeNotChanged() {

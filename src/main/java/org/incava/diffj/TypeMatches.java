@@ -10,58 +10,34 @@ import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
 
 public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends SimpleNode> {
-    private final MultiMap<Double, Pair<ItemType, ItemType>> matches;
+    private final MultiMap<Double, Pair<ASTType, ASTType>> matches;
     private final Items<ASTType, ItemType> items;
-    private final List<ItemType> unprocFromItems;
-    private final List<ItemType> unprocToItems;
-    private final List<ItemType> decls;
+    private final List<ASTType> unprocFromItems;
+    private final List<ASTType> unprocToItems;
+    private final List<ASTType> decls;
 
     public TypeMatches(Items<ASTType, ItemType> items, List<ItemType> decls) {
         this.items = items;
-        this.matches = new MultiMap<Double, Pair<ItemType, ItemType>>();
-        this.unprocFromItems = new ArrayList<ItemType>();
-        this.unprocToItems = new ArrayList<ItemType>();
-        this.decls = decls;
+        this.matches = new MultiMap<Double, Pair<ASTType, ASTType>>();
+        this.unprocFromItems = new ArrayList<ASTType>();
+        this.unprocToItems = new ArrayList<ASTType>();
+        this.decls = toAstTypeList(decls);
     }
 
     public List<ASTType> getRemoved() {
-        return toAstTypeList(unprocFromItems);
+        return unprocFromItems;
     }
 
     public List<ASTType> getAdded() {
-        return toAstTypeList(unprocToItems);
+        return unprocToItems;
     }
 
-    public void add(double score, ItemType firstType, ItemType secondType) {
+    public void add(double score, ASTType firstType, ASTType secondType) {
         matches.put(score, Pair.create(firstType, secondType));
     }
 
-    public Collection<Pair<ItemType, ItemType>> get(double score) {
+    public Collection<Pair<ASTType, ASTType>> get(double score) {
         return matches.get(score);
-    }
-
-    public List<Double> getDescendingScores() {
-        List<Double> descendingScores = new ArrayList<Double>(new TreeSet<Double>(matches.keySet()));
-        Collections.reverse(descendingScores);
-        return descendingScores;
-    }
-
-    public void diff(List<ItemType> toItems, Differences differences) {
-        getScores(toItems);
-        compareMatches(toItems, differences);
-    }
-
-    private void getScores(List<ItemType> toItems) {
-        for (ItemType fromItem : decls) {
-            ASTType fromType = items.getAstType(fromItem);
-            for (ItemType toItem : toItems) {
-                ASTType toType = items.getAstType(toItem);
-                double matchScore = fromType.getMatchScore(toType);
-                if (matchScore > 0.0) {
-                    add(matchScore, fromItem, toItem);
-                }
-            }
-        }
     }
 
     public List<ASTType> toAstTypeList(List<ItemType> its) {
@@ -72,16 +48,45 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
         return astList;
     }
 
-    private void compareMatches(List<ItemType> toItems, Differences differences) {
+    public List<Double> getDescendingScores() {
+        List<Double> descendingScores = new ArrayList<Double>(new TreeSet<Double>(matches.keySet()));
+        Collections.reverse(descendingScores);
+        return descendingScores;
+    }
+
+    public void diff(List<ItemType> toItems, Differences differences) {
+        List<ASTType> astTypes = toAstTypeList(toItems);
+        getScores(astTypes);
+        compareMatches(astTypes, differences);
+    }
+
+    private void getScores(List<ASTType> toTypes) {
+        for (ASTType fromType : decls) {
+            for (ASTType toType : toTypes) {
+                double matchScore = fromType.getMatchScore(toType);
+                if (matchScore > 0.0) {
+                    add(matchScore, fromType, toType);
+                }
+            }
+        }
+    }
+
+    private void compareMatches(List<ASTType> toItems, Differences differences) {
         unprocFromItems.clear();
         unprocToItems.clear();
 
+        tr.Ace.red("decls", decls);
+
         unprocFromItems.addAll(decls);
+        tr.Ace.red("unprocFromItems", unprocFromItems);
+
         unprocToItems.addAll(toItems);
+        tr.Ace.red("unprocToItems", unprocToItems);
 
         List<Double> descendingScores = getDescendingScores();
         
         for (Double score : descendingScores) {
+            tr.Ace.cyan("score", score);
             diffAtScore(score, differences);
         }
     }
@@ -89,20 +94,25 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
     private void diffAtScore(double score, Differences differences) {
         // don't repeat comparisons ...
 
-        List<ItemType> procFromItems = new ArrayList<ItemType>();
-        List<ItemType> procToItems = new ArrayList<ItemType>();
+        List<ASTType> procFromItems = new ArrayList<ASTType>();
+        List<ASTType> procToItems = new ArrayList<ASTType>();
 
-        for (Pair<ItemType, ItemType> declPair : get(score)) {
-            ItemType fromItem = declPair.getFirst();
-            ItemType toItem = declPair.getSecond();
-            ASTType fromType = items.getAstType(fromItem);
-            ASTType toType = items.getAstType(toItem);
+        for (Pair<ASTType, ASTType> declPair : get(score)) {
+            tr.Ace.magenta("declPair", declPair);
+            ASTType fromType = declPair.getFirst();
+            ASTType toType = declPair.getSecond();;
 
-            if (unprocFromItems.contains(fromItem) && unprocToItems.contains(toItem)) {
+            tr.Ace.yellow("unprocFromItems", unprocFromItems);
+            tr.Ace.yellow("fromType", fromType);
+            tr.Ace.yellow("unprocFromItems.contains(fromType)", unprocFromItems.contains(fromType));
+
+            if (unprocFromItems.contains(fromType) && unprocToItems.contains(toType)) {
+                tr.Ace.bold("fromType", fromType);
+                tr.Ace.bold("toType", toType);
                 fromType.diff(toType, differences);
                     
-                procFromItems.add(fromItem);
-                procToItems.add(toItem);
+                procFromItems.add(fromType);
+                procToItems.add(toType);
             }
         }
 
