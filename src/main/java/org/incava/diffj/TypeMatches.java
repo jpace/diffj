@@ -24,12 +24,12 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
         this.decls = decls;
     }
 
-    public List<ItemType> getUndiffedFromElements() {
-        return this.unprocFromItems;
+    public List<ASTType> getRemoved() {
+        return toAstTypeList(unprocFromItems);
     }
 
-    public List<ItemType> getUndiffedToElements() {
-        return this.unprocToItems;
+    public List<ASTType> getAdded() {
+        return toAstTypeList(unprocToItems);
     }
 
     public void add(double score, ItemType firstType, ItemType secondType) {
@@ -47,11 +47,11 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
     }
 
     public void diff(List<ItemType> toItems, Differences differences) {
-        addMatches(toItems);
+        getScores(toItems);
         compareMatches(toItems, differences);
     }
 
-    public void addMatches(List<ItemType> toItems) {
+    private void getScores(List<ItemType> toItems) {
         for (ItemType fromItem : decls) {
             ASTType fromType = items.getAstType(fromItem);
             for (ItemType toItem : toItems) {
@@ -64,7 +64,15 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
         }
     }
 
-    public void compareMatches(List<ItemType> toItems, Differences differences) {
+    public List<ASTType> toAstTypeList(List<ItemType> its) {
+        List<ASTType> astList = new ArrayList<ASTType>();
+        for (ItemType it : its) {
+            astList.add(items.getAstType(it));
+        }
+        return astList;
+    }
+
+    private void compareMatches(List<ItemType> toItems, Differences differences) {
         unprocFromItems.clear();
         unprocToItems.clear();
 
@@ -74,23 +82,23 @@ public class TypeMatches<ASTType extends Diffable<ASTType>, ItemType extends Sim
         List<Double> descendingScores = getDescendingScores();
         
         for (Double score : descendingScores) {
-            // don't repeat comparisons ...
             diffAtScore(score, differences);
         }
     }
 
     private void diffAtScore(double score, Differences differences) {
+        // don't repeat comparisons ...
+
         List<ItemType> procFromItems = new ArrayList<ItemType>();
         List<ItemType> procToItems = new ArrayList<ItemType>();
 
         for (Pair<ItemType, ItemType> declPair : get(score)) {
             ItemType fromItem = declPair.getFirst();
             ItemType toItem = declPair.getSecond();
+            ASTType fromType = items.getAstType(fromItem);
+            ASTType toType = items.getAstType(toItem);
 
             if (unprocFromItems.contains(fromItem) && unprocToItems.contains(toItem)) {
-                ASTType fromType = items.getAstType(fromItem);
-                ASTType toType = items.getAstType(toItem);
-
                 fromType.diff(toType, differences);
                     
                 procFromItems.add(fromItem);

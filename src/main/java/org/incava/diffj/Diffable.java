@@ -1,5 +1,7 @@
 package org.incava.diffj;
 
+import net.sourceforge.pmd.ast.SimpleNode;
+
 /**
  * Something that can be compared against another.
  */
@@ -13,4 +15,6 @@ public interface Diffable<DiffType extends Diffable> {
     public String getAddedMessage();
 
     public String getRemovedMessage();
+
+    public SimpleNode getNode();
 }

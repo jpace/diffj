@@ -30,29 +30,27 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         TypeMatches<ASTType, ItemType> matches = new TypeMatches<ASTType, ItemType>(this, fromDecls);
         matches.diff(toDecls, differences);
 
-        List<ItemType> unprocFromDecls = matches.getUndiffedFromElements();
-        List<ItemType> unprocToDecls = matches.getUndiffedToElements();
+        List<ASTType> removed = matches.getRemoved();
+        List<ASTType> added = matches.getAdded();
 
-        addRemoved(unprocFromDecls, toType, differences);
-        addAdded(unprocToDecls, differences);
+        addRemoved(removed, toType, differences);
+        addAdded(added, differences);
     }
 
     public abstract ASTType getAstType(ItemType item);
 
-    public void addAdded(List<ItemType> toItems, Differences differences) {
-        for (ItemType toItem : toItems) {
-            ASTType toType = getAstType(toItem);
+    public void addAdded(List<ASTType> added, Differences differences) {
+        for (ASTType toType : added) {
             String name = toType.getName();
-            differences.added(type.getDeclaration(), toItem, toType.getAddedMessage(), name);
+            differences.added(type.getDeclaration(), toType.getNode(), toType.getAddedMessage(), name);
         }
     }
 
-    public void addRemoved(List<ItemType> fromItems, Type toType, Differences differences) {
-        for (ItemType fromItem : fromItems) {
-            tr.Ace.log("fromItem", fromItem);
-            ASTType fromType = getAstType(fromItem);
-            String name = fromType.getName();
-            differences.deleted(fromItem, toType.getDeclaration(), fromType.getRemovedMessage(), name);
+    public void addRemoved(List<ASTType> removed, Type toType, Differences differences) {
+        for (ASTType goner : removed) {
+            tr.Ace.log("goner", goner);
+            String name = goner.getName();
+            differences.deleted(goner.getNode(), toType.getDeclaration(), goner.getRemovedMessage(), name);
         }
     }
 }
