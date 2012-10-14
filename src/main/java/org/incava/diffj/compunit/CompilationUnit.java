@@ -1,7 +1,8 @@
-package org.incava.diffj;
+package org.incava.diffj.compunit;
 
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import org.incava.analysis.Report;
+import org.incava.diffj.Differences;
 import org.incava.diffj.type.Types;
 
 public class CompilationUnit {

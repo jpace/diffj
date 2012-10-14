@@ -14,7 +14,7 @@ import net.sourceforge.pmd.ast.JavaParser;
 import net.sourceforge.pmd.ast.ParseException;
 import net.sourceforge.pmd.ast.TokenMgrError;
 import org.incava.analysis.Report;
-import org.incava.diffj.CompilationUnit;
+import org.incava.diffj.compunit.CompilationUnit;
 import org.incava.diffj.lang.DiffJException;
 import org.incava.ijdk.io.ReadOptionType;
 import org.incava.ijdk.io.ReaderExt;

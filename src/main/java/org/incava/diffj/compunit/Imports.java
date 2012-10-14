@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.compunit;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,6 +10,8 @@ import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.Differences;
+import org.incava.diffj.Messages;
 import org.incava.pmdx.CompilationUnitUtil;
 
 public class Imports {
@@ -19,6 +21,20 @@ public class Imports {
     public Imports(ASTCompilationUnit compUnit) {
         this.compUnit = compUnit;
         this.imports = CompilationUnitUtil.getImports(compUnit);
+    }
+
+    public void diff(Imports toImports, Differences differences) {
+        if (isEmpty()) {
+            if (!toImports.isEmpty()) {
+                markAllAdded(toImports, differences);
+            }
+        }
+        else if (toImports.isEmpty()) {
+            markAllRemoved(toImports, differences);
+        }
+        else {
+            compareEach(toImports, differences);
+        }
     }
 
     public boolean isEmpty() {
@@ -64,22 +80,7 @@ public class Imports {
         return sb.toString();
     }
 
-
-    public void diff(Imports toImports, Differences differences) {
-        if (isEmpty()) {
-            if (!toImports.isEmpty()) {
-                markImportSectionAdded(toImports, differences);
-            }
-        }
-        else if (toImports.isEmpty()) {
-            markImportSectionRemoved(toImports, differences);
-        }
-        else {
-            compareEachImport(toImports, differences);
-        }
-    }
-
-    protected void compareEachImport(Imports toImports, Differences differences) {
+    protected void compareEach(Imports toImports, Differences differences) {
         Map<String, ASTImportDeclaration> fromNamesToImp = getNamesToDeclarations();
         Map<String, ASTImportDeclaration> toNamesToImp = toImports.getNamesToDeclarations();
             
@@ -100,7 +101,7 @@ public class Imports {
         }
     }
 
-    protected void markImportSectionAdded(Imports toImports, Differences differences) {
+    protected void markAllAdded(Imports toImports, Differences differences) {
         Token fromStart = getFirstTypeToken();
         Token fromEnd = fromStart;
         Token toStart = toImports.getFirstToken();
@@ -108,7 +109,7 @@ public class Imports {
         differences.added(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_ADDED);
     }
 
-    protected void markImportSectionRemoved(Imports toImports, Differences differences) {
+    protected void markAllRemoved(Imports toImports, Differences differences) {
         Token fromStart = getFirstToken();
         Token fromEnd = getLastToken();
         Token toStart = toImports.getFirstTypeToken();
