@@ -45,37 +45,32 @@ public class TypeMatches<ASTType extends Diffable<ASTType>> {
     }
 
     public void diff(List<ASTType> toTypes, Differences differences) {
-        getScores(toTypes);
+        addAllScores(toTypes);
         compareMatches(toTypes, differences);
     }
 
-    private void getScores(List<ASTType> toTypes) {
+    private void addAllScores(List<ASTType> toTypes) {
         for (ASTType fromType : decls) {
-            for (ASTType toType : toTypes) {
-                double matchScore = fromType.getMatchScore(toType);
-                if (matchScore > 0.0) {
-                    add(matchScore, fromType, toType);
-                }
-            }
+            addScores(fromType, toTypes);
         }
     }
 
+    private void addScores(ASTType fromType, List<ASTType> toTypes) {
+        for (ASTType toType : toTypes) {
+            double matchScore = fromType.getMatchScore(toType);
+            if (matchScore > 0.0) {
+                add(matchScore, fromType, toType);
+            }
+        }
+    }
+    
     private void compareMatches(List<ASTType> toItems, Differences differences) {
-        unprocFromItems.clear();
-        unprocToItems.clear();
-
-        tr.Ace.red("decls", decls);
-
         unprocFromItems.addAll(decls);
-        tr.Ace.red("unprocFromItems", unprocFromItems);
-
         unprocToItems.addAll(toItems);
-        tr.Ace.red("unprocToItems", unprocToItems);
 
         List<Double> descendingScores = getDescendingScores();
         
         for (Double score : descendingScores) {
-            tr.Ace.cyan("score", score);
             diffAtScore(score, differences);
         }
     }
@@ -87,17 +82,10 @@ public class TypeMatches<ASTType extends Diffable<ASTType>> {
         List<ASTType> procToItems = new ArrayList<ASTType>();
 
         for (Pair<ASTType, ASTType> declPair : get(score)) {
-            tr.Ace.magenta("declPair", declPair);
             ASTType fromType = declPair.getFirst();
             ASTType toType = declPair.getSecond();;
 
-            tr.Ace.yellow("unprocFromItems", unprocFromItems);
-            tr.Ace.yellow("fromType", fromType);
-            tr.Ace.yellow("unprocFromItems.contains(fromType)", unprocFromItems.contains(fromType));
-
             if (unprocFromItems.contains(fromType) && unprocToItems.contains(toType)) {
-                tr.Ace.bold("fromType", fromType);
-                tr.Ace.bold("toType", toType);
                 fromType.diff(toType, differences);
                     
                 procFromItems.add(fromType);

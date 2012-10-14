@@ -18,8 +18,7 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         this.clsName = clsName;
     }
 
-    public void diff(Items<ASTType, ItemType> toItems, Differences differences) {
-    }
+    public abstract ASTType getAstType(ItemType item);
 
     public List<ASTType> toAstTypeList(List<ItemType> its) {
         List<ASTType> astList = new ArrayList<ASTType>();
@@ -45,8 +44,6 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         addRemoved(removed, toType, differences);
         addAdded(added, differences);
     }
-
-    public abstract ASTType getAstType(ItemType item);
 
     public void addAdded(List<ASTType> added, Differences differences) {
         for (ASTType toAdd : added) {

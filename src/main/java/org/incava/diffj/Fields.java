@@ -11,19 +11,4 @@ public class Fields extends Items<Field, ASTFieldDeclaration> {
     public Field getAstType(ASTFieldDeclaration fieldDecl) {
         return new Field(fieldDecl);
     }
-
-    public String getName(ASTFieldDeclaration fieldDecl) {
-        Field field = new Field(fieldDecl);
-        return field.getName();
-    }
-
-    public String getAddedMessage(ASTFieldDeclaration fieldDecl) {
-        Field field = new Field(fieldDecl);
-        return field.getAddedMessage();
-    }
-
-    public String getRemovedMessage(ASTFieldDeclaration fieldDecl) {
-        Field field = new Field(fieldDecl);
-        return field.getRemovedMessage();
-    }
 }

@@ -6,7 +6,6 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.ast.ASTMethodDeclarator;
 import net.sourceforge.pmd.ast.ASTNameList;
-import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.params.Parameters;
@@ -71,9 +70,6 @@ public class Method extends Function implements Diffable<Method> {
     }
 
     protected void compareBodies(Method toMethod, Differences differences) {
-        // tr.Ace.log("method", method);
-        // tr.Ace.log("toMethod", toMethod);
-
         if (hasBlock()) {
             if (toMethod.hasBlock()) {
                 compareCode(toMethod, differences);
