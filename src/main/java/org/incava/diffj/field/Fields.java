@@ -1,8 +1,8 @@
-package org.incava.diffj;
+package org.incava.diffj.field;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTFieldDeclaration;
-import org.incava.diffj.field.Field;
+import org.incava.diffj.Items;
 
 public class Fields extends Items<Field, ASTFieldDeclaration> {
     public Fields(ASTClassOrInterfaceDeclaration type) {

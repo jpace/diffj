@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +7,9 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.Diffable;
+import org.incava.diffj.Differences;
+import org.incava.diffj.Messages;
 import org.incava.diffj.params.Parameters;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;

@@ -1,9 +1,11 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTName;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
+import org.incava.diffj.Differences;
+import org.incava.diffj.Messages;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.ThrowsUtil;
 

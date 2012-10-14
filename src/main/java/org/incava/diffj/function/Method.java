@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlock;
@@ -8,6 +8,9 @@ import net.sourceforge.pmd.ast.ASTMethodDeclarator;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.Diffable;
+import org.incava.diffj.Differences;
+import org.incava.diffj.Messages;
 import org.incava.diffj.params.Parameters;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.ParameterUtil;

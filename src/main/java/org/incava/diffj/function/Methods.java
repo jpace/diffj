@@ -1,7 +1,8 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
+import org.incava.diffj.Items;
 
 public class Methods extends Items<Method, ASTMethodDeclaration> {
     public Methods(ASTClassOrInterfaceDeclaration type) {

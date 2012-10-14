@@ -1,12 +1,12 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
-import java.util.List;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.Code;
+import org.incava.diffj.CodedElement;
+import org.incava.diffj.Differences;
 import org.incava.diffj.params.Parameters;
-import org.incava.pmdx.SimpleNodeUtil;
 
 public abstract class Function extends CodedElement {
     private final SimpleNode node;
