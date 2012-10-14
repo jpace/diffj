@@ -28,12 +28,14 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         return astList;
     }
 
-    public void diff(Type toType, Differences differences) {
-        List<ItemType> fromDecls = type.getDeclarationsOfClassType(clsName);
-        List<ItemType> toDecls = toType.getDeclarationsOfClassType(clsName);
+    public List<ASTType> getDeclarations() {
+        List<ItemType> decls = type.getDeclarationsOfClassType(clsName);
+        return toAstTypeList(decls);
+    }
 
-        List<ASTType> fromTypes = toAstTypeList(fromDecls);
-        List<ASTType> toTypes = toAstTypeList(toDecls);
+    public void diff(Items<ASTType, ItemType> toItems, Differences differences) {
+        List<ASTType> fromTypes = getDeclarations();
+        List<ASTType> toTypes = toItems.getDeclarations();
 
         TypeMatches<ASTType> matches = new TypeMatches<ASTType>(fromTypes);
         matches.diff(toTypes, differences);
@@ -41,7 +43,7 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         List<ASTType> removed = matches.getRemoved();
         List<ASTType> added = matches.getAdded();
 
-        addRemoved(removed, toType, differences);
+        addRemoved(removed, toItems.type, differences);
         addAdded(added, differences);
     }
 

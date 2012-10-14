@@ -157,14 +157,15 @@ public class JavaFile extends JavaFSElement {
 
     public int compare(Report report, JavaFile toFile) throws DiffJException {
         try {
-            ASTCompilationUnit fromCu = compile();
-            ASTCompilationUnit toCu   = toFile.compile();
+            ASTCompilationUnit fromAstCu = compile();
+            ASTCompilationUnit toAstCu   = toFile.compile();
             
             report.reset(getLabel(), getContents(), toFile.getLabel(), toFile.getContents());
 
-            if (fromCu != null && toCu != null) {
-                CompilationUnit cu = new CompilationUnit(fromCu);
-                cu.diff(toCu, report);
+            if (fromAstCu != null && toAstCu != null) {
+                CompilationUnit fromCompUnit = new CompilationUnit(fromAstCu);
+                CompilationUnit toCompUnit   = new CompilationUnit(toAstCu);
+                fromCompUnit.diff(toCompUnit, report);
             }
         }
         catch (DiffJException de) {

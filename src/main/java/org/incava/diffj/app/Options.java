@@ -12,69 +12,29 @@ import org.incava.java.Java;
 
 public class Options extends OptionSet {
     public static final String VERSION = "1.4.0";
-
     public static final String DEFAULT_SOURCE = Java.SOURCE_1_5;
 
-    /**
-     * Whether to use brief or detailed reporting.
-     */
     private boolean briefOutput = false;
-
-    /**
-     * Whether to show context (detailed reporting only).
-     */
     private boolean contextOutput = false;
-
-    /**
-     * Whether to use colors for highlighting
-     */
     private boolean highlightOutput = false;
-
-    /**
-     * Whether to show the version.
-     */
     private boolean showVersion = false;
-
-    /**
-     * The Java source version, of the from-file.
-     */
     private String fromSource = DEFAULT_SOURCE;
-
-    /**
-     * The Java source version, of the to-file.
-     */
     private String toSource = DEFAULT_SOURCE;
-
-    /**
-     * Whether to recurse.
-     */
     private Boolean recurse = false;
-
-    /**
-     * The name of the first file, if not the actual name.
-     */
     private String firstFileName = null;
-
-    /**
-     * The name of the second file, if not the actual name.
-     */
     private String secondFileName = null;
-
-    /**
-     * Whether to blather.
-     */
     private Boolean verbose = false;
 
-    private BooleanOption briefOpt;
-    private BooleanOption contextOpt;
-    private IntegerOption tabWidthOpt;
-    private BooleanOption verboseOpt;
-    private BooleanOption versionOpt;
-    private StringOption fromSourceOpt;
-    private StringOption toSourceOpt;
-    private StringOption sourceOpt;
-    private BooleanOption recurseOpt;
-    private BooleanOption highlightOpt;
+    private final BooleanOption briefOpt;
+    private final BooleanOption contextOpt;
+    private final IntegerOption tabWidthOpt;
+    private final BooleanOption verboseOpt;
+    private final BooleanOption versionOpt;
+    private final StringOption fromSourceOpt;
+    private final StringOption toSourceOpt;
+    private final StringOption sourceOpt;
+    private final BooleanOption recurseOpt;
+    private final BooleanOption highlightOpt;
 
     private static Options instance = new Options();
 
@@ -86,26 +46,20 @@ public class Options extends OptionSet {
         super("diffj", "Compares Java code");
 
         // use the diffj.* equivalent property for each option.
-
-        Boolean brief = new Boolean(briefOutput);
         String briefProperty = System.getProperty("diffj.brief");
 
         if (briefProperty != null) {
-            brief = Boolean.valueOf(briefProperty);
-            briefOutput = brief;
+            briefOutput = Boolean.valueOf(briefProperty);
         }
 
-        Integer tabWidth = new Integer(DetailedReport.tabWidth);
         String tabWidthProperty = System.getProperty("diffj.tabwidth");
         if (tabWidthProperty != null) {
-            tabWidth = Integer.valueOf(tabWidthProperty);
-            DetailedReport.tabWidth = tabWidth;
+            DetailedReport.tabWidth = Integer.valueOf(tabWidthProperty);
         }
 
-        Boolean verbose = Boolean.FALSE;
         String verboseProperty = System.getProperty("diffj.verbose");
         if (verboseProperty != null) {
-            verbose = new Boolean(verboseProperty);
+            verbose = Boolean.valueOf(verboseProperty);
         }
 
         briefOpt      = addBooleanOption("brief",     "Display output in brief form");
@@ -163,8 +117,6 @@ public class Options extends OptionSet {
      * processing.
      */
     public List<String> process(List<String> args) {
-        tr.Ace.bold("args", args);
-
         List<String> unprocessed = super.process(args);
 
         Integer tabWidthInt = tabWidthOpt.getValue();
@@ -173,11 +125,9 @@ public class Options extends OptionSet {
         }
     
         Boolean briefBool = briefOpt.getValue();
-        tr.Ace.yellow("briefBool", briefBool);
         if (briefBool != null) {
             briefOutput = briefBool;
         }
-        tr.Ace.yellow("briefOutput", briefOutput);
         
         Boolean contextBool = contextOpt.getValue();
         if (contextBool != null) {
@@ -228,14 +178,10 @@ public class Options extends OptionSet {
             fromSource = fromSourceStr;
         }
 
-        tr.Ace.yellow("fromSource", fromSource);
-
         String toSourceStr = toSourceOpt.getValue();
         if (toSourceStr != null) {
             toSource = toSourceStr;
         }
-
-        tr.Ace.yellow("toSource", toSource);
 
         return unprocessed;
     }

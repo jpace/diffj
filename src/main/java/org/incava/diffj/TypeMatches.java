@@ -9,32 +9,32 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
 
-public class TypeMatches<ASTType extends Diffable<ASTType>> {
-    private final MultiMap<Double, Pair<ASTType, ASTType>> matches;
-    private final List<ASTType> unprocFromItems;
-    private final List<ASTType> unprocToItems;
-    private final List<ASTType> decls;
+public class TypeMatches<ElementType extends Diffable<ElementType>> {
+    private final MultiMap<Double, Pair<ElementType, ElementType>> matches;
+    private final List<ElementType> unprocFromItems;
+    private final List<ElementType> unprocToItems;
+    private final List<ElementType> decls;
 
-    public TypeMatches(List<ASTType> decls) {
-        this.matches = new MultiMap<Double, Pair<ASTType, ASTType>>();
-        this.unprocFromItems = new ArrayList<ASTType>();
-        this.unprocToItems = new ArrayList<ASTType>();
+    public TypeMatches(List<ElementType> decls) {
+        this.matches = new MultiMap<Double, Pair<ElementType, ElementType>>();
+        this.unprocFromItems = new ArrayList<ElementType>();
+        this.unprocToItems = new ArrayList<ElementType>();
         this.decls = decls;
     }
 
-    public List<ASTType> getRemoved() {
+    public List<ElementType> getRemoved() {
         return unprocFromItems;
     }
 
-    public List<ASTType> getAdded() {
+    public List<ElementType> getAdded() {
         return unprocToItems;
     }
 
-    public void add(double score, ASTType firstType, ASTType secondType) {
+    public void add(double score, ElementType firstType, ElementType secondType) {
         matches.put(score, Pair.create(firstType, secondType));
     }
 
-    public Collection<Pair<ASTType, ASTType>> get(double score) {
+    public Collection<Pair<ElementType, ElementType>> get(double score) {
         return matches.get(score);
     }
 
@@ -44,19 +44,19 @@ public class TypeMatches<ASTType extends Diffable<ASTType>> {
         return descendingScores;
     }
 
-    public void diff(List<ASTType> toTypes, Differences differences) {
+    public void diff(List<ElementType> toTypes, Differences differences) {
         addAllScores(toTypes);
         compareMatches(toTypes, differences);
     }
 
-    private void addAllScores(List<ASTType> toTypes) {
-        for (ASTType fromType : decls) {
+    private void addAllScores(List<ElementType> toTypes) {
+        for (ElementType fromType : decls) {
             addScores(fromType, toTypes);
         }
     }
 
-    private void addScores(ASTType fromType, List<ASTType> toTypes) {
-        for (ASTType toType : toTypes) {
+    private void addScores(ElementType fromType, List<ElementType> toTypes) {
+        for (ElementType toType : toTypes) {
             double matchScore = fromType.getMatchScore(toType);
             if (matchScore > 0.0) {
                 add(matchScore, fromType, toType);
@@ -64,7 +64,7 @@ public class TypeMatches<ASTType extends Diffable<ASTType>> {
         }
     }
     
-    private void compareMatches(List<ASTType> toItems, Differences differences) {
+    private void compareMatches(List<ElementType> toItems, Differences differences) {
         unprocFromItems.addAll(decls);
         unprocToItems.addAll(toItems);
 
@@ -78,12 +78,12 @@ public class TypeMatches<ASTType extends Diffable<ASTType>> {
     private void diffAtScore(double score, Differences differences) {
         // don't repeat comparisons ...
 
-        List<ASTType> procFromItems = new ArrayList<ASTType>();
-        List<ASTType> procToItems = new ArrayList<ASTType>();
+        List<ElementType> procFromItems = new ArrayList<ElementType>();
+        List<ElementType> procToItems = new ArrayList<ElementType>();
 
-        for (Pair<ASTType, ASTType> declPair : get(score)) {
-            ASTType fromType = declPair.getFirst();
-            ASTType toType = declPair.getSecond();;
+        for (Pair<ElementType, ElementType> declPair : get(score)) {
+            ElementType fromType = declPair.getFirst();
+            ElementType toType = declPair.getSecond();;
 
             if (unprocFromItems.contains(fromType) && unprocToItems.contains(toType)) {
                 fromType.diff(toType, differences);

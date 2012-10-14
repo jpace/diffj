@@ -10,23 +10,35 @@ public class CompilationUnit {
         this.compUnit = compUnit;
     }
 
-    public void diff(ASTCompilationUnit toCompUnit, Report report) {
+    public Package getPackage() {
+        return new Package(compUnit);
+    }
+
+    public Imports getImports() {
+        return new Imports(compUnit);
+    }
+
+    public Types getTypes() {
+        return new Types(compUnit);
+    }
+
+    public void diff(CompilationUnit toCompUnit, Report report) {
         if (toCompUnit == null) {
             return;
         }
 
         Differences differences = new Differences(report);
         
-        Package fromPackage = new Package(compUnit);
-        Package toPackage = new Package(toCompUnit);
+        Package fromPackage = getPackage();
+        Package toPackage = toCompUnit.getPackage();
         fromPackage.diff(toPackage, differences);
             
-        Imports fromImports = new Imports(compUnit);
-        Imports toImports = new Imports(toCompUnit);
+        Imports fromImports = getImports();
+        Imports toImports = toCompUnit.getImports();
         fromImports.diff(toImports, differences);
 
-        Types fromTypes = new Types(compUnit);
-        Types toTypes = new Types(toCompUnit);
+        Types fromTypes = getTypes();
+        Types toTypes = toCompUnit.getTypes();
         fromTypes.diff(toTypes, differences);
     }
 }

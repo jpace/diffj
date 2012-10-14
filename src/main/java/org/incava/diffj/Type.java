@@ -109,16 +109,20 @@ public class Type extends Element implements Diffable<Type> {
 
     protected void compareDeclarations(Type toType, Differences differences) {
         Methods fromMethods = getMethods();
-        fromMethods.diff(toType, differences);
+        Methods toMethods = toType.getMethods();
+        fromMethods.diff(toMethods, differences);
         
         Fields fromFields = getFields();
-        fromFields.diff(toType, differences);
+        Fields toFields = toType.getFields();
+        fromFields.diff(toFields, differences);
         
         Ctors fromCtors = getCtors();
-        fromCtors.diff(toType, differences);
+        Ctors toCtors = toType.getCtors();
+        fromCtors.diff(toCtors, differences);
         
         InnerTypes fromInnerTypes = getInnerTypes();
-        fromInnerTypes.diff(toType, differences);
+        InnerTypes toInnerTypes = toType.getInnerTypes();
+        fromInnerTypes.diff(toInnerTypes, differences);
     }
 
     public String getName() {
