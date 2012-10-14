@@ -1,10 +1,7 @@
 package org.incava.diffj.compunit;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTImportDeclaration;
@@ -41,16 +38,6 @@ public class Imports {
         return imports.isEmpty();
     }
 
-    public Map<String, ASTImportDeclaration> getNamesToDeclarations() {
-        Map<String, ASTImportDeclaration> namesToImp = new HashMap<String, ASTImportDeclaration>();
-        for (ASTImportDeclaration imp : imports) {
-            String str = getImportAsString(imp);
-            namesToImp.put(str, imp);
-        }
-        
-        return namesToImp;
-    }        
-
     public ASTImportDeclaration getFirstDeclaration() {
         return imports.get(0);
     }
@@ -80,17 +67,31 @@ public class Imports {
         return sb.toString();
     }
 
-    protected void compareEach(Imports toImports, Differences differences) {
-        Map<String, ASTImportDeclaration> fromNamesToImp = getNamesToDeclarations();
-        Map<String, ASTImportDeclaration> toNamesToImp = toImports.getNamesToDeclarations();
-            
+    protected Collection<String> getNames() {
         Collection<String> names = new TreeSet<String>();
-        names.addAll(fromNamesToImp.keySet());
-        names.addAll(toNamesToImp.keySet());
+        for (ASTImportDeclaration imp : imports) {
+            String str = getImportAsString(imp);
+            names.add(str);
+        }
+        return names;
+    }
+
+    protected ASTImportDeclaration getDeclaration(String name) {
+        for (ASTImportDeclaration imp : imports) {
+            if (name.equals(getImportAsString(imp))) {
+                return imp;
+            }
+        }
+        return null;
+    }
+
+    protected void compareEach(Imports toImports, Differences differences) {
+        Collection<String> names = getNames();
+        names.addAll(toImports.getNames());
 
         for (String name : names) {
-            ASTImportDeclaration fromImp = fromNamesToImp.get(name);
-            ASTImportDeclaration toImp = toNamesToImp.get(name);
+            ASTImportDeclaration fromImp = getDeclaration(name);
+            ASTImportDeclaration toImp = toImports.getDeclaration(name);
             
             if (fromImp == null) {
                 differences.added(getFirstDeclaration(), toImp, Messages.IMPORT_ADDED, name);

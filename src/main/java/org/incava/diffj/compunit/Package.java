@@ -18,15 +18,19 @@ public class Package {
         this.pkg = CompilationUnitUtil.getPackage(compUnit);
     }
 
+    public boolean isEmpty() {
+        return pkg == null;
+    }
+
     public void diff(Package toPackage, Differences differences) {
-        if (pkg == null) {
-            if (toPackage.pkg != null) {
+        if (isEmpty()) {
+            if (!toPackage.isEmpty()) {
                 ASTName    name    = toPackage.getPackageName();
                 SimpleNode fromPos = getChild();
                 differences.added(fromPos, name, Messages.PACKAGE_ADDED);
             }
         }
-        else if (toPackage.pkg == null) {
+        else if (toPackage.isEmpty()) {
             ASTName    name  = getPackageName();
             SimpleNode toPos = toPackage.getChild();
             differences.deleted(name, toPos, Messages.PACKAGE_REMOVED);

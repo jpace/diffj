@@ -1,9 +1,7 @@
 package org.incava.diffj.type;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
@@ -24,49 +22,55 @@ public class Types {
     }
 
     public void diff(Types toTypes, Differences differences) {
-        // $$$ refactor this mess
-        
-        Map<String, ASTTypeDeclaration> fromNamesToTD = getNamesToDeclarations();
-        Map<String, ASTTypeDeclaration> toNamesToTD = toTypes.getNamesToDeclarations();
-
-        Collection<String> names = new TreeSet<String>();
-        names.addAll(fromNamesToTD.keySet());
-        names.addAll(toNamesToTD.keySet());
+        Collection<String> names = getNames();
+        names.addAll(toTypes.getNames());
 
         for (String name : names) {
-            ASTTypeDeclaration fromTypeDecl = fromNamesToTD.get(name);
-            ASTTypeDeclaration toTypeDecl = toNamesToTD.get(name);
+            ASTTypeDeclaration fromTypeDecl = getDeclaration(name);
+            ASTTypeDeclaration toTypeDecl = toTypes.getDeclaration(name);
+            compareTypes(fromTypeDecl, toTypeDecl, toTypes, differences);
+        }
+    }
 
-            if (fromTypeDecl == null) {
-                Token toName = TypeDeclarationUtil.getName(toTypeDecl);
-                differences.added(compUnit, toTypeDecl, Messages.TYPE_DECLARATION_ADDED, toName.image);
-            }
-            else if (toTypeDecl == null) {
-                Token toName = TypeDeclarationUtil.getName(fromTypeDecl);
-                differences.deleted(fromTypeDecl, toTypes.compUnit, Messages.TYPE_DECLARATION_REMOVED, toName.image);
-            }
-            else {
-                ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromTypeDecl);
-                ASTClassOrInterfaceDeclaration toDecl = TypeDeclarationUtil.getType(toTypeDecl);
+    protected void compareTypes(ASTTypeDeclaration fromTypeDecl, ASTTypeDeclaration toTypeDecl, Types toTypes, Differences differences) {
+        if (fromTypeDecl == null) {
+            Token toName = TypeDeclarationUtil.getName(toTypeDecl);
+            differences.added(compUnit, toTypeDecl, Messages.TYPE_DECLARATION_ADDED, toName.image);
+        }
+        else if (toTypeDecl == null) {
+            Token toName = TypeDeclarationUtil.getName(fromTypeDecl);
+            differences.deleted(fromTypeDecl, toTypes.compUnit, Messages.TYPE_DECLARATION_REMOVED, toName.image);
+        }
+        else {
+            ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromTypeDecl);
+            ASTClassOrInterfaceDeclaration toDecl = TypeDeclarationUtil.getType(toTypeDecl);
 
-                // either is null 
-                if (fromDecl != null && toDecl != null) {
-                    Type fromType = new Type(fromDecl);
-                    Type toType = new Type(toDecl);
-                    fromType.diff(toType, differences);
-                }
+            if (fromDecl != null && toDecl != null) {
+                Type fromType = new Type(fromDecl);
+                Type toType = new Type(toDecl);
+                fromType.diff(toType, differences);
             }
         }
     }
 
-    protected Map<String, ASTTypeDeclaration> getNamesToDeclarations() {
-        Map<String, ASTTypeDeclaration> namesToTD = new HashMap<String, ASTTypeDeclaration>();
+    protected Collection<String> getNames() {
+        Collection<String> names = new TreeSet<String>();
         for (ASTTypeDeclaration type : types) {
             Token tk = TypeDeclarationUtil.getName(type);
             if (tk != null) {
-                namesToTD.put(tk.image, type);
+                names.add(tk.image);
             }
         }
-        return namesToTD;
+        return names;
+    }
+
+    protected ASTTypeDeclaration getDeclaration(String name) {
+        for (ASTTypeDeclaration type : types) {
+            Token tk = TypeDeclarationUtil.getName(type);
+            if (tk != null && name.equals(tk.image)) {
+                return type;
+            }
+        }
+        return null;
     }
 }
