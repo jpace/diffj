@@ -27,12 +27,13 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         List<ItemType> fromDecls = type.getDeclarationsOfClassType(clsName);
         List<ItemType> toDecls = toType.getDeclarationsOfClassType(clsName);
 
-        TypeMatches<ItemType> matches = getTypeMatches(fromDecls, toDecls);
+        TypeMatches<ASTType, ItemType> matches = new TypeMatches<ASTType, ItemType>(this, fromDecls);
+        matches.addMatches(toDecls);
 
-        List<ItemType> unprocFromDecls = new ArrayList<ItemType>(fromDecls);
-        List<ItemType> unprocToDecls = new ArrayList<ItemType>(toDecls);
+        matches.compareMatches(toDecls, differences);
 
-        compareMatches(matches, unprocFromDecls, unprocToDecls, differences);
+        List<ItemType> unprocFromDecls = matches.getUndiffedFromElements();
+        List<ItemType> unprocToDecls = matches.getUndiffedToElements();
 
         addRemoved(unprocFromDecls, toType, differences);
         addAdded(unprocToDecls, differences);
@@ -40,68 +41,20 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
 
     public abstract ASTType getAstType(ItemType item);
 
-    public abstract String getName(ItemType item);
-
-    public abstract String getAddedMessage(ItemType item);
-
-    public abstract String getRemovedMessage(ItemType item);
-
-    public TypeMatches<ItemType> getTypeMatches(List<ItemType> fromItems, List<ItemType> toItems) {
-        TypeMatches<ItemType> matches = new TypeMatches<ItemType>();
-
-        for (ItemType fromItem : fromItems) {
-            ASTType fromType = getAstType(fromItem);
-            for (ItemType toItem : toItems) {
-                ASTType toType = getAstType(toItem);
-                double matchScore = fromType.getMatchScore(toType);
-                if (matchScore > 0.0) {
-                    matches.add(matchScore, fromItem, toItem);
-                }
-            }
-        }
-        return matches;
-    }
-
-    public void compareMatches(TypeMatches<ItemType> matches, List<ItemType> unprocFromItems, List<ItemType> unprocToItems, Differences differences) {
-        List<Double> descendingScores = matches.getDescendingScores();
-        
-        for (Double score : descendingScores) {
-            // don't repeat comparisons ...
-
-            List<ItemType> procFromItems = new ArrayList<ItemType>();
-            List<ItemType> procToItems = new ArrayList<ItemType>();
-
-            for (Pair<ItemType, ItemType> declPair : matches.get(score)) {
-                ItemType fromItem = declPair.getFirst();
-                ItemType toItem = declPair.getSecond();
-
-                if (unprocFromItems.contains(fromItem) && unprocToItems.contains(toItem)) {
-                    ASTType fromType = getAstType(fromItem);
-                    ASTType toType = getAstType(toItem);
-
-                    fromType.diff(toType, differences);
-                    
-                    procFromItems.add(fromItem);
-                    procToItems.add(toItem);
-                }
-            }
-
-            unprocFromItems.removeAll(procFromItems);
-            unprocToItems.removeAll(procToItems);
-        }
-    }
-
     public void addAdded(List<ItemType> toItems, Differences differences) {
         for (ItemType toItem : toItems) {
-            String name = getName(toItem);
-            differences.added(type.getDeclaration(), toItem, getAddedMessage(toItem), name);
+            ASTType toType = getAstType(toItem);
+            String name = toType.getName();
+            differences.added(type.getDeclaration(), toItem, toType.getAddedMessage(), name);
         }
     }
 
     public void addRemoved(List<ItemType> fromItems, Type toType, Differences differences) {
         for (ItemType fromItem : fromItems) {
-            String name = getName(fromItem);
-            differences.deleted(fromItem, toType.getDeclaration(), getRemovedMessage(fromItem), name);
+            tr.Ace.log("fromItem", fromItem);
+            ASTType fromType = getAstType(fromItem);
+            String name = fromType.getName();
+            differences.deleted(fromItem, toType.getDeclaration(), fromType.getRemovedMessage(), name);
         }
     }
 }
