@@ -9,8 +9,9 @@ import org.incava.diffj.type.Type;
 
 /**
  * Items represents the methods, ctors, fields and inner types of a parent type.
+ * Collects PMD AST types into DiffJ Java types.
  */
-public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends SimpleNode> {
+public abstract class Items<DiffJType extends Diffable<DiffJType>, PmdAstType extends SimpleNode> {
     private final String clsName;
     private final Type type;
 
@@ -19,46 +20,46 @@ public abstract class Items<ASTType extends Diffable<ASTType>, ItemType extends 
         this.clsName = clsName;
     }
 
-    public abstract ASTType getAstType(ItemType item);
+    public abstract DiffJType getAstType(PmdAstType item);
 
-    public List<ASTType> toAstTypeList(List<ItemType> its) {
-        List<ASTType> astList = new ArrayList<ASTType>();
-        for (ItemType it : its) {
+    public List<DiffJType> toAstTypeList(List<PmdAstType> its) {
+        List<DiffJType> astList = new ArrayList<DiffJType>();
+        for (PmdAstType it : its) {
             astList.add(getAstType(it));
         }
         return astList;
     }
 
-    public List<ASTType> getDeclarations() {
-        List<ItemType> decls = type.getDeclarationsOfClassType(clsName);
+    public List<DiffJType> getDeclarations() {
+        List<PmdAstType> decls = type.getDeclarationsOfClassType(clsName);
         return toAstTypeList(decls);
     }
 
-    public void diff(Items<ASTType, ItemType> toItems, Differences differences) {
-        List<ASTType> fromTypes = getDeclarations();
-        List<ASTType> toTypes = toItems.getDeclarations();
+    public void diff(Items<DiffJType, PmdAstType> toItems, Differences differences) {
+        List<DiffJType> fromTypes = getDeclarations();
+        List<DiffJType> toTypes = toItems.getDeclarations();
 
-        TypeMatches<ASTType> matches = new TypeMatches<ASTType>(fromTypes);
+        TypeMatches<DiffJType> matches = new TypeMatches<DiffJType>(fromTypes);
         matches.diff(toTypes, differences);
 
-        List<ASTType> removed = matches.getRemoved();
-        List<ASTType> added = matches.getAdded();
+        List<DiffJType> removed = matches.getRemoved();
+        List<DiffJType> added = matches.getAdded();
 
         addRemoved(removed, toItems.type, differences);
         addAdded(added, differences);
     }
 
-    public void addAdded(List<ASTType> added, Differences differences) {
-        for (ASTType toAdd : added) {
+    public void addAdded(List<DiffJType> added, Differences differences) {
+        for (DiffJType toAdd : added) {
             String name = toAdd.getName();
-            differences.added(type.getDeclaration(), toAdd.getNode(), toAdd.getAddedMessage(), name);
+            differences.added(type.getNode(), toAdd.getNode(), toAdd.getAddedMessage(), name);
         }
     }
 
-    public void addRemoved(List<ASTType> removed, Type toType, Differences differences) {
-        for (ASTType goner : removed) {
+    public void addRemoved(List<DiffJType> removed, Type toType, Differences differences) {
+        for (DiffJType goner : removed) {
             String name = goner.getName();
-            differences.deleted(goner.getNode(), toType.getDeclaration(), goner.getRemovedMessage(), name);
+            differences.deleted(goner.getNode(), toType.getNode(), goner.getRemovedMessage(), name);
         }
     }
 }
