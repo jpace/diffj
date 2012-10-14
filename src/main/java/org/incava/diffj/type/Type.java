@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,10 @@ import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.Diffable;
+import org.incava.diffj.Differences;
+import org.incava.diffj.Element;
+import org.incava.diffj.Messages;
 import org.incava.diffj.field.Fields;
 import org.incava.diffj.function.Ctors;
 import org.incava.diffj.function.Methods;

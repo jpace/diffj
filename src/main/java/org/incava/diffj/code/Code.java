@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.code;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -8,6 +8,8 @@ import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffCodeAdded;
 import org.incava.analysis.FileDiffCodeDeleted;
+import org.incava.diffj.Differences;
+import org.incava.diffj.Messages;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.Diff;
 import org.incava.ijdk.util.diff.Difference;

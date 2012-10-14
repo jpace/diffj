@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.code;
 
 import java.util.List;
 import net.sourceforge.pmd.ast.Token;

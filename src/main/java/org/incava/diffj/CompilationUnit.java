@@ -2,6 +2,7 @@ package org.incava.diffj;
 
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import org.incava.analysis.Report;
+import org.incava.diffj.type.Types;
 
 public class CompilationUnit {
     private final ASTCompilationUnit compUnit;

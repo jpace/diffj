@@ -3,6 +3,7 @@ package org.incava.diffj;
 import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.code.Code;
 
 public abstract class CodedElement extends Element {
     public CodedElement(SimpleNode node) {

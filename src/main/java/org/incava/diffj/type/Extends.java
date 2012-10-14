@@ -1,6 +1,7 @@
-package org.incava.diffj;
+package org.incava.diffj.type;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
+import org.incava.diffj.Messages;
 
 /**
  * Compares extends.

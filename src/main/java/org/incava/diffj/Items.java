@@ -5,6 +5,7 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
+import org.incava.diffj.type.Type;
 
 /**
  * Items represents the methods, ctors, fields and inner types of a parent type.

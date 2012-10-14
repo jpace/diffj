@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.type;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,6 +9,8 @@ import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.Differences;
+import org.incava.diffj.Messages;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
@@ -22,6 +24,8 @@ public class Types {
     }
 
     public void diff(Types toTypes, Differences differences) {
+        // $$$ refactor this mess
+        
         Map<String, ASTTypeDeclaration> fromNamesToTD = getNamesToDeclarations();
         Map<String, ASTTypeDeclaration> toNamesToTD = toTypes.getNamesToDeclarations();
 

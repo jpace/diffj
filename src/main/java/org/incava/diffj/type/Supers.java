@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,6 +8,7 @@ import java.util.Map;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.ast.SimpleNode;
+import org.incava.diffj.Differences;
 import org.incava.pmdx.SimpleNodeUtil;
 
 /**
