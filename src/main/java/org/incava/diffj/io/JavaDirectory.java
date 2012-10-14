@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.incava.analysis.Report;
-import org.incava.diffj.DiffJException;
+import org.incava.diffj.lang.DiffJException;
 
 /**
  * A directory that may or not have Java files.

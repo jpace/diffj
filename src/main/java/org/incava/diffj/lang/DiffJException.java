@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.lang;
 
 public class DiffJException extends Exception {
     private static final long serialVersionUID = 1L;

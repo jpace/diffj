@@ -12,6 +12,7 @@ import org.incava.analysis.Report;
 import org.incava.diffj.*;
 import org.incava.diffj.io.JavaElementFactory;
 import org.incava.diffj.io.JavaFSElement;
+import org.incava.diffj.lang.DiffJException;
 import org.incava.ijdk.util.ListExt;
 import org.incava.qualog.Qualog;
 
