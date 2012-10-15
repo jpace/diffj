@@ -1,5 +1,6 @@
 package org.incava.diffj.compunit;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
@@ -13,11 +14,15 @@ import org.incava.pmdx.CompilationUnitUtil;
 
 public class Imports {
     private final ASTCompilationUnit compUnit;
-    private final List<ASTImportDeclaration> imports;
+    private final List<Import> imports;
 
     public Imports(ASTCompilationUnit compUnit) {
         this.compUnit = compUnit;
-        this.imports = CompilationUnitUtil.getImports(compUnit);
+        this.imports = new ArrayList<Import>();
+        List<ASTImportDeclaration> astImports = CompilationUnitUtil.getImports(compUnit);
+        for (ASTImportDeclaration astImp : astImports) {
+            this.imports.add(new Import(astImp));
+        }
     }
 
     public void diff(Imports toImports, Differences differences) {
@@ -39,7 +44,7 @@ public class Imports {
     }
 
     public ASTImportDeclaration getFirstDeclaration() {
-        return imports.get(0);
+        return imports.get(0).getNode();
     }
 
     public Token getFirstToken() {
@@ -69,17 +74,17 @@ public class Imports {
 
     protected Collection<String> getNames() {
         Collection<String> names = new TreeSet<String>();
-        for (ASTImportDeclaration imp : imports) {
-            String str = getImportAsString(imp);
+        for (Import imp : imports) {
+            String str = imp.getAsString();
             names.add(str);
         }
         return names;
     }
 
     protected ASTImportDeclaration getDeclaration(String name) {
-        for (ASTImportDeclaration imp : imports) {
-            if (name.equals(getImportAsString(imp))) {
-                return imp;
+        for (Import imp : imports) {
+            if (name.equals(imp.getAsString())) {
+                return imp.getNode();
             }
         }
         return null;
