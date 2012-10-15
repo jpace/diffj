@@ -8,16 +8,16 @@ import net.sourceforge.pmd.ast.ASTType;
 import net.sourceforge.pmd.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.AccessibleElement;
 import org.incava.diffj.Diffable;
 import org.incava.diffj.Differences;
-import org.incava.diffj.Element;
 import org.incava.diffj.Messages;
 import org.incava.ijdk.util.CollectionExt;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.VariableUtil;
 
-public class Field extends Element implements Diffable<Field> {
+public class Field extends AccessibleElement implements Diffable<Field> {
     private final ASTFieldDeclaration field;
 
     public Field(ASTFieldDeclaration field) {

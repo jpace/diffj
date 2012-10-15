@@ -5,7 +5,7 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.code.Code;
 
-public abstract class CodedElement extends Element {
+public abstract class CodedElement extends AccessibleElement {
     public CodedElement(SimpleNode node) {
         super(node);
     }

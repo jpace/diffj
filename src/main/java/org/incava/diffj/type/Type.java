@@ -10,9 +10,9 @@ import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.AccessibleElement;
 import org.incava.diffj.Diffable;
 import org.incava.diffj.Differences;
-import org.incava.diffj.Element;
 import org.incava.diffj.Items;
 import org.incava.diffj.Messages;
 import org.incava.diffj.field.Field;
@@ -21,7 +21,7 @@ import org.incava.diffj.function.Method;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
-public class Type extends Element implements Diffable<Type> {
+public class Type extends AccessibleElement implements Diffable<Type> {
     private final ASTClassOrInterfaceDeclaration decl;
     
     public Type(ASTClassOrInterfaceDeclaration decl) {
@@ -31,10 +31,10 @@ public class Type extends Element implements Diffable<Type> {
 
     public void diff(Type toType, Differences differences) {
         if (!isInterface() && toType.isInterface()) {
-            differences.changed(decl, toType.decl, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
+            differences.changed(this, toType, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
         else if (isInterface() && !toType.isInterface()) {
-            differences.changed(decl, toType.decl, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
+            differences.changed(this, toType, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
         }
         
         compareAccess(toType, differences);

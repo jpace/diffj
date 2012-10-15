@@ -68,6 +68,10 @@ public class Differences {
     // changed
     // -------------------------------------------------------
 
+    public void changed(Element from, Element to, String msg, Object ... params) {
+        changed(from.getNode(), to.getNode(), msg, params);
+    }
+
     public void changed(Token from, Token to, String msg, Object ... params) {
         String str = MessageFormat.format(msg, params);
         add(new FileDiffChange(str, from, to));

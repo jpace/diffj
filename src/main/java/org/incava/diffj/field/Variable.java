@@ -73,7 +73,7 @@ public class Variable extends CodedElement {
                 compareCode(toVariable, differences);
             }
             else {
-                differences.changed(init, toVariable.variable, Messages.INITIALIZER_REMOVED);
+                differences.changed(init, toVariable.getNode(), Messages.INITIALIZER_REMOVED);
             }
         }
         else if (toVariable.hasInitializer()) {
