@@ -12,12 +12,12 @@ import org.incava.diffj.type.Type;
  * Collects PMD AST types into DiffJ Java types.
  */
 public abstract class Items<DiffJType extends Diffable<DiffJType>, PmdAstType extends SimpleNode> {
-    private final String clsName;
+    private final Class<PmdAstType> cls;
     private final Type type;
 
-    public Items(ASTClassOrInterfaceDeclaration decl, String clsName) {
+    public Items(ASTClassOrInterfaceDeclaration decl, Class<PmdAstType> cls) {
         this.type = new Type(decl);
-        this.clsName = clsName;
+        this.cls = cls;
     }
 
     public abstract DiffJType getAstType(PmdAstType item);
@@ -31,7 +31,7 @@ public abstract class Items<DiffJType extends Diffable<DiffJType>, PmdAstType ex
     }
 
     public List<DiffJType> getDeclarations() {
-        List<PmdAstType> decls = type.getDeclarationsOfClassType(clsName);
+        List<PmdAstType> decls = type.getDeclarationsOfClass(cls);
         return toAstTypeList(decls);
     }
 
