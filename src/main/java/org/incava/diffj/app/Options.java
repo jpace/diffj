@@ -66,29 +66,26 @@ public class Options extends OptionSet {
         contextOpt    = addBooleanOption("context",   "Show context (non-brief form only)");
         highlightOpt  = addBooleanOption("highlight", "Whether to use colors (context output only)");
         tabWidthOpt   = addOption(new IntegerOption("tabwidth",  "The number of spaces to treat tabs equal to"));
-        recurseOpt    = addBooleanOption("recurse",   "Process directories recursively");
+        recurseOpt    = addOption(new BooleanOption("recurse",   "Process directories recursively", 'r'));
         verboseOpt    = addBooleanOption("verbose",   "Whether to run in verbose mode (for debugging)");
-        versionOpt    = addBooleanOption("version",   "Displays the version");
-        recurseOpt.setShortName('r');
-        versionOpt.setShortName('v');
+        versionOpt    = addOption(new BooleanOption("version",   "Displays the version", 'v'));
 
         String javaVersions = StringExt.join(Arrays.asList(new String[] {
                     Java.SOURCE_1_3,
                     Java.SOURCE_1_4,
-                    Java.SOURCE_1_5 + "(the default)",
+                    Java.SOURCE_1_5 + " (the default)",
                     "or " + Java.SOURCE_1_6,
-                }), ",");
+                }), ", ");
         
         fromSourceOpt = addOption(new StringOption("from-source", "The Java source version, of the from-file; " + javaVersions));
         toSourceOpt   = addOption(new StringOption("to-source",   "The Java source version, of the to-file; " + javaVersions));
         sourceOpt     = addOption(new StringOption("source",      "The Java source version of both from-file and the to-file"));
 
-        BooleanOption unifiedOption = new BooleanOption("unified",   "Output unified context. Unused; for compatibility with GNU diff");
-        addOption(unifiedOption);
-        unifiedOption.setShortName('u');
-
+        // processed as a valid option, but unused.
+        addOption(new BooleanOption("unified",   "Output unified context. Unused; for compatibility with GNU diff", 'u'));
+        
         // svn diff --diff-cmd cmd passes "-u, -L first, -L second, file1, file2":
-        StringOption nameOpt = new StringOption("name",   "Sets the first/second name to be displayed") {
+        StringOption nameOpt = new StringOption("name",   "Sets the first/second name to be displayed", 'L') {
                 public void setValue(String val) {
                     if (firstFileName == null) {
                         firstFileName = val;
@@ -98,11 +95,9 @@ public class Options extends OptionSet {
                     }
                 }
             };
-        nameOpt.setShortName('L');
         addOption(nameOpt);
 
-        BooleanOption fmtOpt = new BooleanOption("format",   "Sets the format to unified diff; ignored");
-        fmtOpt.setShortName('u');
+        BooleanOption fmtOpt = new BooleanOption("format", "Sets the format to unified diff; ignored");
         addOption(fmtOpt);
         
         // addEnvironmentVariable("DIFFJ_PROPERTIES");

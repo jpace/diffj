@@ -2,7 +2,6 @@ package org.incava.diffj.code;
 
 import java.text.MessageFormat;
 import java.util.List;
-import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
@@ -13,7 +12,6 @@ import org.incava.diffj.Messages;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.Diff;
 import org.incava.ijdk.util.diff.Difference;
-import org.incava.pmdx.*;
 
 public class Code {    
     private final String name;

@@ -78,11 +78,11 @@ public class Method extends Function implements Diffable<Method> {
                 compareCode(toMethod, differences);
             }
             else {
-                differences.changed(method, toMethod.method, Messages.METHOD_BLOCK_REMOVED);
+                differences.changed(this, toMethod, Messages.METHOD_BLOCK_REMOVED);
             }
         }
         else if (toMethod.hasBlock()) {
-            differences.changed(method, toMethod.method, Messages.METHOD_BLOCK_ADDED);
+            differences.changed(this, toMethod, Messages.METHOD_BLOCK_ADDED);
         }
     }
 

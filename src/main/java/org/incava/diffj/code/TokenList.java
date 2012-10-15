@@ -10,7 +10,7 @@ import org.incava.ijdk.util.diff.Diff;
 import org.incava.ijdk.util.diff.Difference;
 
 /**
- * A list of tokens. Essentially code, but that class is not yet renamed.
+ * A list of tokens representing code.
  */
 public class TokenList {
     public static class TokenComparator extends DefaultComparator<Token> {
