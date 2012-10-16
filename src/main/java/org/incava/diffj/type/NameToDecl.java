@@ -18,16 +18,17 @@ import org.incava.pmdx.SimpleNodeUtil;
 public class NameToDecl {
     private final Map<String, ASTClassOrInterfaceType> map;
 
-    public NameToDecl(ASTClassOrInterfaceDeclaration decl, String extImpClassName) {
+
+    public NameToDecl(ASTClassOrInterfaceDeclaration decl, Class<? extends SimpleNode> extImpClass) {
         this.map = new HashMap<String, ASTClassOrInterfaceType>();
-        SimpleNode list = SimpleNodeUtil.findChild(decl, extImpClassName);
+        SimpleNode list = SimpleNodeUtil.findChild(decl, extImpClass);
 
         if (list == null) {
             return;
         }
         
         Collection<ASTClassOrInterfaceType> types = new ArrayList<ASTClassOrInterfaceType>();
-        SimpleNodeUtil.fetchChildren(types, list, "net.sourceforge.pmd.ast.ASTClassOrInterfaceType");
+        SimpleNodeUtil.fetchChildren(types, list, net.sourceforge.pmd.ast.ASTClassOrInterfaceType.class);
         for (ASTClassOrInterfaceType type : types) {
             map.put(SimpleNodeUtil.toString(type), type);
         }

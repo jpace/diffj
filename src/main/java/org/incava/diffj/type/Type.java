@@ -48,25 +48,19 @@ public class Type extends AccessibleElement implements Diffable<Type> {
         return decl;
     }
 
-    public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClassType(String clsName) {
-        List<ASTClassOrInterfaceBodyDeclaration> decls = TypeDeclarationUtil.getDeclarations(decl);
-        return getDeclarationsOfClass(decls, clsName);
-    }
-
     public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(Class<ItemType> cls) {
         List<ASTClassOrInterfaceBodyDeclaration> decls = TypeDeclarationUtil.getDeclarations(decl);
-        return getDeclarationsOfClass(decls, cls.getName());
+        return getDeclarationsOfClass(decls, cls);
     }
 
-    @SuppressWarnings("unchecked")
-    public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls, String clsName) {
+    public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls, Class<ItemType> cls) {
         List<ItemType> declList = new ArrayList<ItemType>();
 
         for (ASTClassOrInterfaceBodyDeclaration decl : decls) {
-            SimpleNode dec = TypeDeclarationUtil.getDeclaration(decl, clsName);
+            ItemType dec = TypeDeclarationUtil.getDeclaration(decl, cls);
 
             if (dec != null) {
-                declList.add((ItemType)dec);
+                declList.add(dec);
             }   
         }
         

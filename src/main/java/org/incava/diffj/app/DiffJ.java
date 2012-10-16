@@ -14,7 +14,6 @@ import org.incava.diffj.io.JavaElementFactory;
 import org.incava.diffj.io.JavaFSElement;
 import org.incava.diffj.lang.DiffJException;
 import org.incava.ijdk.util.ListExt;
-import org.incava.qualog.Qualog;
 
 public class DiffJ {
     private final Report report;
@@ -32,8 +31,8 @@ public class DiffJ {
                  String fromLabel, String fromSource,
                  String toLabel, String toSource) {
         // tr.Ace.set(true, 25, 4, 20, 25);
-        // tr.Ace.setOutput(Qualog.VERBOSE, Qualog.LEVEL4);
-        // tr.Ace.setOutput(Qualog.QUIET,   Qualog.LEVEL2);
+        // tr.Ace.setOutput(Log.VERBOSE, Log.LEVEL4);
+        // tr.Ace.setOutput(Log.QUIET,   Log.LEVEL2);
         // tr.Ace.setVerbose(true);
         // tr.Ace.stack("this", this, 15);
 

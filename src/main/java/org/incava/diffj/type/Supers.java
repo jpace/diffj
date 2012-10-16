@@ -3,6 +3,7 @@ package org.incava.diffj.type;
 import java.util.Collection;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceType;
+import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.diffj.Differences;
 
 /**
@@ -27,7 +28,7 @@ public abstract class Supers {
         differences.changed(fromType, decl, getRemovedMessage(), typeName);
     }
 
-    abstract protected String getAstClassName();
+    abstract protected Class<? extends SimpleNode> getPmdClass();
 
     abstract protected String getAddedMessage();
 
@@ -81,7 +82,7 @@ public abstract class Supers {
     }
 
     protected NameToDecl getMap() {
-        String extImpClassName = getAstClassName();
-        return new NameToDecl(decl, extImpClassName);
+        Class<? extends SimpleNode> pmdCls = getPmdClass();
+        return new NameToDecl(decl, pmdCls);
     }
 }

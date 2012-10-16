@@ -1,6 +1,7 @@
 package org.incava.diffj.type;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.diffj.Messages;
 
 /**
@@ -11,8 +12,8 @@ public class Implements extends Supers {
         super(decl);
     }
 
-    protected String getAstClassName() {
-        return "net.sourceforge.pmd.ast.ASTImplementsList";
+    protected Class<? extends SimpleNode> getPmdClass() {
+        return net.sourceforge.pmd.ast.ASTImplementsList.class;
     }
 
     protected String getAddedMessage() {
