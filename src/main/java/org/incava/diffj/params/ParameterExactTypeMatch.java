@@ -16,6 +16,6 @@ public class ParameterExactTypeMatch extends ParameterMatch {
     public void diff(Differences differences) {
         Token fromNameTk = getParameterName();
         Token toNameTk = toParams.getParameterName(index);
-        differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_NAME_CHANGED, fromNameTk.image, toNameTk.image);
+        differences.changed(fromNameTk, toNameTk, Parameters.PARAMETER_NAME_CHANGED, fromNameTk.image, toNameTk.image);
     }
 }

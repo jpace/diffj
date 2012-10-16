@@ -2,12 +2,13 @@ package org.incava.diffj;
 
 import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
+import static org.incava.diffj.function.Throws.*;
 
 public class TestCtorThrows extends ItemsTest {
     protected final static String[] THROWS_MSGS = new String[] {
-        Messages.THROWS_REMOVED,
+        THROWS_REMOVED,
         null,
-        Messages.THROWS_ADDED,
+        THROWS_ADDED,
     };
 
     public TestCtorThrows(String name) {
@@ -25,7 +26,7 @@ public class TestCtorThrows extends ItemsTest {
                            "    Test() throws Exception {}",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.THROWS_ADDED, "Exception", loc(2, 5), loc(2, 13), loc(3, 19), loc(3, 27)));
+                 makeCodeChangedRef(THROWS_ADDED, "Exception", loc(2, 5), loc(2, 13), loc(3, 19), loc(3, 27)));
     }
 
     public void testThrowsAddedOneToTwo() {
@@ -39,7 +40,7 @@ public class TestCtorThrows extends ItemsTest {
                            "    Test() throws IOException, NullPointerException {}",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.THROWS_ADDED, "NullPointerException", loc(2, 19), loc(2, 29), loc(3, 32), loc(3, 51)));
+                 makeCodeChangedRef(THROWS_ADDED, "NullPointerException", loc(2, 19), loc(2, 29), loc(3, 32), loc(3, 51)));
     }
 
     public void testThrowsAddedOneToThree() {
@@ -53,9 +54,9 @@ public class TestCtorThrows extends ItemsTest {
                            "    Test() throws ArrayIndexOutOfBoundsException, IOException, NullPointerException {}",
                            "}"),
 
-                 makeCodeChangedRef(Messages.THROWS_ADDED, "ArrayIndexOutOfBoundsException", loc(2, 19), loc(2, 29), loc(3, 19), loc(3, 48)),
+                 makeCodeChangedRef(THROWS_ADDED, "ArrayIndexOutOfBoundsException", loc(2, 19), loc(2, 29), loc(3, 19), loc(3, 48)),
                  new FileDiffChange(throwsReordMsg("IOException", 0, 1), loc(2, 19), loc(2, 29), loc(3, 51), loc(3, 61)),
-                 makeCodeChangedRef(Messages.THROWS_ADDED, "NullPointerException", loc(2, 19), loc(2, 29), loc(3, 64), loc(3, 83)));
+                 makeCodeChangedRef(THROWS_ADDED, "NullPointerException", loc(2, 19), loc(2, 29), loc(3, 64), loc(3, 83)));
     }
 
     public void testThrowsRemovedOneToNone() {
@@ -69,7 +70,7 @@ public class TestCtorThrows extends ItemsTest {
                            "    Test() {}",
                            "}"),
 
-                 makeCodeChangedRef(Messages.THROWS_REMOVED, "IOException", loc(2, 19), loc(2, 29), loc(3, 5), loc(3, 13)));
+                 makeCodeChangedRef(THROWS_REMOVED, "IOException", loc(2, 19), loc(2, 29), loc(3, 5), loc(3, 13)));
     }
 
     public void testThrowsRemovedTwoToOne() {
@@ -83,7 +84,7 @@ public class TestCtorThrows extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.THROWS_REMOVED, "NullPointerException", loc(2, 32), loc(2, 51), loc(2, 19), loc(2, 29)));
+                 makeCodeChangedRef(THROWS_REMOVED, "NullPointerException", loc(2, 32), loc(2, 51), loc(2, 19), loc(2, 29)));
     }
 
     public void testThrowsRemovedThreeToOne() {
@@ -97,9 +98,9 @@ public class TestCtorThrows extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.THROWS_REMOVED, "ArrayIndexOutOfBoundsException", loc(2, 19), loc(2, 48), loc(2, 19), loc(2, 29)),
+                 makeCodeChangedRef(THROWS_REMOVED, "ArrayIndexOutOfBoundsException", loc(2, 19), loc(2, 48), loc(2, 19), loc(2, 29)),
                  new FileDiffChange(throwsReordMsg("IOException", 1, 0),  loc(2, 51), loc(2, 61), loc(2, 19), loc(2, 29)),
-                 makeCodeChangedRef(Messages.THROWS_REMOVED, "NullPointerException", loc(2, 64), loc(2, 83), loc(2, 19), loc(2, 29)));
+                 makeCodeChangedRef(THROWS_REMOVED, "NullPointerException", loc(2, 64), loc(2, 83), loc(2, 19), loc(2, 29)));
     }
 
     public void testThrowsReordered() {
@@ -117,6 +118,6 @@ public class TestCtorThrows extends ItemsTest {
     }
 
     protected String throwsReordMsg(String throwsName, int oldPosition, int newPosition) {
-        return MessageFormat.format(Messages.THROWS_REORDERED, throwsName, Integer.valueOf(oldPosition), Integer.valueOf(newPosition));
+        return MessageFormat.format(THROWS_REORDERED, throwsName, Integer.valueOf(oldPosition), Integer.valueOf(newPosition));
     }
 }

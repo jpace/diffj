@@ -1,6 +1,8 @@
 package org.incava.diffj;
 
 import org.incava.analysis.FileDiffChange;
+import static org.incava.diffj.code.Code.*;
+import static org.incava.diffj.field.Variable.*;
 
 public class TestFieldInitializer extends ItemsTest {
     public TestFieldInitializer(String name) {
@@ -19,7 +21,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 4;",
                            "}"),
                  
-                 new FileDiffChange(Messages.INITIALIZER_ADDED, loc(2, 9), loc(2, 9), loc(3, 13), loc(3, 13)));
+                 new FileDiffChange(INITIALIZER_ADDED, loc(2, 9), loc(2, 9), loc(3, 13), loc(3, 13)));
     }
 
     public void testInitializerRemoved() {
@@ -33,7 +35,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 new FileDiffChange(Messages.INITIALIZER_REMOVED, loc(2, 13), loc(2, 13), loc(3, 9), loc(3, 9)));
+                 new FileDiffChange(INITIALIZER_REMOVED, loc(2, 13), loc(2, 13), loc(3, 9), loc(3, 9)));
     }
 
     public void testInitializerCodeChanged() {
@@ -47,7 +49,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 5;",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.CODE_CHANGED, "i", loc(2, 13), loc(2, 13), loc(3, 13), loc(3, 13)));
+                 makeCodeChangedRef(CODE_CHANGED, "i", loc(2, 13), loc(2, 13), loc(3, 13), loc(3, 13)));
     }
 
     public void testInitializerCodeAdded() {
@@ -61,7 +63,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 4 * 5;",
                            "}"),
                  
-                 makeCodeAddedRef(Messages.CODE_ADDED, "i", loc(2, 14), loc(2, 14), loc(3, 15), loc(3, 17)));
+                 makeCodeAddedRef(CODE_ADDED, "i", loc(2, 14), loc(2, 14), loc(3, 15), loc(3, 17)));
     }
 
     public void testInitializerCodeRemoved() {
@@ -75,6 +77,6 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 4;",
                            "}"),
                  
-                 makeCodeDeletedRef(Messages.CODE_REMOVED, "i", loc(2, 15), loc(2, 17), loc(3, 14), loc(3, 14)));
+                 makeCodeDeletedRef(CODE_REMOVED, "i", loc(2, 15), loc(2, 17), loc(3, 14), loc(3, 14)));
     }
 }

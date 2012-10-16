@@ -13,6 +13,9 @@ import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Types {
+    public static final String TYPE_DECLARATION_ADDED = "type declaration added: {0}";
+    public static final String TYPE_DECLARATION_REMOVED = "type declaration removed: {0}";
+
     private final ASTCompilationUnit compUnit;
     private final List<ASTTypeDeclaration> types;
 
@@ -35,11 +38,11 @@ public class Types {
     protected void compareTypes(ASTTypeDeclaration fromTypeDecl, ASTTypeDeclaration toTypeDecl, Types toTypes, Differences differences) {
         if (fromTypeDecl == null) {
             Token toName = TypeDeclarationUtil.getName(toTypeDecl);
-            differences.added(compUnit, toTypeDecl, Messages.TYPE_DECLARATION_ADDED, toName.image);
+            differences.added(compUnit, toTypeDecl, TYPE_DECLARATION_ADDED, toName.image);
         }
         else if (toTypeDecl == null) {
             Token toName = TypeDeclarationUtil.getName(fromTypeDecl);
-            differences.deleted(fromTypeDecl, toTypes.compUnit, Messages.TYPE_DECLARATION_REMOVED, toName.image);
+            differences.deleted(fromTypeDecl, toTypes.compUnit, TYPE_DECLARATION_REMOVED, toName.image);
         }
         else {
             ASTClassOrInterfaceDeclaration fromDecl = TypeDeclarationUtil.getType(fromTypeDecl);

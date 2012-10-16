@@ -9,6 +9,13 @@ import org.incava.diffj.element.Differences;
 import org.incava.pmdx.ParameterUtil;
 
 public class Parameters {
+    public static final String PARAMETER_REMOVED = "parameter removed: {0}";
+    public static final String PARAMETER_ADDED = "parameter added: {0}";
+    public static final String PARAMETER_REORDERED = "parameter {0} reordered from argument {1} to {2}";
+    public static final String PARAMETER_TYPE_CHANGED = "parameter type changed from {0} to {1}";
+    public static final String PARAMETER_NAME_CHANGED = "parameter name changed from {0} to {1}";
+    public static final String PARAMETER_REORDERED_AND_RENAMED = "parameter {0} reordered from argument {1} to {2} and renamed {3}";
+
     private final ASTFormalParameters params;
     
     public Parameters(ASTFormalParameters params) {
@@ -63,14 +70,14 @@ public class Parameters {
     protected void markParametersAdded(Parameters toParams, Differences differences) {
         List<Token> names = toParams.getParameterNames();
         for (Token name : names) {
-            differences.changed(params, name, Messages.PARAMETER_ADDED, name.image);
+            differences.changed(params, name, PARAMETER_ADDED, name.image);
         }
     }
 
     protected void markParametersRemoved(Parameters toParams, Differences differences) {
         List<Token> names = getParameterNames();
         for (Token name : names) {
-            differences.changed(name, toParams.params, Messages.PARAMETER_REMOVED, name.image);
+            differences.changed(name, toParams.params, PARAMETER_REMOVED, name.image);
         }
     }
 
@@ -98,7 +105,7 @@ public class Parameters {
             // tr.Ace.bold("toFormalParam", toFormalParam);
             Parameter toParam = new Parameter(unmatchedParam);
             Token toName = toParam.getParameterName();
-            differences.changed(params, unmatchedParam, Messages.PARAMETER_ADDED, toName.image);
+            differences.changed(params, unmatchedParam, PARAMETER_ADDED, toName.image);
         }
     }
 

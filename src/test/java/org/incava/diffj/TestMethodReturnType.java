@@ -1,7 +1,7 @@
 package org.incava.diffj;
 
-import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
+import static org.incava.diffj.function.Method.*;
 
 public class TestMethodReturnType extends ItemsTest {
     public TestMethodReturnType(String name) {
@@ -19,7 +19,7 @@ public class TestMethodReturnType extends ItemsTest {
                            "    Integer foo() { return null; }",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, Messages.RETURN_TYPE_CHANGED, "Object", "Integer"),
+                 new FileDiffChange(getMessage(null, null, RETURN_TYPE_CHANGED, "Object", "Integer"),
                                     loc(2, 5), loc(2, 10), 
                                     loc(3, 5), loc(3, 11)));
     }

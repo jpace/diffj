@@ -1,11 +1,10 @@
 package org.incava.diffj;
 
-import java.text.MessageFormat;
+import static org.incava.diffj.code.Code.*;
 
 public class TestCtorCode extends ItemsTest {
     public TestCtorCode(String name) {
         super(name);
-        tr.Ace.setVerbose(true);
     }
 
     public void testCodeNotChanged() {
@@ -38,7 +37,7 @@ public class TestCtorCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.CODE_CHANGED, "Test()", loc(2, 23), loc(2, 23), loc(4, 18), loc(4, 18)));
+                 makeCodeChangedRef(CODE_CHANGED, "Test()", loc(2, 23), loc(2, 23), loc(4, 18), loc(4, 18)));
     }
     
     public void testCodeInsertedSameLine() {
@@ -55,7 +54,7 @@ public class TestCtorCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeAddedRef(Messages.CODE_ADDED, "Test()", loc(2, 18), loc(2, 18), loc(4, 13), loc(5, 11)));
+                 makeCodeAddedRef(CODE_ADDED, "Test()", loc(2, 18), loc(2, 18), loc(4, 13), loc(5, 11)));
     }
 
     public void testCodeAddedOwnLine() {
@@ -76,7 +75,7 @@ public class TestCtorCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeAddedRef(Messages.CODE_ADDED, "Test()", loc(4, 9), loc(4, 11), loc(5, 9), loc(5, 21)));
+                 makeCodeAddedRef(CODE_ADDED, "Test()", loc(4, 9), loc(4, 11), loc(5, 9), loc(5, 21)));
     }
 
     public void testCodeDeleted() {
@@ -93,7 +92,7 @@ public class TestCtorCode extends ItemsTest {
                            "    Test() { int i = -1; }",
                            "}"),
                  
-                 makeCodeDeletedRef(Messages.CODE_REMOVED, "Test()", loc(3, 13), loc(4, 11), loc(3, 18), loc(3, 18)));
+                 makeCodeDeletedRef(CODE_REMOVED, "Test()", loc(3, 13), loc(4, 11), loc(3, 18), loc(3, 18)));
     }
     
     public void testCodeInsertedAndChanged() {
@@ -110,6 +109,6 @@ public class TestCtorCode extends ItemsTest {
                            "    }",
                            "}"),
 
-                 makeCodeChangedRef(Messages.CODE_CHANGED, "Test(int)", loc(2, 19), loc(2, 23), loc(4,  9), loc(5, 13)));
+                 makeCodeChangedRef(CODE_CHANGED, "Test(int)", loc(2, 19), loc(2, 23), loc(4,  9), loc(5, 13)));
     }
 }

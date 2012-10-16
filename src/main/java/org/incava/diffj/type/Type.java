@@ -21,6 +21,15 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Type extends AccessibleElement implements Diffable<Type> {
+    public static final String TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface";
+    public static final String TYPE_CHANGED_FROM_INTERFACE_TO_CLASS = "type changed from interface to class";
+
+    public static final String INNER_INTERFACE_ADDED = "inner interface added: {0}";
+    public static final String INNER_INTERFACE_REMOVED = "inner interface removed: {0}";
+
+    public static final String INNER_CLASS_ADDED = "inner class added: {0}";
+    public static final String INNER_CLASS_REMOVED = "inner class removed: {0}";
+
     private final ASTClassOrInterfaceDeclaration decl;
     
     public Type(ASTClassOrInterfaceDeclaration decl) {
@@ -30,10 +39,10 @@ public class Type extends AccessibleElement implements Diffable<Type> {
 
     public void diff(Type toType, Differences differences) {
         if (!isInterface() && toType.isInterface()) {
-            differences.changed(this, toType, Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
+            differences.changed(this, toType, TYPE_CHANGED_FROM_CLASS_TO_INTERFACE);
         }
         else if (isInterface() && !toType.isInterface()) {
-            differences.changed(this, toType, Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
+            differences.changed(this, toType, TYPE_CHANGED_FROM_INTERFACE_TO_CLASS);
         }
         
         compareAccess(toType, differences);
@@ -159,10 +168,10 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
 
     public String getAddedMessage() {
-        return isInterface() ? Messages.INNER_INTERFACE_ADDED : Messages.INNER_CLASS_ADDED;
+        return isInterface() ? INNER_INTERFACE_ADDED : INNER_CLASS_ADDED;
     }
 
     public String getRemovedMessage() {
-        return isInterface() ? Messages.INNER_INTERFACE_REMOVED : Messages.INNER_CLASS_REMOVED;
+        return isInterface() ? INNER_INTERFACE_REMOVED : INNER_CLASS_REMOVED;
     }
 }

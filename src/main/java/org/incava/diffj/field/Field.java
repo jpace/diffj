@@ -18,6 +18,9 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.VariableUtil;
 
 public class Field extends AccessibleElement implements Diffable<Field> {
+    public static final String FIELD_REMOVED = "field removed: {0}";
+    public static final String FIELD_ADDED = "field added: {0}";    
+
     private final ASTFieldDeclaration field;
 
     public Field(ASTFieldDeclaration field) {
@@ -36,11 +39,11 @@ public class Field extends AccessibleElement implements Diffable<Field> {
     }
 
     public String getAddedMessage() {
-        return Messages.FIELD_ADDED;
+        return FIELD_ADDED;
     }
 
     public String getRemovedMessage() {
-        return Messages.FIELD_REMOVED;
+        return FIELD_REMOVED;
     }
 
     protected FieldModifiers getModifiers() {

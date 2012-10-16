@@ -10,6 +10,10 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.ThrowsUtil;
 
 public class Throws {
+    public static final String THROWS_REMOVED = "throws removed: {0}";
+    public static final String THROWS_ADDED = "throws added: {0}";
+    public static final String THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}";
+
     private final SimpleNode node;
     private final ASTNameList nameList;
     
@@ -47,14 +51,14 @@ public class Throws {
     protected void addAllThrows(Throws toThrows, Differences differences) {
         List<ASTName> names = toThrows.getChildNames();
         for (ASTName name : names) {
-            changeThrows(node, name, Messages.THROWS_ADDED, name, differences);
+            changeThrows(node, name, THROWS_ADDED, name, differences);
         }
     }
 
     protected void removeAllThrows(Throws toThrows, Differences differences) {
         List<ASTName> names = getChildNames();
         for (ASTName name : names) {
-            changeThrows(name, toThrows.node, Messages.THROWS_REMOVED, name, differences);
+            changeThrows(name, toThrows.node, THROWS_REMOVED, name, differences);
         }
     }
 
@@ -78,17 +82,17 @@ public class Throws {
             else if (throwsMatch >= 0) {
                 ASTName toName = toThrows.getName(throwsMatch);
                 String fromNameStr = SimpleNodeUtil.toString(fromName);
-                differences.changed(fromName, toName, Messages.THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
+                differences.changed(fromName, toName, THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
             }
             else {
-                changeThrows(fromName, toThrows.nameList, Messages.THROWS_REMOVED, fromName, differences);
+                changeThrows(fromName, toThrows.nameList, THROWS_REMOVED, fromName, differences);
             }
         }
 
         for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
             if (toNames.get(toIdx) != null) {
                 ASTName toName = toThrows.getName(toIdx);
-                changeThrows(nameList, toName, Messages.THROWS_ADDED, toName, differences);
+                changeThrows(nameList, toName, THROWS_ADDED, toName, differences);
             }
         }
     }

@@ -17,6 +17,13 @@ import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Method extends Function implements Diffable<Method> {
+    public static final String METHOD_REMOVED = "method removed: {0}";
+    public static final String METHOD_ADDED = "method added: {0}";
+    public static final String METHOD_CHANGED = "method changed from {0} to {1}";
+    public static final String RETURN_TYPE_CHANGED = "return type changed from {0} to {1}";
+    public static final String METHOD_BLOCK_ADDED = "method block added";
+    public static final String METHOD_BLOCK_REMOVED = "method block removed";
+
     private final ASTMethodDeclaration method;
     private final ASTBlock block;
 
@@ -78,11 +85,11 @@ public class Method extends Function implements Diffable<Method> {
                 compareCode(toMethod, differences);
             }
             else {
-                differences.changed(this, toMethod, Messages.METHOD_BLOCK_REMOVED);
+                differences.changed(this, toMethod, METHOD_BLOCK_REMOVED);
             }
         }
         else if (toMethod.hasBlock()) {
-            differences.changed(this, toMethod, Messages.METHOD_BLOCK_ADDED);
+            differences.changed(this, toMethod, METHOD_BLOCK_ADDED);
         }
     }
 
@@ -108,7 +115,7 @@ public class Method extends Function implements Diffable<Method> {
         String     toRetTypeStr   = SimpleNodeUtil.toString(toRetType);
 
         if (!fromRetTypeStr.equals(toRetTypeStr)) {
-            differences.changed(fromRetType, toRetType, Messages.RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
+            differences.changed(fromRetType, toRetType, RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
         }
     }
 
@@ -135,10 +142,10 @@ public class Method extends Function implements Diffable<Method> {
     }
 
     public String getAddedMessage() {
-        return Messages.METHOD_ADDED;
+        return METHOD_ADDED;
     }
 
     public String getRemovedMessage() {
-        return Messages.METHOD_REMOVED;
+        return METHOD_REMOVED;
     }
 }

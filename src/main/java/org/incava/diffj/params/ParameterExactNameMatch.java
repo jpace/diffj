@@ -17,6 +17,6 @@ public class ParameterExactNameMatch extends ParameterMatch {
         Parameter toParam = new Parameter(toFormalParam);
         String fromType = fromParam.getParameterType();
         String toType = toParam.getParameterType();
-        differences.changed(fromFormalParam, toFormalParam, Messages.PARAMETER_TYPE_CHANGED, fromType, toType);
+        differences.changed(fromFormalParam, toFormalParam, Parameters.PARAMETER_TYPE_CHANGED, fromType, toType);
     }
 }

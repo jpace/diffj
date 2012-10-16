@@ -6,66 +6,76 @@ import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.ijdk.text.Location;
+import static org.incava.diffj.compunit.Package.*;
+import static org.incava.diffj.element.Access.*;
+import static org.incava.diffj.element.Modifiers.*;
+import static org.incava.diffj.field.Field.*;
+import static org.incava.diffj.field.Variable.*;
+import static org.incava.diffj.field.Variables.*;
+import static org.incava.diffj.function.Ctor.*;
+import static org.incava.diffj.function.Method.*;
+import static org.incava.diffj.type.Type.*;
+import static org.incava.diffj.type.Types.*;
 
 public class ItemsTest extends DiffJTest {
     protected final static String[] METHOD_MSGS = new String[] {
-        Messages.METHOD_REMOVED,
-        Messages.METHOD_CHANGED, 
-        Messages.METHOD_ADDED,
+        METHOD_REMOVED,
+        METHOD_CHANGED, 
+        METHOD_ADDED,
     };
 
     protected final static String[] FIELD_MSGS = new String[] {
-        Messages.FIELD_REMOVED,
+        FIELD_REMOVED,
         null,
-        Messages.FIELD_ADDED,
+        FIELD_ADDED,
     };
 
     protected final static String[] CLASS_MSGS = new String[] {
-        Messages.INNER_CLASS_REMOVED,
+        INNER_CLASS_REMOVED,
         null,
-        Messages.INNER_CLASS_ADDED,
+        INNER_CLASS_ADDED,
     };
 
     protected final static String[] INTERFACE_MSGS = new String[] {
-        Messages.INNER_INTERFACE_REMOVED,
+        INNER_INTERFACE_REMOVED,
         null,
-        Messages.INNER_INTERFACE_ADDED,
+        INNER_INTERFACE_ADDED,
     };
 
     protected final static String[] CONSTRUCTOR_MSGS = new String[] {
-        Messages.CONSTRUCTOR_REMOVED,
+        CONSTRUCTOR_REMOVED,
         null,
-        Messages.CONSTRUCTOR_ADDED,
+        CONSTRUCTOR_ADDED,
     };
 
     protected final static String[] MODIFIER_MSGS = new String[] {
-        Messages.MODIFIER_REMOVED,
-        Messages.MODIFIER_CHANGED,
-        Messages.MODIFIER_ADDED,
+        MODIFIER_REMOVED,
+        MODIFIER_CHANGED,
+        MODIFIER_ADDED,
     };
 
     protected final static String[] ACCESS_MSGS = new String[] {
-        Messages.ACCESS_REMOVED,
-        Messages.ACCESS_CHANGED, 
-        Messages.ACCESS_ADDED,
+        ACCESS_REMOVED,
+        ACCESS_CHANGED, 
+        ACCESS_ADDED,
     };
 
     protected final static String[] TYPES_MSGS = new String[] {
-        Messages.TYPE_DECLARATION_REMOVED,
+        TYPE_DECLARATION_REMOVED,
         null,
-        Messages.TYPE_DECLARATION_ADDED,
+        TYPE_DECLARATION_ADDED,
     };
 
     protected final static String[] PACKAGE_MSGS = new String[] {
-        Messages.PACKAGE_REMOVED, 
-        Messages.PACKAGE_RENAMED,
-        Messages.PACKAGE_ADDED,
+        PACKAGE_REMOVED, 
+        PACKAGE_RENAMED,
+        PACKAGE_ADDED,
     };
 
     protected final static String[] VARIABLE_MSGS = new String[] {
-        Messages.VARIABLE_REMOVED,
-        Messages.VARIABLE_CHANGED, 
-        Messages.VARIABLE_ADDED,
+        VARIABLE_REMOVED,
+        VARIABLE_CHANGED, 
+        VARIABLE_ADDED,
     };
 
     public ItemsTest(String name) {

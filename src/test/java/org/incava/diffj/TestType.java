@@ -1,6 +1,9 @@
 package org.incava.diffj;
 
 import org.incava.analysis.FileDiffChange;
+import static org.incava.diffj.type.Extends.*;
+import static org.incava.diffj.type.Implements.*;
+import static org.incava.diffj.type.Type.*;
 
 public class TestType extends ItemsTest {
     public TestType(String name) {
@@ -14,7 +17,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface Test {",
                            "}"),
                  
-                 new FileDiffChange(Messages.TYPE_CHANGED_FROM_CLASS_TO_INTERFACE, loc(1, 1), loc(2, 1), loc(1, 1), loc(2, 1)));
+                 new FileDiffChange(TYPE_CHANGED_FROM_CLASS_TO_INTERFACE, loc(1, 1), loc(2, 1), loc(1, 1), loc(2, 1)));
     }
 
     public void testInterfaceToClass() {
@@ -24,7 +27,7 @@ public class TestType extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffChange(Messages.TYPE_CHANGED_FROM_INTERFACE_TO_CLASS, loc(1, 1), loc(2, 1), loc(1, 1), loc(2, 1)));
+                 new FileDiffChange(TYPE_CHANGED_FROM_INTERFACE_TO_CLASS, loc(1, 1), loc(2, 1), loc(1, 1), loc(2, 1)));
     }
 
     public void testClassAccessChanged() {
@@ -156,7 +159,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A extends Date {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.EXTENDED_TYPE_ADDED, "Date", loc(1, 1), loc(2, 1), loc(1, 17), loc(1, 20)));
+                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "Date", loc(1, 1), loc(2, 1), loc(1, 17), loc(1, 20)));
 
         evaluate(new Lines("class A {",
                            "}"),
@@ -164,7 +167,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A extends java.util.Date {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.EXTENDED_TYPE_ADDED, "java.util.Date", loc(1, 1), loc(2, 1), loc(1, 17), loc(1, 30)));
+                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "java.util.Date", loc(1, 1), loc(2, 1), loc(1, 17), loc(1, 30)));
     }
 
     public void testClassExtendsChanged() {
@@ -175,7 +178,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A extends Date {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.EXTENDED_TYPE_CHANGED, new String[] { "Object", "Date" }, loc(1, 17), loc(1, 22), loc(1, 17), loc(1, 20)));
+                 makeCodeChangedRef(EXTENDED_TYPE_CHANGED, new String[] { "Object", "Date" }, loc(1, 17), loc(1, 22), loc(1, 17), loc(1, 20)));
     }
 
     public void testClassExtendsDeleted() {
@@ -185,7 +188,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.EXTENDED_TYPE_REMOVED, "Date", loc(1, 17), loc(1, 20), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "Date", loc(1, 17), loc(1, 20), loc(1, 1), loc(2, 1)));
 
         evaluate(new Lines("class A extends java.util.Date {",
                            "}"),
@@ -193,7 +196,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.EXTENDED_TYPE_REMOVED, "java.util.Date", loc(1, 17), loc(1, 30), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "java.util.Date", loc(1, 17), loc(1, 30), loc(1, 1), loc(2, 1)));
     }
 
     public void testInterfaceExtendsAdded() {
@@ -203,7 +206,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface A extends Comparator {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.EXTENDED_TYPE_ADDED, "Comparator", loc(1, 1), loc(2, 1), loc(1, 21), loc(1, 30)));
+                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "Comparator", loc(1, 1), loc(2, 1), loc(1, 21), loc(1, 30)));
     }
 
     public void testInterfaceExtendsChanged() {
@@ -213,7 +216,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface A extends Comparator {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.EXTENDED_TYPE_CHANGED, new String[] { "Comparable", "Comparator" }, loc(1, 21), loc(1, 30), loc(1, 21), loc(1, 30)));
+                 makeCodeChangedRef(EXTENDED_TYPE_CHANGED, new String[] { "Comparable", "Comparator" }, loc(1, 21), loc(1, 30), loc(1, 21), loc(1, 30)));
     }
 
     public void testInterfaceExtendsDeleted() {
@@ -223,7 +226,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface A {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.EXTENDED_TYPE_REMOVED, "Comparable", loc(1, 21), loc(1, 30), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "Comparable", loc(1, 21), loc(1, 30), loc(1, 1), loc(2, 1)));
     }
 
     public void testClassImplementsAdded() {
@@ -233,7 +236,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A implements Runnable {",
                            "}"),
 
-                 makeCodeChangedRef(Messages.IMPLEMENTED_TYPE_ADDED, "Runnable", loc(1, 1), loc(2, 1), loc(1, 20), loc(1, 27)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_ADDED, "Runnable", loc(1, 1), loc(2, 1), loc(1, 20), loc(1, 27)));
 
         evaluate(new Lines("class A {",
                            "}"),
@@ -241,7 +244,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A implements java.lang.Runnable {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.IMPLEMENTED_TYPE_ADDED, "java.lang.Runnable", loc(1, 1), loc(2, 1), loc(1, 20), loc(1, 37)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_ADDED, "java.lang.Runnable", loc(1, 1), loc(2, 1), loc(1, 20), loc(1, 37)));
     }
 
     public void testClassImplementsChanged() {
@@ -252,7 +255,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A implements Runnable {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.IMPLEMENTED_TYPE_CHANGED, new String[] { "Cloneable", "Runnable" }, loc(1, 20), loc(1, 28), loc(1, 20), loc(1, 27)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_CHANGED, new String[] { "Cloneable", "Runnable" }, loc(1, 20), loc(1, 28), loc(1, 20), loc(1, 27)));
     }
 
     public void testClassImplementsNoChange() {
@@ -273,7 +276,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.IMPLEMENTED_TYPE_REMOVED, "Runnable", loc(1, 20), loc(1, 27), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_REMOVED, "Runnable", loc(1, 20), loc(1, 27), loc(1, 1), loc(2, 1)));
 
         evaluate(new Lines("class A implements java.lang.Runnable {",
                            "}"),
@@ -281,6 +284,6 @@ public class TestType extends ItemsTest {
                  new Lines("class A {",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.IMPLEMENTED_TYPE_REMOVED, "java.lang.Runnable", loc(1, 20), loc(1, 37), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_REMOVED, "java.lang.Runnable", loc(1, 20), loc(1, 37), loc(1, 1), loc(2, 1)));
     }
 }

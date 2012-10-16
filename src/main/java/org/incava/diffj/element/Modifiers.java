@@ -10,6 +10,10 @@ import org.incava.diffj.element.Differences;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public abstract class Modifiers {
+    public static final String MODIFIER_REMOVED = "modifier removed: {0}";
+    public static final String MODIFIER_ADDED = "modifier added: {0}";
+    public static final String MODIFIER_CHANGED = "modifier changed from {0} to {1}";
+
     private final SimpleNode node;
 
     public Modifiers(SimpleNode node) {
@@ -38,11 +42,11 @@ public abstract class Modifiers {
             
             if (fromMod == null) {
                 if (toMod != null) {
-                    differences.changed(getFirstToken(), toMod, Messages.MODIFIER_ADDED, toMod.image);
+                    differences.changed(getFirstToken(), toMod, MODIFIER_ADDED, toMod.image);
                 }
             }
             else if (toMod == null) {
-                differences.changed(fromMod, toModifiers.getFirstToken(), Messages.MODIFIER_REMOVED, fromMod.image);
+                differences.changed(fromMod, toModifiers.getFirstToken(), MODIFIER_REMOVED, fromMod.image);
             }
         }
     }

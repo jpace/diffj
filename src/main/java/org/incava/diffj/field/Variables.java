@@ -20,6 +20,10 @@ import org.incava.pmdx.FieldUtil;
  * </pre>
  */
 public class Variables {
+    public static final String VARIABLE_REMOVED = "variable removed: {0}";
+    public static final String VARIABLE_ADDED = "variable added: {0}";
+    public static final String VARIABLE_CHANGED = "variable changed from {0} to {1}";
+
     private final ASTType type;
     private final List<ASTVariableDeclarator> variables;
 
@@ -46,10 +50,10 @@ public class Variables {
                 variable.diff(toVariable, differences);
             }
             else if (fromVarDecl == null) {
-                processAddDelVariable(name, Messages.VARIABLE_ADDED, variables.get(0), toVarDecl, differences);
+                processAddDelVariable(name, VARIABLE_ADDED, variables.get(0), toVarDecl, differences);
             }
             else {
-                processAddDelVariable(name, Messages.VARIABLE_REMOVED, fromVarDecl, toVariables.variables.get(0), differences);
+                processAddDelVariable(name, VARIABLE_REMOVED, fromVarDecl, toVariables.variables.get(0), differences);
             }
         }
     }

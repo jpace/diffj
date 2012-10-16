@@ -14,6 +14,6 @@ public class ParameterNameMatch extends ParameterMatch {
         int toIdx = getNameMatch();
         Token fromNameTk = fromParam.getParameterName();
         ASTFormalParameter toParam = toParams.getParameter(toIdx);
-        differences.changed(fromFormalParam, toParam, Messages.PARAMETER_REORDERED, fromNameTk.image, index, toIdx);
+        differences.changed(fromFormalParam, toParam, Parameters.PARAMETER_REORDERED, fromNameTk.image, index, toIdx);
     }
 }

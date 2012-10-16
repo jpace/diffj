@@ -15,10 +15,10 @@ public class ParameterTypeMatch extends ParameterMatch {
         Token fromNameTk = fromParam.getParameterName();
         Token toNameTk = toParams.getParameterName(toIdx);
         if (fromNameTk.image.equals(toNameTk.image)) {
-            differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_REORDERED, fromNameTk.image, index, toIdx);
+            differences.changed(fromNameTk, toNameTk, Parameters.PARAMETER_REORDERED, fromNameTk.image, index, toIdx);
         }
         else {
-            differences.changed(fromNameTk, toNameTk, Messages.PARAMETER_REORDERED_AND_RENAMED, fromNameTk.image, index, toIdx, toNameTk.image);
+            differences.changed(fromNameTk, toNameTk, Parameters.PARAMETER_REORDERED_AND_RENAMED, fromNameTk.image, index, toIdx, toNameTk.image);
         }
     }
 }

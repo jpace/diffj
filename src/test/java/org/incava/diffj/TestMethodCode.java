@@ -1,6 +1,7 @@
 package org.incava.diffj;
 
 import org.incava.analysis.FileDiffChange;
+import static org.incava.diffj.code.Code.*;
 
 public class TestMethodCode extends ItemsTest {
     public TestMethodCode(String name) {
@@ -37,7 +38,7 @@ public class TestMethodCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.CODE_CHANGED, "bar()", loc(2, 25), loc(2, 25), loc(4, 17), loc(4, 17)));
+                 makeCodeChangedRef(CODE_CHANGED, "bar()", loc(2, 25), loc(2, 25), loc(4, 17), loc(4, 17)));
     }
     
     public void testCodeInserted() {
@@ -54,7 +55,7 @@ public class TestMethodCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeAddedRef(Messages.CODE_ADDED, "bar()", loc(2, 17), loc(2, 22), loc(4, 9), loc(4, 18)));
+                 makeCodeAddedRef(CODE_ADDED, "bar()", loc(2, 17), loc(2, 22), loc(4, 9), loc(4, 18)));
     }
 
     public void testCodeDeleted() {
@@ -71,7 +72,7 @@ public class TestMethodCode extends ItemsTest {
                            "    int bar() { return -1; }",
                            "}"),
                  
-                 makeCodeDeletedRef(Messages.CODE_REMOVED, "bar()", loc(3, 9), loc(3, 18), loc(3, 17), loc(3, 22)));
+                 makeCodeDeletedRef(CODE_REMOVED, "bar()", loc(3, 9), loc(3, 18), loc(3, 17), loc(3, 22)));
     }
 
     public void testCodeInsertedAndChanged() {
@@ -88,7 +89,7 @@ public class TestMethodCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeChangedRef(Messages.CODE_CHANGED, "bar()", loc(2, 17), loc(2, 25), loc(4, 9), loc(5, 17)));
+                 makeCodeChangedRef(CODE_CHANGED, "bar()", loc(2, 17), loc(2, 25), loc(4, 9), loc(5, 17)));
     }
 
     // See comment in TestDiff.java, with regard to misleading LCSes.
@@ -204,7 +205,7 @@ public class TestMethodCode extends ItemsTest {
                            "            }",
                            "        }"),
                  
-                 makeCodeChangedRef(Messages.CODE_CHANGED, "bar()", loc(2, 17), loc(2, 25), loc(4, 9), loc(5, 17)));
+                 makeCodeChangedRef(CODE_CHANGED, "bar()", loc(2, 17), loc(2, 25), loc(4, 9), loc(5, 17)));
     }
 
     public void xtestIfStatementsNotChangedBracesToStatements() {
@@ -223,11 +224,11 @@ public class TestMethodCode extends ItemsTest {
         //                    "    }",
         //                    "}"),
                  
-        //          makeCodeChangedRef(Messages.PARAMETER_ADDED, "obj",     loc(2, 39), loc(4, 28), loc(3, 21), loc(3, 40)),
-        //          makeCodeChangedRef(Messages.PARAMETER_ADDED, "string1", loc(2, 39), loc(4, 28), loc(4, 21), loc(4, 34)),
-        //          makeCodeChangedRef(Messages.PARAMETER_ADDED, "string2", loc(2, 39), loc(4, 28), loc(4, 37), loc(4, 50)),
-        //          makeCodeChangedRef(Messages.PARAMETER_ADDED, "string3", loc(2, 39), loc(4, 28), loc(4, 53), loc(4, 66)),
-        //          makeCodeChangedRef(Messages.PARAMETER_REMOVED, "ctx",   loc(2, 40), loc(2, 56), loc(3, 20), loc(4, 117)),
+        //          makeCodeChangedRef(PARAMETER_ADDED, "obj",     loc(2, 39), loc(4, 28), loc(3, 21), loc(3, 40)),
+        //          makeCodeChangedRef(PARAMETER_ADDED, "string1", loc(2, 39), loc(4, 28), loc(4, 21), loc(4, 34)),
+        //          makeCodeChangedRef(PARAMETER_ADDED, "string2", loc(2, 39), loc(4, 28), loc(4, 37), loc(4, 50)),
+        //          makeCodeChangedRef(PARAMETER_ADDED, "string3", loc(2, 39), loc(4, 28), loc(4, 53), loc(4, 66)),
+        //          makeCodeChangedRef(PARAMETER_REMOVED, "ctx",   loc(2, 40), loc(2, 56), loc(3, 20), loc(4, 117)),
         //          new FileDiffChange(paramReordMsg("obj1", 1, 4), loc(3, 9), loc(3, 27), loc(4, 69), loc(4, 91)),
         //          new FileDiffChange(paramReordMsg("obj2", 2, 5), loc(4, 9), loc(4, 27), loc(4, 94), loc(4, 116)));
     }

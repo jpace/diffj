@@ -15,6 +15,9 @@ import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Ctor extends Function implements Diffable<Ctor> {
+    public static final String CONSTRUCTOR_REMOVED = "constructor removed: {0}";
+    public static final String CONSTRUCTOR_ADDED = "constructor added: {0}";
+
     private final ASTConstructorDeclaration ctor;
 
     public Ctor(ASTConstructorDeclaration ctor) {
@@ -68,10 +71,10 @@ public class Ctor extends Function implements Diffable<Ctor> {
     }
 
     public String getAddedMessage() {
-        return Messages.CONSTRUCTOR_ADDED;
+        return CONSTRUCTOR_ADDED;
     }
 
     public String getRemovedMessage() {
-        return Messages.CONSTRUCTOR_REMOVED;
+        return CONSTRUCTOR_REMOVED;
     }
 }

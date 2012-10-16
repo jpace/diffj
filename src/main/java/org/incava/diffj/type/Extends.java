@@ -8,6 +8,10 @@ import org.incava.diffj.Messages;
  * Compares extends.
  */
 public class Extends extends Supers {
+    public static final String EXTENDED_TYPE_REMOVED = "extended type removed: {0}";
+    public static final String EXTENDED_TYPE_ADDED = "extended type added: {0}";
+    public static final String EXTENDED_TYPE_CHANGED = "extended type changed from {0} to {1}";
+
     public Extends(ASTClassOrInterfaceDeclaration decl) {
         super(decl);
     }
@@ -17,14 +21,14 @@ public class Extends extends Supers {
     }
 
     protected String getAddedMessage() {
-        return Messages.EXTENDED_TYPE_ADDED;
+        return EXTENDED_TYPE_ADDED;
     }
 
     protected String getChangedMessage() {
-        return Messages.EXTENDED_TYPE_CHANGED;
+        return EXTENDED_TYPE_CHANGED;
     }
 
     protected String getRemovedMessage() {
-        return Messages.EXTENDED_TYPE_REMOVED;
+        return EXTENDED_TYPE_REMOVED;
     }
 }

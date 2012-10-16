@@ -14,6 +14,10 @@ import org.incava.ijdk.util.diff.Diff;
 import org.incava.ijdk.util.diff.Difference;
 
 public class Code {    
+    public static final String CODE_CHANGED = "code changed in {0}";
+    public static final String CODE_ADDED = "code added in {0}";
+    public static final String CODE_REMOVED = "code removed in {0}";
+
     private final String name;
     private final TokenList tokenList;
 
@@ -38,7 +42,7 @@ public class Code {
     }
 
     protected FileDiff replaceReference(FileDiff fileDiff, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        String newMsg = MessageFormat.format(Messages.CODE_CHANGED, name);
+        String newMsg = MessageFormat.format(CODE_CHANGED, name);
         FileDiff newDiff = new FileDiffChange(newMsg, fileDiff, fromLocRg, toLocRg);
         differences.getFileDiffs().remove(fileDiff);
         return addFileDiff(newDiff, differences);
@@ -52,11 +56,11 @@ public class Code {
     protected FileDiff addReference(String msg, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
         String str = MessageFormat.format(msg, name);
 
-        if (msg.equals(Messages.CODE_ADDED)) {
+        if (msg.equals(CODE_ADDED)) {
             // this will show as add when highlighted, as change when not.
             return addFileDiff(new FileDiffCodeAdded(str, fromLocRg, toLocRg), differences);
         }
-        else if (msg.equals(Messages.CODE_REMOVED)) {
+        else if (msg.equals(CODE_REMOVED)) {
             return addFileDiff(new FileDiffCodeDeleted(str, fromLocRg, toLocRg), differences);
         }
         else {
@@ -82,7 +86,7 @@ public class Code {
             return replaceReference(currFileDiff, fromLocRg, toLocRg, differences);
         }
         else {
-            String msg = delEnd == Difference.NONE ? Messages.CODE_ADDED : (addEnd == Difference.NONE ? Messages.CODE_REMOVED : Messages.CODE_CHANGED);
+            String msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);
             return addReference(msg, fromLocRg, toLocRg, differences);
         }
     }

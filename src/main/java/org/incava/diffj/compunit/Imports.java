@@ -13,6 +13,11 @@ import org.incava.diffj.element.Differences;
 import org.incava.pmdx.CompilationUnitUtil;
 
 public class Imports {
+    public static final String IMPORT_REMOVED = "import removed: {0}";
+    public static final String IMPORT_ADDED = "import added: {0}";
+    public static final String IMPORT_SECTION_REMOVED = "import section removed";
+    public static final String IMPORT_SECTION_ADDED = "import section added";
+
     private final ASTCompilationUnit compUnit;
     private final List<Import> imports;
 
@@ -99,10 +104,10 @@ public class Imports {
             ASTImportDeclaration toImp = toImports.getDeclaration(name);
             
             if (fromImp == null) {
-                differences.added(getFirstDeclaration(), toImp, Messages.IMPORT_ADDED, name);
+                differences.added(getFirstDeclaration(), toImp, IMPORT_ADDED, name);
             }
             else if (toImp == null) {
-                differences.deleted(fromImp, toImports.getFirstDeclaration(), Messages.IMPORT_REMOVED, name);
+                differences.deleted(fromImp, toImports.getFirstDeclaration(), IMPORT_REMOVED, name);
             }
         }
     }
@@ -112,7 +117,7 @@ public class Imports {
         Token fromEnd = fromStart;
         Token toStart = toImports.getFirstToken();
         Token toEnd = toImports.getLastToken();
-        differences.added(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_ADDED);
+        differences.added(fromStart, fromEnd, toStart, toEnd, IMPORT_SECTION_ADDED);
     }
 
     protected void markAllRemoved(Imports toImports, Differences differences) {
@@ -120,7 +125,7 @@ public class Imports {
         Token fromEnd = getLastToken();
         Token toStart = toImports.getFirstTypeToken();
         Token toEnd = toStart;
-        differences.deleted(fromStart, fromEnd, toStart, toEnd, Messages.IMPORT_SECTION_REMOVED);
+        differences.deleted(fromStart, fromEnd, toStart, toEnd, IMPORT_SECTION_REMOVED);
     }
 
     protected Token getFirstTypeToken() {

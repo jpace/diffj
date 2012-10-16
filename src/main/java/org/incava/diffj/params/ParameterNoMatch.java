@@ -12,6 +12,6 @@ public class ParameterNoMatch extends ParameterMatch {
 
     public void diff(Differences differences) {
         Token fromNameTk = getParameterName();
-        differences.changed(fromFormalParam, toParams.getFormalParameters(), Messages.PARAMETER_REMOVED, fromNameTk.image);
+        differences.changed(fromFormalParam, toParams.getFormalParameters(), Parameters.PARAMETER_REMOVED, fromNameTk.image);
     }
 }

@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.text.MessageFormat;
 import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;

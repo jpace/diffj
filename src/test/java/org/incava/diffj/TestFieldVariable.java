@@ -1,6 +1,8 @@
 package org.incava.diffj;
 
 import org.incava.analysis.FileDiffChange;
+import static org.incava.diffj.field.Variable.*;
+import static org.incava.diffj.field.Variables.*;
 
 public class TestFieldVariable extends ItemsTest {
     public TestFieldVariable(String name) {
@@ -38,7 +40,7 @@ public class TestFieldVariable extends ItemsTest {
     //                  // variable type changed for v from Object to V
 
     //                  makeFieldRef(null, "v",  loc(3, 20), loc(6,  5), loc(7, 23), loc(7, 26)),
-    //                  makeCodeChangedRef(Messages.VARIABLE_REMOVED, "v",  loc(5, 33), loc(5, 33), loc(6, 25), loc(6, 25)),
+    //                  makeCodeChangedRef(VARIABLE_REMOVED, "v",  loc(5, 33), loc(5, 33), loc(6, 25), loc(6, 25)),
     //                  Java.SOURCE_1_5);
     //     }
     // }
@@ -88,7 +90,7 @@ public class TestFieldVariable extends ItemsTest {
                            "",
                            "}"),
                  
-                 new FileDiffChange(getFromToMessage(Messages.VARIABLE_TYPE_CHANGED, "s", "Set", "HashSet"),
+                 new FileDiffChange(getFromToMessage(VARIABLE_TYPE_CHANGED, "s", "Set", "HashSet"),
                                           loc(2, 5), loc(2, 5, "Set"), 
                                           loc(4, 5), loc(4, 5, "HashSet")));
     }
@@ -102,7 +104,7 @@ public class TestFieldVariable extends ItemsTest {
                            "    String s;",
                            "}"),
                  
-                 new FileDiffChange(getFromToMessage(Messages.VARIABLE_REMOVED, "t"),
+                 new FileDiffChange(getFromToMessage(VARIABLE_REMOVED, "t"),
                                     loc(2, 15), loc(2, 15, "t"), 
                                     loc(2, 12), loc(2, 12, "t")));
     }

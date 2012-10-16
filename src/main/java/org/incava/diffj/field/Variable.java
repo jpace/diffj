@@ -20,6 +20,10 @@ import org.incava.pmdx.SimpleNodeUtil;
  * </pre>
  */
 public class Variable extends CodedElement {
+    public static final String INITIALIZER_REMOVED = "initializer removed";
+    public static final String INITIALIZER_ADDED = "initializer added";
+    public static final String VARIABLE_TYPE_CHANGED = "variable type for {0} changed from {1} to {2}";
+
     private final ASTType type;
     private final ASTVariableDeclarator variable;
     private final ASTVariableInitializer init;
@@ -38,7 +42,7 @@ public class Variable extends CodedElement {
 
         if (!fromTypeStr.equals(toTypeStr)) {
             String name = getName();
-            differences.changed(type, toVariable.type, Messages.VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
+            differences.changed(type, toVariable.type, VARIABLE_TYPE_CHANGED, name, fromTypeStr, toTypeStr);
         }
 
         compareVariableInits(toVariable, differences);
@@ -73,11 +77,11 @@ public class Variable extends CodedElement {
                 compareCode(toVariable, differences);
             }
             else {
-                differences.changed(init, toVariable.getNode(), Messages.INITIALIZER_REMOVED);
+                differences.changed(init, toVariable.getNode(), INITIALIZER_REMOVED);
             }
         }
         else if (toVariable.hasInitializer()) {
-            differences.changed(variable, toVariable.getInitializer(), Messages.INITIALIZER_ADDED);
+            differences.changed(variable, toVariable.getInitializer(), INITIALIZER_ADDED);
         }
     }
 }

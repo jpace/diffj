@@ -10,6 +10,10 @@ import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Package {
+    public static final String PACKAGE_REMOVED = "package removed: {0}";
+    public static final String PACKAGE_ADDED = "package added: {0}";
+    public static final String PACKAGE_RENAMED = "package renamed from {0} to {1}";
+
     private final ASTCompilationUnit compUnit;
     private final ASTPackageDeclaration pkg;
 
@@ -27,13 +31,13 @@ public class Package {
             if (!toPackage.isEmpty()) {
                 ASTName    name    = toPackage.getPackageName();
                 SimpleNode fromPos = getChild();
-                differences.added(fromPos, name, Messages.PACKAGE_ADDED);
+                differences.added(fromPos, name, PACKAGE_ADDED);
             }
         }
         else if (toPackage.isEmpty()) {
             ASTName    name  = getPackageName();
             SimpleNode toPos = toPackage.getChild();
-            differences.deleted(name, toPos, Messages.PACKAGE_REMOVED);
+            differences.deleted(name, toPos, PACKAGE_REMOVED);
         }
         else {
             ASTName fromName = getPackageName();
@@ -42,7 +46,7 @@ public class Package {
             String  toStr    = SimpleNodeUtil.toString(toName);
 
             if (!fromStr.equals(toStr)) {
-                differences.changed(fromName, toName, Messages.PACKAGE_RENAMED);
+                differences.changed(fromName, toName, PACKAGE_RENAMED);
             }
         }
     }
