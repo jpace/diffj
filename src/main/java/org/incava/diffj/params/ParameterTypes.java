@@ -1,6 +1,5 @@
 package org.incava.diffj.params;
 
-import java.util.Iterator;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTFormalParameter;
 import net.sourceforge.pmd.ast.ASTFormalParameters;

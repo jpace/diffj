@@ -2,8 +2,8 @@ package org.incava.diffj.params;
 
 import net.sourceforge.pmd.ast.ASTFormalParameter;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.diffj.Differences;
 import org.incava.diffj.Messages;
+import org.incava.diffj.element.Differences;
 
 /**
  * The type matches for the given index.

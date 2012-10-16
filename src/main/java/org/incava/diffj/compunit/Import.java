@@ -2,7 +2,7 @@ package org.incava.diffj.compunit;
 
 import net.sourceforge.pmd.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.diffj.Differences;
+import org.incava.diffj.element.Differences;
 
 public class Import {
     private final ASTImportDeclaration imp;

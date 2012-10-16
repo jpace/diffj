@@ -1,7 +1,7 @@
 package org.incava.diffj.params;
 
 import net.sourceforge.pmd.ast.ASTFormalParameter;
-import org.incava.diffj.Differences;
+import org.incava.diffj.element.Differences;
 import org.incava.diffj.Messages;
 
 public class ParameterExactNameMatch extends ParameterMatch {

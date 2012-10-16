@@ -3,9 +3,9 @@ package org.incava.diffj.function;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.diffj.CodedElement;
-import org.incava.diffj.Differences;
 import org.incava.diffj.code.Code;
+import org.incava.diffj.element.CodedElement;
+import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
 
 public abstract class Function extends CodedElement {

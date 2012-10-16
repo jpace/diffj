@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.element;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

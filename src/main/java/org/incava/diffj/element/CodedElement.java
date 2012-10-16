@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.element;
 
 import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;

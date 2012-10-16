@@ -8,8 +8,8 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTType;
 import net.sourceforge.pmd.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.diffj.Differences;
 import org.incava.diffj.Messages;
+import org.incava.diffj.element.Differences;
 import org.incava.pmdx.FieldUtil;
 
 /**

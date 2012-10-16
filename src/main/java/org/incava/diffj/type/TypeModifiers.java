@@ -2,7 +2,7 @@ package org.incava.diffj.type;
 
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.diffj.Modifiers;
+import org.incava.diffj.element.Modifiers;
 
 public class TypeModifiers extends Modifiers {
     public static final int[] MODIFIERS = new int[] {

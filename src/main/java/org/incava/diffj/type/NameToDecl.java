@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.diffj.Differences;
+import org.incava.diffj.element.Differences;
 import org.incava.pmdx.SimpleNodeUtil;
 
 /**

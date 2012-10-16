@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 import net.sourceforge.pmd.ast.SimpleNode;
+import org.incava.diffj.element.Diffable;
+import org.incava.diffj.element.Differences;
 import org.incava.ijdk.lang.Pair;
 import org.incava.ijdk.util.MultiMap;
 

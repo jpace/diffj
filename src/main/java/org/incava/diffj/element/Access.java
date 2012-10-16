@@ -1,8 +1,10 @@
-package org.incava.diffj;
+package org.incava.diffj.element;
 
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.pmdx.*;
+import org.incava.diffj.Messages;
+import org.incava.diffj.element.Differences;
+import org.incava.pmdx.ItemUtil;
 
 public class Access {
     private final SimpleNode node;

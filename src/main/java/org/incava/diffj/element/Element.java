@@ -1,7 +1,6 @@
-package org.incava.diffj;
+package org.incava.diffj.element;
 
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.pmdx.SimpleNodeUtil;
 
 public class Element {
     private final SimpleNode node;

@@ -1,11 +1,12 @@
-package org.incava.diffj;
+package org.incava.diffj.type;
 
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.diffj.type.Type;
+import org.incava.diffj.element.Diffable;
+import org.incava.diffj.element.Differences;
 
 /**
  * Items represents the methods, ctors, fields and inner types of a parent type.
