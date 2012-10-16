@@ -8,7 +8,6 @@ import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.diffj.Messages;
 import org.incava.diffj.element.Differences;
 import org.incava.pmdx.CompilationUnitUtil;
 

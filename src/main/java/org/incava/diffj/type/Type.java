@@ -10,7 +10,6 @@ import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.diffj.Messages;
 import org.incava.diffj.element.AccessibleElement;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;

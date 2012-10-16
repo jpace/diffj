@@ -4,7 +4,6 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTFormalParameter;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.diffj.Messages;
 import org.incava.diffj.element.Differences;
 import org.incava.pmdx.ParameterUtil;
 

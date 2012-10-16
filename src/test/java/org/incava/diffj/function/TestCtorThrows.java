@@ -1,7 +1,8 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
 import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
+import org.incava.diffj.*;
 import static org.incava.diffj.function.Throws.*;
 
 public class TestCtorThrows extends ItemsTest {

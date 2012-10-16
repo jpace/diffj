@@ -7,7 +7,6 @@ import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffCodeAdded;
 import org.incava.analysis.FileDiffCodeDeleted;
-import org.incava.diffj.Messages;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.Diff;

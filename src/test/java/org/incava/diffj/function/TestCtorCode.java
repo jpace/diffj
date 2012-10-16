@@ -1,5 +1,6 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
+import org.incava.diffj.*;
 import static org.incava.diffj.code.Code.*;
 
 public class TestCtorCode extends ItemsTest {

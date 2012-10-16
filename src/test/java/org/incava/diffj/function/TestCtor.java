@@ -1,5 +1,6 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
+import org.incava.diffj.*;
 import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;

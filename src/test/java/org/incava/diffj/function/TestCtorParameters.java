@@ -1,8 +1,9 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
 import java.text.MessageFormat;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
+import org.incava.diffj.*;
 import org.incava.diffj.params.Parameters;
 import org.incava.ijdk.text.Location;
 

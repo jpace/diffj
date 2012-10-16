@@ -2,7 +2,6 @@ package org.incava.diffj.type;
 
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.diffj.Messages;
 
 /**
  * Compares implements.
