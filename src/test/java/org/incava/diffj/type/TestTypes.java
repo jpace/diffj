@@ -1,4 +1,6 @@
-package org.incava.diffj;
+package org.incava.diffj.type;
+
+import org.incava.diffj.*;
 
 public class TestTypes extends ItemsTest {
     public TestTypes(String name) {

@@ -1,4 +1,6 @@
-package org.incava.diffj;
+package org.incava.diffj.type;
+
+import org.incava.diffj.*;
 
 public class TestInnerInterface extends ItemsTest {
     public TestInnerInterface(String name) {
@@ -116,5 +118,4 @@ public class TestInnerInterface extends ItemsTest {
                  
                  makeMethodRef("foo()", null, loc(4, 13), loc(4, 23), loc(4, 9), loc(5, 9)));
     }
-
 }

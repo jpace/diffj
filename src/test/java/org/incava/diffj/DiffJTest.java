@@ -109,34 +109,7 @@ public class DiffJTest extends IncavaTestCase {
             fromFile.compare(report, toFile);
             
             if (expectations != null) {
-                if (expectations.length != diffs.size()) {
-                    tr.Ace.setVerbose(true);
-                    
-                    tr.Ace.yellow("diffs.size", diffs.size());
-                    tr.Ace.yellow("diffs", diffs);
-                    
-                    tr.Ace.yellow("expectations.length", expectations.length);
-                    tr.Ace.yellow("expectations", expectations);
-                    
-                    assertEquals("number of differences", expectations.length, diffs.size());
-                }
-
-                int di = 0;
-                for (FileDiff ref : diffs) {
-                    FileDiff exp = expectations[di];
-
-                    tr.Ace.yellow("exp", exp);
-                    tr.Ace.yellow("ref", ref);
-
-                    assertNotNull("reference not null", ref);
-
-                    assertEquals("expectations[" + di + "].type",    exp.getType(),    ref.getType());
-                    assertEquals("expectations[" + di + "].message", exp.getMessage(), ref.getMessage());
-                    assertEquals("expectations[" + di + "].first",   exp.getFirstLocation(), ref.getFirstLocation());
-                    assertEquals("expectations[" + di + "].second",  exp.getSecondLocation(), ref.getSecondLocation());
-
-                    ++di;
-                }
+                assertDifferencesEqual(expectations, diffs);
             }
 
             this.report.flush();
@@ -145,6 +118,40 @@ public class DiffJTest extends IncavaTestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
+    }
+
+    public void assertDifferencesEqual(FileDiff[] expectedDiffs, Collection<FileDiff> actualDiffs) {
+        if (expectedDiffs.length != actualDiffs.size()) {
+            tr.Ace.setVerbose(true);
+                    
+            tr.Ace.yellow("actualDiffs.size", actualDiffs.size());
+            tr.Ace.yellow("actualDiffs", actualDiffs);
+                    
+            tr.Ace.yellow("expectedDiffs.length", expectedDiffs.length);
+            tr.Ace.yellow("expectedDiffs", expectedDiffs);
+                    
+            assertEquals("number of differences", expectedDiffs.length, actualDiffs.size());
+        }
+
+        int di = 0;
+        for (FileDiff actualDiff : actualDiffs) {
+            assertDifferenceEqual(expectedDiffs[di], actualDiff, di);
+            ++di;
+        }
+    }
+
+    public void assertDifferenceEqual(FileDiff expectedDiff, FileDiff actualDiff, int di) {
+        tr.Ace.yellow("expectedDiff", expectedDiff);
+        tr.Ace.yellow("actualDiff", actualDiff);
+
+        assertNotNull("reference not null", actualDiff);
+
+        assertEquals("expectedDiffs[" + di + "].type",    expectedDiff.getType(),    actualDiff.getType());
+        assertEquals("expectedDiffs[" + di + "].message", expectedDiff.getMessage(), actualDiff.getMessage());
+        assertEquals("expectedDiffs[" + di + "].first",   expectedDiff.getFirstLocation(), actualDiff.getFirstLocation());
+        assertEquals("expectedDiffs[" + di + "].second",  expectedDiff.getSecondLocation(), actualDiff.getSecondLocation());
+
+        ++di;
     }
 
     public Report makeReport(StringWriter writer) {

@@ -1,4 +1,6 @@
-package org.incava.diffj;
+package org.incava.diffj.field;
+
+import org.incava.diffj.*;
 
 public class TestFieldModifier extends ItemsTest {
     public TestFieldModifier(String name) {

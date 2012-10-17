@@ -1,6 +1,7 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
 import org.incava.analysis.FileDiffChange;
+import org.incava.diffj.*;
 import static org.incava.diffj.code.Code.*;
 
 public class TestMethodCode extends ItemsTest {

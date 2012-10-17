@@ -138,24 +138,22 @@ public class ItemsTest extends DiffJTest {
     }
 
     protected String getMessage(String removedMsg, String addedMsg, String changedMsg, String from, String to) {
-        String msg = null;
         if (to == null) {
-            msg = MessageFormat.format(removedMsg, from);
+            return MessageFormat.format(removedMsg, from);
         }
         else if (from == null) {
-            msg = MessageFormat.format(addedMsg, to);
+            return MessageFormat.format(addedMsg, to);
         }
         else {
-            msg = MessageFormat.format(changedMsg, from, to);
+            return MessageFormat.format(changedMsg, from, to);
         }
-        return msg;
     }
 
     protected String getFromToMessage(String msg, String ... args) {
         return MessageFormat.format(msg, (Object[])args);
     }
 
-    protected FileDiff makeChangedRef(String from, String to, String[] msgs, Location a0, Location a1, Location b0, Location b1) {
+    protected FileDiff makeChangedRef(String from, String to, String[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         String msg = null;
         if (to == null) {
             msg = MessageFormat.format(msgs[0], from);
@@ -167,7 +165,7 @@ public class ItemsTest extends DiffJTest {
             msg = MessageFormat.format(msgs[1], from, to);
         }
 
-        return new FileDiffChange(msg, a0, a1, b0, b1);
+        return new FileDiffChange(msg, fromStart, fromEnd, toStart, toEnd);
     }
 
     protected FileDiff makeAccessRef(String from, String to, Location fromStart, Location toStart) {

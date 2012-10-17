@@ -1,7 +1,9 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
-public class TestInnerClass extends ItemsTest {
-    public TestInnerClass(String name) {
+import org.incava.diffj.*;
+
+public class TestMethodsInInnerClass extends ItemsTest {
+    public TestMethodsInInnerClass(String name) {
         super(name);
     }
 
@@ -39,43 +41,11 @@ public class TestInnerClass extends ItemsTest {
                  makeMethodRef("foo()", null, loc(3, 9), loc(3, 21), loc(3, 5), loc(4, 5)));
     }
 
-    public void testInnerClassAdded() {
-        evaluate(new Lines("class Test {",
-                           "    class ITest {",
-                           "    }",
-                           "",
-                           "}"),
-
-                 new Lines("class Test {",
-                           "",
-                           "    class ITest {",
-                           "        class I2Test {",
-                           "        }",
-                           "    }",
-                           "}"),
-                 
-                 makeClassRef(null, "I2Test", loc(2, 5), loc(3, 5), loc(4, 9), loc(5, 9)));
-    }
-
-    public void testInnerClassRemoved() {
-        evaluate(new Lines("class Test {",
-                           "    class ITest {",
-                           "        class I2Test {",
-                           "        }",
-                           "    }",
-                           "",
-                           "}"),
-
-                 new Lines("class Test {",
-                           "    class ITest {",
-                           "    }",
-                           "}"),
-                 
-                 makeClassRef("I2Test", null, loc(3, 9), loc(4, 9), loc(2, 5), loc(3, 5)));
-    }
-
+    /**
+     * Tests a method within an inner class within an inner class.
+     * all hail recursion!
+     */
     public void testInnerClassMethodAdded() {
-        // all hail recursion!
         evaluate(new Lines("class Test {",
                            "    class ITest {",
                            "        class I2Test {",
@@ -116,4 +86,5 @@ public class TestInnerClass extends ItemsTest {
                  
                  makeMethodRef("foo(String)", null, loc(4, 13), loc(4, 35), loc(4, 9), loc(5, 9)));
     }
+
 }

@@ -1,11 +1,10 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
+import org.incava.diffj.*;
 import org.incava.java.Java;
 
-public class TestAnnotatedMethods extends ItemsTest {
-    protected final static String[] METHOD_MSGS = TestType.METHOD_MSGS;
-
-    public TestAnnotatedMethods(String name) {
+public class TestMethodsAnnotated extends ItemsTest {
+    public TestMethodsAnnotated(String name) {
         super(name);
     }
 

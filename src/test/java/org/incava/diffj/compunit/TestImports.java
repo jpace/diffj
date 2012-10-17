@@ -1,8 +1,9 @@
-package org.incava.diffj;
+package org.incava.diffj.compunit;
 
 import java.io.StringWriter;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffDelete;
+import org.incava.diffj.*;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.java.Java;
 import static org.incava.diffj.compunit.Imports.*;

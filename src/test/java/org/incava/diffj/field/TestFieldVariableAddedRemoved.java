@@ -1,7 +1,8 @@
-package org.incava.diffj;
+package org.incava.diffj.field;
 
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
+import org.incava.diffj.*;
 import org.incava.java.Java;
 import static org.incava.diffj.field.Variable.*;
 import static org.incava.diffj.field.Variables.*;
