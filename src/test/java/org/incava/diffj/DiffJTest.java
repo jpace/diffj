@@ -11,6 +11,7 @@ import org.incava.analysis.Report;
 import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.ijdk.text.Location;
+import org.incava.ijdk.text.LocationRange;
 import org.incava.java.Java;
 import org.incava.test.IncavaTestCase;
 
@@ -45,6 +46,10 @@ public class DiffJTest extends IncavaTestCase {
 
     public Location loc(Location loc, String var) {
         return loc(loc.getLine(), loc.getColumn() + (var == null ? 0 : var.length() - 1));
+    }
+
+    public LocationRange locrg(int fromLine, int fromColumn, int toLine, int toColumn) {
+        return new LocationRange(loc(fromLine, fromColumn), loc(toLine, toColumn));
     }
 
     public String[] getOutput(String fromLines, String toLines) {

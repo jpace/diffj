@@ -18,7 +18,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface Test {",
                            "}"),
                  
-                 new FileDiffChange(TYPE_CHANGED_FROM_CLASS_TO_INTERFACE, loc(1, 1), loc(2, 1), loc(1, 1), loc(2, 1)));
+                 new FileDiffChange(TYPE_CHANGED_FROM_CLASS_TO_INTERFACE, locrg(1, 1, 2, 1), locrg(1, 1, 2, 1)));
     }
 
     public void testInterfaceToClass() {
@@ -28,7 +28,7 @@ public class TestType extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffChange(TYPE_CHANGED_FROM_INTERFACE_TO_CLASS, loc(1, 1), loc(2, 1), loc(1, 1), loc(2, 1)));
+                 new FileDiffChange(TYPE_CHANGED_FROM_INTERFACE_TO_CLASS, locrg(1, 1, 2, 1), locrg(1, 1, 2, 1)));
     }
 
     public void testClassAccessChanged() {
@@ -38,7 +38,7 @@ public class TestType extends ItemsTest {
                  new Lines("public class Test {",
                            "}"),
 
-                 makeAccessRef(null, "public", loc(1, 1), loc(1, 5), loc(1, 1), loc(1, 6)));
+                 makeAccessRef(null, "public", locrg(1, 1, 1, 5), locrg(1, 1, 1, 6)));
         
         evaluate(new Lines("public class Test {",
                            "}"),
@@ -46,7 +46,7 @@ public class TestType extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 makeAccessRef("public", null, loc(1, 1), loc(1, 6), loc(1, 1), loc(1, 5)));
+                 makeAccessRef("public", null, locrg(1, 1, 1, 6), locrg(1, 1, 1, 5)));
     }
 
     public void testClassModifierAdded() {
@@ -56,7 +56,7 @@ public class TestType extends ItemsTest {
                  new Lines("abstract public class Test {",
                            "}"),
                  
-                 makeChangedRef(null, "abstract", MODIFIER_MSGS, loc(1, 1), loc(1, 6), loc(1, 1), loc(1, 8)));
+                 makeChangedRef(null, "abstract", MODIFIER_MSGS, locrg(1, 1, 1, 6), locrg(1, 1, 1, 8)));
 
         evaluate(new Lines("public class Test {",
                            "}"),
@@ -64,7 +64,7 @@ public class TestType extends ItemsTest {
                  new Lines("final public class Test {",
                            "}"),
                  
-                 makeChangedRef(null, "final", MODIFIER_MSGS, loc(1, 1), loc(1, 6), loc(1, 1), loc(1, 5)));
+                 makeChangedRef(null, "final", MODIFIER_MSGS, locrg(1, 1, 1, 6), locrg(1, 1, 1, 5)));
 
         evaluate(new Lines("class Test {",
                            "}"),
@@ -72,7 +72,7 @@ public class TestType extends ItemsTest {
                  new Lines("strictfp class Test {",
                            "}"),
                  
-                 makeChangedRef(null, "strictfp", MODIFIER_MSGS, loc(1, 1), loc(1, 5), loc(1, 1), loc(1, 8)));
+                 makeChangedRef(null, "strictfp", MODIFIER_MSGS, locrg(1, 1, 1, 5), locrg(1, 1, 1, 8)));
     }
 
     public void testClassModifierRemoved() {
@@ -82,7 +82,7 @@ public class TestType extends ItemsTest {
                  new Lines("public class Test {",
                            "}"),
                  
-                 makeChangedRef("abstract", null, MODIFIER_MSGS, loc(1, 1), loc(1, 8), loc(1, 1), loc(1, 6)));
+                 makeChangedRef("abstract", null, MODIFIER_MSGS, locrg(1, 1, 1, 8), locrg(1, 1, 1, 6)));
 
         evaluate(new Lines("final public class Test {",
                            "}"),
@@ -90,7 +90,7 @@ public class TestType extends ItemsTest {
                  new Lines("public class Test {",
                            "}"),
                  
-                 makeChangedRef("final", null, MODIFIER_MSGS, loc(1, 1), loc(1, 5), loc(1, 1), loc(1, 6)));
+                 makeChangedRef("final", null, MODIFIER_MSGS, locrg(1, 1, 1, 5), locrg(1, 1, 1, 6)));
 
         evaluate(new Lines("strictfp class Test {",
                            "}"),
@@ -98,7 +98,7 @@ public class TestType extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 makeChangedRef("strictfp", null, MODIFIER_MSGS, loc(1, 1), loc(1, 8), loc(1, 1), loc(1, 5)));
+                 makeChangedRef("strictfp", null, MODIFIER_MSGS, locrg(1, 1, 1, 8), locrg(1, 1, 1, 5)));
     }
 
     public void testClassInnerInterfaceUnchanged() {
@@ -125,7 +125,7 @@ public class TestType extends ItemsTest {
                            "    interface ITest {}",
                            "}"),
                  
-                 makeInterfaceRef(null, "ITest", loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 22)));
+                 makeInterfaceRef(null, "ITest", locrg(1, 1, 3, 1), locrg(3, 5, 3, 22)));
     }
 
     public void testClassInnerInterfaceRemoved() {
@@ -138,7 +138,7 @@ public class TestType extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeInterfaceRef("ITest", null, loc(3, 5), loc(3, 22), loc(1, 1), loc(3, 1)));
+                 makeInterfaceRef("ITest", null, locrg(3, 5, 3, 22), locrg(1, 1, 3, 1)));
     }
 
     public void testSemicolonDeclarationRemoved() {
@@ -160,7 +160,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A extends Date {",
                            "}"),
                  
-                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "Date", loc(1, 1), loc(2, 1), loc(1, 17), loc(1, 20)));
+                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "Date", locrg(1, 1, 2, 1), locrg(1, 17, 1, 20)));
 
         evaluate(new Lines("class A {",
                            "}"),
@@ -168,7 +168,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A extends java.util.Date {",
                            "}"),
                  
-                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "java.util.Date", loc(1, 1), loc(2, 1), loc(1, 17), loc(1, 30)));
+                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "java.util.Date", locrg(1, 1, 2, 1), locrg(1, 17, 1, 30)));
     }
 
     public void testClassExtendsChanged() {
@@ -179,7 +179,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A extends Date {",
                            "}"),
                  
-                 makeCodeChangedRef(EXTENDED_TYPE_CHANGED, new String[] { "Object", "Date" }, loc(1, 17), loc(1, 22), loc(1, 17), loc(1, 20)));
+                 makeCodeChangedRef(EXTENDED_TYPE_CHANGED, new String[] { "Object", "Date" }, locrg(1, 17, 1, 22), locrg(1, 17, 1, 20)));
     }
 
     public void testClassExtendsDeleted() {
@@ -189,7 +189,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A {",
                            "}"),
                  
-                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "Date", loc(1, 17), loc(1, 20), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "Date", locrg(1, 17, 1, 20), locrg(1, 1, 2, 1)));
 
         evaluate(new Lines("class A extends java.util.Date {",
                            "}"),
@@ -197,7 +197,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A {",
                            "}"),
                  
-                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "java.util.Date", loc(1, 17), loc(1, 30), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "java.util.Date", locrg(1, 17, 1, 30), locrg(1, 1, 2, 1)));
     }
 
     public void testInterfaceExtendsAdded() {
@@ -207,7 +207,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface A extends Comparator {",
                            "}"),
                  
-                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "Comparator", loc(1, 1), loc(2, 1), loc(1, 21), loc(1, 30)));
+                 makeCodeChangedRef(EXTENDED_TYPE_ADDED, "Comparator", locrg(1, 1, 2, 1), locrg(1, 21, 1, 30)));
     }
 
     public void testInterfaceExtendsChanged() {
@@ -217,7 +217,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface A extends Comparator {",
                            "}"),
                  
-                 makeCodeChangedRef(EXTENDED_TYPE_CHANGED, new String[] { "Comparable", "Comparator" }, loc(1, 21), loc(1, 30), loc(1, 21), loc(1, 30)));
+                 makeCodeChangedRef(EXTENDED_TYPE_CHANGED, new String[] { "Comparable", "Comparator" }, locrg(1, 21, 1, 30), locrg(1, 21, 1, 30)));
     }
 
     public void testInterfaceExtendsDeleted() {
@@ -227,7 +227,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface A {",
                            "}"),
                  
-                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "Comparable", loc(1, 21), loc(1, 30), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(EXTENDED_TYPE_REMOVED, "Comparable", locrg(1, 21, 1, 30), locrg(1, 1, 2, 1)));
     }
 
     public void testClassImplementsAdded() {
@@ -237,7 +237,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A implements Runnable {",
                            "}"),
 
-                 makeCodeChangedRef(IMPLEMENTED_TYPE_ADDED, "Runnable", loc(1, 1), loc(2, 1), loc(1, 20), loc(1, 27)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_ADDED, "Runnable", locrg(1, 1, 2, 1), locrg(1, 20, 1, 27)));
 
         evaluate(new Lines("class A {",
                            "}"),
@@ -245,7 +245,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A implements java.lang.Runnable {",
                            "}"),
                  
-                 makeCodeChangedRef(IMPLEMENTED_TYPE_ADDED, "java.lang.Runnable", loc(1, 1), loc(2, 1), loc(1, 20), loc(1, 37)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_ADDED, "java.lang.Runnable", locrg(1, 1, 2, 1), locrg(1, 20, 1, 37)));
     }
 
     public void testClassImplementsChanged() {
@@ -256,7 +256,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A implements Runnable {",
                            "}"),
                  
-                 makeCodeChangedRef(IMPLEMENTED_TYPE_CHANGED, new String[] { "Cloneable", "Runnable" }, loc(1, 20), loc(1, 28), loc(1, 20), loc(1, 27)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_CHANGED, new String[] { "Cloneable", "Runnable" }, locrg(1, 20, 1, 28), locrg(1, 20, 1, 27)));
     }
 
     public void testClassImplementsNoChange() {
@@ -277,7 +277,7 @@ public class TestType extends ItemsTest {
                  new Lines("class A {",
                            "}"),
                  
-                 makeCodeChangedRef(IMPLEMENTED_TYPE_REMOVED, "Runnable", loc(1, 20), loc(1, 27), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_REMOVED, "Runnable", locrg(1, 20, 1, 27), locrg(1, 1, 2, 1)));
 
         evaluate(new Lines("class A implements java.lang.Runnable {",
                            "}"),
@@ -285,6 +285,6 @@ public class TestType extends ItemsTest {
                  new Lines("class A {",
                            "}"),
                  
-                 makeCodeChangedRef(IMPLEMENTED_TYPE_REMOVED, "java.lang.Runnable", loc(1, 20), loc(1, 37), loc(1, 1), loc(2, 1)));
+                 makeCodeChangedRef(IMPLEMENTED_TYPE_REMOVED, "java.lang.Runnable", locrg(1, 20, 1, 37), locrg(1, 1, 2, 1)));
     }
 }

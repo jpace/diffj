@@ -1,8 +1,16 @@
 package org.incava.diffj.field;
 
+import org.incava.analysis.FileDiff;
 import org.incava.diffj.*;
+import org.incava.ijdk.text.LocationRange;
 
 public class TestFields extends ItemsTest {
+    protected final static String[] FIELD_MSGS = new String[] {
+        Field.FIELD_REMOVED,
+        null,
+        Field.FIELD_ADDED,
+    };
+
     public TestFields(String name) {
         super(name);
     }
@@ -17,7 +25,7 @@ public class TestFields extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 makeFieldRef(null, "i", loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 10)));
+                 makeFieldRef(null, "i", locrg(1, 1, 3, 1), locrg(3, 5, 3, 10)));
     }
 
     public void testClassOneFieldRemoved() {
@@ -30,7 +38,7 @@ public class TestFields extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeFieldRef("i", null, loc(2, 5), loc(2, 10), loc(1, 1), loc(3, 1)));
+                 makeFieldRef("i", null, locrg(2, 5, 2, 10), locrg(1, 1, 3, 1)));
     }
 
     public void testClassOneFieldRemovedOneFieldAdded() {
@@ -44,7 +52,11 @@ public class TestFields extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeFieldRef(null, "j",  loc(1, 1), loc(4,  1), loc(2, 5), loc(2, 13)),
-                 makeFieldRef("i",  null, loc(2, 5), loc(2, 10), loc(1, 1), loc(4,  1)));
+                 makeFieldRef(null, "j",  locrg(1, 1, 4,  1), locrg(2, 5, 2, 13)),
+                 makeFieldRef("i",  null, locrg(2, 5, 2, 10), locrg(1, 1, 4,  1)));
+    }
+
+    protected FileDiff makeFieldRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
+        return makeRef(from, to, FIELD_MSGS, fromLoc, toLoc);
     }
 }
