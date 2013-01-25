@@ -1,9 +1,9 @@
 [submodule "src/main/java/org/incava/ijdk"]
 	path = src/main/java/org/incava/ijdk
-	url = git@github.com:jeugenepace/ijdk.git
+	url = git@github.com:jpace/ijdk.git
 [submodule "src/main/java/org/incava/pmdx"]
 	path = src/main/java/org/incava/pmdx
-	url = git@github.com:jeugenepace/pmdx.git
+	url = git@github.com:jpace/pmdx.git
 [submodule "src/main/java/org/incava/jagol"]
 	path = src/main/java/org/incava/jagol
-	url = git@github.com:jeugenepace/jagol.git
+	url = git@github.com:jpace/jagol.git
