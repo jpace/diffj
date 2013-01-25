@@ -56,6 +56,6 @@ public class Package {
     }
 
     public ASTName getPackageName() {
-        return SimpleNodeUtil.findChild(pkg, net.sourceforge.pmd.ast.ASTName.class);
+        return (ASTName)SimpleNodeUtil.findChild(pkg, net.sourceforge.pmd.ast.ASTName.class);
     }
 }

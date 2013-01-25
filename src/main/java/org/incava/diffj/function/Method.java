@@ -29,7 +29,7 @@ public class Method extends Function implements Diffable<Method> {
     public Method(ASTMethodDeclaration method) {
         super(method);
         this.method = method;
-        this.block = SimpleNodeUtil.findChild(method, net.sourceforge.pmd.ast.ASTBlock.class);
+        this.block = (ASTBlock)SimpleNodeUtil.findChild(method, net.sourceforge.pmd.ast.ASTBlock.class);
     }
 
     public void diff(Method toMethod, Differences differences) {
