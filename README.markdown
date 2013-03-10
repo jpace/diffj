@@ -272,7 +272,7 @@ DOWNLOAD
 
 *Source*: 
 
-    *Github*: https://github.com/jeugenepace/diffj
+    *Github*: https://github.com/jpace/diffj
 
 *Binaries*
 
