@@ -40,7 +40,7 @@ public class Throws {
     }
 
     public List<ASTName> getChildNames() {
-        return SimpleNodeUtil.snatchChildren(nameList, "net.sourceforge.pmd.ast.ASTName");
+        return SimpleNodeUtil.snatchChildren(nameList, ASTName.class);
     }
 
     protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, String msg, ASTName name, Differences differences) {

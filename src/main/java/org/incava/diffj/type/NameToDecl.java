@@ -27,8 +27,7 @@ public class NameToDecl {
             return;
         }
         
-        Collection<ASTClassOrInterfaceType> types = new ArrayList<ASTClassOrInterfaceType>();
-        SimpleNodeUtil.fetchChildren(types, list, net.sourceforge.pmd.ast.ASTClassOrInterfaceType.class);
+        Collection<ASTClassOrInterfaceType> types = SimpleNodeUtil.snatchChildren(list, net.sourceforge.pmd.ast.ASTClassOrInterfaceType.class);
         for (ASTClassOrInterfaceType type : types) {
             map.put(SimpleNodeUtil.toString(type), type);
         }

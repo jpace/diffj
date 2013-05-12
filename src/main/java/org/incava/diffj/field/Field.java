@@ -60,7 +60,7 @@ public class Field extends AccessibleElement implements Diffable<Field> {
     }
 
     protected Variables getVariables() {
-        List<ASTVariableDeclarator> varDecls = SimpleNodeUtil.snatchChildren(field, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+        List<ASTVariableDeclarator> varDecls = SimpleNodeUtil.snatchChildren(field, ASTVariableDeclarator.class);
         return new Variables(getType(), varDecls);
     }
 
@@ -75,7 +75,7 @@ public class Field extends AccessibleElement implements Diffable<Field> {
      * field.
      */
     public List<String> getNameList() {
-        List<ASTVariableDeclarator> varDecls = SimpleNodeUtil.snatchChildren(field, "net.sourceforge.pmd.ast.ASTVariableDeclarator");
+        List<ASTVariableDeclarator> varDecls = SimpleNodeUtil.snatchChildren(field, ASTVariableDeclarator.class);
         List<String> names = new ArrayList<String>();
         for (ASTVariableDeclarator varDecl : varDecls) {
             names.add(VariableUtil.getName(varDecl).image);

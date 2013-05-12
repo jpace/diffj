@@ -64,7 +64,7 @@ public class TestAST extends DiffJTest {
 
         SimpleNode methBlk = getChild(meth, 2, true);
 
-        List<SimpleNode> statements = SimpleNodeUtil.snatchChildren(methBlk, null);
+        List<SimpleNode> statements = SimpleNodeUtil.snatchChildren(methBlk);
         for (SimpleNode stmt : statements) {
             tr.Ace.yellow("stmt", stmt);
             dumpTokens(stmt);
