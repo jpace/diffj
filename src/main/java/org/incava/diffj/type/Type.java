@@ -60,7 +60,7 @@ public class Type extends AccessibleElement implements Diffable<Type> {
         return getDeclarationsOfClass(decls, cls);
     }
 
-    @SuppressWarnings("unchecked")
+    // @SuppressWarnings("unchecked")
     public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls, Class<ItemType> cls) {
         List<ItemType> declList = new ArrayList<ItemType>();
 
