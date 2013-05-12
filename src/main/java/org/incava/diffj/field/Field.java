@@ -56,7 +56,7 @@ public class Field extends AccessibleElement implements Diffable<Field> {
     }
 
     protected ASTType getType() {
-        return (ASTType)SimpleNodeUtil.findChild(field, net.sourceforge.pmd.ast.ASTType.class);
+        return SimpleNodeUtil.findChild(field, net.sourceforge.pmd.ast.ASTType.class);
     }
 
     protected Variables getVariables() {

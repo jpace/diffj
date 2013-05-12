@@ -32,7 +32,7 @@ public class Variable extends CodedElement {
         
         this.type = type;
         this.variable = variable;
-        this.init = (ASTVariableInitializer)SimpleNodeUtil.findChild(variable, net.sourceforge.pmd.ast.ASTVariableInitializer.class);
+        this.init = SimpleNodeUtil.findChild(variable, net.sourceforge.pmd.ast.ASTVariableInitializer.class);
     }
 
     public void diff(Variable toVariable, Differences differences) {
