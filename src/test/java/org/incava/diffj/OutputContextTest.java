@@ -10,6 +10,8 @@ import org.incava.analysis.Report;
 public abstract class OutputContextTest extends OutputTest {
     public OutputContextTest(String name) {
         super(name);
+        tr.Ace.setVerbose(true);
+        tr.Ace.log("name", name);
     }
 
     public abstract String adorn(String str, boolean isDelete);
@@ -19,8 +21,8 @@ public abstract class OutputContextTest extends OutputTest {
     }
 
     public void testImportAdded() {
-        String[] output = doImportAddedTest();        
-        tr.Ace.log("output", output);        
+        String[] output = doImportAddedTest();
+        tr.Ace.onBlue("output", output);
     }
 
     public void testCodeChangedSingleLine() {

@@ -1,6 +1,7 @@
 package org.incava.diffj.compunit;
 
 import java.io.StringWriter;
+import java.text.MessageFormat;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.*;
@@ -30,29 +31,45 @@ public class TestImports extends ItemsTest {
     }
 
     public void testImportsOneNoChange() {
-        evaluate(new Lines("import java.foo.*;",
+        evaluate(new Lines("import java.util.*;",
                            "",
                            "class Test {",
                            "",
                            "}"),
 
-                 new Lines("import java.foo.*;",
+                 new Lines("import java.util.*;",
                            "class Test {",
                            "}"),
 
                  NO_CHANGES);
     }
 
-    public void testImportsTwoNoChange() {
-        evaluate(new Lines("import java.foo.*;",
+    public void testImportsTwoSameOrderNoChange() {
+        evaluate(new Lines("import java.util.*;",
                            "import org.incava.Bazr;",
                            "",
                            "class Test {",
                            "",
                            "}"),
 
-                 new Lines("import java.foo.*;",
+                 new Lines("import java.util.*;",
                            "import org.incava.Bazr;",
+                           "class Test {",
+                           "}"),
+
+                 NO_CHANGES);
+    }
+
+    public void testImportsTwoDifferentOrderNoChange() {
+        evaluate(new Lines("import java.util.*;",
+                           "import org.incava.Bazr;",
+                           "",
+                           "class Test {",
+                           "",
+                           "}"),
+
+                 new Lines("import org.incava.Bazr;",
+                           "import java.util.*;",
                            "class Test {",
                            "}"),
 
@@ -60,7 +77,7 @@ public class TestImports extends ItemsTest {
     }
 
     public void testImportsSectionRemovedOne() {
-        evaluate(new Lines("import java.foo.*;",
+        evaluate(new Lines("import java.util.*;",
                            "",
                            "class Test {",
                            "",
@@ -69,11 +86,11 @@ public class TestImports extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(IMPORT_SECTION_REMOVED, locrg(1, 1, 1, 18), locrg(1, 1, 1, 5)));
+                 new FileDiffDelete(IMPORT_SECTION_REMOVED, locrg(1, 1, 1, 19), locrg(1, 1, 1, 5)));
     }
 
     public void testImportsSectionRemovedTwo() {
-        evaluate(new Lines("import java.foo.*;",
+        evaluate(new Lines("import java.util.*;",
                            "import org.incava.Bazr;",
                            "",
                            "class Test {",
@@ -91,12 +108,12 @@ public class TestImports extends ItemsTest {
                            "",
                            "}"),
 
-                 new Lines("import java.foo.*;",
+                 new Lines("import java.util.*;",
                            "",
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(IMPORT_SECTION_ADDED, locrg(1, 1, 1, 5), locrg(1, 1, 1, 18)));
+                 new FileDiffAdd(IMPORT_SECTION_ADDED, locrg(1, 1, 1, 5), locrg(1, 1, 1, 19)));
     }
 
     public void testImportsSectionAddedTwo() {
@@ -104,7 +121,7 @@ public class TestImports extends ItemsTest {
                            "",
                            "}"),
 
-                 new Lines("import java.foo.*;",
+                 new Lines("import java.util.*;",
                            "import org.incava.Bazr;",
                            "",
                            "class Test {",
@@ -120,22 +137,46 @@ public class TestImports extends ItemsTest {
 
                  new Lines("package org.incava.foo;",
                            "",
-                           "import java.foo.*;",
+                           "import java.util.*;",
                            "import org.incava.Bazr;",
                            ""),
 
-                 Java.SOURCE_1_3,
+                 Java.SOURCE_1_5,
                  makeDetailedReport(writer),
                  new FileDiffAdd(IMPORT_SECTION_ADDED, locrg(1, 1, 1, 7), locrg(3, 1, 4, 23)));
-        
-        tr.Ace.setVerbose(true);
-        tr.Ace.red("*******************************************************");
-
-        String[] lines = StringExt.split(writer.getBuffer().toString(), "\n");
-        System.out.println("lines: " + lines);
-
-        tr.Ace.log("lines", lines);
     }
 
-    //$$$ todo: add tests for IMPORT_REMOVED, IMPORT_ADDED ... how did I miss this?
+    public void testImportAdded() {
+        String msg = MessageFormat.format(IMPORT_ADDED, "org.incava.Bazr");
+        StringWriter writer = new StringWriter();
+        evaluate(new Lines("package org.incava.foo;",
+                           "import java.util.*;",
+                           ""),
+
+                 new Lines("package org.incava.foo;",
+                           "import java.util.*;",
+                           "import org.incava.Bazr;",
+                           ""),
+
+                 Java.SOURCE_1_5,
+                 makeDetailedReport(writer),
+                 new FileDiffAdd(msg, locrg(2, 1, 2, 19), locrg(3, 1, 3, 23)));
+    }
+
+    public void testImportRemoved() {
+        String msg = MessageFormat.format(IMPORT_REMOVED, "java.io.IOException");
+        StringWriter writer = new StringWriter();
+        evaluate(new Lines("package org.incava.foo;",
+                           "import java.io.IOException;",
+                           "import java.util.*;",
+                           ""),
+
+                 new Lines("package org.incava.foo;",
+                           "import java.util.*;",
+                           ""),
+
+                 Java.SOURCE_1_5,
+                 makeDetailedReport(writer),
+                 new FileDiffDelete(msg, locrg(2, 1, 2, 27), locrg(2, 1, 2, 19)));
+    }
 }

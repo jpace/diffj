@@ -61,11 +61,11 @@ public class DiffJTest extends IncavaTestCase {
                  makeDetailedReport(writer),
                  (FileDiff[])null);         // no code expectation comparisons
         
-        tr.Ace.setVerbose(true);
-        tr.Ace.red("*******************************************************");
+        // tr.Ace.setVerbose(true);
+        // tr.Ace.red("*******************************************************");
 
         String[] lines = StringExt.split(writer.getBuffer().toString(), "\n");
-        tr.Ace.log("lines", lines);
+        // tr.Ace.log("lines", lines);
 
         return lines;
     }
@@ -105,11 +105,7 @@ public class DiffJTest extends IncavaTestCase {
 
         try {
             JavaFile fromFile = new JavaFile(fromName, fromStr, src);
-            tr.Ace.cyan("fromFile", fromFile);
-            tr.Ace.cyan("fromStr", fromStr);
             JavaFile toFile = new JavaFile(toName, toStr, src);
-            tr.Ace.green("toFile", toFile);
-            tr.Ace.green("toStr", toStr);
 
             fromFile.compare(report, toFile);
             
@@ -151,9 +147,9 @@ public class DiffJTest extends IncavaTestCase {
 
         assertNotNull("reference not null", actualDiff);
 
-        assertEquals("expectedDiffs[" + di + "].type",    expectedDiff.getType(),    actualDiff.getType());
-        assertEquals("expectedDiffs[" + di + "].message", expectedDiff.getMessage(), actualDiff.getMessage());
-        assertEquals("expectedDiffs[" + di + "].first",   expectedDiff.getFirstLocation(), actualDiff.getFirstLocation());
+        assertEquals("expectedDiffs[" + di + "].type",    expectedDiff.getType(),           actualDiff.getType());
+        assertEquals("expectedDiffs[" + di + "].message", expectedDiff.getMessage(),        actualDiff.getMessage());
+        assertEquals("expectedDiffs[" + di + "].first",   expectedDiff.getFirstLocation(),  actualDiff.getFirstLocation());
         assertEquals("expectedDiffs[" + di + "].second",  expectedDiff.getSecondLocation(), actualDiff.getSecondLocation());
 
         ++di;
