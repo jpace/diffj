@@ -35,23 +35,6 @@ public class TestDiffJ extends DiffJTest {
     }
 
     public void testWithTabs() {
-        String[] output = getOutput(new Lines("public class TabFul {",
-                                              "    public TabFul() {",
-                                              "        if (true) ",
-                                              "			foo();",
-                                              "	}",
-                                              "}"),
-
-                                    new Lines("public class TabFul {",
-                                              "    public TabFul() {",
-                                              "        if (true) {",
-                                              "            foo();",
-                                              "        }",
-                                              "    }",
-                                              "}"));
-        
-        tr.Ace.log("output", output);
-
         List<String> expected = new ArrayList<String>();
         expected.add("- <=> -");
 
@@ -73,20 +56,25 @@ public class TestDiffJ extends DiffJTest {
         expected.add("");
 
         tr.Ace.log("expected", expected);
-        
-        assertEquals(expected, Arrays.asList(output));
+
+        assertOutputEquals(new Lines("public class TabFul {",
+                                     "    public TabFul() {",
+                                     "        if (true) ",
+                                     "			foo();",
+                                     "	}",
+                                     "}"),
+
+                           new Lines("public class TabFul {",
+                                     "    public TabFul() {",
+                                     "        if (true) {",
+                                     "            foo();",
+                                     "        }",
+                                     "    }",
+                                     "}"),
+                           expected);
     }
 
     public void testWithSpecifiedFileNames() {
-        String[] output = getOutput(new Lines("public class FN {",
-                                              "}"),
-
-                                    new Lines("public class FN {",
-                                              "    void f() {}",
-                                              "}"));
-        
-        tr.Ace.log("output  ", output);
-
         List<String> expected = new ArrayList<String>();
         expected.add("- <=> -");
 
@@ -97,7 +85,13 @@ public class TestDiffJ extends DiffJTest {
         expected.add("");
         
         tr.Ace.log("expected", expected);
-        
-        assertEquals(expected, Arrays.asList(output));
+
+        assertOutputEquals(new Lines("public class FN {",
+                                     "}"),
+
+                           new Lines("public class FN {",
+                                     "    void f() {}",
+                                     "}"),
+                           expected);
     }
 }

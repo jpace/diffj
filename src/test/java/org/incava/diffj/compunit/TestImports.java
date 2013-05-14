@@ -131,7 +131,6 @@ public class TestImports extends ItemsTest {
     }
 
     public void testImportsBlockAddedNoClassDefined() {
-        StringWriter writer = new StringWriter();
         evaluate(new Lines("package org.incava.foo;",
                            ""),
 
@@ -141,14 +140,11 @@ public class TestImports extends ItemsTest {
                            "import org.incava.Bazr;",
                            ""),
 
-                 Java.SOURCE_1_5,
-                 makeDetailedReport(writer),
                  new FileDiffAdd(IMPORT_SECTION_ADDED, locrg(1, 1, 1, 7), locrg(3, 1, 4, 23)));
     }
 
     public void testImportAdded() {
         String msg = MessageFormat.format(IMPORT_ADDED, "org.incava.Bazr");
-        StringWriter writer = new StringWriter();
         evaluate(new Lines("package org.incava.foo;",
                            "import java.util.*;",
                            ""),
@@ -158,14 +154,11 @@ public class TestImports extends ItemsTest {
                            "import org.incava.Bazr;",
                            ""),
 
-                 Java.SOURCE_1_5,
-                 makeDetailedReport(writer),
                  new FileDiffAdd(msg, locrg(2, 1, 2, 19), locrg(3, 1, 3, 23)));
     }
 
     public void testImportRemoved() {
         String msg = MessageFormat.format(IMPORT_REMOVED, "java.io.IOException");
-        StringWriter writer = new StringWriter();
         evaluate(new Lines("package org.incava.foo;",
                            "import java.io.IOException;",
                            "import java.util.*;",
@@ -175,8 +168,6 @@ public class TestImports extends ItemsTest {
                            "import java.util.*;",
                            ""),
 
-                 Java.SOURCE_1_5,
-                 makeDetailedReport(writer),
                  new FileDiffDelete(msg, locrg(2, 1, 2, 27), locrg(2, 1, 2, 19)));
     }
 }

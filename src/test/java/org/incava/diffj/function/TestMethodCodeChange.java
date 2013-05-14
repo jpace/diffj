@@ -7,23 +7,6 @@ public class TestMethodCodeChange extends ItemsTest {
         super(name);
     }
 
-    public void xtestCodeNotChanged() {
-        evaluate(new Lines("class Test {",
-                           "    int bar() { return -1; }",
-                           "",
-                           "}"),
-
-                 new Lines("class Test {",
-                           "",
-                           "    int bar() { ",
-                           "        return -1;",
-                           "    }",
-                           "",
-                           "}"),
-
-                 NO_CHANGES);
-    }
-
     public void testCodeChangedInsert() {
         getOutput(new Lines("class Test {",
                             "    int bar() { ",

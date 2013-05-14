@@ -1,7 +1,9 @@
 package org.incava.diffj;
 
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import junit.framework.TestCase;
 import net.sourceforge.pmd.ast.ParseException;
 import org.incava.analysis.BriefReport;
@@ -121,15 +123,23 @@ public class DiffJTest extends IncavaTestCase {
         }
     }
 
+    public void assertOutputEquals(Lines fromLines, Lines toLines, List<String> expected) {
+        String[] output = getOutput(fromLines, toLines);
+                
+        tr.Ace.log("output  ", output);
+
+        assertEquals(expected, Arrays.asList(output));
+    }
+
     public void assertDifferencesEqual(FileDiff[] expectedDiffs, Collection<FileDiff> actualDiffs) {
         if (expectedDiffs.length != actualDiffs.size()) {
             tr.Ace.setVerbose(true);
                     
-            tr.Ace.yellow("actualDiffs.size", actualDiffs.size());
-            tr.Ace.yellow("actualDiffs", actualDiffs);
+            // tr.Ace.yellow("actualDiffs.size", actualDiffs.size());
+            // tr.Ace.yellow("actualDiffs", actualDiffs);
                     
-            tr.Ace.yellow("expectedDiffs.length", expectedDiffs.length);
-            tr.Ace.yellow("expectedDiffs", expectedDiffs);
+            // tr.Ace.yellow("expectedDiffs.length", expectedDiffs.length);
+            // tr.Ace.yellow("expectedDiffs", expectedDiffs);
                     
             assertEquals("number of differences", expectedDiffs.length, actualDiffs.size());
         }
@@ -142,8 +152,8 @@ public class DiffJTest extends IncavaTestCase {
     }
 
     public void assertDifferenceEqual(FileDiff expectedDiff, FileDiff actualDiff, int di) {
-        tr.Ace.yellow("expectedDiff", expectedDiff);
-        tr.Ace.yellow("actualDiff", actualDiff);
+        // tr.Ace.yellow("expectedDiff", expectedDiff);
+        // tr.Ace.yellow("actualDiff", actualDiff);
 
         assertNotNull("reference not null", actualDiff);
 

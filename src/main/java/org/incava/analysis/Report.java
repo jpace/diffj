@@ -105,26 +105,10 @@ public abstract class Report {
      * Clears the list of differences.
      */
     protected void clear() {
-        tr.Ace.yellow("differences", differences);
         differences.clear();
-        tr.Ace.yellow("differences", differences);
     }
 
     public boolean hasDifferences() {
         return !differences.isEmpty();
-    }
-
-    //$$$ @todo: remove all these methods, which are just to let JRuby
-    //subclasses get at the private/protected fields here.
-    public String getFromFileName() {
-        return fromFileName;
-    }
-    
-    public String getToFileName() {
-        return toFileName;
-    }
-
-    public Writer getWriter() {
-        return writer;
     }
 }
