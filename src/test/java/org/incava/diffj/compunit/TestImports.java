@@ -170,4 +170,29 @@ public class TestImports extends ItemsTest {
 
                  new FileDiffDelete(msg, locrg(2, 1, 2, 27), locrg(2, 1, 2, 19)));
     }
+
+    public void testImportAddedAndRemoved() {
+        String addMsg = MessageFormat.format(IMPORT_ADDED, "org.incava.log.Log");
+        String delMsg = MessageFormat.format(IMPORT_REMOVED, "org.incava.qualog.Qualog");
+        evaluate(new Lines("package org.incava.util;",
+                           "",
+                           "import org.incava.qualog.Qualog;",
+                           "",
+                           "public class TimedEvent",
+                           "{",
+                           "}",
+                           "",
+                           "\n"),
+
+                 new Lines("package org.incava.util;",
+                           "",
+                           "import org.incava.log.Log;",
+                           "",
+                           "public class TimedEvent",
+                           "{",
+                           "}\n"),
+
+                 new FileDiffAdd(addMsg, locrg(3, 1, 3, 32), locrg(3, 1, 3, 26)),
+                 new FileDiffDelete(delMsg, locrg(3, 1, 3, 32), locrg(3, 1, 3, 26)));
+    }
 }

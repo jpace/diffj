@@ -99,26 +99,6 @@ public class OutputTest extends ItemsTest {
                                    "public class TimedEvent {}"));
     }
 
-    public void xtestImportAddedAndRemoved() {
-        getOutput("package org.incava.util;\n" +
-                  "\n" +
-                  "import org.incava.qualog.Qualog;\n" +
-                  "\n" +
-                  "public class TimedEvent\n" +
-                  "{\n" +
-                  "}\n" +
-                  "\n" +
-                  "\n",
-
-                  "package org.incava.util;\n" +
-                  "\n" +
-                  "import org.incava.log.Log;\n" +
-                  "\n" +
-                  "public class TimedEvent\n" +
-                  "{\n" +
-                  "}\n");
-    }
-
     public void xtestCodeChanged() {
         getOutput("package org.incava.util;\n" +
                   "\n" +

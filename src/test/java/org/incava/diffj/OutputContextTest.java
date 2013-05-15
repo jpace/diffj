@@ -113,28 +113,6 @@ public abstract class OutputContextTest extends OutputTest {
         assertEquals(expected, Arrays.asList(output));        
     }
 
-    public void xtestImportAddedAndRemoved() {
-        evaluate(new Lines("package org.incava.util;",
-                           "",
-                           "import org.incava.qualog.Qualog;",
-                           "",
-                           "public class TimedEvent",
-                           "{",
-                           "}",
-                           "",
-                           "\n"),
-
-                 new Lines("package org.incava.util;",
-                           "",
-                           "import org.incava.log.Log;",
-                           "",
-                           "public class TimedEvent",
-                           "{",
-                           "}\n"),
-
-                 new FileDiff[0]);
-    }
-
     public void xtestCodeChanged() {
         evaluate(new Lines("package org.incava.util;",
                            "",
