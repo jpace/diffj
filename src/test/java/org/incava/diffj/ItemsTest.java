@@ -142,18 +142,7 @@ public class ItemsTest extends DiffJTest {
     }
 
     protected FileDiff makeChangedRef(String from, String to, String[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        String msg = null;
-        if (to == null) {
-            msg = MessageFormat.format(msgs[0], from);
-        }
-        else if (from == null) {
-            msg = MessageFormat.format(msgs[2], to);
-        }
-        else {
-            msg = MessageFormat.format(msgs[1], from, to);
-        }
-
-        return new FileDiffChange(msg, fromStart, fromEnd, toStart, toEnd);
+        return makeChangedRef(from, to, msgs, new LocationRange(fromStart, fromEnd), new LocationRange(toStart, toEnd));
     }
 
     protected FileDiff makeChangedRef(String from, String to, String[] msgs, LocationRange fromLoc, LocationRange toLoc) {
