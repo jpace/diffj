@@ -1,10 +1,22 @@
 package org.incava.diffj.function;
 
+import org.incava.analysis.FileDiff;
 import org.incava.diffj.*;
+import org.incava.ijdk.text.Location;
 
 public class TestPackage extends ItemsTest {
     public TestPackage(String name) {
         super(name);
+    }
+
+    protected FileDiff makePackageRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        return makeRef(from, to, PACKAGE_MSGS, fromStart, fromEnd, toStart, toEnd);
+    }
+
+    protected FileDiff makePackageRef(String from, String to, Location fromStart, Location toStart) {
+        return makeRef(from, to, PACKAGE_MSGS, 
+                       fromStart, loc(fromStart, from),
+                       toStart,   loc(toStart,   to));
     }
 
     public void testPackageNoChange() {

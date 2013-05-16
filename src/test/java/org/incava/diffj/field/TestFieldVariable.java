@@ -11,41 +11,6 @@ public class TestFieldVariable extends ItemsTest {
         tr.Ace.setVerbose(true);
     }
 
-    // public static class TestFieldDiffVariableAddedRemoved extends ItemsTest {
-        
-    //     public TestFieldDiffVariableAddedRemoved(String name) {
-    //         super(name);
-    //     }
-        
-    //     public void testVariableAddedRemoved() {
-    //         evaluate(new Lines("public class Collections {",
-    //                  "",
-    //                  "    private static class SingletonMap",
-    //                  "                                      implements Serializable {",
-    //                  "        private final Object k, v;",
-    //                  "    }",
-    //                  "}"),
-    //                  "public class Collections {",
-    //                  "",
-    //                  "    private static class SingletonMap<K,V>",
-    //                  "	  implements Serializable {",
-    //                  "",
-    //                  "        private final K k;",
-    //                  "        private final V v;",
-    //                  "    }",
-    //                  "}"),
-    // wrong!
-    // these should be:
-
-    //                  // variable type changed for k from Object to K
-    //                  // variable type changed for v from Object to V
-
-    //                  makeFieldRef(null, "v",  loc(3, 20), loc(6,  5), loc(7, 23), loc(7, 26)),
-    //                  makeCodeChangedRef(VARIABLE_REMOVED, "v",  loc(5, 33), loc(5, 33), loc(6, 25), loc(6, 25)),
-    //                  Java.SOURCE_1_5);
-    //     }
-    // }
-
     public void testVariableChanged() {
         evaluate(new Lines("class Test {",
                            "    int i;",
@@ -92,8 +57,8 @@ public class TestFieldVariable extends ItemsTest {
                            "}"),
                  
                  new FileDiffChange(getFromToMessage(VARIABLE_TYPE_CHANGED, "s", "Set", "HashSet"),
-                                          loc(2, 5), loc(2, 5, "Set"), 
-                                          loc(4, 5), loc(4, 5, "HashSet")));
+                                    loc(2, 5), loc(2, 5, "Set"), 
+                                    loc(4, 5), loc(4, 5, "HashSet")));
     }
 
     public void testMultipleVariables() {

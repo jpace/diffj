@@ -60,18 +60,12 @@ public class TestFieldVariableAddedRemoved extends ItemsTest {
                            "        private final V v;",
                            "    }",
                            "}"),
-
-                 Java.SOURCE_1_5,
                  
-                 // wrong!
-                 // these should be:
-                 
-                 // variable type changed for k from Object to K
-                 // variable type changed for v from Object to V
                  
                  makeVariableTypeChangedRef("k", "Object", "K", 5, 23, 6, 23),
                  makeVariableTypeChangedRef("v", "Object", "V", 5, 23, 7, 23),
                  
+                 //$$$ todo: not these:
                  makeVariableRemovedRef("k", 5, 30, 7, 25),
                  makeVariableRemovedRef("v", 5, 33, 6, 25));
     }

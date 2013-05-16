@@ -83,10 +83,6 @@ public class ItemsTest extends DiffJTest {
         return makeRef(from, to, METHOD_MSGS, fromStart, fromEnd, toStart, toEnd);
     }
 
-    protected FileDiff makeClassRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeRef(from, to, CLASS_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
     protected FileDiff makeInterfaceRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
         return makeRef(from, to, INTERFACE_MSGS, fromLoc, toLoc);
     }
@@ -95,41 +91,19 @@ public class ItemsTest extends DiffJTest {
         return makeRef(from, to, INTERFACE_MSGS, fromStart, fromEnd, toStart, toEnd);
     }
 
-    protected FileDiff makeTypeRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeRef(from, to, TYPES_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makePackageRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeRef(from, to, PACKAGE_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makePackageRef(String from, String to, Location fromStart, Location toStart) {
-        return makeRef(from, to, PACKAGE_MSGS, 
-                       fromStart, loc(fromStart, from),
-                       toStart,   loc(toStart,   to));
-    }
-
-    protected FileDiff makeVariableRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeRef(from, to, VARIABLE_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makeConstructorRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeRef(from, to, CONSTRUCTOR_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
     protected FileDiff makeRef(String from, String to, String[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         String msg = null;
 
         if (to == null) {
-            msg  = MessageFormat.format(msgs[0], from);
+            msg = MessageFormat.format(msgs[0], from);
             return new FileDiffDelete(msg, fromStart, fromEnd, toStart, toEnd);
         }
         else if (from == null) {
-            msg  = MessageFormat.format(msgs[2], to);
+            msg = MessageFormat.format(msgs[2], to);
             return new FileDiffAdd(msg, fromStart, fromEnd, toStart, toEnd);
         }
         else {
-            msg  = MessageFormat.format(msgs[1], from, to);
+            msg = MessageFormat.format(msgs[1], from, to);
             return new FileDiffChange(msg, fromStart, fromEnd, toStart, toEnd);
         }
     }
@@ -138,15 +112,15 @@ public class ItemsTest extends DiffJTest {
         String msg = null;
 
         if (to == null) {
-            msg  = MessageFormat.format(msgs[0], from);
+            msg = MessageFormat.format(msgs[0], from);
             return new FileDiffDelete(msg, fromLoc, toLoc);
         }
         else if (from == null) {
-            msg  = MessageFormat.format(msgs[2], to);
+            msg = MessageFormat.format(msgs[2], to);
             return new FileDiffAdd(msg, fromLoc, toLoc);
         }
         else {
-            msg  = MessageFormat.format(msgs[1], from, to);
+            msg = MessageFormat.format(msgs[1], from, to);
             return new FileDiffChange(msg, fromLoc, toLoc);
         }
     }

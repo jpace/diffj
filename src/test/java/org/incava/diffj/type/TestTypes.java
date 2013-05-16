@@ -1,10 +1,16 @@
 package org.incava.diffj.type;
 
+import org.incava.analysis.FileDiff;
 import org.incava.diffj.*;
+import org.incava.ijdk.text.Location;
 
 public class TestTypes extends ItemsTest {
     public TestTypes(String name) {
         super(name);
+    }
+
+    protected FileDiff makeTypeRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        return makeRef(from, to, TYPES_MSGS, fromStart, fromEnd, toStart, toEnd);
     }
 
     public void testAllTypesAdded() {

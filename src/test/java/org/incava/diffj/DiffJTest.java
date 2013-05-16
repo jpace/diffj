@@ -135,11 +135,11 @@ public class DiffJTest extends IncavaTestCase {
         if (expectedDiffs.length != actualDiffs.size()) {
             tr.Ace.setVerbose(true);
                     
-            // tr.Ace.yellow("actualDiffs.size", actualDiffs.size());
-            // tr.Ace.yellow("actualDiffs", actualDiffs);
+            tr.Ace.yellow("actualDiffs.size", actualDiffs.size());
+            tr.Ace.yellow("actualDiffs", actualDiffs);
                     
-            // tr.Ace.yellow("expectedDiffs.length", expectedDiffs.length);
-            // tr.Ace.yellow("expectedDiffs", expectedDiffs);
+            tr.Ace.yellow("expectedDiffs.length", expectedDiffs.length);
+            tr.Ace.yellow("expectedDiffs", expectedDiffs);
                     
             assertEquals("number of differences", expectedDiffs.length, actualDiffs.size());
         }

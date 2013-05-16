@@ -1,10 +1,16 @@
 package org.incava.diffj.type;
 
+import org.incava.analysis.FileDiff;
 import org.incava.diffj.*;
+import org.incava.ijdk.text.Location;
 
 public class TestInnerClass extends ItemsTest {
     public TestInnerClass(String name) {
         super(name);
+    }
+
+    protected FileDiff makeClassRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        return makeRef(from, to, CLASS_MSGS, fromStart, fromEnd, toStart, toEnd);
     }
 
     public void testInnerClassAdded() {
