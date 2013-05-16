@@ -21,14 +21,6 @@ public abstract class Modifiers {
 
     public abstract int[] getModifierTypes();
 
-    public List<Token> getLeadingTokens() { 
-        return SimpleNodeUtil.getLeadingTokens(node);
-    }
-
-    public Token getFirstToken() {
-        return node.getFirstToken();
-    }
-
     public void diff(Modifiers toModifiers, Differences differences) {
         int[] modifierTypes = getModifierTypes();
 
@@ -41,11 +33,11 @@ public abstract class Modifiers {
             
             if (fromMod == null) {
                 if (toMod != null) {
-                    differences.changed(getFirstToken(), toMod, MODIFIER_ADDED, toMod.image);
+                    differences.changed(node.getFirstToken(), toMod, MODIFIER_ADDED, toMod.image);
                 }
             }
             else if (toMod == null) {
-                differences.changed(fromMod, toModifiers.getFirstToken(), MODIFIER_REMOVED, fromMod.image);
+                differences.changed(fromMod, toModifiers.node.getFirstToken(), MODIFIER_REMOVED, fromMod.image);
             }
         }
     }
@@ -56,7 +48,7 @@ public abstract class Modifiers {
      * node.
      */
     protected Map<Integer, Token> getModifierMap() {
-        List<Token> mods = getLeadingTokens();
+        List<Token> mods = SimpleNodeUtil.getLeadingTokens(node);
         Map<Integer, Token> byKind = new TreeMap<Integer, Token>();
 
         for (Token tk : mods) {
