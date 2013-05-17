@@ -181,11 +181,11 @@ public class TestCtorParameters extends ItemsTest {
     }
 
     protected String paramReordMsg(String paramName, int oldPosition, int newPosition) {
-        return MessageFormat.format(Parameters.PARAMETER_REORDERED, paramName, Integer.valueOf(oldPosition), Integer.valueOf(newPosition));
+        return MessageFormat.format(Parameters.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
     }
 
     protected String paramReordRenamedMsg(String oldName, int oldPosition, String newName, int newPosition) {
-        return MessageFormat.format(Parameters.PARAMETER_REORDERED_AND_RENAMED, oldName, Integer.valueOf(oldPosition), Integer.valueOf(newPosition), newName);
+        return Parameters.PARAMETER_REORDERED_AND_RENAMED.format(oldName, oldPosition, newPosition, newName);
     }
 
     protected FileDiff makeChangedRef(String msg, 

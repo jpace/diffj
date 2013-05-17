@@ -11,6 +11,7 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Differences {
@@ -74,6 +75,11 @@ public class Differences {
 
     public void changed(Token from, Token to, String msg, Object ... params) {
         String str = MessageFormat.format(msg, params);
+        add(new FileDiffChange(str, from, to));
+    }
+
+    public void changed(Token from, Token to, Message msg, Object ... params) {
+        String str = msg.format(params);
         add(new FileDiffChange(str, from, to));
     }
 

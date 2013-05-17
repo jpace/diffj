@@ -223,6 +223,6 @@ public class TestMethodParameters extends ItemsTest {
     }
 
     protected String paramReordRenamedMsg(String oldName, int oldPosition, String newName, int newPosition) {
-        return MessageFormat.format(Parameters.PARAMETER_REORDERED_AND_RENAMED, oldName, oldPosition, newPosition, newName);
+        return Parameters.PARAMETER_REORDERED_AND_RENAMED.format(oldName, oldPosition, newPosition, newName);
     }
 }

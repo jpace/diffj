@@ -5,6 +5,7 @@ import net.sourceforge.pmd.ast.ASTFormalParameter;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.ParameterUtil;
 
 public class Parameters {
@@ -13,7 +14,7 @@ public class Parameters {
     public static final String PARAMETER_REORDERED = "parameter {0} reordered from argument {1} to {2}";
     public static final String PARAMETER_TYPE_CHANGED = "parameter type changed from {0} to {1}";
     public static final String PARAMETER_NAME_CHANGED = "parameter name changed from {0} to {1}";
-    public static final String PARAMETER_REORDERED_AND_RENAMED = "parameter {0} reordered from argument {1} to {2} and renamed {3}";
+    public static final Message PARAMETER_REORDERED_AND_RENAMED = new Message("parameter {0} reordered from argument {1} to {2} and renamed {3}");
 
     private final ASTFormalParameters params;
     

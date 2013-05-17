@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public abstract class Modifiers {

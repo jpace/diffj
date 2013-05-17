@@ -1,10 +1,6 @@
 package org.incava.diffj.params;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTFormalParameter;
-import net.sourceforge.pmd.ast.ASTFormalParameters;
-import net.sourceforge.pmd.ast.Token;
-import org.incava.pmdx.ParameterUtil;
 
 public class ParameterTypes {
     private final List<String> paramTypes;
@@ -57,36 +53,36 @@ public class ParameterTypes {
         }
 
         int numParams = Math.max(fromSize, toSize);
-        double match = (double)exactMatches / numParams;
-        match += (double)misorderedMatches / (2 * numParams);
+        double match = (double)exactMatches / numParams + (double)misorderedMatches / (2 * numParams);
 
         return 0.5 + (match / 2.0);
     }
 
-    /**
-     * Returns 0 for exact match, +1 for misordered match, -1 for no match.
-     */
+    private void clearMatchList(List<String> fromList, int fromIndex, List<String> toList, int toIndex) {
+        fromList.set(fromIndex, null);
+        toList.set(toIndex, null);
+    }
+
     public int getListMatch(List<String> fromList, int fromIndex, List<String> toList) {
         int fromSize = fromList.size();
-        int toSize = toList.size();
         String fromStr = fromIndex < fromSize ? fromList.get(fromIndex) : null;
-        String toStr = fromIndex < toSize ? toList.get(fromIndex) : null;
         
         if (fromStr == null) {
             return -1;
         }
+
+        int toSize = toList.size();
+        String toStr = fromIndex < toSize ? toList.get(fromIndex) : null;
         
         if (fromStr.equals(toStr)) {
-            fromList.set(fromIndex, null);
-            toList.set(fromIndex, null);
+            clearMatchList(fromList, fromIndex, toList, fromIndex);
             return fromIndex;
         }
         
         for (int toIdx = 0; toIdx < toSize; ++toIdx) {
             toStr = toList.get(toIdx);
             if (fromStr.equals(toStr)) {
-                fromList.set(fromIndex, null);
-                toList.set(toIdx, null);
+                clearMatchList(fromList, fromIndex, toList, toIdx);
                 return toIdx;
             }
         }

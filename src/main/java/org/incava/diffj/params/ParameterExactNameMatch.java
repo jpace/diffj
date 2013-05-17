@@ -6,12 +6,9 @@ import org.incava.diffj.element.Differences;
 public class ParameterExactNameMatch extends ParameterMatch {
     public ParameterExactNameMatch(ASTFormalParameter fromFormalParam, int index, int typeMatch, int nameMatch, Parameters toParams) {
         super(fromFormalParam, index, typeMatch, nameMatch, toParams);
-        tr.Ace.onWhite("index", index);
     }
 
     public void diff(Differences differences) {
-        tr.Ace.onMagenta("differences", differences);
-
         ASTFormalParameter toFormalParam = toParams.getParameter(index);
         Parameter toParam = new Parameter(toFormalParam);
         String fromType = fromParam.getParameterType();
