@@ -9,12 +9,6 @@ import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.Message;
 
 public class TestCtorParameters extends ItemsTest {
-    protected final static String[] PARAMETER_MSGS = new String[] {
-        Parameters.PARAMETER_REMOVED,
-        null,
-        Parameters.PARAMETER_ADDED,
-    };
-
     public TestCtorParameters(String name) {
         super(name);
     }

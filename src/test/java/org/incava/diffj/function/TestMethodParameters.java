@@ -7,15 +7,8 @@ import org.incava.diffj.params.Parameters;
 import org.incava.ijdk.text.Location;
 
 public class TestMethodParameters extends ItemsTest {
-    protected final static String[] PARAM_MSGS = new String[] {
-        Parameters.PARAMETER_REMOVED,
-        null,
-        Parameters.PARAMETER_ADDED,
-    };
-
     public TestMethodParameters(String name) {
         super(name);
-
         tr.Ace.setVerbose(true);
     }
 

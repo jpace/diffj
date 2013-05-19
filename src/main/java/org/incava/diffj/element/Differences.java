@@ -119,6 +119,14 @@ public class Differences {
         add(new FileDiffChange(str, fromStart, fromEnd, toStart, toEnd));
     }
 
+    public void changed(SimpleNode from, Token to, Message msg, Object ... params) {
+        changed(from.getFirstToken(), from.getLastToken(), to, to, msg, params);
+    }
+
+    public void changed(Token from, SimpleNode to, Message msg, Object ... params) {
+        changed(from, from, to.getFirstToken(), to.getLastToken(), msg, params);
+    }
+
     // -------------------------------------------------------
     // deleted
     // -------------------------------------------------------

@@ -9,8 +9,8 @@ import org.incava.ijdk.text.Message;
 import org.incava.pmdx.ParameterUtil;
 
 public class Parameters {
-    public static final String PARAMETER_REMOVED = "parameter removed: {0}";
-    public static final String PARAMETER_ADDED = "parameter added: {0}";
+    public static final Message PARAMETER_REMOVED = new Message("parameter removed: {0}");
+    public static final Message PARAMETER_ADDED = new Message("parameter added: {0}");
     public static final Message PARAMETER_REORDERED = new Message("parameter {0} reordered from argument {1} to {2}");
     public static final Message PARAMETER_TYPE_CHANGED = new Message("parameter type changed from {0} to {1}");
     public static final Message PARAMETER_NAME_CHANGED = new Message("parameter name changed from {0} to {1}");

@@ -213,6 +213,13 @@ public class ItemsTest extends DiffJTest {
         return new FileDiffChange(msg, fromLoc, toLoc);
     }
 
+    protected FileDiff makeCodeChangedRef(Message codeChgMsg, String arg, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        String str = codeChgMsg.format(arg);
+        return new FileDiffChange(str, new LocationRange(fromStart, fromEnd), new LocationRange(toStart, toEnd));
+    }
+
+    // -------------------------------------------------------
+
     protected FileDiff makeCodeAddedRef(String codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         return makeCodeAddedRef(codeChgMsg, new String[] { where }, fromStart, fromEnd, toStart, toEnd);
     }
