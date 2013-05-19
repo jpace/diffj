@@ -16,6 +16,7 @@ import org.incava.diffj.type.Type;
 import org.incava.diffj.type.Types;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
+import org.incava.ijdk.text.Message;
 
 public class ItemsTest extends DiffJTest {
     protected final static String[] METHOD_MSGS = new String[] {
@@ -134,6 +135,18 @@ public class ItemsTest extends DiffJTest {
         }
         else {
             return MessageFormat.format(changedMsg, from, to);
+        }
+    }
+
+    protected String getMessage(Message removedMsg, Message addedMsg, Message changedMsg, String from, String to) {
+        if (to == null) {
+            return removedMsg.format(from);
+        }
+        else if (from == null) {
+            return addedMsg.format(to);
+        }
+        else {
+            return changedMsg.format(from, to);
         }
     }
 

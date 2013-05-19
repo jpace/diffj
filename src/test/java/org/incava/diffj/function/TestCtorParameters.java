@@ -6,6 +6,7 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.*;
 import org.incava.diffj.params.Parameters;
 import org.incava.ijdk.text.Location;
+import org.incava.ijdk.text.Message;
 
 public class TestCtorParameters extends ItemsTest {
     protected final static String[] PARAMETER_MSGS = new String[] {
@@ -118,7 +119,7 @@ public class TestCtorParameters extends ItemsTest {
                            "}"),
                  
                  new FileDiffChange(getMessage(null, null, Parameters.PARAMETER_TYPE_CHANGED, "int", "Integer"), 
-                                          loc(2, 10), loc(2, 14), loc(3, 10), loc(3, 18)));
+                                    loc(2, 10), loc(2, 14), loc(3, 10), loc(3, 18)));
     }
 
     public void testParameterChangedName() {
@@ -189,6 +190,12 @@ public class TestCtorParameters extends ItemsTest {
     }
 
     protected FileDiff makeChangedRef(String msg, 
+                                      String fromStr, String toStr,
+                                      Location fromStart, Location toStart) {
+        return new FileDiffChange(getMessage(null, null, msg, fromStr, toStr), fromStart, loc(fromStart, fromStr), toStart, loc(toStart, toStr));
+    }
+
+    protected FileDiff makeChangedRef(Message msg, 
                                       String fromStr, String toStr,
                                       Location fromStart, Location toStart) {
         return new FileDiffChange(getMessage(null, null, msg, fromStr, toStr), fromStart, loc(fromStart, fromStr), toStart, loc(toStart, toStr));

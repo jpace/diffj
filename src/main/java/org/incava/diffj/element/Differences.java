@@ -78,11 +78,6 @@ public class Differences {
         add(new FileDiffChange(str, from, to));
     }
 
-    public void changed(Token from, Token to, Message msg, Object ... params) {
-        String str = msg.format(params);
-        add(new FileDiffChange(str, from, to));
-    }
-
     public void changed(Token from, Token to, String msg) {
         changed(from, to, msg, toParameters(from, to));
     }
@@ -106,6 +101,22 @@ public class Differences {
 
     public void changed(Token from, SimpleNode to, String msg, Object ... params) {
         changed(from, from, to.getFirstToken(), to.getLastToken(), msg, params);
+    }
+
+    // -------------------------------------------------------
+
+    public void changed(Token from, Token to, Message msg, Object ... params) {
+        String str = msg.format(params);
+        add(new FileDiffChange(str, from, to));
+    }
+
+    public void changed(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
+        changed(from.getFirstToken(), from.getLastToken(), to.getFirstToken(), to.getLastToken(), msg, params);
+    }
+
+    public void changed(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
+        String str = msg.format(params);
+        add(new FileDiffChange(str, fromStart, fromEnd, toStart, toEnd));
     }
 
     // -------------------------------------------------------
