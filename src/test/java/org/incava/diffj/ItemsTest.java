@@ -55,7 +55,7 @@ public class ItemsTest extends DiffJTest {
         Access.ACCESS_ADDED,
     };
 
-    protected final static String[] TYPES_MSGS = new String[] {
+    protected final static Message[] TYPES_MSGS = new Message[] {
         Types.TYPE_DECLARATION_REMOVED,
         null,
         Types.TYPE_DECLARATION_ADDED,
@@ -123,6 +123,23 @@ public class ItemsTest extends DiffJTest {
         else {
             msg = MessageFormat.format(msgs[1], from, to);
             return new FileDiffChange(msg, fromLoc, toLoc);
+        }
+    }
+
+    protected FileDiff makeRef(String from, String to, Message[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        String msg = null;
+
+        if (to == null) {
+            msg = msgs[0].format(from);
+            return new FileDiffDelete(msg, fromStart, fromEnd, toStart, toEnd);
+        }
+        else if (from == null) {
+            msg = msgs[2].format(to);
+            return new FileDiffAdd(msg, fromStart, fromEnd, toStart, toEnd);
+        }
+        else {
+            msg = msgs[1].format(from, to);
+            return new FileDiffChange(msg, fromStart, fromEnd, toStart, toEnd);
         }
     }
 

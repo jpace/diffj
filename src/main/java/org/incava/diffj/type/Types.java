@@ -8,12 +8,13 @@ import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Types {
-    public static final String TYPE_DECLARATION_ADDED = "type declaration added: {0}";
-    public static final String TYPE_DECLARATION_REMOVED = "type declaration removed: {0}";
+    public static final Message TYPE_DECLARATION_ADDED = new Message("type declaration added: {0}");
+    public static final Message TYPE_DECLARATION_REMOVED = new Message("type declaration removed: {0}");
 
     private final ASTCompilationUnit compUnit;
     private final List<ASTTypeDeclaration> types;

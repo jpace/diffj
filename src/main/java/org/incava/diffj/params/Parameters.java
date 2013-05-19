@@ -84,14 +84,11 @@ public class Parameters {
     public void compareEachParameter(Parameters toParams, Differences differences) {
         ParameterComparator pc = new ParameterComparator(this, toParams);
         List<ParameterMatch> matches = pc.getMatches();
-        tr.Ace.cyan("matches", matches);
 
         int size = matches.size();
 
         for (int idx = 0; idx < size; ++idx) {
             ParameterMatch paramMatch = matches.get(idx);
-            tr.Ace.cyan("idx", idx);
-            tr.Ace.cyan("paramMatch", paramMatch);
             paramMatch.diff(differences);
         }
 
@@ -101,8 +98,6 @@ public class Parameters {
                 continue;
             }
 
-            // ASTFormalParameter toFormalParam = toParams.getParameter(toIdx);
-            // tr.Ace.bold("toFormalParam", toFormalParam);
             Parameter toParam = new Parameter(unmatchedParam);
             Token toName = toParam.getParameterName();
             differences.changed(params, unmatchedParam, PARAMETER_ADDED, toName.image);
