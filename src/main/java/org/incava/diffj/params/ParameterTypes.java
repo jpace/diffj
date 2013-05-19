@@ -1,6 +1,7 @@
 package org.incava.diffj.params;
 
 import java.util.List;
+import org.incava.ijdk.lang.Pair;
 
 public class ParameterTypes {
     private final List<String> paramTypes;
@@ -11,6 +12,22 @@ public class ParameterTypes {
 
     protected boolean isEmpty() {
         return paramTypes.isEmpty();
+    }
+
+    private Pair<Integer, Integer> getMatchListScore(List<String> aParamTypes, List<String> bParamTypes, Pair<Integer, Integer> matches) {
+        for (int idx = 0; idx < aParamTypes.size(); ++idx) {
+            Integer paramMatch = getListMatch(aParamTypes, idx, bParamTypes);
+            if (paramMatch == null) {
+                continue;
+            }
+            else if (paramMatch == idx) {
+                matches = Pair.create(matches.getFirst() + 1, matches.getSecond());
+            }
+            else {
+                matches = Pair.create(matches.getFirst(), matches.getSecond() + 1);
+            }
+        }
+        return matches;
     }
 
     public double getMatchScore(ParameterTypes toParmTyp) {
@@ -26,36 +43,15 @@ public class ParameterTypes {
 
         List<String> toParamTypes = toParmTyp.paramTypes;
 
-        int fromSize = paramTypes.size();
-        int toSize = toParamTypes.size();
+        // first == number of exact matches; second == number of misordered matches:
+        Pair<Integer, Integer> matches = getMatchListScore(paramTypes, toParamTypes, Pair.create(0, 0));
+        matches = getMatchListScore(toParamTypes, paramTypes, matches);
+        
+        int numParams = Math.max(paramTypes.size(), toParamTypes.size());
 
-        int exactMatches = 0;
-        int misorderedMatches = 0;
-            
-        for (int fromIdx = 0; fromIdx < fromSize; ++fromIdx) {
-            int paramMatch = getListMatch(paramTypes, fromIdx, toParamTypes);
-            if (paramMatch == fromIdx) {
-                ++exactMatches;
-            }
-            else if (paramMatch >= 0) {
-                ++misorderedMatches;
-            }
-        }
+        double matchCount = (double)matches.getFirst() / numParams + (double)matches.getSecond() / (2 * numParams);
 
-        for (int toIdx = 0; toIdx < toSize; ++toIdx) {
-            int paramMatch = getListMatch(toParamTypes, toIdx, paramTypes);
-            if (paramMatch == toIdx) {
-                ++exactMatches;
-            }
-            else if (paramMatch >= 0) {
-                ++misorderedMatches;
-            }
-        }
-
-        int numParams = Math.max(fromSize, toSize);
-        double match = (double)exactMatches / numParams + (double)misorderedMatches / (2 * numParams);
-
-        return 0.5 + (match / 2.0);
+        return 0.5 + (matchCount / 2.0);
     }
 
     private void clearMatchList(List<String> fromList, int fromIndex, List<String> toList, int toIndex) {
@@ -63,12 +59,12 @@ public class ParameterTypes {
         toList.set(toIndex, null);
     }
 
-    public int getListMatch(List<String> fromList, int fromIndex, List<String> toList) {
+    public Integer getListMatch(List<String> fromList, int fromIndex, List<String> toList) {
         int fromSize = fromList.size();
         String fromStr = fromIndex < fromSize ? fromList.get(fromIndex) : null;
         
         if (fromStr == null) {
-            return -1;
+            return null;
         }
 
         int toSize = toList.size();
@@ -86,6 +82,6 @@ public class ParameterTypes {
                 return toIdx;
             }
         }
-        return -1;
+        return null;
     }
 }

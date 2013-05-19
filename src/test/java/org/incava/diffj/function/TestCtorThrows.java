@@ -119,6 +119,6 @@ public class TestCtorThrows extends ItemsTest {
     }
 
     protected String throwsReordMsg(String throwsName, int oldPosition, int newPosition) {
-        return MessageFormat.format(THROWS_REORDERED, throwsName, Integer.valueOf(oldPosition), Integer.valueOf(newPosition));
+        return MessageFormat.format(THROWS_REORDERED, throwsName, oldPosition, newPosition);
     }
 }
