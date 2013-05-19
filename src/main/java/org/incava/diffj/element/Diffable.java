@@ -1,6 +1,7 @@
 package org.incava.diffj.element;
 
 import net.sourceforge.pmd.ast.SimpleNode;
+import org.incava.ijdk.text.Message;
 
 /**
  * Something that can be compared against another.
@@ -12,9 +13,9 @@ public interface Diffable<DiffType extends Diffable> {
 
     public String getName();
 
-    public String getAddedMessage();
+    public Message getAddedMessage();
 
-    public String getRemovedMessage();
+    public Message getRemovedMessage();
 
     public SimpleNode getNode();
 }

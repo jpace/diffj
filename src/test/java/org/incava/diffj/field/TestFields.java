@@ -3,9 +3,10 @@ package org.incava.diffj.field;
 import org.incava.analysis.FileDiff;
 import org.incava.diffj.*;
 import org.incava.ijdk.text.LocationRange;
+import org.incava.ijdk.text.Message;
 
 public class TestFields extends ItemsTest {
-    protected final static String[] FIELD_MSGS = new String[] {
+    protected final static Message[] FIELD_MSGS = new Message[] {
         Field.FIELD_REMOVED,
         null,
         Field.FIELD_ADDED,

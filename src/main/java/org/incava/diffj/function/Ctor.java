@@ -10,12 +10,13 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Ctor extends Function implements Diffable<Ctor> {
-    public static final String CONSTRUCTOR_REMOVED = "constructor removed: {0}";
-    public static final String CONSTRUCTOR_ADDED = "constructor added: {0}";
+    public static final Message CONSTRUCTOR_REMOVED = new Message("constructor removed: {0}");
+    public static final Message CONSTRUCTOR_ADDED = new Message("constructor added: {0}");
 
     private final ASTConstructorDeclaration ctor;
 
@@ -69,11 +70,11 @@ public class Ctor extends Function implements Diffable<Ctor> {
         return fromParams.getMatchScore(toParams);
     }
 
-    public String getAddedMessage() {
+    public Message getAddedMessage() {
         return CONSTRUCTOR_ADDED;
     }
 
-    public String getRemovedMessage() {
+    public Message getRemovedMessage() {
         return CONSTRUCTOR_REMOVED;
     }
 }

@@ -11,14 +11,15 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Method extends Function implements Diffable<Method> {
-    public static final String METHOD_REMOVED = "method removed: {0}";
-    public static final String METHOD_ADDED = "method added: {0}";
-    public static final String METHOD_CHANGED = "method changed from {0} to {1}";
+    public static final Message METHOD_REMOVED = new Message("method removed: {0}");
+    public static final Message METHOD_ADDED = new Message("method added: {0}");
+    public static final Message METHOD_CHANGED = new Message("method changed from {0} to {1}");
     public static final String RETURN_TYPE_CHANGED = "return type changed from {0} to {1}";
     public static final String METHOD_BLOCK_ADDED = "method block added";
     public static final String METHOD_BLOCK_REMOVED = "method block removed";
@@ -140,11 +141,11 @@ public class Method extends Function implements Diffable<Method> {
         return fromParams.getMatchScore(toParams);
     }
 
-    public String getAddedMessage() {
+    public Message getAddedMessage() {
         return METHOD_ADDED;
     }
 
-    public String getRemovedMessage() {
+    public Message getRemovedMessage() {
         return METHOD_REMOVED;
     }
 }

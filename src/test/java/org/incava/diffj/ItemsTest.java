@@ -19,25 +19,25 @@ import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.text.Message;
 
 public class ItemsTest extends DiffJTest {
-    protected final static String[] METHOD_MSGS = new String[] {
+    protected final static Message[] METHOD_MSGS = new Message[] {
         Method.METHOD_REMOVED,
         Method.METHOD_CHANGED, 
         Method.METHOD_ADDED,
     };
 
-    protected final static String[] CLASS_MSGS = new String[] {
+    protected final static Message[] CLASS_MSGS = new Message[] {
         Type.INNER_CLASS_REMOVED,
         null,
         Type.INNER_CLASS_ADDED,
     };
 
-    protected final static String[] INTERFACE_MSGS = new String[] {
+    protected final static Message[] INTERFACE_MSGS = new Message[] {
         Type.INNER_INTERFACE_REMOVED,
         null,
         Type.INNER_INTERFACE_ADDED,
     };
 
-    protected final static String[] CONSTRUCTOR_MSGS = new String[] {
+    protected final static Message[] CONSTRUCTOR_MSGS = new Message[] {
         Ctor.CONSTRUCTOR_REMOVED,
         null,
         Ctor.CONSTRUCTOR_ADDED,
@@ -140,6 +140,23 @@ public class ItemsTest extends DiffJTest {
         else {
             msg = msgs[1].format(from, to);
             return new FileDiffChange(msg, fromStart, fromEnd, toStart, toEnd);
+        }
+    }
+
+    protected FileDiff makeRef(String from, String to, Message[] msgs, LocationRange fromLoc, LocationRange toLoc) {
+        String msg = null;
+
+        if (to == null) {
+            msg = msgs[0].format(from);
+            return new FileDiffDelete(msg, fromLoc, toLoc);
+        }
+        else if (from == null) {
+            msg = msgs[2].format(to);
+            return new FileDiffAdd(msg, fromLoc, toLoc);
+        }
+        else {
+            msg = msgs[1].format(from, to);
+            return new FileDiffChange(msg, fromLoc, toLoc);
         }
     }
 

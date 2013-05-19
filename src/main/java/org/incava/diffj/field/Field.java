@@ -11,14 +11,15 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.AccessibleElement;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 import org.incava.ijdk.util.CollectionExt;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.VariableUtil;
 
 public class Field extends AccessibleElement implements Diffable<Field> {
-    public static final String FIELD_REMOVED = "field removed: {0}";
-    public static final String FIELD_ADDED = "field added: {0}";    
+    public static final Message FIELD_REMOVED = new Message("field removed: {0}");
+    public static final Message FIELD_ADDED = new Message("field added: {0}");
 
     private final ASTFieldDeclaration field;
 
@@ -37,11 +38,11 @@ public class Field extends AccessibleElement implements Diffable<Field> {
         return FieldUtil.getNames(field);
     }
 
-    public String getAddedMessage() {
+    public Message getAddedMessage() {
         return FIELD_ADDED;
     }
 
-    public String getRemovedMessage() {
+    public Message getRemovedMessage() {
         return FIELD_REMOVED;
     }
 

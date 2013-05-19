@@ -16,6 +16,7 @@ import org.incava.diffj.element.Differences;
 import org.incava.diffj.field.Field;
 import org.incava.diffj.function.Ctor;
 import org.incava.diffj.function.Method;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
@@ -23,11 +24,11 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     public static final String TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface";
     public static final String TYPE_CHANGED_FROM_INTERFACE_TO_CLASS = "type changed from interface to class";
 
-    public static final String INNER_INTERFACE_ADDED = "inner interface added: {0}";
-    public static final String INNER_INTERFACE_REMOVED = "inner interface removed: {0}";
+    public static final Message INNER_INTERFACE_ADDED = new Message("inner interface added: {0}");
+    public static final Message INNER_INTERFACE_REMOVED = new Message("inner interface removed: {0}");
 
-    public static final String INNER_CLASS_ADDED = "inner class added: {0}";
-    public static final String INNER_CLASS_REMOVED = "inner class removed: {0}";
+    public static final Message INNER_CLASS_ADDED = new Message("inner class added: {0}");
+    public static final Message INNER_CLASS_REMOVED = new Message("inner class removed: {0}");
 
     private final ASTClassOrInterfaceDeclaration decl;
     
@@ -60,7 +61,6 @@ public class Type extends AccessibleElement implements Diffable<Type> {
         return getDeclarationsOfClass(decls, cls);
     }
 
-    // @SuppressWarnings("unchecked")
     public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls, Class<ItemType> cls) {
         List<ItemType> declList = new ArrayList<ItemType>();
 
@@ -167,11 +167,11 @@ public class Type extends AccessibleElement implements Diffable<Type> {
         return getName().equals(toType.getName()) ? 1.0 : 0.0;
     }
 
-    public String getAddedMessage() {
+    public Message getAddedMessage() {
         return isInterface() ? INNER_INTERFACE_ADDED : INNER_CLASS_ADDED;
     }
 
-    public String getRemovedMessage() {
+    public Message getRemovedMessage() {
         return isInterface() ? INNER_INTERFACE_REMOVED : INNER_CLASS_REMOVED;
     }
 }
