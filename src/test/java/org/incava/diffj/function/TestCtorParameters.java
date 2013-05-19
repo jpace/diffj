@@ -182,7 +182,7 @@ public class TestCtorParameters extends ItemsTest {
     }
 
     protected String paramReordMsg(String paramName, int oldPosition, int newPosition) {
-        return MessageFormat.format(Parameters.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
+        return Parameters.PARAMETER_REORDERED.format(paramName, oldPosition, newPosition);
     }
 
     protected String paramReordRenamedMsg(String oldName, int oldPosition, String newName, int newPosition) {

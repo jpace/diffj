@@ -214,12 +214,12 @@ public class TestMethodParameters extends ItemsTest {
     }
 
     protected FileDiffChange makeParamReorderedRef(String paramName, int oldPosition, int newPosition, Location fromStart, Location toStart) {
-        String msg = MessageFormat.format(Parameters.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
+        String msg = Parameters.PARAMETER_REORDERED.format(paramName, oldPosition, newPosition);
         return new FileDiffChange(msg, fromStart, loc(fromStart, paramName), toStart, loc(toStart, paramName));
     }
 
     protected String paramReordMsg(String paramName, int oldPosition, int newPosition) {
-        return MessageFormat.format(Parameters.PARAMETER_REORDERED, paramName, oldPosition, newPosition);
+        return Parameters.PARAMETER_REORDERED.format(paramName, oldPosition, newPosition);
     }
 
     protected String paramReordRenamedMsg(String oldName, int oldPosition, String newName, int newPosition) {
