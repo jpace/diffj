@@ -20,9 +20,9 @@ public class Method extends Function implements Diffable<Method> {
     public static final Message METHOD_REMOVED = new Message("method removed: {0}");
     public static final Message METHOD_ADDED = new Message("method added: {0}");
     public static final Message METHOD_CHANGED = new Message("method changed from {0} to {1}");
-    public static final String RETURN_TYPE_CHANGED = "return type changed from {0} to {1}";
-    public static final String METHOD_BLOCK_ADDED = "method block added";
-    public static final String METHOD_BLOCK_REMOVED = "method block removed";
+    public static final Message RETURN_TYPE_CHANGED = new Message("return type changed from {0} to {1}");
+    public static final Message METHOD_BLOCK_ADDED = new Message("method block added");
+    public static final Message METHOD_BLOCK_REMOVED = new Message("method block removed");
 
     private final ASTMethodDeclaration method;
     private final ASTBlock block;

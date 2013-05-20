@@ -18,7 +18,7 @@ public class TestType extends ItemsTest {
                  new Lines("interface Test {",
                            "}"),
                  
-                 new FileDiffChange(TYPE_CHANGED_FROM_CLASS_TO_INTERFACE, locrg(1, 1, 2, 1), locrg(1, 1, 2, 1)));
+                 new FileDiffChange(TYPE_CHANGED_FROM_CLASS_TO_INTERFACE.format(), locrg(1, 1, 2, 1), locrg(1, 1, 2, 1)));
     }
 
     public void testInterfaceToClass() {
@@ -28,7 +28,7 @@ public class TestType extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffChange(TYPE_CHANGED_FROM_INTERFACE_TO_CLASS, locrg(1, 1, 2, 1), locrg(1, 1, 2, 1)));
+                 new FileDiffChange(TYPE_CHANGED_FROM_INTERFACE_TO_CLASS.format(), locrg(1, 1, 2, 1), locrg(1, 1, 2, 1)));
     }
 
     public void testClassAccessChanged() {

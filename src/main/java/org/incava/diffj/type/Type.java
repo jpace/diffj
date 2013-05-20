@@ -21,8 +21,8 @@ import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Type extends AccessibleElement implements Diffable<Type> {
-    public static final String TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = "type changed from class to interface";
-    public static final String TYPE_CHANGED_FROM_INTERFACE_TO_CLASS = "type changed from interface to class";
+    public static final Message TYPE_CHANGED_FROM_CLASS_TO_INTERFACE = new Message("type changed from class to interface");
+    public static final Message TYPE_CHANGED_FROM_INTERFACE_TO_CLASS = new Message("type changed from interface to class");
 
     public static final Message INNER_INTERFACE_ADDED = new Message("inner interface added: {0}");
     public static final Message INNER_INTERFACE_REMOVED = new Message("inner interface removed: {0}");

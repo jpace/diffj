@@ -21,7 +21,7 @@ public class TestMethodImplemented extends ItemsTest {
                            "}"),
                  
                  makeModifierRef("abstract", null, loc(2, 5), loc(2, 12), loc(3, 5), loc(3, 8)),
-                 new FileDiffChange(METHOD_BLOCK_ADDED, loc(2, 14), loc(2, 24), loc(3, 5), loc(3, 17)));
+                 new FileDiffChange(METHOD_BLOCK_ADDED.format(), loc(2, 14), loc(2, 24), loc(3, 5), loc(3, 17)));
     }
 
     public void testImplementedToAbstractMethod() {
@@ -36,7 +36,7 @@ public class TestMethodImplemented extends ItemsTest {
                            "}"),
                  
                  makeModifierRef(null, "abstract", loc(2, 5), loc(2,  8), loc(3, 5), loc(3, 12)),
-                 new FileDiffChange(METHOD_BLOCK_REMOVED, loc(2, 5), loc(2, 17), loc(3, 14), loc(3, 24)));
+                 new FileDiffChange(METHOD_BLOCK_REMOVED.format(), loc(2, 5), loc(2, 17), loc(3, 14), loc(3, 24)));
     }
 
     public void testMethodNativeToImplemented() {
@@ -53,7 +53,7 @@ public class TestMethodImplemented extends ItemsTest {
                            "}"),
 
                  makeModifierRef("native", null, loc(2, 5), loc(2, 10), loc(3, 5), loc(3, 8)),
-                 new FileDiffChange(METHOD_BLOCK_ADDED, loc(2, 12), loc(2, 22), loc(3, 5), loc(5, 5)));
+                 new FileDiffChange(METHOD_BLOCK_ADDED.format(), loc(2, 12), loc(2, 22), loc(3, 5), loc(5, 5)));
     }
 
     public void testMethodImplementedToNative() {
@@ -68,6 +68,6 @@ public class TestMethodImplemented extends ItemsTest {
                            "}"),
                  
                  makeModifierRef(null, "native", loc(2, 5), loc(2, 8), loc(2, 5), loc(2, 10)),
-                 new FileDiffChange(METHOD_BLOCK_REMOVED, loc(2, 5), loc(4, 5), loc(2, 12), loc(2, 22)));
+                 new FileDiffChange(METHOD_BLOCK_REMOVED.format(), loc(2, 5), loc(4, 5), loc(2, 12), loc(2, 22)));
     }
 }
