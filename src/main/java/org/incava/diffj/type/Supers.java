@@ -5,6 +5,7 @@ import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 
 /**
  * Compares super (extends or implements).
@@ -30,11 +31,11 @@ public abstract class Supers {
 
     abstract protected Class<? extends SimpleNode> getPmdClass();
 
-    abstract protected String getAddedMessage();
+    abstract protected Message getAddedMessage();
 
-    abstract protected String getChangedMessage();
+    abstract protected Message getChangedMessage();
 
-    abstract protected String getRemovedMessage();
+    abstract protected Message getRemovedMessage();
     
     public void diff(Supers toSupers, Differences differences) {
         ASTClassOrInterfaceDeclaration toDecl = toSupers.decl;

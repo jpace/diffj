@@ -247,9 +247,19 @@ public class ItemsTest extends DiffJTest {
         return new FileDiffChange(msg, fromLoc, toLoc);
     }
 
+    // -------------------------------------------------------
+
+    protected FileDiff makeCodeChangedRef(Message codeChgMsg, String[] args, LocationRange fromLoc, LocationRange toLoc) {
+        String str = codeChgMsg.format((Object[])args);
+        return new FileDiffChange(str, fromLoc, toLoc);
+    }
+
     protected FileDiff makeCodeChangedRef(Message codeChgMsg, String arg, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        String str = codeChgMsg.format(arg);
-        return new FileDiffChange(str, new LocationRange(fromStart, fromEnd), new LocationRange(toStart, toEnd));
+        return makeCodeChangedRef(codeChgMsg, arg, new LocationRange(fromStart, fromEnd), new LocationRange(toStart, toEnd));
+    }
+
+    protected FileDiff makeCodeChangedRef(Message codeChgMsg, String where, LocationRange fromLoc, LocationRange toLoc) {
+        return makeCodeChangedRef(codeChgMsg, new String[] { where }, fromLoc, toLoc);
     }
 
     // -------------------------------------------------------
