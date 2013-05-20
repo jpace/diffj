@@ -67,7 +67,7 @@ public class ItemsTest extends DiffJTest {
         Package.PACKAGE_ADDED,
     };
 
-    protected final static String[] VARIABLE_MSGS = new String[] {
+    protected final static Message[] VARIABLE_MSGS = new Message[] {
         Variables.VARIABLE_REMOVED,
         Variables.VARIABLE_CHANGED, 
         Variables.VARIABLE_ADDED,
@@ -188,8 +188,31 @@ public class ItemsTest extends DiffJTest {
         return MessageFormat.format(msg, (Object[])args);
     }
 
+    protected String getFromToMessage(Message msg, String ... args) {
+        return msg.format((Object[])args);
+    }
+
     protected FileDiff makeChangedRef(String from, String to, String[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         return makeChangedRef(from, to, msgs, new LocationRange(fromStart, fromEnd), new LocationRange(toStart, toEnd));
+    }
+
+    protected FileDiff makeChangedRef(String from, String to, Message[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        return makeChangedRef(from, to, msgs, new LocationRange(fromStart, fromEnd), new LocationRange(toStart, toEnd));
+    }
+
+    protected FileDiff makeChangedRef(String from, String to, Message[] msgs, LocationRange fromLoc, LocationRange toLoc) {
+        String str = null;
+        if (to == null) {
+            str = msgs[0].format(from);
+        }
+        else if (from == null) {
+            str = msgs[2].format(to);
+        }
+        else {
+            str = msgs[1].format(from, to);
+        }
+
+        return new FileDiffChange(str, fromLoc, toLoc);
     }
 
     protected FileDiff makeChangedRef(String from, String to, String[] msgs, LocationRange fromLoc, LocationRange toLoc) {

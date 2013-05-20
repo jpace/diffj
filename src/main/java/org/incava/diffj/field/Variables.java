@@ -9,6 +9,7 @@ import net.sourceforge.pmd.ast.ASTType;
 import net.sourceforge.pmd.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.FieldUtil;
 
 /**
@@ -19,9 +20,9 @@ import org.incava.pmdx.FieldUtil;
  * </pre>
  */
 public class Variables {
-    public static final String VARIABLE_REMOVED = "variable removed: {0}";
-    public static final String VARIABLE_ADDED = "variable added: {0}";
-    public static final String VARIABLE_CHANGED = "variable changed from {0} to {1}";
+    public static final Message VARIABLE_REMOVED = new Message("variable removed: {0}");
+    public static final Message VARIABLE_ADDED = new Message("variable added: {0}");
+    public static final Message VARIABLE_CHANGED = new Message("variable changed from {0} to {1}");
 
     private final ASTType type;
     private final List<ASTVariableDeclarator> variables;
@@ -68,7 +69,7 @@ public class Variables {
         return namesToDecls;
     }
 
-    protected void processAddDelVariable(String name, String msg, ASTVariableDeclarator fromVarDecl, ASTVariableDeclarator toVarDecl, Differences differences) {
+    protected void processAddDelVariable(String name, Message msg, ASTVariableDeclarator fromVarDecl, ASTVariableDeclarator toVarDecl, Differences differences) {
         Token fromTk = FieldUtil.getName(fromVarDecl);
         Token toTk = FieldUtil.getName(toVarDecl);
         differences.changed(fromTk, toTk, msg, name);

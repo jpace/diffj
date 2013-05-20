@@ -8,7 +8,6 @@ import static org.incava.diffj.field.Variables.*;
 public class TestFieldVariable extends ItemsTest {
     public TestFieldVariable(String name) {
         super(name);
-        tr.Ace.setVerbose(true);
     }
 
     public void testVariableChanged() {

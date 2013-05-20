@@ -3,12 +3,13 @@ package org.incava.diffj.field;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.*;
+import org.incava.ijdk.text.Message;
 import org.incava.java.Java;
 import static org.incava.diffj.field.Variable.*;
 import static org.incava.diffj.field.Variables.*;
 
 public class TestFieldVariableAddedRemoved extends ItemsTest {
-    protected final static String[] VARIABLE_MSGS = new String[] {
+    protected final static Message[] VARIABLE_MSGS = new Message[] {
         VARIABLE_REMOVED,
         VARIABLE_CHANGED, 
         VARIABLE_ADDED,

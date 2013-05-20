@@ -8,6 +8,7 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.CodedElement;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.FieldUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -19,9 +20,9 @@ import org.incava.pmdx.SimpleNodeUtil;
  * </pre>
  */
 public class Variable extends CodedElement {
-    public static final String INITIALIZER_REMOVED = "initializer removed";
-    public static final String INITIALIZER_ADDED = "initializer added";
-    public static final String VARIABLE_TYPE_CHANGED = "variable type for {0} changed from {1} to {2}";
+    public static final Message INITIALIZER_REMOVED = new Message("initializer removed");
+    public static final Message INITIALIZER_ADDED = new Message("initializer added");
+    public static final Message VARIABLE_TYPE_CHANGED = new Message("variable type for {0} changed from {1} to {2}");
 
     private final ASTType type;
     private final ASTVariableDeclarator variable;

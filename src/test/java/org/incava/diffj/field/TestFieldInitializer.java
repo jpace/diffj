@@ -8,7 +8,6 @@ import static org.incava.diffj.field.Variable.*;
 public class TestFieldInitializer extends ItemsTest {
     public TestFieldInitializer(String name) {
         super(name);
-        tr.Ace.setVerbose(true);
     }
 
     public void testInitializerAdded() {
@@ -22,7 +21,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 4;",
                            "}"),
                  
-                 new FileDiffChange(INITIALIZER_ADDED, loc(2, 9), loc(2, 9), loc(3, 13), loc(3, 13)));
+                 new FileDiffChange(INITIALIZER_ADDED.format(), loc(2, 9), loc(2, 9), loc(3, 13), loc(3, 13)));
     }
 
     public void testInitializerRemoved() {
@@ -36,7 +35,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 new FileDiffChange(INITIALIZER_REMOVED, loc(2, 13), loc(2, 13), loc(3, 9), loc(3, 9)));
+                 new FileDiffChange(INITIALIZER_REMOVED.format(), loc(2, 13), loc(2, 13), loc(3, 9), loc(3, 9)));
     }
 
     public void testInitializerCodeChanged() {
