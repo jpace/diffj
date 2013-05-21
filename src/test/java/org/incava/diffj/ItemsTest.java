@@ -92,40 +92,6 @@ public class ItemsTest extends DiffJTest {
         return makeRef(from, to, INTERFACE_MSGS, fromStart, fromEnd, toStart, toEnd);
     }
 
-    protected FileDiff makeRef(String from, String to, String[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        String msg = null;
-
-        if (to == null) {
-            msg = MessageFormat.format(msgs[0], from);
-            return new FileDiffDelete(msg, fromStart, fromEnd, toStart, toEnd);
-        }
-        else if (from == null) {
-            msg = MessageFormat.format(msgs[2], to);
-            return new FileDiffAdd(msg, fromStart, fromEnd, toStart, toEnd);
-        }
-        else {
-            msg = MessageFormat.format(msgs[1], from, to);
-            return new FileDiffChange(msg, fromStart, fromEnd, toStart, toEnd);
-        }
-    }
-
-    protected FileDiff makeRef(String from, String to, String[] msgs, LocationRange fromLoc, LocationRange toLoc) {
-        String msg = null;
-
-        if (to == null) {
-            msg = MessageFormat.format(msgs[0], from);
-            return new FileDiffDelete(msg, fromLoc, toLoc);
-        }
-        else if (from == null) {
-            msg = MessageFormat.format(msgs[2], to);
-            return new FileDiffAdd(msg, fromLoc, toLoc);
-        }
-        else {
-            msg = MessageFormat.format(msgs[1], from, to);
-            return new FileDiffChange(msg, fromLoc, toLoc);
-        }
-    }
-
     protected FileDiff makeRef(String from, String to, Message[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         String msg = null;
 
@@ -160,18 +126,6 @@ public class ItemsTest extends DiffJTest {
         }
     }
 
-    protected String getMessage(String removedMsg, String addedMsg, String changedMsg, String from, String to) {
-        if (to == null) {
-            return MessageFormat.format(removedMsg, from);
-        }
-        else if (from == null) {
-            return MessageFormat.format(addedMsg, to);
-        }
-        else {
-            return MessageFormat.format(changedMsg, from, to);
-        }
-    }
-
     protected String getMessage(Message removedMsg, Message addedMsg, Message changedMsg, String from, String to) {
         if (to == null) {
             return removedMsg.format(from);
@@ -184,16 +138,8 @@ public class ItemsTest extends DiffJTest {
         }
     }
 
-    protected String getFromToMessage(String msg, String ... args) {
-        return MessageFormat.format(msg, (Object[])args);
-    }
-
     protected String getFromToMessage(Message msg, String ... args) {
         return msg.format((Object[])args);
-    }
-
-    protected FileDiff makeChangedRef(String from, String to, String[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeChangedRef(from, to, msgs, new LocationRange(fromStart, fromEnd), new LocationRange(toStart, toEnd));
     }
 
     protected FileDiff makeChangedRef(String from, String to, Message[] msgs, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
@@ -213,21 +159,6 @@ public class ItemsTest extends DiffJTest {
         }
 
         return new FileDiffChange(str, fromLoc, toLoc);
-    }
-
-    protected FileDiff makeChangedRef(String from, String to, String[] msgs, LocationRange fromLoc, LocationRange toLoc) {
-        String msg = null;
-        if (to == null) {
-            msg = MessageFormat.format(msgs[0], from);
-        }
-        else if (from == null) {
-            msg = MessageFormat.format(msgs[2], to);
-        }
-        else {
-            msg = MessageFormat.format(msgs[1], from, to);
-        }
-
-        return new FileDiffChange(msg, fromLoc, toLoc);
     }
 
     protected FileDiff makeAccessRef(String from, String to, Location fromStart, Location toStart) {
@@ -252,26 +183,6 @@ public class ItemsTest extends DiffJTest {
         return makeChangedRef(from, to, MODIFIER_MSGS, fromStart, fromEnd, toStart, toEnd);
     }
 
-    protected FileDiff makeCodeChangedRef(String codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeCodeChangedRef(codeChgMsg, new String[] { where }, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makeCodeChangedRef(String codeChgMsg, String where, LocationRange fromLoc, LocationRange toLoc) {
-        return makeCodeChangedRef(codeChgMsg, new String[] { where }, fromLoc, toLoc);
-    }
-
-    protected FileDiff makeCodeChangedRef(String codeChgMsg, String[] args, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        String msg = MessageFormat.format(codeChgMsg, (Object[])args);
-        return new FileDiffChange(msg, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makeCodeChangedRef(String codeChgMsg, String[] args, LocationRange fromLoc, LocationRange toLoc) {
-        String msg = MessageFormat.format(codeChgMsg, (Object[])args);
-        return new FileDiffChange(msg, fromLoc, toLoc);
-    }
-
-    // -------------------------------------------------------
-
     protected FileDiff makeCodeChangedRef(Message codeChgMsg, String[] args, LocationRange fromLoc, LocationRange toLoc) {
         String str = codeChgMsg.format((Object[])args);
         return new FileDiffChange(str, fromLoc, toLoc);
@@ -285,17 +196,6 @@ public class ItemsTest extends DiffJTest {
         return makeCodeChangedRef(codeChgMsg, new String[] { where }, fromLoc, toLoc);
     }
 
-    // -------------------------------------------------------
-
-    protected FileDiff makeCodeAddedRef(String codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeCodeAddedRef(codeChgMsg, new String[] { where }, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makeCodeAddedRef(String codeChgMsg, String[] args, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        String msg = MessageFormat.format(codeChgMsg, (Object[])args);
-        return new FileDiffAdd(msg, fromStart, fromEnd, toStart, toEnd);
-    }
-
     protected FileDiff makeCodeAddedRef(Message codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         return makeCodeAddedRef(codeChgMsg, new String[] { where }, fromStart, fromEnd, toStart, toEnd);
     }
@@ -303,15 +203,6 @@ public class ItemsTest extends DiffJTest {
     protected FileDiff makeCodeAddedRef(Message codeChgMsg, String[] args, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         String msg = codeChgMsg.format((Object[])args);
         return new FileDiffAdd(msg, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makeCodeDeletedRef(String codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeCodeDeletedRef(codeChgMsg, new String[] { where }, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    protected FileDiff makeCodeDeletedRef(String codeChgMsg, String[] args, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        String msg = MessageFormat.format(codeChgMsg, (Object[])args);
-        return new FileDiffDelete(msg, fromStart, fromEnd, toStart, toEnd);
     }
 
     protected FileDiff makeCodeDeletedRef(Message codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
@@ -322,7 +213,4 @@ public class ItemsTest extends DiffJTest {
         String msg = codeChgMsg.format((Object[])args);
         return new FileDiffDelete(msg, fromStart, fromEnd, toStart, toEnd);
     }
-
-    // -------------------------------------------------------
-
 }

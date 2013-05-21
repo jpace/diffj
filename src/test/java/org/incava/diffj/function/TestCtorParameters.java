@@ -183,12 +183,6 @@ public class TestCtorParameters extends ItemsTest {
         return Parameters.PARAMETER_REORDERED_AND_RENAMED.format(oldName, oldPosition, newPosition, newName);
     }
 
-    protected FileDiff makeChangedRef(String msg, 
-                                      String fromStr, String toStr,
-                                      Location fromStart, Location toStart) {
-        return new FileDiffChange(getMessage(null, null, msg, fromStr, toStr), fromStart, loc(fromStart, fromStr), toStart, loc(toStart, toStr));
-    }
-
     protected FileDiff makeChangedRef(Message msg, 
                                       String fromStr, String toStr,
                                       Location fromStart, Location toStart) {
