@@ -10,9 +10,9 @@ import org.incava.ijdk.text.Message;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public abstract class Modifiers {
-    public static final String MODIFIER_REMOVED = "modifier removed: {0}";
-    public static final String MODIFIER_ADDED = "modifier added: {0}";
-    public static final String MODIFIER_CHANGED = "modifier changed from {0} to {1}";
+    public static final Message MODIFIER_REMOVED = new Message("modifier removed: {0}");
+    public static final Message MODIFIER_ADDED = new Message("modifier added: {0}");
+    public static final Message MODIFIER_CHANGED = new Message("modifier changed from {0} to {1}");
 
     private final SimpleNode node;
 

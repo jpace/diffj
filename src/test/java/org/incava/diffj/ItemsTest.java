@@ -43,13 +43,13 @@ public class ItemsTest extends DiffJTest {
         Ctor.CONSTRUCTOR_ADDED,
     };
 
-    protected final static String[] MODIFIER_MSGS = new String[] {
+    protected final static Message[] MODIFIER_MSGS = new Message[] {
         Modifiers.MODIFIER_REMOVED,
         Modifiers.MODIFIER_CHANGED,
         Modifiers.MODIFIER_ADDED,
     };
 
-    protected final static String[] ACCESS_MSGS = new String[] {
+    protected final static Message[] ACCESS_MSGS = new Message[] {
         Access.ACCESS_REMOVED,
         Access.ACCESS_CHANGED, 
         Access.ACCESS_ADDED,

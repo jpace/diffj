@@ -5,13 +5,14 @@ import net.sourceforge.pmd.ast.ASTName;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.ThrowsUtil;
 
 public class Throws {
-    public static final String THROWS_REMOVED = "throws removed: {0}";
-    public static final String THROWS_ADDED = "throws added: {0}";
-    public static final String THROWS_REORDERED = "throws {0} reordered from argument {1} to {2}";
+    public static final Message THROWS_REMOVED = new Message("throws removed: {0}");
+    public static final Message THROWS_ADDED = new Message("throws added: {0}");
+    public static final Message THROWS_REORDERED = new Message("throws {0} reordered from argument {1} to {2}");
 
     private final SimpleNode node;
     private final ASTNameList nameList;
@@ -43,7 +44,7 @@ public class Throws {
         return SimpleNodeUtil.snatchChildren(nameList, ASTName.class);
     }
 
-    protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, String msg, ASTName name, Differences differences) {
+    protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, Message msg, ASTName name, Differences differences) {
         differences.changed(fromNode, toNode, msg, SimpleNodeUtil.toString(name));
     }
 

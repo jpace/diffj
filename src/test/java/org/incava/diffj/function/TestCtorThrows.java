@@ -3,10 +3,11 @@ package org.incava.diffj.function;
 import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.*;
+import org.incava.ijdk.text.Message;
 import static org.incava.diffj.function.Throws.*;
 
 public class TestCtorThrows extends ItemsTest {
-    protected final static String[] THROWS_MSGS = new String[] {
+    protected final static Message[] THROWS_MSGS = new Message[] {
         THROWS_REMOVED,
         null,
         THROWS_ADDED,
@@ -119,6 +120,6 @@ public class TestCtorThrows extends ItemsTest {
     }
 
     protected String throwsReordMsg(String throwsName, int oldPosition, int newPosition) {
-        return MessageFormat.format(THROWS_REORDERED, throwsName, oldPosition, newPosition);
+        return THROWS_REORDERED.format(throwsName, oldPosition, newPosition);
     }
 }

@@ -125,6 +125,6 @@ public class TestMethodThrows extends ItemsTest {
     }
 
     protected String throwsReordMsg(String throwsName, int oldPosition, int newPosition) {
-        return MessageFormat.format(THROWS_REORDERED, throwsName, oldPosition, newPosition);
+        return THROWS_REORDERED.format(throwsName, oldPosition, newPosition);
     }
 }

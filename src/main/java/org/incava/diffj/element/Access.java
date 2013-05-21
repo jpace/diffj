@@ -4,11 +4,12 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Differences;
 import org.incava.pmdx.ItemUtil;
+import org.incava.ijdk.text.Message;
 
 public class Access {
-    public static final String ACCESS_REMOVED = "access removed: {0}";
-    public static final String ACCESS_ADDED = "access added: {0}";
-    public static final String ACCESS_CHANGED = "access changed from {0} to {1}";    
+    public static final Message ACCESS_REMOVED = new Message("access removed: {0}");
+    public static final Message ACCESS_ADDED = new Message("access added: {0}");
+    public static final Message ACCESS_CHANGED = new Message("access changed from {0} to {1}");
 
     private final SimpleNode node;
 
