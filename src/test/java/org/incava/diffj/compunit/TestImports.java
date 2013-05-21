@@ -6,11 +6,12 @@ import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.*;
 import org.incava.ijdk.lang.StringExt;
+import org.incava.ijdk.text.Message;
 import org.incava.java.Java;
 import static org.incava.diffj.compunit.Imports.*;
 
 public class TestImports extends ItemsTest {
-    protected final static String[] IMPORT_SECTION_MSGS = new String[] {
+    protected final static Message[] IMPORT_SECTION_MSGS = new Message[] {
         Imports.IMPORT_SECTION_REMOVED,
         null, 
         Imports.IMPORT_SECTION_ADDED,
@@ -86,7 +87,7 @@ public class TestImports extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(IMPORT_SECTION_REMOVED, locrg(1, 1, 1, 19), locrg(1, 1, 1, 5)));
+                 new FileDiffDelete(IMPORT_SECTION_REMOVED.format(), locrg(1, 1, 1, 19), locrg(1, 1, 1, 5)));
     }
 
     public void testImportsSectionRemovedTwo() {
@@ -100,7 +101,7 @@ public class TestImports extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(IMPORT_SECTION_REMOVED, locrg(1, 1, 2, 23), locrg(1, 1, 1, 5)));
+                 new FileDiffDelete(IMPORT_SECTION_REMOVED.format(), locrg(1, 1, 2, 23), locrg(1, 1, 1, 5)));
     }
 
     public void testImportsSectionAddedOne() {
@@ -113,7 +114,7 @@ public class TestImports extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(IMPORT_SECTION_ADDED, locrg(1, 1, 1, 5), locrg(1, 1, 1, 19)));
+                 new FileDiffAdd(IMPORT_SECTION_ADDED.format(), locrg(1, 1, 1, 5), locrg(1, 1, 1, 19)));
     }
 
     public void testImportsSectionAddedTwo() {
@@ -127,7 +128,7 @@ public class TestImports extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(IMPORT_SECTION_ADDED, locrg(1, 1, 1, 5), locrg(1, 1, 2, 23)));
+                 new FileDiffAdd(IMPORT_SECTION_ADDED.format(), locrg(1, 1, 1, 5), locrg(1, 1, 2, 23)));
     }
 
     public void testImportsBlockAddedNoClassDefined() {
@@ -140,11 +141,11 @@ public class TestImports extends ItemsTest {
                            "import org.incava.Bazr;",
                            ""),
 
-                 new FileDiffAdd(IMPORT_SECTION_ADDED, locrg(1, 1, 1, 7), locrg(3, 1, 4, 23)));
+                 new FileDiffAdd(IMPORT_SECTION_ADDED.format(), locrg(1, 1, 1, 7), locrg(3, 1, 4, 23)));
     }
 
     public void testImportAdded() {
-        String msg = MessageFormat.format(IMPORT_ADDED, "org.incava.Bazr");
+        String msg = IMPORT_ADDED.format("org.incava.Bazr");
         evaluate(new Lines("package org.incava.foo;",
                            "import java.util.*;",
                            ""),
@@ -158,7 +159,7 @@ public class TestImports extends ItemsTest {
     }
 
     public void testImportRemoved() {
-        String msg = MessageFormat.format(IMPORT_REMOVED, "java.io.IOException");
+        String msg = IMPORT_REMOVED.format("java.io.IOException");
         evaluate(new Lines("package org.incava.foo;",
                            "import java.io.IOException;",
                            "import java.util.*;",
@@ -172,8 +173,8 @@ public class TestImports extends ItemsTest {
     }
 
     public void testImportAddedAndRemoved() {
-        String addMsg = MessageFormat.format(IMPORT_ADDED, "org.incava.log.Log");
-        String delMsg = MessageFormat.format(IMPORT_REMOVED, "org.incava.qualog.Qualog");
+        String addMsg = IMPORT_ADDED.format("org.incava.log.Log");
+        String delMsg = IMPORT_REMOVED.format("org.incava.qualog.Qualog");
         evaluate(new Lines("package org.incava.util;",
                            "",
                            "import org.incava.qualog.Qualog;",

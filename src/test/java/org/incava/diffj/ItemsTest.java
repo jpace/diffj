@@ -61,7 +61,7 @@ public class ItemsTest extends DiffJTest {
         Types.TYPE_DECLARATION_ADDED,
     };
 
-    protected final static String[] PACKAGE_MSGS = new String[] {
+    protected final static Message[] PACKAGE_MSGS = new Message[] {
         Package.PACKAGE_REMOVED, 
         Package.PACKAGE_RENAMED,
         Package.PACKAGE_ADDED,
@@ -296,6 +296,15 @@ public class ItemsTest extends DiffJTest {
         return new FileDiffAdd(msg, fromStart, fromEnd, toStart, toEnd);
     }
 
+    protected FileDiff makeCodeAddedRef(Message codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        return makeCodeAddedRef(codeChgMsg, new String[] { where }, fromStart, fromEnd, toStart, toEnd);
+    }
+
+    protected FileDiff makeCodeAddedRef(Message codeChgMsg, String[] args, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        String msg = codeChgMsg.format((Object[])args);
+        return new FileDiffAdd(msg, fromStart, fromEnd, toStart, toEnd);
+    }
+
     protected FileDiff makeCodeDeletedRef(String codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         return makeCodeDeletedRef(codeChgMsg, new String[] { where }, fromStart, fromEnd, toStart, toEnd);
     }
@@ -304,4 +313,16 @@ public class ItemsTest extends DiffJTest {
         String msg = MessageFormat.format(codeChgMsg, (Object[])args);
         return new FileDiffDelete(msg, fromStart, fromEnd, toStart, toEnd);
     }
+
+    protected FileDiff makeCodeDeletedRef(Message codeChgMsg, String where, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        return makeCodeDeletedRef(codeChgMsg, new String[] { where }, fromStart, fromEnd, toStart, toEnd);
+    }
+
+    protected FileDiff makeCodeDeletedRef(Message codeChgMsg, String[] args, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
+        String msg = codeChgMsg.format((Object[])args);
+        return new FileDiffDelete(msg, fromStart, fromEnd, toStart, toEnd);
+    }
+
+    // -------------------------------------------------------
+
 }

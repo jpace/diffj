@@ -10,9 +10,9 @@ import org.incava.pmdx.CompilationUnitUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Package {
-    public static final String PACKAGE_REMOVED = "package removed: {0}";
-    public static final String PACKAGE_ADDED = "package added: {0}";
-    public static final String PACKAGE_RENAMED = "package renamed from {0} to {1}";
+    public static final Message PACKAGE_REMOVED = new Message("package removed: {0}");
+    public static final Message PACKAGE_ADDED = new Message("package added: {0}");
+    public static final Message PACKAGE_RENAMED = new Message("package renamed from {0} to {1}");
 
     private final ASTCompilationUnit compUnit;
     private final ASTPackageDeclaration pkg;

@@ -131,6 +131,14 @@ public class Differences {
         changed(from, from, to.getFirstToken(), to.getLastToken(), msg, params);
     }
 
+    public void changed(Token from, Token to, Message msg) {
+        changed(from, to, msg, toParameters(from, to));
+    }
+
+    public void changed(SimpleNode from, SimpleNode to, Message msg) {
+        changed(from, to, msg, toParameters(from, to));
+    }
+
     // -------------------------------------------------------
     // deleted
     // -------------------------------------------------------
@@ -167,6 +175,11 @@ public class Differences {
 
     // -------------------------------------------------------
 
+    public void deleted(Token from, Token to, Message msg, Object ... params) {
+        String str = msg.format(params);
+        add(new FileDiffDelete(str, from, to));
+    }
+
     public void deleted(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
         String str = msg.format(params);
         add(new FileDiffDelete(str, fromStart, fromEnd, toStart, toEnd));
@@ -174,6 +187,14 @@ public class Differences {
 
     public void deleted(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
         deleted(from.getFirstToken(), from.getLastToken(), to.getFirstToken(), to.getLastToken(), msg, params);
+    }
+
+    public void deleted(Token from, Token to, Message msg) {
+        deleted(from, to, msg, toParameters(from, null));
+    }
+
+    public void deleted(SimpleNode from, SimpleNode to, Message msg) {
+        deleted(from, to, msg, toParameters(from, null));
     }
 
     // -------------------------------------------------------
@@ -212,6 +233,15 @@ public class Differences {
 
     // -------------------------------------------------------
 
+    public void added(Token from, Token to, Message msg, Object ... params) {
+        String str = msg.format(params);
+        add(new FileDiffAdd(str, from, to));
+    }
+
+    public void added(Token from, Token to, Message msg) {
+        added(from, to, msg, toParameters(null, to));
+    }
+
     public void added(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
         String str = msg.format(params);
         add(new FileDiffAdd(str, fromStart, fromEnd, toStart, toEnd));
@@ -219,6 +249,10 @@ public class Differences {
 
     public void added(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
         added(from.getFirstToken(), from.getLastToken(), to.getFirstToken(), to.getLastToken(), msg, params);
+    }
+
+    public void added(SimpleNode from, SimpleNode to, Message msg) {
+        added(from, to, msg, toParameters(null, to));
     }
 
 }

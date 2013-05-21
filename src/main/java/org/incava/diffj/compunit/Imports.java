@@ -9,13 +9,14 @@ import net.sourceforge.pmd.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.ast.ASTTypeDeclaration;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.Message;
 import org.incava.pmdx.CompilationUnitUtil;
 
 public class Imports {
-    public static final String IMPORT_REMOVED = "import removed: {0}";
-    public static final String IMPORT_ADDED = "import added: {0}";
-    public static final String IMPORT_SECTION_REMOVED = "import section removed";
-    public static final String IMPORT_SECTION_ADDED = "import section added";
+    public static final Message IMPORT_REMOVED = new Message("import removed: {0}");
+    public static final Message IMPORT_ADDED = new Message("import added: {0}");
+    public static final Message IMPORT_SECTION_REMOVED = new Message("import section removed");
+    public static final Message IMPORT_SECTION_ADDED = new Message("import section added");
 
     private final ASTCompilationUnit compUnit;
     private final List<Import> imports;

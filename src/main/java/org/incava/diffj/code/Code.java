@@ -9,13 +9,14 @@ import org.incava.analysis.FileDiffCodeAdded;
 import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
+import org.incava.ijdk.text.Message;
 import org.incava.ijdk.util.diff.Diff;
 import org.incava.ijdk.util.diff.Difference;
 
 public class Code {    
-    public static final String CODE_CHANGED = "code changed in {0}";
-    public static final String CODE_ADDED = "code added in {0}";
-    public static final String CODE_REMOVED = "code removed in {0}";
+    public static final Message CODE_CHANGED = new Message("code changed in {0}");
+    public static final Message CODE_ADDED = new Message("code added in {0}");
+    public static final Message CODE_REMOVED = new Message("code removed in {0}");
 
     private final String name;
     private final TokenList tokenList;
@@ -41,7 +42,7 @@ public class Code {
     }
 
     protected FileDiff replaceReference(FileDiff fileDiff, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        String newMsg = MessageFormat.format(CODE_CHANGED, name);
+        String newMsg = CODE_CHANGED.format(name);
         FileDiff newDiff = new FileDiffChange(newMsg, fileDiff, fromLocRg, toLocRg);
         differences.getFileDiffs().remove(fileDiff);
         return addFileDiff(newDiff, differences);
@@ -52,8 +53,8 @@ public class Code {
         return fileDiff;
     }
 
-    protected FileDiff addReference(String msg, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        String str = MessageFormat.format(msg, name);
+    protected FileDiff addReference(Message msg, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
+        String str = msg.format(name);
 
         if (msg.equals(CODE_ADDED)) {
             // this will show as add when highlighted, as change when not.
@@ -85,7 +86,7 @@ public class Code {
             return replaceReference(currFileDiff, fromLocRg, toLocRg, differences);
         }
         else {
-            String msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);
+            Message msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);
             return addReference(msg, fromLocRg, toLocRg, differences);
         }
     }
