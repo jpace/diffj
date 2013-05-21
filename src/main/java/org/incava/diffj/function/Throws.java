@@ -74,18 +74,15 @@ public class Throws {
             // save a reference to the name here, in case it gets removed
             // from the array in getMatch.
             ASTName fromName = fromNames.get(fromIdx);
-            int throwsMatch = getMatch(fromNames, fromIdx, toNames);
-            
-            if (throwsMatch == fromIdx) {
-                continue;
+            Integer throwsMatch = getMatch(fromNames, fromIdx, toNames);
+
+            if (throwsMatch == null) {
+                changeThrows(fromName, toThrows.nameList, THROWS_REMOVED, fromName, differences);
             }
-            else if (throwsMatch >= 0) {
+            else if (throwsMatch != fromIdx) {
                 ASTName toName = toThrows.getName(throwsMatch);
                 String fromNameStr = SimpleNodeUtil.toString(fromName);
                 differences.changed(fromName, toName, THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
-            }
-            else {
-                changeThrows(fromName, toThrows.nameList, THROWS_REMOVED, fromName, differences);
             }
         }
 
@@ -97,7 +94,7 @@ public class Throws {
         }
     }
 
-    protected int getMatch(List<ASTName> fromNames, int fromIdx, List<ASTName> toNames) {
+    protected Integer getMatch(List<ASTName> fromNames, int fromIdx, List<ASTName> toNames) {
         String fromNameStr = SimpleNodeUtil.toString(fromNames.get(fromIdx));
 
         for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
@@ -108,6 +105,6 @@ public class Throws {
             }
         }
 
-        return -1;
+        return null;
     }
 }
