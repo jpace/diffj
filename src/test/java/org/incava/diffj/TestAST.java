@@ -39,7 +39,7 @@ public class TestAST extends DiffJTest {
     }
 
     public SimpleNode getChild(SimpleNode parent, int idx, boolean dump) {
-        SimpleNode child = SimpleNodeUtil.findChild(parent, (String)null, idx);
+        SimpleNode child = SimpleNodeUtil.findChild(parent, null, idx);
         if (dump) {
             dump(child);
             // dumpTokens(child);
