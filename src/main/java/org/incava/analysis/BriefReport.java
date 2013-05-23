@@ -43,6 +43,7 @@ public class BriefReport extends Report {
             writer.flush();
         }
         catch (IOException ioe) {
+            tr.Ace.log("ioe", ioe);
         }
     }
 }

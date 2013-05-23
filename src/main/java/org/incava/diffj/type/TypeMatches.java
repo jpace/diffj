@@ -85,7 +85,7 @@ public class TypeMatches<ElementType extends Diffable<ElementType>> {
 
         for (Pair<ElementType, ElementType> declPair : get(score)) {
             ElementType fromType = declPair.getFirst();
-            ElementType toType = declPair.getSecond();;
+            ElementType toType = declPair.getSecond();
 
             if (unprocFromItems.contains(fromType) && unprocToItems.contains(toType)) {
                 fromType.diff(toType, differences);

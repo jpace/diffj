@@ -94,6 +94,7 @@ public abstract class Report {
                 writer.write(sb.toString());
             }
             catch (IOException ioe) {
+                tr.Ace.log("ioe", ioe);
             }
             
             fromFileName = null;

@@ -109,6 +109,7 @@ public class DetailedReport extends Report {
             // writer.close();
         }
         catch (IOException ioe) {
+            tr.Ace.log("ioe", ioe);
         }
     }
 

@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.diffj.element.Differences;
 import org.incava.pmdx.SimpleNodeUtil;
 
 /**
@@ -17,7 +16,6 @@ import org.incava.pmdx.SimpleNodeUtil;
  */
 public class NameToDecl {
     private final Map<String, ASTClassOrInterfaceType> map;
-
 
     public NameToDecl(ASTClassOrInterfaceDeclaration decl, Class<? extends SimpleNode> extImpClass) {
         this.map = new HashMap<String, ASTClassOrInterfaceType>();
@@ -27,7 +25,7 @@ public class NameToDecl {
             return;
         }
         
-        Collection<ASTClassOrInterfaceType> types = SimpleNodeUtil.snatchChildren(list, ASTClassOrInterfaceType.class);
+        Collection<ASTClassOrInterfaceType> types = SimpleNodeUtil.findChildren(list, ASTClassOrInterfaceType.class);
         for (ASTClassOrInterfaceType type : types) {
             map.put(SimpleNodeUtil.toString(type), type);
         }

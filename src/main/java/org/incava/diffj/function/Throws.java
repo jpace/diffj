@@ -41,7 +41,7 @@ public class Throws {
     }
 
     public List<ASTName> getChildNames() {
-        return SimpleNodeUtil.snatchChildren(nameList, ASTName.class);
+        return SimpleNodeUtil.findChildren(nameList, ASTName.class);
     }
 
     protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, Message msg, ASTName name, Differences differences) {
