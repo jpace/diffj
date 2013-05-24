@@ -56,16 +56,19 @@ public class Code {
     protected FileDiff addReference(Message msg, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
         String str = msg.format(name);
 
+        FileDiff fileDiff = null;
+
         if (msg.equals(CODE_ADDED)) {
             // this will show as add when highlighted, as change when not.
-            return addFileDiff(new FileDiffCodeAdded(str, fromLocRg, toLocRg), differences);
+            fileDiff = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
         }
         else if (msg.equals(CODE_REMOVED)) {
-            return addFileDiff(new FileDiffCodeDeleted(str, fromLocRg, toLocRg), differences);
+            fileDiff = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
         }
         else {
-            return addFileDiff(new FileDiffChange(str, fromLocRg, toLocRg), differences);
+            fileDiff = new FileDiffChange(str, fromLocRg, toLocRg);
         }
+        return addFileDiff(fileDiff, differences);
     }
     
     protected FileDiff processDifference(Difference diff, TokenList toTokenList, FileDiff currFileDiff, Differences differences) {
