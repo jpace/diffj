@@ -35,22 +35,6 @@ public class TestCtorAccess extends ItemsTest {
                  makeAccessRef("public", null, loc(2, 5), loc(2, 10), loc(3, 5), loc(3, 8)));
     }
 
-    // public void xtestAccessRemoved() {
-    //     Ref ref = removedAccess("public");
-        
-    //     evaluate(new Lines("class Test {",
-    //                        "    " + str(ref, "public") + " Test() {}",
-    //                        "",
-    //                        "}"),
-
-    //              new Lines("class Test {",
-    //                        "",
-    //                        "    " + str(ref) + "Test() {}",
-    //                        "}"),
-                 
-    //              makeAccessRef("public", null, loc(2, 5), loc(2, 10), loc(3, 5), loc(3, 8)));
-    // }
-
     public void testAccessChanged() {
         evaluate(new Lines("class Test {",
                            "    private Test() {}",

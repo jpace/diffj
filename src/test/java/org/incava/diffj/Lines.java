@@ -14,10 +14,10 @@ public class Lines {
     }
 
     public String[] get() {
-        return this.lines;
+        return lines;
     }
 
     public String toString() {
-        return StringExt.join(this.lines, "");
+        return StringExt.join(lines, "");
     }
 }

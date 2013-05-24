@@ -38,13 +38,8 @@ public class TestAST extends DiffJTest {
         return tokens;
     }
 
-    public SimpleNode getChild(SimpleNode parent, int idx, boolean dump) {
-        SimpleNode child = SimpleNodeUtil.findChild(parent, null, idx);
-        if (dump) {
-            dump(child);
-            // dumpTokens(child);
-        }
-        return child;
+    public SimpleNode getChildNode(SimpleNode parent, int idx) {
+        return SimpleNodeUtil.findChild(parent, null, idx);
     }
 
     public void show(String fileName) throws Exception {
@@ -55,14 +50,15 @@ public class TestAST extends DiffJTest {
         
         ASTCompilationUnit ast = javaFile.compile();
 
-        SimpleNode typeDecl = getChild(ast, 0, false);
-        SimpleNode clsDecl = getChild(typeDecl, 0, false);
-        SimpleNode body = getChild(clsDecl, 0, false);
+        SimpleNode typeDecl = getChildNode(ast, 0);
+        SimpleNode clsDecl = getChildNode(typeDecl, 0);
+        SimpleNode body = getChildNode(clsDecl, 0);
 
-        SimpleNode bodyDecl = getChild(body, 0, false);
-        SimpleNode meth = getChild(bodyDecl, 0, false);
+        SimpleNode bodyDecl = getChildNode(body, 0);
+        SimpleNode meth = getChildNode(bodyDecl, 0);
 
-        SimpleNode methBlk = getChild(meth, 2, true);
+        SimpleNode methBlk = getChildNode(meth, 2);
+        dump(methBlk);
 
         List<SimpleNode> statements = SimpleNodeUtil.findChildren(methBlk);
         for (SimpleNode stmt : statements) {
