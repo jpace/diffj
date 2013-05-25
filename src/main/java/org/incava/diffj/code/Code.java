@@ -53,21 +53,23 @@ public class Code {
         return fileDiff;
     }
 
-    protected FileDiff addReference(Message msg, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        String str = msg.format(name);
+    protected FileDiff codeAdded(LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
+        String str = CODE_ADDED.format(name);
+        
+        // this will show as add when highlighted, as change when not.
+        FileDiff fileDiff = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
+        return addFileDiff(fileDiff, differences);
+    }
 
-        FileDiff fileDiff = null;
+    protected FileDiff codeRemoved(LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
+        String str = CODE_REMOVED.format(name);
+        FileDiff fileDiff = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
+        return addFileDiff(fileDiff, differences);
+    }    
 
-        if (msg.equals(CODE_ADDED)) {
-            // this will show as add when highlighted, as change when not.
-            fileDiff = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
-        }
-        else if (msg.equals(CODE_REMOVED)) {
-            fileDiff = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
-        }
-        else {
-            fileDiff = new FileDiffChange(str, fromLocRg, toLocRg);
-        }
+    protected FileDiff codeChanged(LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
+        String str = CODE_CHANGED.format(name);
+        FileDiff fileDiff = new FileDiffChange(str, fromLocRg, toLocRg);
         return addFileDiff(fileDiff, differences);
     }
     
@@ -88,9 +90,14 @@ public class Code {
         if (currFileDiff != null && currFileDiff.isOnSameLine(fromLocRg)) {
             return replaceReference(currFileDiff, fromLocRg, toLocRg, differences);
         }
+        else if (delEnd == Difference.NONE) {
+            return codeAdded(fromLocRg, toLocRg, differences);
+        }
+        else if (addEnd == Difference.NONE) {
+            return codeRemoved(fromLocRg, toLocRg, differences);
+        }
         else {
-            Message msg = delEnd == Difference.NONE ? CODE_ADDED : (addEnd == Difference.NONE ? CODE_REMOVED : CODE_CHANGED);
-            return addReference(msg, fromLocRg, toLocRg, differences);
+            return codeChanged(fromLocRg, toLocRg, differences);
         }
     }
 }

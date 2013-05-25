@@ -35,6 +35,11 @@ public class TestAST extends DiffJTest {
     public List<Token> dumpTokens(SimpleNode node) {
         List<Token> tokens = SimpleNodeUtil.getChildTokens(node);
         tr.Ace.log("tokens", tokens);
+        StringBuffer sb = new StringBuffer();
+        for (Token tk : tokens) {
+            sb.append("^").append(tk.image);
+        }
+        tr.Ace.cyan("sb", sb);
         return tokens;
     }
 
