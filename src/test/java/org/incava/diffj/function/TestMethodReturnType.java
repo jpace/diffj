@@ -1,7 +1,8 @@
 package org.incava.diffj.function;
 
 import org.incava.analysis.FileDiffChange;
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import static org.incava.diffj.function.Method.*;
 
 public class TestMethodReturnType extends ItemsTest {
@@ -20,8 +21,6 @@ public class TestMethodReturnType extends ItemsTest {
                            "    Integer foo() { return null; }",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, RETURN_TYPE_CHANGED, "Object", "Integer"),
-                                    loc(2, 5), loc(2, 10), 
-                                    loc(3, 5), loc(3, 11)));
+                 new FileDiffChange(getMessage(null, null, RETURN_TYPE_CHANGED, "Object", "Integer"), locrg(2, 5, 10), locrg(3, 5, 11)));
     }
 }

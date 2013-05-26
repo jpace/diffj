@@ -24,7 +24,7 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(Integer i) {}",
                            "}"),
 
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i", loc(2, 9), loc(2, 10), loc(3, 18), loc(3, 18)));
+                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i", locrg(2, 9, 10), locrg(3, 18, 18)));
     }
 
     public void testParameterAddedOneToTwo() {
@@ -38,7 +38,7 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(String s, Integer i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i", loc(2, 9), loc(2, 18), loc(3, 20), loc(3, 28)));
+                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i", locrg(2, 9, 18), locrg(3, 20, 28)));
     }
 
     public void testParameterAddedOneToThree() {
@@ -52,9 +52,9 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(List[] ary, String s, Integer i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "ary", loc(2,  9), loc(2, 18), loc(3, 10), loc(3, 19)),
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i",   loc(2,  9), loc(2, 18), loc(3, 32), loc(3, 40)),
-                 new FileDiffChange(paramReordMsg("s", 0, 1), loc(2, 17), loc(2, 17), loc(3, 29), loc(3, 29)));
+                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "ary", locrg(2, 9, 18), locrg(3, 10, 19)),
+                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i",   locrg(2, 9, 18), locrg(3, 32, 40)),
+                 new FileDiffChange(paramReordMsg("s", 0, 1), locrg(2, 17, 17), locrg(3, 29, 29)));
     }
 
     public void testParameterRemovedOneToNone() {
@@ -68,7 +68,7 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test() {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i", loc(2, 18), loc(2, 18), loc(3, 9), loc(3, 10)));
+                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i", locrg(2, 18, 18), locrg(3, 9, 10)));
     }
 
     public void testParameterRemovedTwoToOne() {
@@ -82,7 +82,7 @@ public class TestCtorParameters extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i", loc(2, 20), loc(2, 28), loc(2, 9), loc(2, 18)));
+                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i", locrg(2, 20, 28), locrg(2, 9, 18)));
     }
 
     public void testParameterRemovedThreeToOne() {
@@ -96,9 +96,9 @@ public class TestCtorParameters extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "ary", loc(2, 10), loc(2, 19), loc(2,  9), loc(2, 18)),
-                 new FileDiffChange(paramReordMsg("s", 1, 0), loc(2, 29), loc(2, 29), loc(2, 17), loc(2, 17)),
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i",   loc(2, 32), loc(2, 40), loc(2,  9), loc(2, 18)));
+                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "ary", locrg(2, 10, 19), locrg(2, 9, 18)),
+                 new FileDiffChange(paramReordMsg("s", 1, 0), locrg(2, 29, 29), locrg(2, 17, 17)),
+                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i",   locrg(2, 32, 40), locrg(2, 9, 18)));
     }
 
     public void testParameterChangedType() {
@@ -113,7 +113,7 @@ public class TestCtorParameters extends ItemsTest {
                            "}"),
                  
                  new FileDiffChange(getMessage(null, null, Parameters.PARAMETER_TYPE_CHANGED, "int", "Integer"), 
-                                    loc(2, 10), loc(2, 14), loc(3, 10), loc(3, 18)));
+                                    locrg(2, 10, 14), locrg(3, 10, 18)));
     }
 
     public void testParameterChangedName() {
@@ -141,8 +141,8 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(double d, int i) {}",
                            "}"),
                  
-                 new FileDiffChange(paramReordMsg("i", 0, 1), loc(2, 14), loc(2, 14), loc(3, 24), loc(3, 24)),
-                 new FileDiffChange(paramReordMsg("d", 1, 0), loc(2, 24), loc(2, 24), loc(3, 17), loc(3, 17)));
+                 new FileDiffChange(paramReordMsg("i", 0, 1), locrg(2, 14, 14), locrg(3, 24, 24)),
+                 new FileDiffChange(paramReordMsg("d", 1, 0), locrg(2, 24, 24), locrg(3, 17, 17)));
     }
 
     public void testParameterReorderedAndRenamed() {
@@ -156,8 +156,8 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(double dbl, int i2) {}",
                            "}"),
                  
-                 new FileDiffChange(paramReordRenamedMsg("i", 0, "i2",  1), loc(2, 14), loc(2, 14), loc(3, 26), loc(3, 27)),
-                 new FileDiffChange(paramReordRenamedMsg("d", 1, "dbl", 0), loc(2, 24), loc(2, 24), loc(3, 17), loc(3, 19)));
+                 new FileDiffChange(paramReordRenamedMsg("i", 0, "i2",  1), locrg(2, 14, 14), locrg(3, 26, 27)),
+                 new FileDiffChange(paramReordRenamedMsg("d", 1, "dbl", 0), locrg(2, 24, 24), locrg(3, 17, 19)));
     }
 
     public void testParameterOneAddedOneReordered() {
@@ -171,8 +171,8 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(int i2, int i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i2", loc(2,  9), loc(2, 15), loc(3, 10), loc(3, 15)),
-                 new FileDiffChange(paramReordMsg("i", 0, 1), loc(2, 14), loc(2, 14), loc(3, 22), loc(3, 22)));
+                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i2", locrg(2, 9, 15), locrg(3, 10, 15)),
+                 new FileDiffChange(paramReordMsg("i", 0, 1), locrg(2, 14, 14), locrg(3, 22, 22)));
     }
 
     protected String paramReordMsg(String paramName, int oldPosition, int newPosition) {

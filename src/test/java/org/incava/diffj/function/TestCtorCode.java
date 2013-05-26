@@ -38,7 +38,7 @@ public class TestCtorCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeChangedRef(CODE_CHANGED, "Test()", loc(2, 23), loc(2, 23), loc(4, 18), loc(4, 18)));
+                 makeCodeChangedRef(CODE_CHANGED, "Test()", locrg(2, 23, 23), locrg(4, 18, 18)));
     }
     
     public void testCodeInsertedSameLine() {
@@ -55,7 +55,7 @@ public class TestCtorCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeAddedRef(CODE_ADDED, "Test()", loc(2, 18), loc(2, 18), loc(4, 13), loc(5, 11)));
+                 makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 18, 18), locrg(4, 13, 5, 11)));
     }
 
     public void testCodeAddedOwnLine() {
@@ -76,7 +76,7 @@ public class TestCtorCode extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeCodeAddedRef(CODE_ADDED, "Test()", loc(4, 9), loc(4, 11), loc(5, 9), loc(5, 21)));
+                 makeCodeAddedRef(CODE_ADDED, "Test()", locrg(4, 9, 11), locrg(5, 9, 21)));
     }
 
     public void testCodeDeleted() {
@@ -93,7 +93,7 @@ public class TestCtorCode extends ItemsTest {
                            "    Test() { int i = -1; }",
                            "}"),
                  
-                 makeCodeDeletedRef(CODE_REMOVED, "Test()", loc(3, 13), loc(4, 11), loc(3, 18), loc(3, 18)));
+                 makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 13, 4, 11), locrg(3, 18, 18)));
     }
     
     public void testCodeInsertedAndChanged() {
@@ -110,6 +110,6 @@ public class TestCtorCode extends ItemsTest {
                            "    }",
                            "}"),
 
-                 makeCodeChangedRef(CODE_CHANGED, "Test(int)", loc(2, 19), loc(2, 23), loc(4,  9), loc(5, 13)));
+                 makeCodeChangedRef(CODE_CHANGED, "Test(int)", locrg(2, 19, 23), locrg(4, 9, 5, 13)));
     }
 }

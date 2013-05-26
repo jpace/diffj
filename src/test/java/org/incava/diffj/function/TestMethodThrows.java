@@ -2,7 +2,8 @@ package org.incava.diffj.function;
 
 import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import static org.incava.diffj.function.Throws.*;
 
 public class TestMethodThrows extends ItemsTest {
@@ -21,7 +22,7 @@ public class TestMethodThrows extends ItemsTest {
                            "    void foo() throws Exception {}",
                            "}"),
 
-                 makeCodeChangedRef(THROWS_ADDED, "Exception", loc(2, 5), loc(2, 17), loc(3, 23), loc(3, 31)));
+                 makeCodeChangedRef(THROWS_ADDED, "Exception", locrg(2, 5, 17), locrg(3, 23, 31)));
     }
 
     public void testThrowsAddedOneToTwo() {
@@ -35,7 +36,7 @@ public class TestMethodThrows extends ItemsTest {
                            "    void foo() throws IOException, NullPointerException {}",
                            "}"),
 
-                 makeCodeChangedRef(THROWS_ADDED, "NullPointerException", loc(2, 23), loc(2, 33), loc(3, 36), loc(3, 55)));
+                 makeCodeChangedRef(THROWS_ADDED, "NullPointerException", locrg(2, 23, 33), locrg(3, 36, 55)));
     }
 
     public void testThrowsAddedOneToThree() {
@@ -49,9 +50,9 @@ public class TestMethodThrows extends ItemsTest {
                            "    void foo() throws ArrayIndexOutOfBoundsException, IOException, NullPointerException {}",
                            "}"),
                  
-                 makeCodeChangedRef(THROWS_ADDED, "ArrayIndexOutOfBoundsException", loc(2, 23), loc(2, 33), loc(3, 23), loc(3, 52)),
-                 new FileDiffChange(throwsReordMsg("IOException", 0, 1), loc(2, 23), loc(2, 33), loc(3, 55), loc(3, 65)),
-                 makeCodeChangedRef(THROWS_ADDED, "NullPointerException", loc(2, 23), loc(2, 33), loc(3, 68), loc(3, 87)));
+                 makeCodeChangedRef(THROWS_ADDED, "ArrayIndexOutOfBoundsException", locrg(2, 23, 33), locrg(3, 23, 52)),
+                 new FileDiffChange(throwsReordMsg("IOException", 0, 1), locrg(2, 23, 33), locrg(3, 55, 65)),
+                 makeCodeChangedRef(THROWS_ADDED, "NullPointerException", locrg(2, 23, 33), locrg(3, 68, 87)));
     }
 
     public void testThrowsRemovedOneToNone() {
@@ -65,7 +66,7 @@ public class TestMethodThrows extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeCodeChangedRef(THROWS_REMOVED, "IOException", loc(2, 23), loc(2, 33), loc(3, 5), loc(3, 17)));
+                 makeCodeChangedRef(THROWS_REMOVED, "IOException", locrg(2, 23, 33), locrg(3, 5, 17)));
     }
 
     public void testThrowsRemovedTwoToOne() {
@@ -79,7 +80,7 @@ public class TestMethodThrows extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(THROWS_REMOVED, "NullPointerException", loc(2, 36), loc(2, 55), loc(2, 23), loc(2, 33)));
+                 makeCodeChangedRef(THROWS_REMOVED, "NullPointerException", locrg(2, 36, 55), locrg(2, 23, 33)));
     }
 
     public void testThrowsRemovedThreeToOne() {
@@ -93,9 +94,9 @@ public class TestMethodThrows extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(THROWS_REMOVED, "ArrayIndexOutOfBoundsException", loc(2, 23), loc(2, 52), loc(2, 23), loc(2, 33)),
-                 new FileDiffChange(throwsReordMsg("IOException", 1, 0), loc(2, 55), loc(2, 65), loc(2, 23), loc(2, 33)),
-                 makeCodeChangedRef(THROWS_REMOVED, "NullPointerException", loc(2, 68), loc(2, 87), loc(2, 23), loc(2, 33)));
+                 makeCodeChangedRef(THROWS_REMOVED, "ArrayIndexOutOfBoundsException", locrg(2, 23, 52), locrg(2, 23, 33)),
+                 new FileDiffChange(throwsReordMsg("IOException", 1, 0), locrg(2, 55, 65), locrg(2, 23, 33)),
+                 makeCodeChangedRef(THROWS_REMOVED, "NullPointerException", locrg(2, 68, 87), locrg(2, 23, 33)));
     }
 
     public void testThrowsReordered() {
@@ -109,12 +110,8 @@ public class TestMethodThrows extends ItemsTest {
                            "",
                            "}"),
                  
-                 new FileDiffChange(throwsReordMsg("ArrayIndexOutOfBoundsException", 0, 1),
-                                    loc(2, 23), loc(2, 52), 
-                                    loc(2, 36), loc(2, 65)),
-                 new FileDiffChange(throwsReordMsg("IOException", 1, 0),
-                                    loc(2, 55), loc(2, 65), 
-                                    loc(2, 23), loc(2, 33)));
+                 new FileDiffChange(throwsReordMsg("ArrayIndexOutOfBoundsException", 0, 1), locrg(2, 23, 52), locrg(2, 36, 65)),
+                 new FileDiffChange(throwsReordMsg("IOException", 1, 0), locrg(2, 55, 65), locrg(2, 23, 33)));
     }
 
     protected String throwsMsg(String from, String to) {

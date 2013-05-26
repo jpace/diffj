@@ -1,6 +1,7 @@
 package org.incava.diffj.function;
 
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 
 public class TestMethodModifiers extends ItemsTest {
     public TestMethodModifiers(String name) {
@@ -18,7 +19,7 @@ public class TestMethodModifiers extends ItemsTest {
                            "    static void foo() {}",
                            "}"),
                  
-                 makeModifierRef(null, "static", loc(2, 5), loc(2, 8), loc(3, 5), loc(3, 10)));
+                 makeModifierRef(null, "static", locrg(2, 5, 8), locrg(3, 5, 10)));
     }
 
     public void testModifierAddedToExisting() {
@@ -32,7 +33,7 @@ public class TestMethodModifiers extends ItemsTest {
                            "    static public void foo() {}",
                            "}"),
                  
-                 makeModifierRef(null, "static", loc(2, 5), loc(2, 10), loc(3, 5), loc(3, 10)));
+                 makeModifierRef(null, "static", locrg(2, 5, 10), locrg(3, 5, 10)));
     }
 
     public void testModifierRemoved() {
@@ -46,6 +47,6 @@ public class TestMethodModifiers extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeModifierRef("final", null, loc(2, 5), loc(2, 9), loc(3, 5), loc(3, 8)));
+                 makeModifierRef("final", null, locrg(2, 5, 9), locrg(3, 5, 8)));
     }
 }

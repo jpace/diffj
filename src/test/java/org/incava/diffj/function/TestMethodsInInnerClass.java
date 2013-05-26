@@ -1,6 +1,7 @@
 package org.incava.diffj.function;
 
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 
 public class TestMethodsInInnerClass extends ItemsTest {
     public TestMethodsInInnerClass(String name) {
@@ -21,7 +22,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", loc(2, 5), loc(3, 5), loc(4, 9), loc(4, 21)));
+                 makeMethodRef(null, "foo()", locrg(2, 5, 3, 5), locrg(4, 9, 21)));
     }
 
     public void testMethodRemoved() {
@@ -38,7 +39,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
 
-                 makeMethodRef("foo()", null, loc(3, 9), loc(3, 21), loc(3, 5), loc(4, 5)));
+                 makeMethodRef("foo()", null, locrg(3, 9, 21), locrg(3, 5, 4, 5)));
     }
 
     /**
@@ -63,7 +64,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", loc(3, 9), loc(4, 9), loc(5, 13), loc(5, 25)));
+                 makeMethodRef(null, "foo()", locrg(3, 9, 4, 9), locrg(5, 13, 25)));
     }
 
     public void testInnerClassMethodRemoved() {
@@ -84,7 +85,6 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef("foo(String)", null, loc(4, 13), loc(4, 35), loc(4, 9), loc(5, 9)));
+                 makeMethodRef("foo(String)", null, locrg(4, 13, 35), locrg(4, 9, 5, 9)));
     }
-
 }

@@ -1,7 +1,8 @@
 package org.incava.diffj.function;
 
 import org.incava.analysis.FileDiffChange;
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import static org.incava.diffj.function.Method.*;
 
 public class TestMethodImplemented extends ItemsTest {
@@ -20,8 +21,8 @@ public class TestMethodImplemented extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeModifierRef("abstract", null, loc(2, 5), loc(2, 12), loc(3, 5), loc(3, 8)),
-                 new FileDiffChange(METHOD_BLOCK_ADDED.format(), loc(2, 14), loc(2, 24), loc(3, 5), loc(3, 17)));
+                 makeModifierRef("abstract", null, locrg(2, 5, 12), locrg(3, 5, 8)),
+                 new FileDiffChange(METHOD_BLOCK_ADDED.format(), locrg(2, 14, 24), locrg(3, 5, 17)));
     }
 
     public void testImplementedToAbstractMethod() {
@@ -35,8 +36,8 @@ public class TestMethodImplemented extends ItemsTest {
                            "    abstract void foo();",
                            "}"),
                  
-                 makeModifierRef(null, "abstract", loc(2, 5), loc(2,  8), loc(3, 5), loc(3, 12)),
-                 new FileDiffChange(METHOD_BLOCK_REMOVED.format(), loc(2, 5), loc(2, 17), loc(3, 14), loc(3, 24)));
+                 makeModifierRef(null, "abstract", locrg(2, 5, 8), locrg(3, 5, 12)),
+                 new FileDiffChange(METHOD_BLOCK_REMOVED.format(), locrg(2, 5, 17), locrg(3, 14, 24)));
     }
 
     public void testMethodNativeToImplemented() {
@@ -52,8 +53,8 @@ public class TestMethodImplemented extends ItemsTest {
                            "    }",
                            "}"),
 
-                 makeModifierRef("native", null, loc(2, 5), loc(2, 10), loc(3, 5), loc(3, 8)),
-                 new FileDiffChange(METHOD_BLOCK_ADDED.format(), loc(2, 12), loc(2, 22), loc(3, 5), loc(5, 5)));
+                 makeModifierRef("native", null, locrg(2, 5, 10), locrg(3, 5, 8)),
+                 new FileDiffChange(METHOD_BLOCK_ADDED.format(), locrg(2, 12, 22), locrg(3, 5, 5, 5)));
     }
 
     public void testMethodImplementedToNative() {
@@ -67,7 +68,7 @@ public class TestMethodImplemented extends ItemsTest {
                            "    native void foo();",
                            "}"),
                  
-                 makeModifierRef(null, "native", loc(2, 5), loc(2, 8), loc(2, 5), loc(2, 10)),
-                 new FileDiffChange(METHOD_BLOCK_REMOVED.format(), loc(2, 5), loc(4, 5), loc(2, 12), loc(2, 22)));
+                 makeModifierRef(null, "native", locrg(2, 5, 8), locrg(2, 5, 10)),
+                 new FileDiffChange(METHOD_BLOCK_REMOVED.format(), locrg(2, 5, 4, 5), locrg(2, 12, 22)));
     }
 }

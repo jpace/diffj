@@ -1,6 +1,7 @@
 package org.incava.diffj.function;
 
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 
 public class TestMethods extends ItemsTest {
     public TestMethods(String name) {
@@ -17,7 +18,7 @@ public class TestMethods extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", loc(1, 1), loc(3, 1), loc(3, 5), loc(3, 17)));
+                 makeMethodRef(null, "foo()", locrg(1, 1, 3, 1), locrg(3, 5, 17)));
     }
 
     public void testClassOneMethodAdded() {
@@ -32,7 +33,7 @@ public class TestMethods extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", loc(1, 1), loc(4, 1), loc(4, 5), loc(4, 17)));
+                 makeMethodRef(null, "foo()", locrg(1, 1, 4, 1), locrg(4, 5, 17)));
     }
 
     public void testClassAllMethodsRemoved() {
@@ -45,7 +46,7 @@ public class TestMethods extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeMethodRef("foo()", null, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
+                 makeMethodRef("foo()", null, locrg(3, 5, 17), locrg(1, 1, 3, 1)));
     }
 
     public void testClassNoMethodsChanged() {
