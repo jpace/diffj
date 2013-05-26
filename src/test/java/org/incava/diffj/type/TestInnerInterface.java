@@ -1,6 +1,7 @@
 package org.incava.diffj.type;
 
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 
 public class TestInnerInterface extends ItemsTest {
     public TestInnerInterface(String name) {
@@ -21,7 +22,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", loc(2, 5), loc(3, 5), loc(4, 9), loc(4, 19)));
+                 makeMethodRef(null, "foo()", locrg(2, 5, 3, 5), locrg(4, 9, 19)));
     }
 
     public void testMethodRemoved() {
@@ -38,7 +39,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef("foo()", null, loc(3, 9), loc(3, 19), loc(3, 5), loc(4, 5)));
+                 makeMethodRef("foo()", null, locrg(3, 9, 19), locrg(3, 5, 4, 5)));
     }
 
     public void testInnerInterfaceAdded() {
@@ -56,7 +57,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeInterfaceRef(null, "I2Test", loc(2, 5), loc(3, 5), loc(4, 9), loc(5, 9)));
+                 makeInterfaceRef(null, "I2Test", locrg(2, 5, 3, 5), locrg(4, 9, 5, 9)));
     }
 
     public void testInnerInterfaceRemoved() {
@@ -73,7 +74,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeInterfaceRef("I2Test", null, loc(3, 9), loc(4, 9), loc(2, 5), loc(3, 5)));
+                 makeInterfaceRef("I2Test", null, locrg(3, 9, 4, 9), locrg(2, 5, 3, 5)));
     }
 
     public void testInnerInterfaceMethodAdded() {
@@ -95,7 +96,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", loc(3, 9), loc(4, 9), loc(5, 13), loc(5, 23)));
+                 makeMethodRef(null, "foo()", locrg(3, 9, 4, 9), locrg(5, 13, 23)));
     }
 
     public void testInnerInterfaceMethodRemoved() {
@@ -116,6 +117,6 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef("foo()", null, loc(4, 13), loc(4, 23), loc(4, 9), loc(5, 9)));
+                 makeMethodRef("foo()", null, locrg(4, 13, 23), locrg(4, 9, 5, 9)));
     }
 }

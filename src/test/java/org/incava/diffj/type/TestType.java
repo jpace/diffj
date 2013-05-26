@@ -1,7 +1,8 @@
 package org.incava.diffj.type;
 
 import org.incava.analysis.FileDiffChange;
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import static org.incava.diffj.type.Extends.*;
 import static org.incava.diffj.type.Implements.*;
 import static org.incava.diffj.type.Type.*;
