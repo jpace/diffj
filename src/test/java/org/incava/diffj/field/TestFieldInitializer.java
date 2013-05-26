@@ -1,7 +1,8 @@
 package org.incava.diffj.field;
 
 import org.incava.analysis.FileDiffChange;
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import static org.incava.diffj.code.Code.*;
 import static org.incava.diffj.field.Variable.*;
 
@@ -21,7 +22,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 4;",
                            "}"),
                  
-                 new FileDiffChange(INITIALIZER_ADDED.format(), loc(2, 9), loc(2, 9), loc(3, 13), loc(3, 13)));
+                 new FileDiffChange(INITIALIZER_ADDED.format(), locrg(2, 9, 9), locrg(3, 13, 13)));
     }
 
     public void testInitializerRemoved() {
@@ -35,7 +36,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 new FileDiffChange(INITIALIZER_REMOVED.format(), loc(2, 13), loc(2, 13), loc(3, 9), loc(3, 9)));
+                 new FileDiffChange(INITIALIZER_REMOVED.format(), locrg(2, 13, 13), locrg(3, 9, 9)));
     }
 
     public void testInitializerCodeChanged() {
@@ -49,7 +50,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 5;",
                            "}"),
                  
-                 makeCodeChangedRef(CODE_CHANGED, "i", loc(2, 13), loc(2, 13), loc(3, 13), loc(3, 13)));
+                 makeCodeChangedRef(CODE_CHANGED, "i", locrg(2, 13, 13), locrg(3, 13, 13)));
     }
 
     public void testInitializerCodeAdded() {
@@ -63,7 +64,7 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 4 * 5;",
                            "}"),
                  
-                 makeCodeAddedRef(CODE_ADDED, "i", loc(2, 14), loc(2, 14), loc(3, 15), loc(3, 17)));
+                 makeCodeAddedRef(CODE_ADDED, "i", locrg(2, 14, 14), locrg(3, 15, 17)));
     }
 
     public void testInitializerCodeRemoved() {
@@ -77,6 +78,6 @@ public class TestFieldInitializer extends ItemsTest {
                            "    int i = 4;",
                            "}"),
                  
-                 makeCodeDeletedRef(CODE_REMOVED, "i", loc(2, 15), loc(2, 17), loc(3, 14), loc(3, 14)));
+                 makeCodeDeletedRef(CODE_REMOVED, "i", locrg(2, 15, 17), locrg(3, 14, 14)));
     }
 }

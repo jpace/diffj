@@ -1,6 +1,7 @@
 package org.incava.diffj.field;
 
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 
 public class TestFieldModifier extends ItemsTest {
     public TestFieldModifier(String name) {
@@ -19,7 +20,7 @@ public class TestFieldModifier extends ItemsTest {
                            "    static int i;",
                            "}"),
                  
-                 makeModifierRef(null, "static", loc(2, 5), loc(2, 7), loc(3, 5), loc(3, 10)));
+                 makeModifierRef(null, "static", locrg(2, 5, 7), locrg(3, 5, 10)));
     }
 
     public void testModifierRemoved() {
@@ -33,6 +34,6 @@ public class TestFieldModifier extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 makeModifierRef("final", null, loc(2, 5), loc(2, 9), loc(3, 5), loc(3, 7)));
+                 makeModifierRef("final", null, locrg(2, 5, 9), locrg(3, 5, 7)));
     }
 }

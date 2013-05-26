@@ -1,7 +1,8 @@
 package org.incava.diffj.field;
 
 import org.incava.analysis.FileDiffChange;
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import static org.incava.diffj.field.Variable.*;
 import static org.incava.diffj.field.Variables.*;
 
@@ -23,8 +24,8 @@ public class TestFieldVariable extends ItemsTest {
                            "",
                            "}"),
 
-                 makeChangedRef(null, "j", VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(4, 9), loc(4, 9)),
-                 makeChangedRef("i", null, VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(4, 9), loc(4, 9)));
+                 makeChangedRef(null, "j", VARIABLE_MSGS, locrg(2, 9, 9), locrg(4, 9, 9)),
+                 makeChangedRef("i", null, VARIABLE_MSGS, locrg(2, 9, 9), locrg(4, 9, 9)));
     }
 
     public void testVariableWithInitializerChanged() {
@@ -38,8 +39,8 @@ public class TestFieldVariable extends ItemsTest {
                            "    int j = 4;",
                            "}"),
                  
-                 makeChangedRef(null, "j", VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(3, 9), loc(3, 9)),
-                 makeChangedRef("i", null, VARIABLE_MSGS, loc(2, 9), loc(2,  9), loc(3, 9), loc(3, 9)));
+                 makeChangedRef(null, "j", VARIABLE_MSGS, locrg(2, 9, 9), locrg(3, 9, 9)),
+                 makeChangedRef("i", null, VARIABLE_MSGS, locrg(2, 9, 9), locrg(3, 9, 9)));
     }
 
     public void testVariableTypeChanged() {

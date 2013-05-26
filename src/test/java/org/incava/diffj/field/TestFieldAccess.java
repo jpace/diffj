@@ -1,6 +1,7 @@
 package org.incava.diffj.field;
 
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 
 public class TestFieldAccess extends ItemsTest {
     public TestFieldAccess(String name) {
@@ -18,7 +19,7 @@ public class TestFieldAccess extends ItemsTest {
                            "    private int i;",
                            "}"),
                  
-                 makeAccessRef(null, "private", loc(2, 5), loc(2, 7), loc(3, 5), loc(3, 11)));
+                 makeAccessRef(null, "private", locrg(2, 5, 7), locrg(3, 5, 11)));
     }
 
     public void testAccessRemoved() {
@@ -32,7 +33,7 @@ public class TestFieldAccess extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 makeAccessRef("public", null, loc(2, 5), loc(2, 10), loc(3, 5), loc(3, 7)));
+                 makeAccessRef("public", null, locrg(2, 5, 10), locrg(3, 5, 7)));
     }
 
     public void testAccessChanged() {
