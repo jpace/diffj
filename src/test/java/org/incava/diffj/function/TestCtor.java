@@ -1,6 +1,7 @@
 package org.incava.diffj.function;
 
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
@@ -8,17 +9,15 @@ import org.incava.java.Java;
 public class TestCtor extends ItemsTest {
     public TestCtor(String name) {
         super(name);
+        tr.Ace.setVerbose(true);
+        tr.Ace.yellow("name", name);
     }
 
     public void testCtorWithParameterizedTypeDump() {
-        Lines lines = new Lines("public class LogIterator {",
+        Lines lines = new Lines("public class LogIterator<T> {",
                                 "    public <T> LogIterator() {",
                                 "    }",
                                 "}");
-        
-        tr.Ace.setVerbose(true);
-        tr.Ace.yellow("this", this);
-
         try {
             JavaFile jf = new JavaFile("name", lines.toString(), "1.6");
             org.incava.pmdx.SimpleNodeUtil.dump(jf.compile());
@@ -35,10 +34,6 @@ public class TestCtor extends ItemsTest {
                                 "    public LogIterator() {",
                                 "    }",
                                 "}");
-        
-        tr.Ace.setVerbose(true);
-        tr.Ace.yellow("this", this);
-
         try {
             JavaFile jf = new JavaFile("name", lines.toString(), "1.6");
             org.incava.pmdx.SimpleNodeUtil.dump(jf.compile());
@@ -51,14 +46,13 @@ public class TestCtor extends ItemsTest {
     }
         
     public void testCtorWithParameterizedType() {
-        tr.Ace.setVerbose(true);
-        tr.Ace.yellow("this", this);
-        evaluate(new Lines("public class LogIterator {",
-                           "    public <T> LogIterator() {",
+        //$$$ todo: fix this diff to show the type parameter removed:
+        evaluate(new Lines("public class LogIterator<T> {",
+                           "    public LogIterator() {",
                            "    }",
                            "}"),
                  new Lines("public class LogIterator {",
-                           "    public <T> LogIterator() {",
+                           "    public LogIterator() {",
                            "    }",
                            "}"),
                  Java.SOURCE_1_6,
