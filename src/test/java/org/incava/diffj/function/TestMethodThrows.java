@@ -114,13 +114,6 @@ public class TestMethodThrows extends ItemsTest {
                  new FileDiffChange(throwsReordMsg("IOException", 1, 0), locrg(2, 55, 65), locrg(2, 23, 33)));
     }
 
-    protected String throwsMsg(String from, String to) {
-        return getMessage(THROWS_REMOVED,
-                          THROWS_ADDED,
-                          null, 
-                          from, to);
-    }
-
     protected String throwsReordMsg(String throwsName, int oldPosition, int newPosition) {
         return THROWS_REORDERED.format(throwsName, oldPosition, newPosition);
     }

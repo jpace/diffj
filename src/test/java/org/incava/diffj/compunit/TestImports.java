@@ -88,7 +88,7 @@ public class TestImports extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(IMPORT_SECTION_REMOVED.format(), locrg(1, 1, 1, 19), locrg(1, 1, 1, 5)));
+                 new FileDiffDelete(locrg(1, 1, 1, 19), locrg(1, 1, 1, 5), IMPORT_SECTION_REMOVED));
     }
 
     public void testImportsSectionRemovedTwo() {
@@ -102,7 +102,7 @@ public class TestImports extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(IMPORT_SECTION_REMOVED.format(), locrg(1, 1, 2, 23), locrg(1, 1, 1, 5)));
+                 new FileDiffDelete(locrg(1, 1, 2, 23), locrg(1, 1, 1, 5), IMPORT_SECTION_REMOVED));
     }
 
     public void testImportsSectionAddedOne() {
@@ -115,7 +115,7 @@ public class TestImports extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(IMPORT_SECTION_ADDED.format(), locrg(1, 1, 1, 5), locrg(1, 1, 1, 19)));
+                 new FileDiffAdd(locrg(1, 1, 1, 5), locrg(1, 1, 1, 19), IMPORT_SECTION_ADDED));
     }
 
     public void testImportsSectionAddedTwo() {
@@ -129,7 +129,7 @@ public class TestImports extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(IMPORT_SECTION_ADDED.format(), locrg(1, 1, 1, 5), locrg(1, 1, 2, 23)));
+                 new FileDiffAdd(locrg(1, 1, 1, 5), locrg(1, 1, 2, 23), IMPORT_SECTION_ADDED));
     }
 
     public void testImportsBlockAddedNoClassDefined() {
@@ -142,11 +142,10 @@ public class TestImports extends ItemsTest {
                            "import org.incava.Bazr;",
                            ""),
 
-                 new FileDiffAdd(IMPORT_SECTION_ADDED.format(), locrg(1, 1, 1, 7), locrg(3, 1, 4, 23)));
+                 new FileDiffAdd(locrg(1, 1, 1, 7), locrg(3, 1, 4, 23), IMPORT_SECTION_ADDED));
     }
 
     public void testImportAdded() {
-        String msg = IMPORT_ADDED.format("org.incava.Bazr");
         evaluate(new Lines("package org.incava.foo;",
                            "import java.util.*;",
                            ""),
@@ -156,11 +155,10 @@ public class TestImports extends ItemsTest {
                            "import org.incava.Bazr;",
                            ""),
 
-                 new FileDiffAdd(msg, locrg(2, 1, 2, 19), locrg(3, 1, 3, 23)));
+                 new FileDiffAdd(locrg(2, 1, 2, 19), locrg(3, 1, 3, 23), IMPORT_ADDED, "org.incava.Bazr"));
     }
 
     public void testImportRemoved() {
-        String msg = IMPORT_REMOVED.format("java.io.IOException");
         evaluate(new Lines("package org.incava.foo;",
                            "import java.io.IOException;",
                            "import java.util.*;",
@@ -170,12 +168,10 @@ public class TestImports extends ItemsTest {
                            "import java.util.*;",
                            ""),
 
-                 new FileDiffDelete(msg, locrg(2, 1, 2, 27), locrg(2, 1, 2, 19)));
+                 new FileDiffDelete(locrg(2, 1, 2, 27), locrg(2, 1, 2, 19), IMPORT_REMOVED, "java.io.IOException"));
     }
 
     public void testImportAddedAndRemoved() {
-        String addMsg = IMPORT_ADDED.format("org.incava.log.Log");
-        String delMsg = IMPORT_REMOVED.format("org.incava.qualog.Qualog");
         evaluate(new Lines("package org.incava.util;",
                            "",
                            "import org.incava.qualog.Qualog;",
@@ -194,7 +190,7 @@ public class TestImports extends ItemsTest {
                            "{",
                            "}\n"),
 
-                 new FileDiffAdd(addMsg, locrg(3, 1, 3, 32), locrg(3, 1, 3, 26)),
-                 new FileDiffDelete(delMsg, locrg(3, 1, 3, 32), locrg(3, 1, 3, 26)));
+                 new FileDiffAdd(locrg(3, 1, 3, 32), locrg(3, 1, 3, 26), IMPORT_ADDED, "org.incava.log.Log"),
+                 new FileDiffDelete(locrg(3, 1, 3, 32), locrg(3, 1, 3, 26), IMPORT_REMOVED, "org.incava.qualog.Qualog"));
     }
 }

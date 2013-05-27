@@ -21,6 +21,6 @@ public class TestMethodReturnType extends ItemsTest {
                            "    Integer foo() { return null; }",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, RETURN_TYPE_CHANGED, "Object", "Integer"), locrg(2, 5, 10), locrg(3, 5, 11)));
+                 new FileDiffChange(locrg(2, 5, 10), locrg(3, 5, 11), RETURN_TYPE_CHANGED, "Object", "Integer"));
     }
 }

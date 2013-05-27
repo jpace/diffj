@@ -112,7 +112,7 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo(Integer i) {}",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, Parameters.PARAMETER_TYPE_CHANGED, "int", "Integer"), locrg(2, 14, 18), locrg(3, 14, 22)));
+                 new FileDiffChange(locrg(2, 14, 18), locrg(3, 14, 22), Parameters.PARAMETER_TYPE_CHANGED, "int", "Integer"));
     }
 
     public void testParameterChangedName() {
@@ -126,7 +126,7 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo(int x) {}",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, Parameters.PARAMETER_NAME_CHANGED, "i", "x"), locrg(2, 18, 18), locrg(3, 18, 18)));
+                 new FileDiffChange(locrg(2, 18, 18), locrg(3, 18, 18), Parameters.PARAMETER_NAME_CHANGED, "i", "x"));
     }
 
     public void testParameterReordered() {
@@ -194,10 +194,6 @@ public class TestMethodParameters extends ItemsTest {
                  makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "ctx",     locrg(2, 40, 56), locrg(3, 20, 4, 117)),
                  new FileDiffChange(paramReordMsg("obj1", 1, 4), locrg(3, 9, 27), locrg(4, 69, 91)),
                  new FileDiffChange(paramReordMsg("obj2", 2, 5), locrg(4, 9, 27), locrg(4, 94, 116)));
-    }
-
-    protected String paramMsg(String from, String to) {
-        return getMessage(Parameters.PARAMETER_REMOVED, Parameters.PARAMETER_ADDED, null, from, to);
     }
 
     protected FileDiffChange makeParamReorderedRef(String paramName, int oldPosition, int newPosition, Location fromStart, Location toStart) {

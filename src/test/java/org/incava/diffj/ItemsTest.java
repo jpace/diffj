@@ -88,19 +88,14 @@ public class ItemsTest extends DiffJTest {
     }
 
     protected FileDiff makeRef(String from, String to, Message[] msgs, LocationRange fromLoc, LocationRange toLoc) {
-        String msg = null;
-
         if (to == null) {
-            msg = msgs[0].format(from);
-            return new FileDiffDelete(msg, fromLoc, toLoc);
+            return new FileDiffDelete(fromLoc, toLoc, msgs[0], from);
         }
         else if (from == null) {
-            msg = msgs[2].format(to);
-            return new FileDiffAdd(msg, fromLoc, toLoc);
+            return new FileDiffAdd(fromLoc, toLoc, msgs[2], to);
         }
         else {
-            msg = msgs[1].format(from, to);
-            return new FileDiffChange(msg, fromLoc, toLoc);
+            return new FileDiffChange(fromLoc, toLoc, msgs[1], from, to);
         }
     }
 
@@ -117,18 +112,15 @@ public class ItemsTest extends DiffJTest {
     }
 
     protected FileDiff makeChangedRef(String from, String to, Message[] msgs, LocationRange fromLoc, LocationRange toLoc) {
-        String str = null;
         if (to == null) {
-            str = msgs[0].format(from);
+            return new FileDiffChange(fromLoc, toLoc, msgs[0], from);
         }
         else if (from == null) {
-            str = msgs[2].format(to);
+            return new FileDiffChange(fromLoc, toLoc, msgs[2], to);
         }
         else {
-            str = msgs[1].format(from, to);
+            return new FileDiffChange(fromLoc, toLoc, msgs[1], from, to);
         }
-
-        return new FileDiffChange(str, fromLoc, toLoc);
     }
 
     protected FileDiff makeAccessRef(String from, String to, Location fromStart, Location toStart) {
@@ -148,8 +140,7 @@ public class ItemsTest extends DiffJTest {
     }
 
     protected FileDiff makeCodeChangedRef(Message codeChgMsg, String[] args, LocationRange fromLoc, LocationRange toLoc) {
-        String str = codeChgMsg.format((Object[])args);
-        return new FileDiffChange(str, fromLoc, toLoc);
+        return new FileDiffChange(fromLoc, toLoc, codeChgMsg, (Object[])args);
     }
 
     protected FileDiff makeCodeAddedRef(Message codeChgMsg, String where, LocationRange fromLoc, LocationRange toLoc) {
@@ -157,8 +148,7 @@ public class ItemsTest extends DiffJTest {
     }
 
     protected FileDiff makeCodeAddedRef(Message codeChgMsg, String[] args, LocationRange fromLoc, LocationRange toLoc) {
-        String msg = codeChgMsg.format((Object[])args);
-        return new FileDiffAdd(msg, fromLoc, toLoc);
+        return new FileDiffAdd(fromLoc, toLoc, codeChgMsg, (Object[])args);
     }
 
     protected FileDiff makeCodeDeletedRef(Message codeChgMsg, String where, LocationRange fromLoc, LocationRange toLoc) {
@@ -166,7 +156,6 @@ public class ItemsTest extends DiffJTest {
     }
 
     protected FileDiff makeCodeDeletedRef(Message codeChgMsg, String[] args, LocationRange fromLoc, LocationRange toLoc) {
-        String msg = codeChgMsg.format((Object[])args);
-        return new FileDiffDelete(msg, fromLoc, toLoc);
+        return new FileDiffDelete(fromLoc, toLoc, codeChgMsg, (Object[])args);
     }
 }
