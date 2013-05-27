@@ -1,8 +1,10 @@
 package org.incava.diffj.function;
 
 import org.incava.analysis.FileDiff;
-import org.incava.diffj.*;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import org.incava.ijdk.text.Location;
+import org.incava.ijdk.text.LocationRange;
 
 public class TestPackage extends ItemsTest {
     public TestPackage(String name) {
@@ -11,6 +13,10 @@ public class TestPackage extends ItemsTest {
 
     protected FileDiff makePackageRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         return makeRef(from, to, PACKAGE_MSGS, fromStart, fromEnd, toStart, toEnd);
+    }
+
+    protected FileDiff makePackageRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
+        return makeRef(from, to, PACKAGE_MSGS, fromLoc, toLoc);
     }
 
     protected FileDiff makePackageRef(String from, String to, Location fromStart, Location toStart) {
@@ -58,7 +64,7 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
 
-                 makePackageRef("org.incava.foo", null, loc(1, 9), loc(1, 22), loc(4, 1), loc(5, 1)));
+                 makePackageRef("org.incava.foo", null, locrg(1, 9, 22), locrg(4, 1, 5, 1)));
     }
 
     public void testPackageAdded() {
@@ -70,7 +76,7 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 makePackageRef(null, "org.incava.foo", loc(1, 1), loc(2, 1), loc(1, 9), loc(1, 22)));
+                 makePackageRef(null, "org.incava.foo", locrg(1, 1, 2, 1), locrg(1, 9, 22)));
     }
 
     public void testPackageRenamed() {
