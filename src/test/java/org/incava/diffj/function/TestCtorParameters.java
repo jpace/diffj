@@ -5,9 +5,9 @@ import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
-import org.incava.diffj.params.Parameters;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.Message;
+import static org.incava.diffj.params.Parameters.*;
 
 public class TestCtorParameters extends ItemsTest {
     public TestCtorParameters(String name) {
@@ -25,7 +25,7 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(Integer i) {}",
                            "}"),
 
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i", locrg(2, 9, 10), locrg(3, 18, 18)));
+                 makeCodeChangedRef(PARAMETER_ADDED, "i", locrg(2, 9, 10), locrg(3, 18, 18)));
     }
 
     public void testParameterAddedOneToTwo() {
@@ -39,7 +39,7 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(String s, Integer i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i", locrg(2, 9, 18), locrg(3, 20, 28)));
+                 makeCodeChangedRef(PARAMETER_ADDED, "i", locrg(2, 9, 18), locrg(3, 20, 28)));
     }
 
     public void testParameterAddedOneToThree() {
@@ -53,9 +53,9 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(List[] ary, String s, Integer i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "ary", locrg(2, 9, 18), locrg(3, 10, 19)),
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i",   locrg(2, 9, 18), locrg(3, 32, 40)),
-                 new FileDiffChange(paramReordMsg("s", 0, 1), locrg(2, 17, 17), locrg(3, 29, 29)));
+                 makeCodeChangedRef(PARAMETER_ADDED, "ary", locrg(2, 9, 18), locrg(3, 10, 19)),
+                 makeCodeChangedRef(PARAMETER_ADDED, "i",   locrg(2, 9, 18), locrg(3, 32, 40)),
+                 new FileDiffChange(PARAMETER_REORDERED.format("s", 0, 1), locrg(2, 17, 17), locrg(3, 29, 29)));
     }
 
     public void testParameterRemovedOneToNone() {
@@ -69,7 +69,7 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test() {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i", locrg(2, 18, 18), locrg(3, 9, 10)));
+                 makeCodeChangedRef(PARAMETER_REMOVED, "i", locrg(2, 18, 18), locrg(3, 9, 10)));
     }
 
     public void testParameterRemovedTwoToOne() {
@@ -83,7 +83,7 @@ public class TestCtorParameters extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i", locrg(2, 20, 28), locrg(2, 9, 18)));
+                 makeCodeChangedRef(PARAMETER_REMOVED, "i", locrg(2, 20, 28), locrg(2, 9, 18)));
     }
 
     public void testParameterRemovedThreeToOne() {
@@ -97,9 +97,9 @@ public class TestCtorParameters extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "ary", locrg(2, 10, 19), locrg(2, 9, 18)),
-                 new FileDiffChange(paramReordMsg("s", 1, 0), locrg(2, 29, 29), locrg(2, 17, 17)),
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i",   locrg(2, 32, 40), locrg(2, 9, 18)));
+                 makeCodeChangedRef(PARAMETER_REMOVED, "ary", locrg(2, 10, 19), locrg(2, 9, 18)),
+                 new FileDiffChange(PARAMETER_REORDERED.format("s", 1, 0), locrg(2, 29, 29), locrg(2, 17, 17)),
+                 makeCodeChangedRef(PARAMETER_REMOVED, "i",   locrg(2, 32, 40), locrg(2, 9, 18)));
     }
 
     public void testParameterChangedType() {
@@ -113,8 +113,7 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(Integer i) {}",
                            "}"),
                  
-                 new FileDiffChange(getMessage(null, null, Parameters.PARAMETER_TYPE_CHANGED, "int", "Integer"), 
-                                    locrg(2, 10, 14), locrg(3, 10, 18)));
+                 new FileDiffChange(PARAMETER_TYPE_CHANGED.format("int", "Integer"), locrg(2, 10, 14), locrg(3, 10, 18)));
     }
 
     public void testParameterChangedName() {
@@ -127,8 +126,8 @@ public class TestCtorParameters extends ItemsTest {
                            "",
                            "    Test(int x) {}",
                            "}"),
-                 
-                 makeChangedRef(Parameters.PARAMETER_NAME_CHANGED, "i", "x", loc(2, 14), loc(3, 14)));
+
+                 new FileDiffChange(PARAMETER_NAME_CHANGED.format("i", "x"), locrg(2, 14, 14), locrg(3, 14, 14)));
     }
 
     public void testParameterReordered() {
@@ -142,8 +141,8 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(double d, int i) {}",
                            "}"),
                  
-                 new FileDiffChange(paramReordMsg("i", 0, 1), locrg(2, 14, 14), locrg(3, 24, 24)),
-                 new FileDiffChange(paramReordMsg("d", 1, 0), locrg(2, 24, 24), locrg(3, 17, 17)));
+                 new FileDiffChange(PARAMETER_REORDERED.format("i", 0, 1), locrg(2, 14, 14), locrg(3, 24, 24)),
+                 new FileDiffChange(PARAMETER_REORDERED.format("d", 1, 0), locrg(2, 24, 24), locrg(3, 17, 17)));
     }
 
     public void testParameterReorderedAndRenamed() {
@@ -157,8 +156,8 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(double dbl, int i2) {}",
                            "}"),
                  
-                 new FileDiffChange(paramReordRenamedMsg("i", 0, "i2",  1), locrg(2, 14, 14), locrg(3, 26, 27)),
-                 new FileDiffChange(paramReordRenamedMsg("d", 1, "dbl", 0), locrg(2, 24, 24), locrg(3, 17, 19)));
+                 new FileDiffChange(PARAMETER_REORDERED_AND_RENAMED.format("i", 0, 1, "i2"), locrg(2, 14, 14), locrg(3, 26, 27)),
+                 new FileDiffChange(PARAMETER_REORDERED_AND_RENAMED.format("d", 1, 0, "dbl"), locrg(2, 24, 24), locrg(3, 17, 19)));
     }
 
     public void testParameterOneAddedOneReordered() {
@@ -172,21 +171,7 @@ public class TestCtorParameters extends ItemsTest {
                            "    Test(int i2, int i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i2", locrg(2, 9, 15), locrg(3, 10, 15)),
-                 new FileDiffChange(paramReordMsg("i", 0, 1), locrg(2, 14, 14), locrg(3, 22, 22)));
-    }
-
-    protected String paramReordMsg(String paramName, int oldPosition, int newPosition) {
-        return Parameters.PARAMETER_REORDERED.format(paramName, oldPosition, newPosition);
-    }
-
-    protected String paramReordRenamedMsg(String oldName, int oldPosition, String newName, int newPosition) {
-        return Parameters.PARAMETER_REORDERED_AND_RENAMED.format(oldName, oldPosition, newPosition, newName);
-    }
-
-    protected FileDiff makeChangedRef(Message msg, 
-                                      String fromStr, String toStr,
-                                      Location fromStart, Location toStart) {
-        return new FileDiffChange(getMessage(null, null, msg, fromStr, toStr), fromStart, loc(fromStart, fromStr), toStart, loc(toStart, toStr));
+                 makeCodeChangedRef(PARAMETER_ADDED, "i2", locrg(2, 9, 15), locrg(3, 10, 15)),
+                 new FileDiffChange(PARAMETER_REORDERED.format("i", 0, 1), locrg(2, 14, 14), locrg(3, 22, 22)));
     }
 }

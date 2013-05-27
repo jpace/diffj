@@ -2,7 +2,7 @@ package org.incava.diffj.code;
 
 import java.util.List;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.TokenUtil;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.DefaultComparator;
 import org.incava.ijdk.util.ListExt;
@@ -42,7 +42,7 @@ public class TokenList {
             startTk = tokens.get(start);
             endTk = tokens.get(end);
         }
-        return new LocationRange(FileDiff.toBeginLocation(startTk), FileDiff.toEndLocation(endTk));
+        return new LocationRange(TokenUtil.toBeginLocation(startTk), TokenUtil.toEndLocation(endTk));
     }    
     
     public Token getStart(int start) {

@@ -56,7 +56,7 @@ public class TestFieldVariable extends ItemsTest {
                            "",
                            "}"),
                  
-                 new FileDiffChange(getFromToMessage(VARIABLE_TYPE_CHANGED, "s", "Set", "HashSet"),
+                 new FileDiffChange(VARIABLE_TYPE_CHANGED.format("s", "Set", "HashSet"),
                                     loc(2, 5), loc(2, 5, "Set"), 
                                     loc(4, 5), loc(4, 5, "HashSet")));
     }
@@ -70,7 +70,7 @@ public class TestFieldVariable extends ItemsTest {
                            "    String s;",
                            "}"),
                  
-                 new FileDiffChange(getFromToMessage(VARIABLE_REMOVED, "t"),
+                 new FileDiffChange(VARIABLE_REMOVED.format("t"),
                                     loc(2, 15), loc(2, 15, "t"), 
                                     loc(2, 12), loc(2, 12, "t")));
     }

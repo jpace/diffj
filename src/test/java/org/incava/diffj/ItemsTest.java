@@ -1,6 +1,5 @@
 package org.incava.diffj;
 
-import java.text.MessageFormat;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffChange;
@@ -115,10 +114,6 @@ public class ItemsTest extends DiffJTest {
         else {
             return changedMsg.format(from, to);
         }
-    }
-
-    protected String getFromToMessage(Message msg, String ... args) {
-        return msg.format((Object[])args);
     }
 
     protected FileDiff makeChangedRef(String from, String to, Message[] msgs, LocationRange fromLoc, LocationRange toLoc) {

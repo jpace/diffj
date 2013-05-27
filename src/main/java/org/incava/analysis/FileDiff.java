@@ -25,22 +25,10 @@ public abstract class FileDiff implements Comparable<FileDiff> {
         }
     }
 
-    public static Location toBeginLocation(Token t) {
-        return t == null ? null : new Location(t.beginLine, t.beginColumn);
-    }
-
-    public static LocationRange toLocationRange(Token from, Token to) {
-        return new LocationRange(toBeginLocation(from), toEndLocation(to));
-    }
-
     public static LocationRange toLocationRange(Location from, Location to) {
         return from == null ? null : new LocationRange(from, to);
     }
     
-    public static Location toEndLocation(Token t) {
-        return t == null ? null : new Location(t.endLine, t.endColumn);
-    }
-
     /**
      * The message for this reference. This should be only one line, because it
      * is used in single-line reports.
@@ -97,14 +85,14 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * @param to       The token in the second file.
      */
     public FileDiff(Type type, String message, Token from, Token to) {
-        this(type, message, toLocationRange(from, from), toLocationRange(to, to));
+        this(type, message, TokenUtil.toLocationRange(from, from), TokenUtil.toLocationRange(to, to));
     }
 
     /**
      * Creates a reference from a message and two beginning and ending tokens.
      */
     public FileDiff(Type type, String message, Token fromStart, Token fromEnd, Token toStart, Token toEnd) {
-        this(type, message, toLocationRange(fromStart, fromEnd), toLocationRange(toStart, toEnd));
+        this(type, message, TokenUtil.toLocationRange(fromStart, fromEnd), TokenUtil.toLocationRange(toStart, toEnd));
     }
 
     /**

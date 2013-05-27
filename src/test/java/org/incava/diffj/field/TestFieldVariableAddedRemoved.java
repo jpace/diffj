@@ -31,7 +31,7 @@ public class TestFieldVariableAddedRemoved extends ItemsTest {
     public FileDiff makeVariableTypeChangedRef(String varName, String fromType, String toType, 
                                                int fromLine, int fromFromCol, int fromToCol, // this assumes that type doesn't span lines
                                                int toLine,   int toFromCol,   int toToCol) {
-        return new FileDiffChange(getFromToMessage(VARIABLE_TYPE_CHANGED, varName, fromType, toType),
+        return new FileDiffChange(VARIABLE_TYPE_CHANGED.format(varName, fromType, toType),
                                   loc(fromLine, fromFromCol), loc(fromLine, fromToCol), 
                                   loc(toLine,   toFromCol),   loc(toLine, toToCol));
     }
