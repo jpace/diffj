@@ -1,6 +1,5 @@
 package org.incava.analysis;
 
-import net.sourceforge.pmd.ast.Token;
 import org.incava.ijdk.lang.ObjectExt;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
@@ -74,25 +73,6 @@ public abstract class FileDiff implements Comparable<FileDiff> {
         this.message        = message;
         this.firstLocation  = fromLoc;
         this.secondLocation = toLoc;
-    }
-
-    /**
-     * Creates a reference from a message and two tokens, one in each file.
-     *
-     * @param type    What type this reference is.     
-     * @param message The message applying to this reference.
-     * @param from    The token in the first file.
-     * @param to       The token in the second file.
-     */
-    public FileDiff(Type type, String message, Token from, Token to) {
-        this(type, message, TokenUtil.toLocationRange(from, from), TokenUtil.toLocationRange(to, to));
-    }
-
-    /**
-     * Creates a reference from a message and two beginning and ending tokens.
-     */
-    public FileDiff(Type type, String message, Token fromStart, Token fromEnd, Token toStart, Token toEnd) {
-        this(type, message, TokenUtil.toLocationRange(fromStart, fromEnd), TokenUtil.toLocationRange(toStart, toEnd));
     }
 
     /**
