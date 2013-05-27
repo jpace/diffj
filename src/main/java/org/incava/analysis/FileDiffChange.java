@@ -1,6 +1,5 @@
 package org.incava.analysis;
 
-import net.sourceforge.pmd.ast.Token;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
 
@@ -14,17 +13,6 @@ public class FileDiffChange extends FileDiff {
     }
     
     public FileDiffChange(String message, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        super(Type.CHANGED, message, fromStart, fromEnd, toStart, toEnd);
-    }
-
-    public FileDiffChange(String message, Token from, Token to) {
-        super(Type.CHANGED, message, from, to);
-    }
-
-    /**
-     * Creates a reference from a message and two beginning and ending tokens.
-     */
-    public FileDiffChange(String message, Token fromStart, Token fromEnd, Token toStart, Token toEnd) {
         super(Type.CHANGED, message, fromStart, fromEnd, toStart, toEnd);
     }
 

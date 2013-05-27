@@ -10,6 +10,7 @@ import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
+import org.incava.analysis.TokenUtil;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -71,8 +72,7 @@ public class Differences {
     }
 
     public void changed(Token from, Token to, Message msg, Object ... params) {
-        String str = msg.format(params);
-        add(new FileDiffChange(str, from, to));
+        changed(from, from, to, to, msg, params);
     }
 
     public void changed(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
@@ -81,7 +81,7 @@ public class Differences {
 
     public void changed(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
         String str = msg.format(params);
-        add(new FileDiffChange(str, fromStart, fromEnd, toStart, toEnd));
+        add(new FileDiffChange(str, TokenUtil.toLocationRange(fromStart, fromEnd), TokenUtil.toLocationRange(toStart, toEnd)));
     }
 
     public void changed(SimpleNode from, Token to, Message msg, Object ... params) {
@@ -105,13 +105,12 @@ public class Differences {
     // -------------------------------------------------------
 
     public void deleted(Token from, Token to, Message msg, Object ... params) {
-        String str = msg.format(params);
-        add(new FileDiffDelete(str, from, to));
+        deleted(from, from, to, to, msg, params);
     }
 
     public void deleted(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
         String str = msg.format(params);
-        add(new FileDiffDelete(str, fromStart, fromEnd, toStart, toEnd));
+        add(new FileDiffDelete(str, TokenUtil.toLocationRange(fromStart, fromEnd), TokenUtil.toLocationRange(toStart, toEnd)));
     }
 
     public void deleted(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
