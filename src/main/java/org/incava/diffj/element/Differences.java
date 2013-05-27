@@ -73,8 +73,7 @@ public class Differences {
     // -------------------------------------------------------
 
     public void changed(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
-        String str = msg.format(params);
-        add(new FileDiffChange(str, toRange(fromStart, fromEnd), toRange(toStart, toEnd)));
+        add(new FileDiffChange(toRange(fromStart, fromEnd), toRange(toStart, toEnd), msg, params));
     }
 
     public void changed(Element from, Element to, Message msg, Object ... params) {
@@ -109,13 +108,12 @@ public class Differences {
     // deleted
     // -------------------------------------------------------
 
-    public void deleted(Token from, Token to, Message msg, Object ... params) {
-        deleted(from, from, to, to, msg, params);
+    public void deleted(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
+        add(new FileDiffDelete(toRange(fromStart, fromEnd), toRange(toStart, toEnd), msg, params));
     }
 
-    public void deleted(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
-        String str = msg.format(params);
-        add(new FileDiffDelete(str, toRange(fromStart, fromEnd), toRange(toStart, toEnd)));
+    public void deleted(Token from, Token to, Message msg, Object ... params) {
+        deleted(from, from, to, to, msg, params);
     }
 
     public void deleted(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
@@ -135,8 +133,7 @@ public class Differences {
     // -------------------------------------------------------
 
     public void added(Token fromStart, Token fromEnd, Token toStart, Token toEnd, Message msg, Object ... params) {
-        String str = msg.format(params);
-        add(new FileDiffAdd(str, toRange(fromStart, fromEnd), toRange(toStart, toEnd)));
+        add(new FileDiffAdd(toRange(fromStart, fromEnd), toRange(toStart, toEnd), msg, params));
     }
 
     public void added(Token from, Token to, Message msg, Object ... params) {

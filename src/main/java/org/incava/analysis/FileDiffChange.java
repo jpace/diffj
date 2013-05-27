@@ -2,6 +2,7 @@ package org.incava.analysis;
 
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
+import org.incava.ijdk.text.Message;
 
 /**
  * A reference to code changed, associated with a file by a starting and ending
@@ -14,6 +15,10 @@ public class FileDiffChange extends FileDiff {
     
     public FileDiffChange(String message, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
         super(Type.CHANGED, message, fromStart, fromEnd, toStart, toEnd);
+    }
+
+    public FileDiffChange(LocationRange fromLoc, LocationRange toLoc, Message msg, Object ... params) {
+        super(Type.CHANGED, fromLoc, toLoc, msg, params);
     }
 
     /**

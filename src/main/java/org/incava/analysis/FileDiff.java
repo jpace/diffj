@@ -3,6 +3,7 @@ package org.incava.analysis;
 import org.incava.ijdk.lang.ObjectExt;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
+import org.incava.ijdk.text.Message;
 
 /**
  * A message, associated with a file by a starting and ending position.
@@ -71,6 +72,22 @@ public abstract class FileDiff implements Comparable<FileDiff> {
     public FileDiff(Type type, String message, LocationRange fromLoc, LocationRange toLoc) {
         this.type           = type;
         this.message        = message;
+        this.firstLocation  = fromLoc;
+        this.secondLocation = toLoc;
+    }
+
+    /**
+     * Creates a reference from a message and begin and end positions.
+     *
+     * @param type        What type this reference is.
+     * @param fromLoc     The location range in the from-file.
+     * @param toLoc       The location range in the to-file.
+     * @param msg         The message applying to this reference.
+     * @param params      The parameters for the message.
+     */
+    public FileDiff(Type type, LocationRange fromLoc, LocationRange toLoc, Message msg, Object ... params) {
+        this.type           = type;
+        this.message        = msg.format(params);
         this.firstLocation  = fromLoc;
         this.secondLocation = toLoc;
     }
