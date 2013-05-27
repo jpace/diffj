@@ -80,6 +80,6 @@ public class TestMethods extends ItemsTest {
     //              "    void foo() {}",
     //              "}"),
     //              
-    //              makeMethodRef("foo()", null, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
+    //              makeMethodRef("foo()", null, locrg(3, 5, 17), locrg(1, 1, 3, 1)));
     // }
 }

@@ -58,6 +58,10 @@ public class DiffJTest extends IncavaTestCase {
         return new LocationRange(loc(line, fromColumn), loc(line, toColumn));
     }
 
+    public LocationRange locrg(Location loc, String var) {
+        return new LocationRange(loc, loc(loc, var));
+    }
+
     public String[] getOutput(String fromLines, String toLines) {
         StringWriter writer = new StringWriter();
 

@@ -11,10 +11,6 @@ public class TestTypes extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makeTypeRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeRef(from, to, TYPES_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
     protected FileDiff makeTypeRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
         return makeRef(from, to, TYPES_MSGS, fromLoc, toLoc);
     }

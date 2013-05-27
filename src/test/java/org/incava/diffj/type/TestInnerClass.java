@@ -11,10 +11,6 @@ public class TestInnerClass extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makeClassRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeRef(from, to, CLASS_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
     protected FileDiff makeClassRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
         return makeRef(from, to, CLASS_MSGS, fromLoc, toLoc);
     }

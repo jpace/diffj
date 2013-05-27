@@ -11,18 +11,12 @@ public class TestPackage extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makePackageRef(String from, String to, Location fromStart, Location fromEnd, Location toStart, Location toEnd) {
-        return makeRef(from, to, PACKAGE_MSGS, fromStart, fromEnd, toStart, toEnd);
-    }
-
     protected FileDiff makePackageRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
         return makeRef(from, to, PACKAGE_MSGS, fromLoc, toLoc);
     }
 
     protected FileDiff makePackageRef(String from, String to, Location fromStart, Location toStart) {
-        return makeRef(from, to, PACKAGE_MSGS, 
-                       fromStart, loc(fromStart, from),
-                       toStart,   loc(toStart,   to));
+        return makeRef(from, to, PACKAGE_MSGS, locrg(fromStart, from), locrg(toStart, to));
     }
 
     public void testPackageNoChange() {

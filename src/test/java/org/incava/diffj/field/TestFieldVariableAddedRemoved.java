@@ -36,12 +36,8 @@ public class TestFieldVariableAddedRemoved extends ItemsTest {
                                   loc(toLine,   toFromCol),   loc(toLine, toToCol));
     }
 
-    public FileDiff makeVariableRemovedRef(String varName, 
-                                           int fromLine, int fromCol, 
-                                           int toLine,   int toCol) {
-        return makeCodeChangedRef(VARIABLE_REMOVED, varName,  
-                                  loc(fromLine, fromCol), loc(fromLine, fromCol, varName), 
-                                  loc(toLine, toCol),     loc(toLine,   toCol,   varName));
+    public FileDiff makeVariableRemovedRef(String varName, int fromLine, int fromCol, int toLine, int toCol) {
+        return makeCodeChangedRef(VARIABLE_REMOVED, varName, locrg(loc(fromLine, fromCol), varName), locrg(loc(toLine, toCol), varName));
     }
     
     public void testVariableAddedRemoved() {

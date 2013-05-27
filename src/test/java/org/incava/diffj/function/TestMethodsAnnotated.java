@@ -42,19 +42,4 @@ public class TestMethodsAnnotated extends ItemsTest {
                            "}"),
                  Java.SOURCE_1_6);
     }
-
-    // @todo make assumption of single line, a la TestFieldDiff
-
-    // public void testClassMethodAccessRemoved() {
-    //     evaluate(new Lines("class Test {",
-    //              "",
-    //              "    public void foo() {}",
-    //              "}"),
-    //              new Lines("class Test {",
-    //              "",
-    //              "    void foo() {}",
-    //              "}"),
-    //              
-    //              makeMethodRef("foo()", null, loc(3, 5), loc(3, 17), loc(1, 1), loc(3, 1)));
-    // }
 }
