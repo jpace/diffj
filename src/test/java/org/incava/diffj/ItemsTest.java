@@ -143,6 +143,10 @@ public class ItemsTest extends DiffJTest {
         return new FileDiffChange(fromLoc, toLoc, codeChgMsg, (Object[])args);
     }
 
+    protected FileDiff makeCodeChangedRef(LocationRange fromLoc, LocationRange toLoc, Message codeChgMsg, String ... args) {
+        return new FileDiffChange(fromLoc, toLoc, codeChgMsg, (Object[])args);
+    }
+
     protected FileDiff makeCodeAddedRef(Message codeChgMsg, String where, LocationRange fromLoc, LocationRange toLoc) {
         return makeCodeAddedRef(codeChgMsg, new String[] { where }, fromLoc, toLoc);
     }
