@@ -51,7 +51,7 @@ public class TestMethodThrows extends ItemsTest {
                            "}"),
                  
                  makeCodeChangedRef(THROWS_ADDED, "ArrayIndexOutOfBoundsException", locrg(2, 23, 33), locrg(3, 23, 52)),
-                 new FileDiffChange(throwsReordMsg("IOException", 0, 1), locrg(2, 23, 33), locrg(3, 55, 65)),
+                 new FileDiffChange(locrg(2, 23, 33), locrg(3, 55, 65), THROWS_REORDERED, "IOException", 0, 1),
                  makeCodeChangedRef(THROWS_ADDED, "NullPointerException", locrg(2, 23, 33), locrg(3, 68, 87)));
     }
 
@@ -95,7 +95,7 @@ public class TestMethodThrows extends ItemsTest {
                            "}"),
                  
                  makeCodeChangedRef(THROWS_REMOVED, "ArrayIndexOutOfBoundsException", locrg(2, 23, 52), locrg(2, 23, 33)),
-                 new FileDiffChange(throwsReordMsg("IOException", 1, 0), locrg(2, 55, 65), locrg(2, 23, 33)),
+                 new FileDiffChange(locrg(2, 55, 65), locrg(2, 23, 33), THROWS_REORDERED, "IOException", 1, 0),
                  makeCodeChangedRef(THROWS_REMOVED, "NullPointerException", locrg(2, 68, 87), locrg(2, 23, 33)));
     }
 
@@ -110,11 +110,7 @@ public class TestMethodThrows extends ItemsTest {
                            "",
                            "}"),
                  
-                 new FileDiffChange(throwsReordMsg("ArrayIndexOutOfBoundsException", 0, 1), locrg(2, 23, 52), locrg(2, 36, 65)),
-                 new FileDiffChange(throwsReordMsg("IOException", 1, 0), locrg(2, 55, 65), locrg(2, 23, 33)));
-    }
-
-    protected String throwsReordMsg(String throwsName, int oldPosition, int newPosition) {
-        return THROWS_REORDERED.format(throwsName, oldPosition, newPosition);
+                 new FileDiffChange(locrg(2, 23, 52), locrg(2, 36, 65), THROWS_REORDERED, "ArrayIndexOutOfBoundsException", 0, 1),
+                 new FileDiffChange(locrg(2, 55, 65), locrg(2, 23, 33), THROWS_REORDERED, "IOException", 1, 0));
     }
 }
