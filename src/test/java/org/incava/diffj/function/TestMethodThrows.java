@@ -22,7 +22,7 @@ public class TestMethodThrows extends ItemsTest {
                            "    void foo() throws Exception {}",
                            "}"),
 
-                 makeCodeChangedRef(locrg(2, 5, 17), locrg(3, 23, 31), THROWS_ADDED, "Exception"));
+                 new FileDiffChange(locrg(2, 5, 17), locrg(3, 23, 31), THROWS_ADDED, "Exception"));
     }
 
     public void testThrowsAddedOneToTwo() {
@@ -36,7 +36,7 @@ public class TestMethodThrows extends ItemsTest {
                            "    void foo() throws IOException, NullPointerException {}",
                            "}"),
 
-                 makeCodeChangedRef(locrg(2, 23, 33), locrg(3, 36, 55), THROWS_ADDED, "NullPointerException"));
+                 new FileDiffChange(locrg(2, 23, 33), locrg(3, 36, 55), THROWS_ADDED, "NullPointerException"));
     }
 
     public void testThrowsAddedOneToThree() {
@@ -50,9 +50,9 @@ public class TestMethodThrows extends ItemsTest {
                            "    void foo() throws ArrayIndexOutOfBoundsException, IOException, NullPointerException {}",
                            "}"),
                  
-                 makeCodeChangedRef(locrg(2, 23, 33), locrg(3, 23, 52), THROWS_ADDED, "ArrayIndexOutOfBoundsException"),
+                 new FileDiffChange(locrg(2, 23, 33), locrg(3, 23, 52), THROWS_ADDED, "ArrayIndexOutOfBoundsException"),
                  new FileDiffChange(locrg(2, 23, 33), locrg(3, 55, 65), THROWS_REORDERED, "IOException", 0, 1),
-                 makeCodeChangedRef(locrg(2, 23, 33), locrg(3, 68, 87), THROWS_ADDED, "NullPointerException"));
+                 new FileDiffChange(locrg(2, 23, 33), locrg(3, 68, 87), THROWS_ADDED, "NullPointerException"));
     }
 
     public void testThrowsRemovedOneToNone() {
@@ -66,7 +66,7 @@ public class TestMethodThrows extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeCodeChangedRef(locrg(2, 23, 33), locrg(3, 5, 17), THROWS_REMOVED, "IOException"));
+                 new FileDiffChange(locrg(2, 23, 33), locrg(3, 5, 17), THROWS_REMOVED, "IOException"));
     }
 
     public void testThrowsRemovedTwoToOne() {
@@ -80,7 +80,7 @@ public class TestMethodThrows extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(locrg(2, 36, 55), locrg(2, 23, 33), THROWS_REMOVED, "NullPointerException"));
+                 new FileDiffChange(locrg(2, 36, 55), locrg(2, 23, 33), THROWS_REMOVED, "NullPointerException"));
     }
 
     public void testThrowsRemovedThreeToOne() {
@@ -94,9 +94,9 @@ public class TestMethodThrows extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(locrg(2, 23, 52), locrg(2, 23, 33), THROWS_REMOVED, "ArrayIndexOutOfBoundsException"),
+                 new FileDiffChange(locrg(2, 23, 52), locrg(2, 23, 33), THROWS_REMOVED, "ArrayIndexOutOfBoundsException"),
                  new FileDiffChange(locrg(2, 55, 65), locrg(2, 23, 33), THROWS_REORDERED, "IOException", 1, 0),
-                 makeCodeChangedRef(locrg(2, 68, 87), locrg(2, 23, 33), THROWS_REMOVED, "NullPointerException"));
+                 new FileDiffChange(locrg(2, 68, 87), locrg(2, 23, 33), THROWS_REMOVED, "NullPointerException"));
     }
 
     public void testThrowsReordered() {

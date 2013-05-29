@@ -24,7 +24,7 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo(Integer i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i", locrg(2, 13, 14), locrg(3, 22, 22)));
+                 new FileDiffChange(locrg(2, 13, 14), locrg(3, 22, 22), Parameters.PARAMETER_ADDED, "i"));
     }
 
     public void testParameterAddedOneToTwo() {
@@ -38,7 +38,7 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo(String s, Integer i) {}",
                            "}"),
 
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i", locrg(2, 13, 22), locrg(3, 24, 32)));
+                 new FileDiffChange(locrg(2, 13, 22), locrg(3, 24, 32), Parameters.PARAMETER_ADDED, "i"));
     }
 
     public void testParameterAddedOneToThree() {
@@ -52,8 +52,8 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo(List[] ary, String s, Integer i) {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "ary", locrg(2, 13, 22), locrg(3, 14, 23)),
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i",   locrg(2, 13, 22), locrg(3, 36, 44)),
+                 new FileDiffChange(locrg(2, 13, 22), locrg(3, 14, 23), Parameters.PARAMETER_ADDED, "ary"),
+                 new FileDiffChange(locrg(2, 13, 22), locrg(3, 36, 44), Parameters.PARAMETER_ADDED, "i"),
                  makeParamReorderedRef("s", 0, 1, loc(2, 21), loc(3, 33)));
     }
 
@@ -68,7 +68,7 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i", locrg(2, 22, 22), locrg(3, 13, 14)));
+                 new FileDiffChange(locrg(2, 22, 22), locrg(3, 13, 14), Parameters.PARAMETER_REMOVED, "i"));
     }
 
     public void testParameterRemovedTwoToOne() {
@@ -82,7 +82,7 @@ public class TestMethodParameters extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i", locrg(2, 24, 32), locrg(2, 13, 22)));
+                 new FileDiffChange(locrg(2, 24, 32), locrg(2, 13, 22), Parameters.PARAMETER_REMOVED, "i"));
     }
 
     public void testParameterRemovedThreeToOne() {
@@ -96,9 +96,9 @@ public class TestMethodParameters extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "ary", locrg(2, 14, 23), locrg(2, 13, 22)),
+                 new FileDiffChange(locrg(2, 14, 23), locrg(2, 13, 22), Parameters.PARAMETER_REMOVED, "ary"),
                  makeParamReorderedRef("s", 1, 0, loc(2, 33), loc(2, 21)),
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "i",   locrg(2, 36, 44), locrg(2, 13, 22)));
+                 new FileDiffChange(locrg(2, 36, 44), locrg(2, 13, 22), Parameters.PARAMETER_REMOVED, "i"));
     }
 
     public void testParameterChangedType() {
@@ -155,8 +155,8 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo(double dbl, int i2) {}",
                            "}"),
                  
-                 new FileDiffChange(paramReordRenamedMsg("i", 0, "i2",  1), locrg(2, 18, 18), locrg(3, 30, 31)),
-                 new FileDiffChange(paramReordRenamedMsg("d", 1, "dbl", 0), locrg(2, 28, 28), locrg(3, 21, 23)));
+                 new FileDiffChange(locrg(2, 18, 18), locrg(3, 30, 31), Parameters.PARAMETER_REORDERED_AND_RENAMED, "i", 0, 1, "i2"),
+                 new FileDiffChange(locrg(2, 28, 28), locrg(3, 21, 23), Parameters.PARAMETER_REORDERED_AND_RENAMED, "d", 1, 0, "dbl"));
     }
 
     public void testParameterOneAddedOneReordered() {
@@ -170,7 +170,7 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo(int i2, int i) {}",
                            "}"),
 
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED, "i2", locrg(2, 13, 19), locrg(3, 14, 19)),
+                 new FileDiffChange(locrg(2, 13, 19), locrg(3, 14, 19), Parameters.PARAMETER_ADDED, "i2"),
                  makeParamReorderedRef("i", 0, 1, loc(2, 18), loc(3, 26)));
     }
 
@@ -187,11 +187,11 @@ public class TestMethodParameters extends ItemsTest {
                            "                    String string1, String string2, String string3, java.lang.Object[] obj1, java.lang.Object[] obj2);",
                            "}"),
                  
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED,   "obj",     locrg(2, 39, 4, 28), locrg(3, 21, 40)),
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED,   "string1", locrg(2, 39, 4, 28), locrg(4, 21, 34)),
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED,   "string2", locrg(2, 39, 4, 28), locrg(4, 37, 50)),
-                 makeCodeChangedRef(Parameters.PARAMETER_ADDED,   "string3", locrg(2, 39, 4, 28), locrg(4, 53, 66)),
-                 makeCodeChangedRef(Parameters.PARAMETER_REMOVED, "ctx",     locrg(2, 40, 56), locrg(3, 20, 4, 117)),
+                 new FileDiffChange(locrg(2, 39, 4, 28), locrg(3, 21, 40), Parameters.PARAMETER_ADDED,   "obj"),
+                 new FileDiffChange(locrg(2, 39, 4, 28), locrg(4, 21, 34), Parameters.PARAMETER_ADDED, "string1"),
+                 new FileDiffChange(locrg(2, 39, 4, 28), locrg(4, 37, 50), Parameters.PARAMETER_ADDED, "string2"),
+                 new FileDiffChange(locrg(2, 39, 4, 28), locrg(4, 53, 66), Parameters.PARAMETER_ADDED,   "string3"),
+                 new FileDiffChange(locrg(2, 40, 56), locrg(3, 20, 4, 117), Parameters.PARAMETER_REMOVED, "ctx"),
                  new FileDiffChange(paramReordMsg("obj1", 1, 4), locrg(3, 9, 27), locrg(4, 69, 91)),
                  new FileDiffChange(paramReordMsg("obj2", 2, 5), locrg(4, 9, 27), locrg(4, 94, 116)));
     }
