@@ -18,7 +18,7 @@ public class TestMethods extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", locrg(1, 1, 3, 1), locrg(3, 5, 17)));
+                 makeMethodRef(locrg(1, 1, 3, 1), locrg(3, 5, 17), null, "foo()"));
     }
 
     public void testClassOneMethodAdded() {
@@ -33,7 +33,7 @@ public class TestMethods extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", locrg(1, 1, 4, 1), locrg(4, 5, 17)));
+                 makeMethodRef(locrg(1, 1, 4, 1), locrg(4, 5, 17), null, "foo()"));
     }
 
     public void testClassAllMethodsRemoved() {
@@ -46,7 +46,7 @@ public class TestMethods extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeMethodRef("foo()", null, locrg(3, 5, 17), locrg(1, 1, 3, 1)));
+                 makeMethodRef(locrg(3, 5, 17), locrg(1, 1, 3, 1), "foo()", null));
     }
 
     public void testClassNoMethodsChanged() {
@@ -80,6 +80,6 @@ public class TestMethods extends ItemsTest {
     //              "    void foo() {}",
     //              "}"),
     //              
-    //              makeMethodRef("foo()", null, locrg(3, 5, 17), locrg(1, 1, 3, 1)));
+    //              makeMethodRef(locrg(3, 5, 17), locrg(1, 1, 3, 1), "foo()", null));
     // }
 }

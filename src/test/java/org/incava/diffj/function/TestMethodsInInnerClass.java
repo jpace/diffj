@@ -22,7 +22,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", locrg(2, 5, 3, 5), locrg(4, 9, 21)));
+                 makeMethodRef(locrg(2, 5, 3, 5), locrg(4, 9, 21), null, "foo()"));
     }
 
     public void testMethodRemoved() {
@@ -39,7 +39,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
 
-                 makeMethodRef("foo()", null, locrg(3, 9, 21), locrg(3, 5, 4, 5)));
+                 makeMethodRef(locrg(3, 9, 21), locrg(3, 5, 4, 5), "foo()", null));
     }
 
     /**
@@ -64,7 +64,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", locrg(3, 9, 4, 9), locrg(5, 13, 25)));
+                 makeMethodRef(locrg(3, 9, 4, 9), locrg(5, 13, 25), null, "foo()"));
     }
 
     public void testInnerClassMethodRemoved() {
@@ -85,6 +85,6 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef("foo(String)", null, locrg(4, 13, 35), locrg(4, 9, 5, 9)));
+                 makeMethodRef(locrg(4, 13, 35), locrg(4, 9, 5, 9), "foo(String)", null));
     }
 }

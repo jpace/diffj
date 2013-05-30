@@ -54,7 +54,7 @@ public class TestMethodParameters extends ItemsTest {
                  
                  new FileDiffChange(locrg(2, 13, 22), locrg(3, 14, 23), Parameters.PARAMETER_ADDED, "ary"),
                  new FileDiffChange(locrg(2, 13, 22), locrg(3, 36, 44), Parameters.PARAMETER_ADDED, "i"),
-                 makeParamReorderedRef("s", 0, 1, loc(2, 21), loc(3, 33)));
+                 makeParamReorderedRef(loc(2, 21), loc(3, 33), "s", 0, 1));
     }
 
     public void testParameterRemovedOneToNone() {
@@ -97,7 +97,7 @@ public class TestMethodParameters extends ItemsTest {
                            "}"),
                  
                  new FileDiffChange(locrg(2, 14, 23), locrg(2, 13, 22), Parameters.PARAMETER_REMOVED, "ary"),
-                 makeParamReorderedRef("s", 1, 0, loc(2, 33), loc(2, 21)),
+                 makeParamReorderedRef(loc(2, 33), loc(2, 21), "s", 1, 0),
                  new FileDiffChange(locrg(2, 36, 44), locrg(2, 13, 22), Parameters.PARAMETER_REMOVED, "i"));
     }
 
@@ -140,8 +140,8 @@ public class TestMethodParameters extends ItemsTest {
                            "    void foo(double d, int i) {}",
                            "}"),
                  
-                 makeParamReorderedRef("i", 0, 1, loc(2, 18), loc(3, 28)),
-                 makeParamReorderedRef("d", 1, 0, loc(2, 28), loc(3, 21)));
+                 makeParamReorderedRef(loc(2, 18), loc(3, 28), "i", 0, 1),
+                 makeParamReorderedRef(loc(2, 28), loc(3, 21), "d", 1, 0));
     }
 
     public void testParameterReorderedAndRenamed() {
@@ -171,7 +171,7 @@ public class TestMethodParameters extends ItemsTest {
                            "}"),
 
                  new FileDiffChange(locrg(2, 13, 19), locrg(3, 14, 19), Parameters.PARAMETER_ADDED, "i2"),
-                 makeParamReorderedRef("i", 0, 1, loc(2, 18), loc(3, 26)));
+                 makeParamReorderedRef(loc(2, 18), loc(3, 26), "i", 0, 1));
     }
 
     public void testParameterReorderedByName() {
@@ -192,20 +192,12 @@ public class TestMethodParameters extends ItemsTest {
                  new FileDiffChange(locrg(2, 39, 4, 28), locrg(4, 37, 50), Parameters.PARAMETER_ADDED, "string2"),
                  new FileDiffChange(locrg(2, 39, 4, 28), locrg(4, 53, 66), Parameters.PARAMETER_ADDED,   "string3"),
                  new FileDiffChange(locrg(2, 40, 56), locrg(3, 20, 4, 117), Parameters.PARAMETER_REMOVED, "ctx"),
-                 new FileDiffChange(paramReordMsg("obj1", 1, 4), locrg(3, 9, 27), locrg(4, 69, 91)),
-                 new FileDiffChange(paramReordMsg("obj2", 2, 5), locrg(4, 9, 27), locrg(4, 94, 116)));
+                 new FileDiffChange(locrg(3, 9, 27), locrg(4, 69, 91), Parameters.PARAMETER_REORDERED, "obj1", 1, 4),
+                 new FileDiffChange(locrg(4, 9, 27), locrg(4, 94, 116), Parameters.PARAMETER_REORDERED, "obj2", 2, 5));
     }
 
-    protected FileDiffChange makeParamReorderedRef(String paramName, int oldPosition, int newPosition, Location fromStart, Location toStart) {
+    protected FileDiffChange makeParamReorderedRef(Location fromStart, Location toStart, String paramName, int oldPosition, int newPosition) {
         String msg = Parameters.PARAMETER_REORDERED.format(paramName, oldPosition, newPosition);
         return new FileDiffChange(msg, fromStart, loc(fromStart, paramName), toStart, loc(toStart, paramName));
-    }
-
-    protected String paramReordMsg(String paramName, int oldPosition, int newPosition) {
-        return Parameters.PARAMETER_REORDERED.format(paramName, oldPosition, newPosition);
-    }
-
-    protected String paramReordRenamedMsg(String oldName, int oldPosition, String newName, int newPosition) {
-        return Parameters.PARAMETER_REORDERED_AND_RENAMED.format(oldName, oldPosition, newPosition, newName);
     }
 }

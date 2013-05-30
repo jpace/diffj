@@ -22,7 +22,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", locrg(2, 5, 3, 5), locrg(4, 9, 19)));
+                 makeMethodRef(locrg(2, 5, 3, 5), locrg(4, 9, 19), null, "foo()"));
     }
 
     public void testMethodRemoved() {
@@ -39,7 +39,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef("foo()", null, locrg(3, 9, 19), locrg(3, 5, 4, 5)));
+                 makeMethodRef(locrg(3, 9, 19), locrg(3, 5, 4, 5), "foo()", null));
     }
 
     public void testInnerInterfaceAdded() {
@@ -57,7 +57,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeInterfaceRef(null, "I2Test", locrg(2, 5, 3, 5), locrg(4, 9, 5, 9)));
+                 makeInterfaceRef(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), null, "I2Test"));
     }
 
     public void testInnerInterfaceRemoved() {
@@ -74,7 +74,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeInterfaceRef("I2Test", null, locrg(3, 9, 4, 9), locrg(2, 5, 3, 5)));
+                 makeInterfaceRef(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), "I2Test", null));
     }
 
     public void testInnerInterfaceMethodAdded() {
@@ -96,7 +96,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(null, "foo()", locrg(3, 9, 4, 9), locrg(5, 13, 23)));
+                 makeMethodRef(locrg(3, 9, 4, 9), locrg(5, 13, 23), null, "foo()"));
     }
 
     public void testInnerInterfaceMethodRemoved() {
@@ -117,6 +117,6 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef("foo()", null, locrg(4, 13, 23), locrg(4, 9, 5, 9)));
+                 makeMethodRef(locrg(4, 13, 23), locrg(4, 9, 5, 9), "foo()", null));
     }
 }
