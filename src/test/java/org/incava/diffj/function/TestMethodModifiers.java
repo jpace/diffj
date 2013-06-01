@@ -19,7 +19,7 @@ public class TestMethodModifiers extends ItemsTest {
                            "    static void foo() {}",
                            "}"),
                  
-                 makeModifierRef(null, "static", locrg(2, 5, 8), locrg(3, 5, 10)));
+                 makeModifierRef(locrg(2, 5, 8), locrg(3, 5, 10), null, "static"));
     }
 
     public void testModifierAddedToExisting() {
@@ -33,7 +33,7 @@ public class TestMethodModifiers extends ItemsTest {
                            "    static public void foo() {}",
                            "}"),
                  
-                 makeModifierRef(null, "static", locrg(2, 5, 10), locrg(3, 5, 10)));
+                 makeModifierRef(locrg(2, 5, 10), locrg(3, 5, 10), null, "static"));
     }
 
     public void testModifierRemoved() {
@@ -47,6 +47,6 @@ public class TestMethodModifiers extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeModifierRef("final", null, locrg(2, 5, 9), locrg(3, 5, 8)));
+                 makeModifierRef(locrg(2, 5, 9), locrg(3, 5, 8), "final", null));
     }
 }

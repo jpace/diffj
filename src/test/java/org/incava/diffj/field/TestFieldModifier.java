@@ -20,7 +20,7 @@ public class TestFieldModifier extends ItemsTest {
                            "    static int i;",
                            "}"),
                  
-                 makeModifierRef(null, "static", locrg(2, 5, 7), locrg(3, 5, 10)));
+                 makeModifierRef(locrg(2, 5, 7), locrg(3, 5, 10), null, "static"));
     }
 
     public void testModifierRemoved() {
@@ -34,6 +34,6 @@ public class TestFieldModifier extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 makeModifierRef("final", null, locrg(2, 5, 9), locrg(3, 5, 7)));
+                 makeModifierRef(locrg(2, 5, 9), locrg(3, 5, 7), "final", null));
     }
 }

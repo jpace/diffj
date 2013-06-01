@@ -19,7 +19,7 @@ public class TestMethodAccess extends ItemsTest {
                            "    public void foo() {}",
                            "}"),
                  
-                 makeAccessRef(null, "public", locrg(2, 5, 8), locrg(3, 5, 10)));
+                 makeAccessRef(locrg(2, 5, 8), locrg(3, 5, 10), null, "public"));
     }
 
     public void testAccessRemoved() {
@@ -33,7 +33,7 @@ public class TestMethodAccess extends ItemsTest {
                            "    void foo() {}",
                            "}"),
 
-                 makeAccessRef("public", null, locrg(2, 5, 10), locrg(3, 5, 8)));
+                 makeAccessRef(locrg(2, 5, 10), locrg(3, 5, 8), "public", null));
     }
 
     public void testAccessChanged() {
@@ -47,6 +47,6 @@ public class TestMethodAccess extends ItemsTest {
                            "    public void foo() {}",
                            "}"),
                  
-                 makeAccessRef("private", "public", loc(2, 5), loc(3, 5)));
+                 makeAccessRef(loc(2, 5), loc(3, 5), "private", "public"));
     }
 }

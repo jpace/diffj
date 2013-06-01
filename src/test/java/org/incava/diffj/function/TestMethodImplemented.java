@@ -21,7 +21,7 @@ public class TestMethodImplemented extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeModifierRef("abstract", null, locrg(2, 5, 12), locrg(3, 5, 8)),
+                 makeModifierRef(locrg(2, 5, 12), locrg(3, 5, 8), "abstract", null),
                  new FileDiffChange(METHOD_BLOCK_ADDED.format(), locrg(2, 14, 24), locrg(3, 5, 17)));
     }
 
@@ -36,7 +36,7 @@ public class TestMethodImplemented extends ItemsTest {
                            "    abstract void foo();",
                            "}"),
                  
-                 makeModifierRef(null, "abstract", locrg(2, 5, 8), locrg(3, 5, 12)),
+                 makeModifierRef(locrg(2, 5, 8), locrg(3, 5, 12), null, "abstract"),
                  new FileDiffChange(METHOD_BLOCK_REMOVED.format(), locrg(2, 5, 17), locrg(3, 14, 24)));
     }
 
@@ -53,7 +53,7 @@ public class TestMethodImplemented extends ItemsTest {
                            "    }",
                            "}"),
 
-                 makeModifierRef("native", null, locrg(2, 5, 10), locrg(3, 5, 8)),
+                 makeModifierRef(locrg(2, 5, 10), locrg(3, 5, 8), "native", null),
                  new FileDiffChange(METHOD_BLOCK_ADDED.format(), locrg(2, 12, 22), locrg(3, 5, 5, 5)));
     }
 
@@ -68,7 +68,7 @@ public class TestMethodImplemented extends ItemsTest {
                            "    native void foo();",
                            "}"),
                  
-                 makeModifierRef(null, "native", locrg(2, 5, 8), locrg(2, 5, 10)),
+                 makeModifierRef(locrg(2, 5, 8), locrg(2, 5, 10), null, "native"),
                  new FileDiffChange(METHOD_BLOCK_REMOVED.format(), locrg(2, 5, 4, 5), locrg(2, 12, 22)));
     }
 }
