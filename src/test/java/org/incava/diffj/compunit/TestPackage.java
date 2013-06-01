@@ -11,12 +11,12 @@ public class TestPackage extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makePackageRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
-        return makeRef(from, to, PACKAGE_MSGS, fromLoc, toLoc);
+    protected FileDiff makePackageRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
+        return makeRef(fromLoc, toLoc, PACKAGE_MSGS, from, to);
     }
 
-    protected FileDiff makePackageRef(String from, String to, Location fromStart, Location toStart) {
-        return makeRef(from, to, PACKAGE_MSGS, locrg(fromStart, from), locrg(toStart, to));
+    protected FileDiff makePackageRef(Location fromStart, Location toStart, String from, String to) {
+        return makePackageRef(locrg(fromStart, from), locrg(toStart, to), from, to);
     }
 
     public void testPackageNoChange() {
@@ -58,7 +58,7 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
 
-                 makePackageRef("org.incava.foo", null, locrg(1, 9, 22), locrg(4, 1, 5, 1)));
+                 makePackageRef(locrg(1, 9, 22), locrg(4, 1, 5, 1), "org.incava.foo", null));
     }
 
     public void testPackageAdded() {
@@ -70,7 +70,7 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 makePackageRef(null, "org.incava.foo", locrg(1, 1, 2, 1), locrg(1, 9, 22)));
+                 makePackageRef(locrg(1, 1, 2, 1), locrg(1, 9, 22), null, "org.incava.foo"));
     }
 
     public void testPackageRenamed() {
@@ -83,6 +83,6 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 makePackageRef("org.incava.bar", "org.incava.foo", loc(1, 9), loc(1, 9)));
+                 makePackageRef(loc(1, 9), loc(1, 9), "org.incava.bar", "org.incava.foo"));
     }
 }
