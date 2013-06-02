@@ -11,8 +11,8 @@ public class TestTypes extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makeTypeRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
-        return makeRef(from, to, TYPES_MSGS, fromLoc, toLoc);
+    protected FileDiff makeTypeRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
+        return makeRef(fromLoc, toLoc, TYPES_MSGS, from, to);
     }
 
     public void testAllTypesAdded() {
@@ -23,8 +23,8 @@ public class TestTypes extends ItemsTest {
                            "interface Test2 {",
                            "}"),
                  
-                 makeTypeRef(null, "Test",  locrg(1, 1, 1), locrg(1, 1, 2, 1)),
-                 makeTypeRef(null, "Test2", locrg(1, 1, 1), locrg(3, 1, 4, 1)));
+                 makeTypeRef(locrg(1, 1, 1), locrg(1, 1, 2, 1), null, "Test"),
+                 makeTypeRef(locrg(1, 1, 1), locrg(3, 1, 4, 1), null, "Test2"));
 
         evaluate(new Lines("import foo.Bar;"),
 
@@ -34,8 +34,8 @@ public class TestTypes extends ItemsTest {
                            "interface Test2 {",
                            "}"),
                  
-                 makeTypeRef(null, "Test",  locrg(1, 1, 16), locrg(2, 1, 3, 1)),
-                 makeTypeRef(null, "Test2", locrg(1, 1, 16), locrg(4, 1, 5, 1)));
+                 makeTypeRef(locrg(1, 1, 16), locrg(2, 1, 3, 1), null, "Test"),
+                 makeTypeRef(locrg(1, 1, 16), locrg(4, 1, 5, 1), null, "Test2"));
 
         evaluate(new Lines("package foo;",
                            ""),
@@ -46,8 +46,8 @@ public class TestTypes extends ItemsTest {
                            "interface Test2 {",
                            "}"),
                  
-                 makeTypeRef(null, "Test",  locrg(1, 1, 2, 1), locrg(2, 1, 3, 1)),
-                 makeTypeRef(null, "Test2", locrg(1, 1, 2, 1), locrg(4, 1, 5, 1)));
+                 makeTypeRef(locrg(1, 1, 2, 1), locrg(2, 1, 3, 1), null, "Test"),
+                 makeTypeRef(locrg(1, 1, 2, 1), locrg(4, 1, 5, 1), null, "Test2"));
     }
 
     public void testAllTypesRemoved() {
@@ -58,7 +58,7 @@ public class TestTypes extends ItemsTest {
 
                  new Lines(""),
                  
-                 makeTypeRef("Test",  null, locrg(1, 1, 2, 1), locrg(1, 1, 1)),
-                 makeTypeRef("Test2", null, locrg(3, 1, 4, 1), locrg(1, 1, 1)));
+                 makeTypeRef(locrg(1, 1, 2, 1), locrg(1, 1, 1), "Test",  null),
+                 makeTypeRef(locrg(3, 1, 4, 1), locrg(1, 1, 1), "Test2", null));
     }
 }

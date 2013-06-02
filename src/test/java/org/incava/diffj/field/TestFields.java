@@ -27,7 +27,7 @@ public class TestFields extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 makeFieldRef(null, "i", locrg(1, 1, 3, 1), locrg(3, 5, 3, 10)));
+                 makeFieldRef(locrg(1, 1, 3, 1), locrg(3, 5, 3, 10), null, "i"));
     }
 
     public void testClassOneFieldRemoved() {
@@ -40,7 +40,7 @@ public class TestFields extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeFieldRef("i", null, locrg(2, 5, 2, 10), locrg(1, 1, 3, 1)));
+                 makeFieldRef(locrg(2, 5, 2, 10), locrg(1, 1, 3, 1), "i", null));
     }
 
     public void testClassOneFieldRemovedOneFieldAdded() {
@@ -54,11 +54,11 @@ public class TestFields extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeFieldRef(null, "j",  locrg(1, 1, 4,  1), locrg(2, 5, 2, 13)),
-                 makeFieldRef("i",  null, locrg(2, 5, 2, 10), locrg(1, 1, 4,  1)));
+                 makeFieldRef(locrg(1, 1, 4,  1), locrg(2, 5, 2, 13), null, "j"),
+                 makeFieldRef(locrg(2, 5, 2, 10), locrg(1, 1, 4,  1), "i",  null));
     }
 
-    protected FileDiff makeFieldRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
-        return makeRef(from, to, FIELD_MSGS, fromLoc, toLoc);
+    protected FileDiff makeFieldRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
+        return makeRef(fromLoc, toLoc, FIELD_MSGS, from, to);
     }
 }

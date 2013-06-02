@@ -10,8 +10,8 @@ public class TestCtors extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makeConstructorRef(String from, String to, LocationRange fromLoc, LocationRange toLoc) {
-        return makeRef(from, to, CONSTRUCTOR_MSGS, fromLoc, toLoc);
+    protected FileDiff makeConstructorRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
+        return makeRef(fromLoc, toLoc, CONSTRUCTOR_MSGS, from, to);
     }
 
     public void testClassConstructorAdded() {
@@ -24,7 +24,7 @@ public class TestCtors extends ItemsTest {
                            "    Test(String s) {}",
                            "}"),
 
-                 makeConstructorRef(null, "Test(String)", locrg(1, 1, 3, 1), locrg(3, 5, 21)));
+                 makeConstructorRef(locrg(1, 1, 3, 1), locrg(3, 5, 21), null, "Test(String)"));
     }
 
     public void testClassConstructorRemoved() {
@@ -37,6 +37,6 @@ public class TestCtors extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeConstructorRef("Test(int, double, float)", null, locrg(3, 12, 44), locrg(1, 1, 3, 1)));
+                 makeConstructorRef(locrg(3, 12, 44), locrg(1, 1, 3, 1), "Test(int, double, float)", null));
     }
 }
