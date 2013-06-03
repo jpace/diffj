@@ -99,10 +99,6 @@ public class ItemsTest extends DiffJTest {
         }
     }
 
-    protected FileDiff makeChangedRef(String from, String to, Message[] msgs, LocationRange fromLoc, LocationRange toLoc) {
-        return makeChangedRef(fromLoc, toLoc, msgs, from, to);
-    }
-
     protected FileDiff makeChangedRef(LocationRange fromLoc, LocationRange toLoc, Message[] msgs, String from, String to) {
         if (to == null) {
             return new FileDiffChange(fromLoc, toLoc, msgs[0], from);

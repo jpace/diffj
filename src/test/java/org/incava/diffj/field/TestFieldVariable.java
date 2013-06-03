@@ -24,8 +24,8 @@ public class TestFieldVariable extends ItemsTest {
                            "",
                            "}"),
 
-                 makeChangedRef(null, "j", VARIABLE_MSGS, locrg(2, 9, 9), locrg(4, 9, 9)),
-                 makeChangedRef("i", null, VARIABLE_MSGS, locrg(2, 9, 9), locrg(4, 9, 9)));
+                 makeChangedRef(locrg(2, 9, 9), locrg(4, 9, 9), VARIABLE_MSGS, null, "j"),
+                 makeChangedRef(locrg(2, 9, 9), locrg(4, 9, 9), VARIABLE_MSGS, "i", null));
     }
 
     public void testVariableWithInitializerChanged() {
@@ -39,8 +39,8 @@ public class TestFieldVariable extends ItemsTest {
                            "    int j = 4;",
                            "}"),
                  
-                 makeChangedRef(null, "j", VARIABLE_MSGS, locrg(2, 9, 9), locrg(3, 9, 9)),
-                 makeChangedRef("i", null, VARIABLE_MSGS, locrg(2, 9, 9), locrg(3, 9, 9)));
+                 makeChangedRef(locrg(2, 9, 9), locrg(3, 9, 9), VARIABLE_MSGS, null, "j"),
+                 makeChangedRef(locrg(2, 9, 9), locrg(3, 9, 9), VARIABLE_MSGS, "i", null));
     }
 
     public void testVariableTypeChanged() {
