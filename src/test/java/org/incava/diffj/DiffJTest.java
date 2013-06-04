@@ -4,8 +4,6 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import junit.framework.TestCase;
-import net.sourceforge.pmd.ast.ParseException;
 import org.incava.analysis.BriefReport;
 import org.incava.analysis.DetailedReport;
 import org.incava.analysis.FileDiff;
@@ -19,8 +17,6 @@ import org.incava.test.IncavaTestCase;
 
 public class DiffJTest extends IncavaTestCase {
     public static final FileDiff[] NO_CHANGES = new FileDiff[0];
-    
-    private Report report;
     
     public DiffJTest(String name) {
         super(name);
@@ -76,7 +72,6 @@ public class DiffJTest extends IncavaTestCase {
 
         String[] lines = StringExt.split(writer.getBuffer().toString(), "\n");
         // tr.Ace.log("lines", lines);
-
         return lines;
     }
 
@@ -109,33 +104,44 @@ public class DiffJTest extends IncavaTestCase {
     }
 
     public void evaluate(String fromName, String fromStr, String toName, String toStr, String src, Report report, FileDiff ... expectations) {
-        this.report = report;
+        assertDiffsEqual(fromName, fromStr, toName, toStr, src, report, expectations);
+    }
 
-        Collection<FileDiff> diffs = this.report.getDifferences();
-
+    public void assertDiffsEqual(String fromName, String fromStr, String toName, String toStr, String src, Report report, FileDiff ... expectations) {
+        JavaFile fromFile = null;
+        JavaFile toFile = null;
         try {
-            JavaFile fromFile = new JavaFile(fromName, fromStr, src);
-            JavaFile toFile = new JavaFile(toName, toStr, src);
-
-            fromFile.compare(report, toFile);
-            
-            if (expectations != null) {
-                assertDifferencesEqual(expectations, diffs);
-            }
-
-            this.report.flush();
+            fromFile = new JavaFile(fromName, fromStr, src);
+            toFile = new JavaFile(toName, toStr, src);
         }
         catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
+        assertDiffsEqual(fromFile, toFile, report, expectations);
+    }
+
+    public void assertDiffsEqual(JavaFile fromFile, JavaFile toFile, Report report, FileDiff ... expectations) {
+        Collection<FileDiff> diffs = report.getDifferences();
+
+        try {
+            fromFile.compare(report, toFile);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        if (expectations != null) {
+            assertDifferencesEqual(expectations, diffs);
+        }
+        
+        report.flush();
     }
 
     public void assertOutputEquals(Lines fromLines, Lines toLines, List<String> expected) {
         String[] output = getOutput(fromLines, toLines);
-                
-        tr.Ace.log("output  ", output);
-
+        tr.Ace.log("output", output);
         assertEquals(expected, Arrays.asList(output));
     }
 
@@ -179,9 +185,5 @@ public class DiffJTest extends IncavaTestCase {
 
     public Report makeDetailedReport(StringWriter writer) {
         return new DetailedReport(writer, showContext(), highlight());
-    }
-
-    public Report getReport() {
-        return report;
     }
 }
