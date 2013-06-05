@@ -10,12 +10,6 @@ import static org.incava.diffj.field.Variable.*;
 import static org.incava.diffj.field.Variables.*;
 
 public class TestFieldVariableAddedRemoved extends ItemsTest {
-    protected final static Message[] VARIABLE_MSGS = new Message[] {
-        VARIABLE_REMOVED,
-        VARIABLE_CHANGED, 
-        VARIABLE_ADDED,
-    };
-
     public TestFieldVariableAddedRemoved(String name) {
         super(name);
     }
@@ -58,7 +52,6 @@ public class TestFieldVariableAddedRemoved extends ItemsTest {
                            "        private final V v;",
                            "    }",
                            "}"),
-                 
                  
                  makeVariableTypeChangedRef("k", "Object", "K", 5, 23, 6, 23),
                  makeVariableTypeChangedRef("v", "Object", "V", 5, 23, 7, 23),
