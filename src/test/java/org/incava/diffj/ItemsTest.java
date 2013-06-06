@@ -83,8 +83,12 @@ public class ItemsTest extends DiffJTest {
         return makeRef(fromLoc, toLoc, METHOD_MSGS, from, to);
     }
 
-    protected FileDiff makeInterfaceRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
-        return makeRef(fromLoc, toLoc, INTERFACE_MSGS, from, to);
+    protected FileDiff makeInterfaceAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
+        return makeRef(fromLoc, toLoc, INTERFACE_MSGS, null, added);
+    }
+
+    protected FileDiff makeInterfaceRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
+        return makeRef(fromLoc, toLoc, INTERFACE_MSGS, removed, null);
     }
 
     protected FileDiff makeRef(LocationRange fromLoc, LocationRange toLoc, Message[] msgs, String from, String to) {

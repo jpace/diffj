@@ -57,7 +57,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeInterfaceRef(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), null, "I2Test"));
+                 makeInterfaceAddedRef(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), "I2Test"));
     }
 
     public void testInnerInterfaceRemoved() {
@@ -74,7 +74,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeInterfaceRef(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), "I2Test", null));
+                 makeInterfaceRemovedRef(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), "I2Test"));
     }
 
     public void testInnerInterfaceMethodAdded() {

@@ -126,7 +126,7 @@ public class TestType extends ItemsTest {
                            "    interface ITest {}",
                            "}"),
                  
-                 makeInterfaceRef(locrg(1, 1, 3, 1), locrg(3, 5, 22), null, "ITest"));
+                 makeInterfaceAddedRef(locrg(1, 1, 3, 1), locrg(3, 5, 22), "ITest"));
     }
 
     public void testClassInnerInterfaceRemoved() {
@@ -139,7 +139,7 @@ public class TestType extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeInterfaceRef(locrg(3, 5, 22), locrg(1, 1, 3, 1), "ITest", null));
+                 makeInterfaceRemovedRef(locrg(3, 5, 22), locrg(1, 1, 3, 1), "ITest"));
     }
 
     public void testSemicolonDeclarationRemoved() {

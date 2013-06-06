@@ -10,8 +10,12 @@ public class TestInnerClass extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makeClassRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
-        return makeRef(fromLoc, toLoc, CLASS_MSGS, from, to);
+    protected FileDiff makeClassAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
+        return makeRef(fromLoc, toLoc, CLASS_MSGS, null, added);
+    }
+
+    protected FileDiff makeClassRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
+        return makeRef(fromLoc, toLoc, CLASS_MSGS, removed, null);
     }
 
     public void testInnerClassAdded() {
@@ -29,7 +33,7 @@ public class TestInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeClassRef(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), null, "I2Test"));
+                 makeClassAddedRef(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), "I2Test"));
     }
 
     public void testInnerClassRemoved() {
@@ -46,6 +50,6 @@ public class TestInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeClassRef(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), "I2Test", null));
+                 makeClassRemovedRef(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), "I2Test"));
     }
 }

@@ -17,6 +17,14 @@ public class TestFields extends ItemsTest {
         super(name);
     }
 
+    protected FileDiff makeFieldAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
+        return makeRef(fromLoc, toLoc, FIELD_MSGS, null, added);
+    }
+
+    protected FileDiff makeFieldRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
+        return makeRef(fromLoc, toLoc, FIELD_MSGS, removed, null);
+    }
+
     public void testClassOneFieldAdded() {
         evaluate(new Lines("class Test {",
                            "",
@@ -27,7 +35,7 @@ public class TestFields extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 makeFieldRef(locrg(1, 1, 3, 1), locrg(3, 5, 3, 10), null, "i"));
+                 makeFieldAddedRef(locrg(1, 1, 3, 1), locrg(3, 5, 3, 10), "i"));
     }
 
     public void testClassOneFieldRemoved() {
@@ -40,7 +48,7 @@ public class TestFields extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeFieldRef(locrg(2, 5, 2, 10), locrg(1, 1, 3, 1), "i", null));
+                 makeFieldRemovedRef(locrg(2, 5, 2, 10), locrg(1, 1, 3, 1), "i"));
     }
 
     public void testClassOneFieldRemovedOneFieldAdded() {
@@ -54,11 +62,7 @@ public class TestFields extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeFieldRef(locrg(1, 1, 4,  1), locrg(2, 5, 2, 13), null, "j"),
-                 makeFieldRef(locrg(2, 5, 2, 10), locrg(1, 1, 4,  1), "i",  null));
-    }
-
-    protected FileDiff makeFieldRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
-        return makeRef(fromLoc, toLoc, FIELD_MSGS, from, to);
+                 makeFieldAddedRef(locrg(1, 1, 4,  1), locrg(2, 5, 2, 13), "j"),
+                 makeFieldRemovedRef(locrg(2, 5, 2, 10), locrg(1, 1, 4,  1), "i"));
     }
 }
