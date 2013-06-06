@@ -11,10 +11,6 @@ public class TestTypes extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makeTypeRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
-        return makeRef(fromLoc, toLoc, TYPES_MSGS, from, to);
-    }
-
     protected FileDiff makeTypeAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
         return makeRef(fromLoc, toLoc, TYPES_MSGS, null, added);
     }
@@ -70,8 +66,8 @@ public class TestTypes extends ItemsTest {
 
                  new Lines(""),
                  
-                 makeTypeRef(locrg(1, 1, 2, 1), locrg(1, 1, 1), "Test",  null),
-                 makeTypeRef(locrg(3, 1, 4, 1), locrg(1, 1, 1), "Test2", null));
+                 makeTypeRemovedRef(locrg(1, 1, 2, 1), locrg(1, 1, 1), "Test"),
+                 makeTypeRemovedRef(locrg(3, 1, 4, 1), locrg(1, 1, 1), "Test2"));
     }
 
     public void testTypesRemovedToImports() {
@@ -83,8 +79,8 @@ public class TestTypes extends ItemsTest {
 
                  new Lines("import foo.Bar;"),
                  
-                 makeTypeRef(locrg(2, 1, 3, 1), locrg(1, 1, 16), "Test",  null),
-                 makeTypeRef(locrg(4, 1, 5, 1), locrg(1, 1, 16), "Test2", null));
+                 makeTypeRemovedRef(locrg(2, 1, 3, 1), locrg(1, 1, 16), "Test"),
+                 makeTypeRemovedRef(locrg(4, 1, 5, 1), locrg(1, 1, 16), "Test2"));
     }
 
     public void testTypesRemovedToPackage() {
@@ -96,7 +92,7 @@ public class TestTypes extends ItemsTest {
 
                  new Lines("package foo;"),
                  
-                 makeTypeRef(locrg(2, 1, 3, 1), locrg(1, 1, 13), "Test",  null),
-                 makeTypeRef(locrg(4, 1, 5, 1), locrg(1, 1, 13), "Test2", null));
+                 makeTypeRemovedRef(locrg(2, 1, 3, 1), locrg(1, 1, 13), "Test"),
+                 makeTypeRemovedRef(locrg(4, 1, 5, 1), locrg(1, 1, 13), "Test2"));
     }
 }
