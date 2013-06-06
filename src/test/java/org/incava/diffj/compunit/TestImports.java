@@ -88,7 +88,7 @@ public class TestImports extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(locrg(1, 1, 1, 19), locrg(1, 1, 1, 5), IMPORT_SECTION_REMOVED));
+                 new FileDiffDelete(locrg(1, 1, 19), locrg(1, 1, 5), IMPORT_SECTION_REMOVED));
     }
 
     public void testImportsSectionRemovedTwo() {
@@ -102,7 +102,7 @@ public class TestImports extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 new FileDiffDelete(locrg(1, 1, 2, 23), locrg(1, 1, 1, 5), IMPORT_SECTION_REMOVED));
+                 new FileDiffDelete(locrg(1, 1, 2, 23), locrg(1, 1, 5), IMPORT_SECTION_REMOVED));
     }
 
     public void testImportsSectionAddedOne() {
@@ -115,7 +115,7 @@ public class TestImports extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(locrg(1, 1, 1, 5), locrg(1, 1, 1, 19), IMPORT_SECTION_ADDED));
+                 new FileDiffAdd(locrg(1, 1, 5), locrg(1, 1, 19), IMPORT_SECTION_ADDED));
     }
 
     public void testImportsSectionAddedTwo() {
@@ -129,7 +129,7 @@ public class TestImports extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 new FileDiffAdd(locrg(1, 1, 1, 5), locrg(1, 1, 2, 23), IMPORT_SECTION_ADDED));
+                 new FileDiffAdd(locrg(1, 1, 5), locrg(1, 1, 2, 23), IMPORT_SECTION_ADDED));
     }
 
     public void testImportsBlockAddedNoClassDefined() {

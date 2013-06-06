@@ -11,12 +11,16 @@ public class TestPackage extends ItemsTest {
         super(name);
     }
 
-    protected FileDiff makePackageRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
-        return makeRef(fromLoc, toLoc, PACKAGE_MSGS, from, to);
+    protected FileDiff makePackageAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
+        return makeRef(fromLoc, toLoc, PACKAGE_MSGS, null, added);
     }
 
-    protected FileDiff makePackageRef(Location fromStart, Location toStart, String from, String to) {
-        return makePackageRef(locrg(fromStart, from), locrg(toStart, to), from, to);
+    protected FileDiff makePackageRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
+        return makeRef(fromLoc, toLoc, PACKAGE_MSGS, removed, null);
+    }
+
+    protected FileDiff makePackageChangedRef(Location fromStart, Location toStart, String from, String to) {
+        return makeRef(locrg(fromStart, from), locrg(toStart, to), PACKAGE_MSGS, from, to);
     }
 
     public void testPackageNoChange() {
@@ -58,7 +62,7 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
 
-                 makePackageRef(locrg(1, 9, 22), locrg(4, 1, 5, 1), "org.incava.foo", null));
+                 makePackageRemovedRef(locrg(1, 9, 22), locrg(4, 1, 5, 1), "org.incava.foo"));
     }
 
     public void testPackageAdded() {
@@ -70,7 +74,7 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 makePackageRef(locrg(1, 1, 2, 1), locrg(1, 9, 22), null, "org.incava.foo"));
+                 makePackageAddedRef(locrg(1, 1, 2, 1), locrg(1, 9, 22), "org.incava.foo"));
     }
 
     public void testPackageRenamed() {
@@ -83,6 +87,6 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 makePackageRef(loc(1, 9), loc(1, 9), "org.incava.bar", "org.incava.foo"));
+                 makePackageChangedRef(loc(1, 9), loc(1, 9), "org.incava.bar", "org.incava.foo"));
     }
 }
