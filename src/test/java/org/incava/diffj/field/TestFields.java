@@ -1,28 +1,15 @@
 package org.incava.diffj.field;
 
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.text.Message;
 
 public class TestFields extends ItemsTest {
-    protected final static Message[] FIELD_MSGS = new Message[] {
-        Field.FIELD_REMOVED,
-        null,
-        Field.FIELD_ADDED,
-    };
-
     public TestFields(String name) {
         super(name);
-    }
-
-    protected FileDiff makeFieldAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
-        return makeRef(fromLoc, toLoc, FIELD_MSGS, null, added);
-    }
-
-    protected FileDiff makeFieldRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
-        return makeRef(fromLoc, toLoc, FIELD_MSGS, removed, null);
     }
 
     public void testClassOneFieldAdded() {
@@ -35,7 +22,7 @@ public class TestFields extends ItemsTest {
                            "    int i;",
                            "}"),
                  
-                 makeFieldAddedRef(locrg(1, 1, 3, 1), locrg(3, 5, 3, 10), "i"));
+                 new FileDiffAdd(locrg(1, 1, 3, 1), locrg(3, 5, 3, 10), Field.FIELD_ADDED, "i"));
     }
 
     public void testClassOneFieldRemoved() {
@@ -48,7 +35,7 @@ public class TestFields extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeFieldRemovedRef(locrg(2, 5, 2, 10), locrg(1, 1, 3, 1), "i"));
+                 new FileDiffDelete(locrg(2, 5, 2, 10), locrg(1, 1, 3, 1), Field.FIELD_REMOVED, "i"));
     }
 
     public void testClassOneFieldRemovedOneFieldAdded() {
@@ -62,7 +49,7 @@ public class TestFields extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeFieldAddedRef(locrg(1, 1, 4,  1), locrg(2, 5, 2, 13), "j"),
-                 makeFieldRemovedRef(locrg(2, 5, 2, 10), locrg(1, 1, 4,  1), "i"));
+                 new FileDiffAdd(locrg(1, 1, 4,  1), locrg(2, 5, 2, 13), Field.FIELD_ADDED, "j"),
+                 new FileDiffDelete(locrg(2, 5, 2, 10), locrg(1, 1, 4,  1), Field.FIELD_REMOVED, "i"));
     }
 }

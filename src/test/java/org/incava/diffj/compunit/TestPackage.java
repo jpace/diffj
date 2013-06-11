@@ -1,26 +1,17 @@
 package org.incava.diffj.function;
 
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffChange;
+import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
+import org.incava.diffj.compunit.Package;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
 
 public class TestPackage extends ItemsTest {
     public TestPackage(String name) {
         super(name);
-    }
-
-    protected FileDiff makePackageAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
-        return makeRef(fromLoc, toLoc, PACKAGE_MSGS, null, added);
-    }
-
-    protected FileDiff makePackageRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
-        return makeRef(fromLoc, toLoc, PACKAGE_MSGS, removed, null);
-    }
-
-    protected FileDiff makePackageChangedRef(Location fromStart, Location toStart, String from, String to) {
-        return makeRef(locrg(fromStart, from), locrg(toStart, to), PACKAGE_MSGS, from, to);
     }
 
     public void testPackageNoChange() {
@@ -62,7 +53,7 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
 
-                 makePackageRemovedRef(locrg(1, 9, 22), locrg(4, 1, 5, 1), "org.incava.foo"));
+                 new FileDiffDelete(locrg(1, 9, 22), locrg(4, 1, 5, 1), Package.PACKAGE_REMOVED, "org.incava.foo"));
     }
 
     public void testPackageAdded() {
@@ -74,10 +65,13 @@ public class TestPackage extends ItemsTest {
                            "class Test {",
                            "}"),
                  
-                 makePackageAddedRef(locrg(1, 1, 2, 1), locrg(1, 9, 22), "org.incava.foo"));
+                 new FileDiffAdd(locrg(1, 1, 2, 1), locrg(1, 9, 22), Package.PACKAGE_ADDED, "org.incava.foo"));
     }
 
     public void testPackageRenamed() {
+        String oldPkg = "org.incava.bar";
+        String newPkg = "org.incava.foo";
+
         evaluate(new Lines("package org.incava.bar;",
                            "class Test {",
                            "}"),
@@ -86,7 +80,7 @@ public class TestPackage extends ItemsTest {
                            "", 
                            "class Test {",
                            "}"),
-                 
-                 makePackageChangedRef(loc(1, 9), loc(1, 9), "org.incava.bar", "org.incava.foo"));
+
+                 new FileDiffChange(locrg(loc(1, 9), oldPkg), locrg(loc(1, 9), newPkg), Package.PACKAGE_RENAMED, oldPkg, newPkg));
     }
 }

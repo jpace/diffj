@@ -22,7 +22,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(locrg(2, 5, 3, 5), locrg(4, 9, 19), null, "foo()"));
+                 makeMethodAddedRef(locrg(2, 5, 3, 5), locrg(4, 9, 19), "foo()"));
     }
 
     public void testMethodRemoved() {
@@ -39,7 +39,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(locrg(3, 9, 19), locrg(3, 5, 4, 5), "foo()", null));
+                 makeMethodRemovedRef(locrg(3, 9, 19), locrg(3, 5, 4, 5), "foo()"));
     }
 
     public void testInnerInterfaceAdded() {
@@ -96,7 +96,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(locrg(3, 9, 4, 9), locrg(5, 13, 23), null, "foo()"));
+                 makeMethodAddedRef(locrg(3, 9, 4, 9), locrg(5, 13, 23), "foo()"));
     }
 
     public void testInnerInterfaceMethodRemoved() {
@@ -117,6 +117,6 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRef(locrg(4, 13, 23), locrg(4, 9, 5, 9), "foo()", null));
+                 makeMethodRemovedRef(locrg(4, 13, 23), locrg(4, 9, 5, 9), "foo()"));
     }
 }

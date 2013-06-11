@@ -1,6 +1,8 @@
 package org.incava.diffj.type;
 
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
 import org.incava.ijdk.text.Location;
@@ -12,11 +14,11 @@ public class TestTypes extends ItemsTest {
     }
 
     protected FileDiff makeTypeAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
-        return makeRef(fromLoc, toLoc, TYPES_MSGS, null, added);
+        return new FileDiffAdd(fromLoc, toLoc, Types.TYPE_DECLARATION_ADDED, added);
     }
 
     protected FileDiff makeTypeRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
-        return makeRef(fromLoc, toLoc, TYPES_MSGS, removed, null);
+        return new FileDiffDelete(fromLoc, toLoc, Types.TYPE_DECLARATION_REMOVED, removed);
     }
 
     public void testTypesAddedToEmpty() {
