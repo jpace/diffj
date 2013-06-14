@@ -1,7 +1,10 @@
 package org.incava.diffj.function;
 
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
+import org.incava.ijdk.text.LocationRange;
 
 public class TestMethods extends ItemsTest {
     public TestMethods(String name) {
@@ -18,7 +21,7 @@ public class TestMethods extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeMethodRef(locrg(1, 1, 3, 1), locrg(3, 5, 17), null, "foo()"));
+                 new FileDiffAdd(locrg(1, 1, 3, 1), locrg(3, 5, 17), Method.METHOD_ADDED, "foo()"));
     }
 
     public void testClassOneMethodAdded() {
@@ -33,7 +36,7 @@ public class TestMethods extends ItemsTest {
                            "    void foo() {}",
                            "}"),
                  
-                 makeMethodRef(locrg(1, 1, 4, 1), locrg(4, 5, 17), null, "foo()"));
+                 new FileDiffAdd(locrg(1, 1, 4, 1), locrg(4, 5, 17), Method.METHOD_ADDED, "foo()"));
     }
 
     public void testClassAllMethodsRemoved() {
@@ -46,7 +49,7 @@ public class TestMethods extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeMethodRef(locrg(3, 5, 17), locrg(1, 1, 3, 1), "foo()", null));
+                 new FileDiffDelete(locrg(3, 5, 17), locrg(1, 1, 3, 1), Method.METHOD_REMOVED, "foo()"));
     }
 
     public void testClassNoMethodsChanged() {

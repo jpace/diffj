@@ -79,10 +79,6 @@ public class ItemsTest extends DiffJTest {
     //$$$ todo: migrate (Location, Location) to (LocationRange)
     //$$$ todo: move interfaceRef, etc, to TestInterface
 
-    protected FileDiff makeMethodRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
-        return makeRef(fromLoc, toLoc, METHOD_MSGS, from, to);
-    }
-
     protected FileDiff makeMethodAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
         return new FileDiffAdd(fromLoc, toLoc, Method.METHOD_ADDED, added);
     }

@@ -1,5 +1,7 @@
 package org.incava.diffj.function;
 
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
 
@@ -22,7 +24,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodAddedRef(locrg(2, 5, 3, 5), locrg(4, 9, 21), "foo()"));
+                 new FileDiffAdd(locrg(2, 5, 3, 5), locrg(4, 9, 21), Method.METHOD_ADDED, "foo()"));
     }
 
     public void testMethodRemoved() {
@@ -39,7 +41,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
 
-                 makeMethodRemovedRef(locrg(3, 9, 21), locrg(3, 5, 4, 5), "foo()"));
+                 new FileDiffDelete(locrg(3, 9, 21), locrg(3, 5, 4, 5), Method.METHOD_REMOVED, "foo()"));
     }
 
     /**
@@ -64,7 +66,7 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodAddedRef(locrg(3, 9, 4, 9), locrg(5, 13, 25), "foo()"));
+                 new FileDiffAdd(locrg(3, 9, 4, 9), locrg(5, 13, 25), Method.METHOD_ADDED, "foo()"));
     }
 
     public void testInnerClassMethodRemoved() {
@@ -85,6 +87,6 @@ public class TestMethodsInInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeMethodRemovedRef(locrg(4, 13, 35), locrg(4, 9, 5, 9), "foo(String)"));
+                 new FileDiffDelete(locrg(4, 13, 35), locrg(4, 9, 5, 9), Method.METHOD_REMOVED, "foo(String)"));
     }
 }

@@ -1,21 +1,13 @@
 package org.incava.diffj.function;
 
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
-import org.incava.ijdk.text.LocationRange;
 
 public class TestCtors extends ItemsTest {
     public TestCtors(String name) {
         super(name);
-    }
-
-    protected FileDiff makeConstructorAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
-        return makeRef(fromLoc, toLoc, CONSTRUCTOR_MSGS, null, added);
-    }
-
-    protected FileDiff makeConstructorRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
-        return makeRef(fromLoc, toLoc, CONSTRUCTOR_MSGS, removed, null);
     }
 
     public void testClassConstructorAdded() {
@@ -28,7 +20,7 @@ public class TestCtors extends ItemsTest {
                            "    Test(String s) {}",
                            "}"),
 
-                 makeConstructorAddedRef(locrg(1, 1, 3, 1), locrg(3, 5, 21), "Test(String)"));
+                 new FileDiffAdd(locrg(1, 1, 3, 1), locrg(3, 5, 21), Ctor.CONSTRUCTOR_ADDED, "Test(String)"));
     }
 
     public void testClassConstructorRemoved() {
@@ -41,6 +33,6 @@ public class TestCtors extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeConstructorRemovedRef(locrg(3, 12, 44), locrg(1, 1, 3, 1), "Test(int, double, float)"));
+                 new FileDiffDelete(locrg(3, 12, 44), locrg(1, 1, 3, 1), Ctor.CONSTRUCTOR_REMOVED, "Test(int, double, float)"));
     }
 }
