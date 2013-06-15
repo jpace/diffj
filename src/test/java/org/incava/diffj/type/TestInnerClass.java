@@ -1,21 +1,13 @@
 package org.incava.diffj.type;
 
-import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffAdd;
+import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
-import org.incava.ijdk.text.LocationRange;
 
 public class TestInnerClass extends ItemsTest {
     public TestInnerClass(String name) {
         super(name);
-    }
-
-    protected FileDiff makeClassAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
-        return makeRef(fromLoc, toLoc, CLASS_MSGS, null, added);
-    }
-
-    protected FileDiff makeClassRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
-        return makeRef(fromLoc, toLoc, CLASS_MSGS, removed, null);
     }
 
     public void testInnerClassAdded() {
@@ -33,7 +25,7 @@ public class TestInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeClassAddedRef(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), "I2Test"));
+                 new FileDiffAdd(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), Type.INNER_CLASS_ADDED, "I2Test"));
     }
 
     public void testInnerClassRemoved() {
@@ -50,6 +42,6 @@ public class TestInnerClass extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeClassRemovedRef(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), "I2Test"));
+                 new FileDiffDelete(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), Type.INNER_CLASS_REMOVED, "I2Test"));
     }
 }

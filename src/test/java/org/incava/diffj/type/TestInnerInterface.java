@@ -60,7 +60,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeInterfaceAddedRef(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), "I2Test"));
+                 new FileDiffAdd(locrg(2, 5, 3, 5), locrg(4, 9, 5, 9), Type.INNER_INTERFACE_ADDED, "I2Test"));
     }
 
     public void testInnerInterfaceRemoved() {
@@ -77,7 +77,7 @@ public class TestInnerInterface extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 makeInterfaceRemovedRef(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), "I2Test"));
+                 new FileDiffDelete(locrg(3, 9, 4, 9), locrg(2, 5, 3, 5), Type.INNER_INTERFACE_REMOVED, "I2Test"));
     }
 
     public void testInnerInterfaceMethodAdded() {

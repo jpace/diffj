@@ -76,37 +76,6 @@ public class ItemsTest extends DiffJTest {
         super(name);
     }
 
-    //$$$ todo: migrate (Location, Location) to (LocationRange)
-    //$$$ todo: move interfaceRef, etc, to TestInterface
-
-    protected FileDiff makeMethodAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
-        return new FileDiffAdd(fromLoc, toLoc, Method.METHOD_ADDED, added);
-    }
-
-    protected FileDiff makeMethodRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
-        return new FileDiffDelete(fromLoc, toLoc, Method.METHOD_REMOVED, removed);
-    }
-
-    protected FileDiff makeInterfaceAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
-        return makeRef(fromLoc, toLoc, INTERFACE_MSGS, null, added);
-    }
-
-    protected FileDiff makeInterfaceRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
-        return makeRef(fromLoc, toLoc, INTERFACE_MSGS, removed, null);
-    }
-
-    protected FileDiff makeRef(LocationRange fromLoc, LocationRange toLoc, Message[] msgs, String from, String to) {
-        if (to == null) {
-            return new FileDiffDelete(fromLoc, toLoc, msgs[0], from);
-        }
-        else if (from == null) {
-            return new FileDiffAdd(fromLoc, toLoc, msgs[2], to);
-        }
-        else {
-            return new FileDiffChange(fromLoc, toLoc, msgs[1], from, to);
-        }
-    }
-
     protected FileDiff makeChangedRef(LocationRange fromLoc, LocationRange toLoc, Message[] msgs, String from, String to) {
         if (to == null) {
             return new FileDiffChange(fromLoc, toLoc, msgs[0], from);

@@ -1,6 +1,8 @@
 package org.incava.diffj.type;
 
+import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffChange;
+import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
 import static org.incava.diffj.type.Extends.*;
@@ -126,7 +128,7 @@ public class TestType extends ItemsTest {
                            "    interface ITest {}",
                            "}"),
                  
-                 makeInterfaceAddedRef(locrg(1, 1, 3, 1), locrg(3, 5, 22), "ITest"));
+                 new FileDiffAdd(locrg(1, 1, 3, 1), locrg(3, 5, 22), INNER_INTERFACE_ADDED, "ITest"));
     }
 
     public void testClassInnerInterfaceRemoved() {
@@ -139,7 +141,7 @@ public class TestType extends ItemsTest {
                            "",
                            "}"),
                  
-                 makeInterfaceRemovedRef(locrg(3, 5, 22), locrg(1, 1, 3, 1), "ITest"));
+                 new FileDiffDelete(locrg(3, 5, 22), locrg(1, 1, 3, 1), Type.INNER_INTERFACE_REMOVED, "ITest"));
     }
 
     public void testSemicolonDeclarationRemoved() {
