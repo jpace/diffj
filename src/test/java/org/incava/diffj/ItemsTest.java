@@ -88,13 +88,21 @@ public class ItemsTest extends DiffJTest {
         }
     }
 
-    protected FileDiff makeAccessRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
-        return makeChangedRef(fromLoc, toLoc, ACCESS_MSGS, from, to);
+    protected FileDiff makeAccessAddedRef(LocationRange fromLoc, LocationRange toLoc, String added) {
+        return new FileDiffChange(fromLoc, toLoc, Access.ACCESS_ADDED, added);
     }    
 
-    protected FileDiff makeAccessRef(Location fromStart, Location toStart, String from, String to) {
-        return makeAccessRef(locrg(fromStart, from), locrg(toStart, to), from, to);
-    }
+    protected FileDiff makeAccessRemovedRef(LocationRange fromLoc, LocationRange toLoc, String removed) {
+        return new FileDiffChange(fromLoc, toLoc, Access.ACCESS_REMOVED, removed);
+    }    
+
+    protected FileDiff makeAccessChangedRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
+        return new FileDiffChange(fromLoc, toLoc, Access.ACCESS_CHANGED, from, to);
+    }    
+
+    protected FileDiff makeAccessChangedRef(Location fromStart, Location toStart, String from, String to) {
+        return new FileDiffChange(locrg(fromStart, from), locrg(toStart, to), Access.ACCESS_CHANGED, from, to);
+    }    
 
     protected FileDiff makeModifierRef(LocationRange fromLoc, LocationRange toLoc, String from, String to) {
         return makeChangedRef(fromLoc, toLoc, MODIFIER_MSGS, from, to);

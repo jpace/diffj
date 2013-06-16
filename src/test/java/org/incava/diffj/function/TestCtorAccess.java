@@ -19,7 +19,7 @@ public class TestCtorAccess extends ItemsTest {
                            "    public Test() {}",
                            "}"),
                  
-                 makeAccessRef(locrg(2, 5, 8), locrg(3, 5, 10), null, "public"));
+                 makeAccessAddedRef(locrg(2, 5, 8), locrg(3, 5, 10), "public"));
     }
 
     public void testAccessRemoved() {
@@ -33,7 +33,7 @@ public class TestCtorAccess extends ItemsTest {
                            "    Test() {}",
                            "}"),
                  
-                 makeAccessRef(locrg(2, 5, 10), locrg(3, 5, 8), "public", null));
+                 makeAccessRemovedRef(locrg(2, 5, 10), locrg(3, 5, 8), "public"));
     }
 
     public void testAccessChanged() {
@@ -47,6 +47,6 @@ public class TestCtorAccess extends ItemsTest {
                            "    public Test() {}",
                            "}"),
                  
-                 makeAccessRef(loc(2, 5), loc(3, 5), "private", "public"));
+                 makeAccessChangedRef(loc(2, 5), loc(3, 5), "private", "public"));
     }
 }

@@ -41,7 +41,7 @@ public class TestType extends ItemsTest {
                  new Lines("public class Test {",
                            "}"),
 
-                 makeAccessRef(locrg(1, 1, 5), locrg(1, 1, 6), null, "public"));
+                 makeAccessAddedRef(locrg(1, 1, 5), locrg(1, 1, 6), "public"));
         
         evaluate(new Lines("public class Test {",
                            "}"),
@@ -49,7 +49,7 @@ public class TestType extends ItemsTest {
                  new Lines("class Test {",
                            "}"),
                  
-                 makeAccessRef(locrg(1, 1, 6), locrg(1, 1, 5), "public", null));
+                 makeAccessRemovedRef(locrg(1, 1, 6), locrg(1, 1, 5), "public"));
     }
 
     public void testClassModifierAdded() {
