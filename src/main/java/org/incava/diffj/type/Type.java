@@ -57,22 +57,8 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
 
     public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(Class<ItemType> cls) {
-        List<ASTClassOrInterfaceBodyDeclaration> decls = TypeDeclarationUtil.getDeclarations(decl);
-        return getDeclarationsOfClass(decls, cls);
-    }
-
-    public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(List<ASTClassOrInterfaceBodyDeclaration> decls, Class<ItemType> cls) {
-        List<ItemType> declList = new ArrayList<ItemType>();
-
-        for (ASTClassOrInterfaceBodyDeclaration decl : decls) {
-            ItemType dec = TypeDeclarationUtil.getDeclaration(decl, cls);
-
-            if (dec != null) {
-                declList.add(dec);
-            }   
-        }
-        
-        return declList;
+        TypeDeclarationList tdl = new TypeDeclarationList(decl);
+        return tdl.getDeclarationsOfClass(cls);
     }
 
     protected boolean isInterface() {
