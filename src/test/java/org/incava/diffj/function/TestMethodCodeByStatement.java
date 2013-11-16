@@ -1,18 +1,24 @@
-package org.incava.diffj;
+package org.incava.diffj.function;
 
 import java.io.*;
+import java.io.*;
 import java.net.URL;
+import java.util.*;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.analysis.FileDiffChange;
+import org.incava.diffj.ItemsTest;
+import org.incava.diffj.Lines;
 import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.text.Location;
 import org.incava.java.Java;
 import org.incava.pmdx.SimpleNodeUtil;
+import static org.incava.diffj.code.Code.*;
 
-public class TestAST extends DiffJTest {
-    public TestAST(String name) {
+public class TestMethodCodeByStatement extends ItemsTest {
+    public TestMethodCodeByStatement(String name) {
         super(name);
     }
 
