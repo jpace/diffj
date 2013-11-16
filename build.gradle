@@ -28,7 +28,7 @@ jar {
 }
 
 test {
-    // excludes = [ '**/IncavaTestCase*', '**/.#*' ]
+    excludes = [ '**/IncavaTestCase*', '**/.#*', '**/DiffJTest.class', '**/ItemsTest.class', '**/OutputTest.class' ]
     includes = [ '**/Test*' ]
 }
 
