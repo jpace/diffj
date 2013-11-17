@@ -38,7 +38,6 @@ public class Differences {
     }
 
     public void add(FileDiff fdiff) {
-        tr.Ace.stack("fdiff", fdiff);
         fileDiffs.add(fdiff);
     }
 

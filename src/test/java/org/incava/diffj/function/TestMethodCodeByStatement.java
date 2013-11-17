@@ -11,6 +11,7 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
+import org.incava.diffj.code.TokenList;
 import org.incava.diffj.compunit.CompilationUnit;
 import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.text.Location;
@@ -32,21 +33,10 @@ public class TestMethodCodeByStatement extends ItemsTest {
         SimpleNodeUtil.dump(node);
     }
 
-    public String tokensToString(SimpleNode node) {
-        List<Token> tokens = SimpleNodeUtil.getChildTokens(node);
+    public TokenList dumpTokens(SimpleNode node) {
+        TokenList tokens = new TokenList(node);
         tr.Ace.log("tokens", tokens);
-        StringBuffer sb = new StringBuffer();
-        for (Token tk : tokens) {
-            sb.append("^").append(tk.image);
-        }
-        tr.Ace.cyan("sb", sb);
-        return sb.toString();
-    }
-
-    public List<Token> dumpTokens(SimpleNode node) {
-        List<Token> tokens = SimpleNodeUtil.getChildTokens(node);
-        tr.Ace.log("tokens", tokens);
-        String str = tokensToString(node);
+        String str = tokens.toString();
         return tokens;
     }
 
@@ -77,31 +67,31 @@ public class TestMethodCodeByStatement extends ItemsTest {
         return SimpleNodeUtil.findChildren(node);
     }
 
-    public List<String> show(String fileName) throws Exception {
+    public List<TokenList> show(String fileName) throws Exception {
         ASTCompilationUnit ast = getCompilationUnit(fileName).getAstCompUnit();
         SimpleNode meth = getFirstMethod(ast);
 
         SimpleNode methBlk = getChildNode(meth, 2);
         dump(methBlk);
 
-        List<String> strs = new ArrayList<String>();
+        List<TokenList> tokenLists = new ArrayList<TokenList>();
 
         List<SimpleNode> statements = getStatements(methBlk);
         for (SimpleNode stmt : statements) {
             tr.Ace.yellow("stmt", stmt);
             dumpTokens(stmt);
-            strs.add(tokensToString(stmt));
+            tokenLists.add(new TokenList(stmt));
         }
-        return strs;
+        return tokenLists;
     }
 
     public void testSomething() throws Exception {
         tr.Ace.setVerbose(true);
         tr.Ace.log("this", this);
         
-        List<String> a = show("diffj/codecomp/d0/Changed.java");
-        List<String> b = show("diffj/codecomp/d1/Changed.java");
-        Diff<String> diff = new Diff<String>(a, b);
+        List<TokenList> a = show("diffj/codecomp/d0/Changed.java");
+        List<TokenList> b = show("diffj/codecomp/d1/Changed.java");
+        Diff<TokenList> diff = new Diff<TokenList>(a, b, new TokenList.TokenListComparator());
         List<Difference> diffs = diff.execute();
         tr.Ace.log("diffs", diffs);
     }
