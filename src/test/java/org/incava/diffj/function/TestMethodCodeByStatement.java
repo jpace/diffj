@@ -11,6 +11,7 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
+import org.incava.diffj.compunit.CompilationUnit;
 import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.util.diff.*;
@@ -24,15 +25,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
     }
 
     public URL seek(String name) {
-        URL res = ClassLoader.getSystemResource(name);
-        tr.Ace.log(name, res);
-        return res;
-    }
-
-    public InputStream get(String name) {
-        InputStream is = ClassLoader.getSystemResourceAsStream(name);
-        tr.Ace.log(name, is);
-        return is;
+        return ClassLoader.getSystemResource(name);
     }
 
     public void dump(SimpleNode node) {
@@ -61,7 +54,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
         return SimpleNodeUtil.findChild(parent, null, idx);
     }
 
-    public ASTCompilationUnit getCompilationUnit(String fileName) throws Exception {
+    public CompilationUnit getCompilationUnit(String fileName) throws Exception {
         URL url = seek(fileName);
         File file = new File(url.toURI());
         JavaFile javaFile = new JavaFile(file, fileName, "1.5");
@@ -85,7 +78,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
     }
 
     public List<String> show(String fileName) throws Exception {
-        ASTCompilationUnit ast = getCompilationUnit(fileName);
+        ASTCompilationUnit ast = getCompilationUnit(fileName).getAstCompUnit();
         SimpleNode meth = getFirstMethod(ast);
 
         SimpleNode methBlk = getChildNode(meth, 2);

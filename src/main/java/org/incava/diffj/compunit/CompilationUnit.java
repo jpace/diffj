@@ -24,6 +24,10 @@ public class CompilationUnit {
         return new Types(compUnit);
     }
 
+    public ASTCompilationUnit getAstCompUnit() {
+        return compUnit;
+    }
+
     public void diff(CompilationUnit toCompUnit, Report report) {
         if (toCompUnit == null) {
             return;

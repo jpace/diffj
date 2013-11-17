@@ -127,9 +127,10 @@ public class JavaFile extends JavaFSElement {
         return parser;
     }
 
-    public ASTCompilationUnit compile() throws DiffJException {
+    public CompilationUnit compile() throws DiffJException {
         try {
-            return getParser().CompilationUnit();
+            ASTCompilationUnit cu = getParser().CompilationUnit();
+            return cu == null ? null : new CompilationUnit(cu);
         }
         catch (TokenMgrError tme) {
             throw new DiffJException("Error tokenizing " + label + ": " + tme.getMessage(), tme);
@@ -157,14 +158,12 @@ public class JavaFile extends JavaFSElement {
 
     public int compare(Report report, JavaFile toFile) throws DiffJException {
         try {
-            ASTCompilationUnit fromAstCu = compile();
-            ASTCompilationUnit toAstCu   = toFile.compile();
+            CompilationUnit fromCompUnit = compile();
+            CompilationUnit toCompUnit   = toFile.compile();
             
             report.reset(getLabel(), getContents(), toFile.getLabel(), toFile.getContents());
 
-            if (fromAstCu != null && toAstCu != null) {
-                CompilationUnit fromCompUnit = new CompilationUnit(fromAstCu);
-                CompilationUnit toCompUnit   = new CompilationUnit(toAstCu);
+            if (fromCompUnit != null && toCompUnit != null) {
                 fromCompUnit.diff(toCompUnit, report);
             }
         }
