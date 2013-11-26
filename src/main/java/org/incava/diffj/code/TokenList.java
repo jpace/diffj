@@ -7,7 +7,7 @@ import org.incava.analysis.TokenUtil;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.DefaultComparator;
 import org.incava.ijdk.util.ListExt;
-import org.incava.ijdk.util.diff.Diff;
+import org.incava.ijdk.util.diff.Differ;
 import org.incava.ijdk.util.diff.Difference;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -59,19 +59,25 @@ public class TokenList {
         tokens = SimpleNodeUtil.getChildTokens(node);
     }
 
-    public Diff<Token> diff(TokenList toTokenList) {
-        return new Diff<Token>(tokens, toTokenList.tokens, new TokenComparator());
+    public Differ<Token, TokenDifference> diff(TokenList toTokenList) {
+        return new Differ<Token, TokenDifference>(tokens, toTokenList.tokens, new TokenComparator()) {
+            public TokenDifference createDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
+                if (delEnd == Difference.NONE) {
+                    return new TokenDifference(delStart, delEnd, addStart, addEnd);
+                }
+                else if (addEnd == Difference.NONE) {
+                    return new TokenDifference(delStart, delEnd, addStart, addEnd);
+                }
+                else {
+                    return new TokenDifference(delStart, delEnd, addStart, addEnd);
+                }
+            }
+        };
     }
 
     public LocationRange getLocationRange(Integer start, Integer end) {
-        Token startTk, endTk;
-        if (end == Difference.NONE) {
-            endTk = startTk = getStart(start);
-        }
-        else {
-            startTk = tokens.get(start);
-            endTk = tokens.get(end);
-        }
+        Token startTk = getStart(start);
+        Token endTk = end == Difference.NONE ? startTk : tokens.get(end);
         return new LocationRange(TokenUtil.toBeginLocation(startTk), TokenUtil.toEndLocation(endTk));
     }    
     

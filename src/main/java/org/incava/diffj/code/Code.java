@@ -10,8 +10,7 @@ import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.text.Message;
-import org.incava.ijdk.util.diff.Diff;
-import org.incava.ijdk.util.diff.Difference;
+import org.incava.ijdk.util.diff.Differ;
 
 public class Code {    
     public static final Message CODE_CHANGED = new Message("code changed in {0}");
@@ -28,12 +27,12 @@ public class Code {
 
     public void diff(Code toCode, Differences differences) {
         TokenList toTokenList = toCode.tokenList;
-        Diff<Token> tokenDiff = tokenList.diff(toTokenList);
+        Differ<Token, TokenDifference> tokenDiff = tokenList.diff(toTokenList);
         
         FileDiff currFileDiff = null;
-        List<Difference> diffList = tokenDiff.execute();
+        List<TokenDifference> diffList = tokenDiff.execute();
 
-        for (Difference diff : diffList) {
+        for (TokenDifference diff : diffList) {
             currFileDiff = processDifference(diff, toTokenList, currFileDiff, differences);
             if (currFileDiff == null) {
                 break;
@@ -73,16 +72,11 @@ public class Code {
         return addFileDiff(fileDiff, differences);
     }
     
-    protected FileDiff processDifference(Difference diff, TokenList toTokenList, FileDiff currFileDiff, Differences differences) {
+    protected FileDiff processDifference(TokenDifference diff, TokenList toTokenList, FileDiff currFileDiff, Differences differences) {
         int delStart = diff.getDeletedStart();
         int delEnd   = diff.getDeletedEnd();
         int addStart = diff.getAddedStart();
         int addEnd   = diff.getAddedEnd();
-
-        if (delEnd == Difference.NONE && addEnd == Difference.NONE) {
-            // WTF?
-            return null;
-        }
 
         LocationRange fromLocRg = tokenList.getLocationRange(delStart, delEnd);
         LocationRange toLocRg = toTokenList.getLocationRange(addStart, addEnd);
@@ -90,14 +84,8 @@ public class Code {
         if (currFileDiff != null && currFileDiff.isOnSameLine(fromLocRg)) {
             return replaceReference(currFileDiff, fromLocRg, toLocRg, differences);
         }
-        else if (delEnd == Difference.NONE) {
-            return codeAdded(fromLocRg, toLocRg, differences);
-        }
-        else if (addEnd == Difference.NONE) {
-            return codeRemoved(fromLocRg, toLocRg, differences);
-        }
         else {
-            return codeChanged(fromLocRg, toLocRg, differences);
+            return diff.execute(this, fromLocRg, toLocRg, differences);
         }
     }
 }
