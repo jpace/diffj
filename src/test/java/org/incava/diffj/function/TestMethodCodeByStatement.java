@@ -1,14 +1,12 @@
 package org.incava.diffj.function;
 
-import java.io.*;
-import java.io.*;
+import java.io.File;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
 import org.incava.diffj.code.TokenList;
@@ -23,6 +21,8 @@ import static org.incava.diffj.code.Code.*;
 public class TestMethodCodeByStatement extends ItemsTest {
     public TestMethodCodeByStatement(String name) {
         super(name);
+        tr.Ace.setVerbose(true);
+        tr.Ace.log("name", name);
     }
 
     public URL seek(String name) {
@@ -58,7 +58,6 @@ public class TestMethodCodeByStatement extends ItemsTest {
         SimpleNode typeDecl = getChildNode(ast, 0);
         SimpleNode clsDecl = getChildNode(typeDecl, 0);
         SimpleNode body = getChildNode(clsDecl, 0);
-
         SimpleNode bodyDecl = getChildNode(body, 0);
         return getChildNode(bodyDecl, 0);
     }
@@ -70,7 +69,6 @@ public class TestMethodCodeByStatement extends ItemsTest {
     public List<TokenList> show(String fileName) throws Exception {
         ASTCompilationUnit ast = getCompilationUnit(fileName).getAstCompUnit();
         SimpleNode meth = getFirstMethod(ast);
-
         SimpleNode methBlk = getChildNode(meth, 2);
         dump(methBlk);
 
@@ -85,14 +83,68 @@ public class TestMethodCodeByStatement extends ItemsTest {
         return tokenLists;
     }
 
-    public void testSomething() throws Exception {
-        tr.Ace.setVerbose(true);
-        tr.Ace.log("this", this);
-        
+    public void testMethod() throws Exception {
         List<TokenList> a = show("diffj/codecomp/d0/Changed.java");
         List<TokenList> b = show("diffj/codecomp/d1/Changed.java");
         Diff<TokenList> diff = new Diff<TokenList>(a, b, new TokenList.TokenListComparator());
         List<Difference> diffs = diff.execute();
         tr.Ace.log("diffs", diffs);
+        for (Difference df : diffs) {
+            tr.Ace.yellow("df", df);
+            tr.Ace.yellow("df.add?", df.isAdd());
+            tr.Ace.yellow("df.change?", df.isChange());
+            tr.Ace.yellow("df.delete?", df.isDelete());
+            if (df.isChange()) {
+                TokenList alist = a.get(df.getDeletedStart());
+                tr.Ace.log("alist", alist);
+                TokenList blist = b.get(df.getAddedStart());
+                tr.Ace.log("blist", blist);
+                
+                // Differ<Token, TokenDifference> diff(TokenList toTokenList) 
+            }
+        }
+    }
+
+    public List<TokenList> showCtor(String fileName) throws Exception {
+        ASTCompilationUnit ast = getCompilationUnit(fileName).getAstCompUnit();
+        SimpleNode typeDecl = getChildNode(ast, 0);
+        SimpleNode clsDecl = getChildNode(typeDecl, 0);
+        SimpleNode body = getChildNode(clsDecl, 0);
+        SimpleNode bodyDecl = getChildNode(body, 0);
+        SimpleNode ctorDecl = getChildNode(bodyDecl, 0);
+
+        dump(ctorDecl);
+        
+        List<TokenList> tokenLists = new ArrayList<TokenList>();
+
+        List<SimpleNode> statements = getStatements(ctorDecl);
+        for (SimpleNode stmt : statements) {
+            tr.Ace.yellow("stmt", stmt);
+            dumpTokens(stmt);
+            tokenLists.add(new TokenList(stmt));
+        }
+        return tokenLists;
+    }
+
+    public void testCtor() throws Exception {
+        List<TokenList> a = showCtor("diffj/codecomp/d0/ChangedCtor.java");
+        List<TokenList> b = showCtor("diffj/codecomp/d1/ChangedCtor.java");
+        Diff<TokenList> diff = new Diff<TokenList>(a, b, new TokenList.TokenListComparator());
+        List<Difference> diffs = diff.execute();
+        tr.Ace.log("diffs", diffs);
+        for (Difference df : diffs) {
+            tr.Ace.yellow("df", df);
+            tr.Ace.yellow("df.add?", df.isAdd());
+            tr.Ace.yellow("df.change?", df.isChange());
+            tr.Ace.yellow("df.delete?", df.isDelete());
+            if (df.isChange()) {
+                TokenList alist = a.get(df.getDeletedStart());
+                tr.Ace.log("alist", alist);
+                TokenList blist = b.get(df.getAddedStart());
+                tr.Ace.log("blist", blist);
+                
+                // Differ<Token, TokenDifference> diff(TokenList toTokenList) 
+            }
+        }
     }
 }

@@ -1,7 +1,8 @@
 package org.incava.test;
 
 import junit.framework.TestCase;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class IncavaTestCase extends TestCase {
     public IncavaTestCase(String name) {

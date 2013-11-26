@@ -1,5 +1,5 @@
-class Changed {
-    void f(String s) {
+class ChangedCtor {
+    ChangedCtor() {
         boolean debug = true;
         if (s instanceof String) System.out.println("s: " + s);
 

@@ -91,12 +91,10 @@ public class TokenList {
     }
 
     public String toString() {
-        tr.Ace.log("tokens", tokens);
         StringBuffer sb = new StringBuffer();
         for (Token tk : tokens) {
             sb.append("^").append(tk.image);
         }
-        tr.Ace.cyan("sb", sb);
         return sb.toString();
     }
 }
