@@ -1,6 +1,7 @@
 package org.incava.test;
 
 import junit.framework.TestCase;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -19,18 +20,15 @@ public class IncavaTestCase extends TestCase {
     static public void assertEquals(String msg, Collection expected, Collection actual) {
         String m = toMessage(msg);
 
-        assertEquals(m + "collection sizes", expected.size(), actual.size());
-        
+        int count = Math.max(expected.size(), actual.size());
         Iterator eit = expected.iterator();
         Iterator ait = actual.iterator();
 
-        int ni = 0;
-        while (eit.hasNext() && ait.hasNext()) {
+        for (int ni = 0; ni < count; ++ni) {
             Object e = eit.next();
             Object a = ait.next();
 
             assertEquals(m + "collection[" + ni + "]", e, a);
-            ++ni;
         }
     }
 
@@ -39,11 +37,7 @@ public class IncavaTestCase extends TestCase {
     }
 
     static public void assertEquals(String msg, Object[] expected, Object[] actual) {
-        String m = toMessage(msg);
-        assertEquals(m + "array sizes", expected.length, actual.length);
-        for (int ni = 0; ni < expected.length; ++ni) {
-            assertEquals(m + "array[" + ni + "]", expected[ni], actual[ni]);
-        }
+        assertEquals(msg, Arrays.asList(expected), Arrays.asList(actual));
     }
 
     static public void assertEquals(Object[] expected, Object[] actual) {
@@ -56,8 +50,7 @@ public class IncavaTestCase extends TestCase {
 
     static public void assertEquals(String msg, int[] expected, int[] actual) {
         String m = toMessage(msg);
-        assertEquals(m + "array sizes", expected.length, actual.length);
-        for (int ni = 0; ni < expected.length; ++ni) {
+        for (int ni = 0; ni < Math.max(expected.length, actual.length); ++ni) {
             assertEquals(m + "array[" + ni + "]", expected[ni], actual[ni]);
         }
     }

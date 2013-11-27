@@ -84,6 +84,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
     }
 
     public void testMethod() throws Exception {
+        tr.Ace.onBlue("******************************************");
         List<TokenList> a = show("diffj/codecomp/d0/Changed.java");
         List<TokenList> b = show("diffj/codecomp/d1/Changed.java");
         Diff<TokenList> diff = new Diff<TokenList>(a, b, new TokenList.TokenListComparator());
@@ -103,6 +104,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
                 // Differ<Token, TokenDifference> diff(TokenList toTokenList) 
             }
         }
+        tr.Ace.onBlue("******************************************");
     }
 
     public List<TokenList> showCtor(String fileName) throws Exception {
@@ -118,6 +120,8 @@ public class TestMethodCodeByStatement extends ItemsTest {
         List<TokenList> tokenLists = new ArrayList<TokenList>();
 
         List<SimpleNode> statements = getStatements(ctorDecl);
+        // the parameters list:
+        statements.remove(0);
         for (SimpleNode stmt : statements) {
             tr.Ace.yellow("stmt", stmt);
             dumpTokens(stmt);
@@ -127,6 +131,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
     }
 
     public void testCtor() throws Exception {
+        tr.Ace.onGreen("******************************************");
         List<TokenList> a = showCtor("diffj/codecomp/d0/ChangedCtor.java");
         List<TokenList> b = showCtor("diffj/codecomp/d1/ChangedCtor.java");
         Diff<TokenList> diff = new Diff<TokenList>(a, b, new TokenList.TokenListComparator());
@@ -146,5 +151,6 @@ public class TestMethodCodeByStatement extends ItemsTest {
                 // Differ<Token, TokenDifference> diff(TokenList toTokenList) 
             }
         }
+        tr.Ace.onGreen("******************************************");
     }
 }

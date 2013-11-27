@@ -4,6 +4,7 @@ import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.TokenUtil;
+import org.incava.diffj.element.Tkn;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.DefaultComparator;
 import org.incava.ijdk.util.ListExt;
@@ -42,11 +43,9 @@ public class TokenList {
     }
 
     public static int compareTokens(Token xt, Token yt) {
-        int cmp = xt.kind < yt.kind ? -1 : (xt.kind > yt.kind ? 1 : 0);
-        if (cmp == 0) {
-            cmp = xt.image.compareTo(yt.image);
-        }
-        return cmp;
+        Tkn x = new Tkn(xt);
+        Tkn y = new Tkn(yt);
+        return x.compareTo(y);
     }
 
     private final List<Token> tokens;
@@ -78,7 +77,9 @@ public class TokenList {
     public LocationRange getLocationRange(Integer start, Integer end) {
         Token startTk = getStart(start);
         Token endTk = end == Difference.NONE ? startTk : tokens.get(end);
-        return new LocationRange(TokenUtil.toBeginLocation(startTk), TokenUtil.toEndLocation(endTk));
+        Tkn startTkn = new Tkn(startTk);
+        Tkn endTkn = new Tkn(endTk);
+        return new LocationRange(startTkn.getBeginLocation(), endTkn.getEndLocation());
     }    
     
     public Token getStart(int start) {
