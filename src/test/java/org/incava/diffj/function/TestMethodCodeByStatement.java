@@ -10,7 +10,9 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
 import org.incava.diffj.code.TokenList;
+import org.incava.diffj.code.TokenDifference;
 import org.incava.diffj.compunit.CompilationUnit;
+import org.incava.diffj.function.Method;
 import org.incava.diffj.io.JavaFile;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.util.diff.*;
@@ -66,10 +68,14 @@ public class TestMethodCodeByStatement extends ItemsTest {
         return SimpleNodeUtil.findChildren(node);
     }
 
-    public List<TokenList> show(String fileName) throws Exception {
+    public List<TokenList> showMethod(String fileName) throws Exception {
         ASTCompilationUnit ast = getCompilationUnit(fileName).getAstCompUnit();
-        SimpleNode meth = getFirstMethod(ast);
-        SimpleNode methBlk = getChildNode(meth, 2);
+        SimpleNode methNode = getFirstMethod(ast);
+        tr.Ace.onRed("methNode", methNode);
+        Method meth = new Method((net.sourceforge.pmd.ast.ASTMethodDeclaration)methNode);
+        // SimpleNode methBlk = getChildNode(methNode, 2);
+        net.sourceforge.pmd.ast.ASTBlock methBlk = meth.getBlock();
+        tr.Ace.onRed("methBlk", methBlk);
         dump(methBlk);
 
         List<TokenList> tokenLists = new ArrayList<TokenList>();
@@ -83,10 +89,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
         return tokenLists;
     }
 
-    public void testMethod() throws Exception {
-        tr.Ace.onBlue("******************************************");
-        List<TokenList> a = show("diffj/codecomp/d0/Changed.java");
-        List<TokenList> b = show("diffj/codecomp/d1/Changed.java");
+    public void runDiff(List<TokenList> a, List<TokenList> b) {
         Diff<TokenList> diff = new Diff<TokenList>(a, b, new TokenList.TokenListComparator());
         List<Difference> diffs = diff.execute();
         tr.Ace.log("diffs", diffs);
@@ -100,10 +103,22 @@ public class TestMethodCodeByStatement extends ItemsTest {
                 tr.Ace.log("alist", alist);
                 TokenList blist = b.get(df.getAddedStart());
                 tr.Ace.log("blist", blist);
+
+                Differ<Token, TokenDifference> differ = alist.diff(blist);
+                tr.Ace.log("differ", differ);
+                List<TokenDifference> tkDiffs = differ.execute();
+                tr.Ace.log("tkDiffs", tkDiffs);
                 
                 // Differ<Token, TokenDifference> diff(TokenList toTokenList) 
             }
         }
+    }
+
+    public void testMethod() throws Exception {
+        tr.Ace.onBlue("******************************************");
+        List<TokenList> a = showMethod("diffj/codecomp/d0/Changed.java");
+        List<TokenList> b = showMethod("diffj/codecomp/d1/Changed.java");
+        runDiff(a, b);
         tr.Ace.onBlue("******************************************");
     }
 
@@ -134,23 +149,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
         tr.Ace.onGreen("******************************************");
         List<TokenList> a = showCtor("diffj/codecomp/d0/ChangedCtor.java");
         List<TokenList> b = showCtor("diffj/codecomp/d1/ChangedCtor.java");
-        Diff<TokenList> diff = new Diff<TokenList>(a, b, new TokenList.TokenListComparator());
-        List<Difference> diffs = diff.execute();
-        tr.Ace.log("diffs", diffs);
-        for (Difference df : diffs) {
-            tr.Ace.yellow("df", df);
-            tr.Ace.yellow("df.add?", df.isAdd());
-            tr.Ace.yellow("df.change?", df.isChange());
-            tr.Ace.yellow("df.delete?", df.isDelete());
-            if (df.isChange()) {
-                TokenList alist = a.get(df.getDeletedStart());
-                tr.Ace.log("alist", alist);
-                TokenList blist = b.get(df.getAddedStart());
-                tr.Ace.log("blist", blist);
-                
-                // Differ<Token, TokenDifference> diff(TokenList toTokenList) 
-            }
-        }
+        runDiff(a, b);
         tr.Ace.onGreen("******************************************");
     }
 }

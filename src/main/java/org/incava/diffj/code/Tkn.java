@@ -1,4 +1,4 @@
-package org.incava.diffj.element;
+package org.incava.diffj.code;
 
 import net.sourceforge.pmd.ast.Token;
 import org.incava.ijdk.text.Location;

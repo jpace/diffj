@@ -3,8 +3,6 @@ package org.incava.diffj.code;
 import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.TokenUtil;
-import org.incava.diffj.element.Tkn;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.DefaultComparator;
 import org.incava.ijdk.util.ListExt;
