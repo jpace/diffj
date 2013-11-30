@@ -11,13 +11,15 @@ import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
+import org.incava.diffj.util.Messages;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.CtorUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Ctor extends Function implements Diffable<Ctor> {
-    public static final Message CONSTRUCTOR_REMOVED = new Message("constructor removed: {0}");
-    public static final Message CONSTRUCTOR_ADDED = new Message("constructor added: {0}");
+    public final static Message CONSTRUCTOR_REMOVED = new Message("constructor removed: {0}");
+    public final static Message CONSTRUCTOR_ADDED = new Message("constructor added: {0}");
+    public final static Messages CTOR_MESSAGES = new Messages(CONSTRUCTOR_ADDED, null, CONSTRUCTOR_REMOVED);
 
     private final ASTConstructorDeclaration ctor;
 
@@ -72,10 +74,10 @@ public class Ctor extends Function implements Diffable<Ctor> {
     }
 
     public Message getAddedMessage() {
-        return CONSTRUCTOR_ADDED;
+        return CTOR_MESSAGES.getAdded();
     }
 
     public Message getRemovedMessage() {
-        return CONSTRUCTOR_REMOVED;
+        return CTOR_MESSAGES.getDeleted();
     }
 }

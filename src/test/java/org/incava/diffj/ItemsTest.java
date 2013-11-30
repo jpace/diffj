@@ -18,58 +18,10 @@ import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.text.Message;
 
 public class ItemsTest extends DiffJTest {
-    protected final static Message[] METHOD_MSGS = new Message[] {
-        Method.METHOD_REMOVED,
-        Method.METHOD_CHANGED, 
-        Method.METHOD_ADDED,
-    };
-
-    protected final static Message[] CLASS_MSGS = new Message[] {
-        Type.INNER_CLASS_REMOVED,
-        null,
-        Type.INNER_CLASS_ADDED,
-    };
-
-    protected final static Message[] INTERFACE_MSGS = new Message[] {
-        Type.INNER_INTERFACE_REMOVED,
-        null,
-        Type.INNER_INTERFACE_ADDED,
-    };
-
-    protected final static Message[] CONSTRUCTOR_MSGS = new Message[] {
-        Ctor.CONSTRUCTOR_REMOVED,
-        null,
-        Ctor.CONSTRUCTOR_ADDED,
-    };
-
     protected final static Message[] MODIFIER_MSGS = new Message[] {
         Modifiers.MODIFIER_REMOVED,
         Modifiers.MODIFIER_CHANGED,
         Modifiers.MODIFIER_ADDED,
-    };
-
-    protected final static Message[] ACCESS_MSGS = new Message[] {
-        Access.ACCESS_REMOVED,
-        Access.ACCESS_CHANGED, 
-        Access.ACCESS_ADDED,
-    };
-
-    protected final static Message[] TYPES_MSGS = new Message[] {
-        Types.TYPE_DECLARATION_REMOVED,
-        null,
-        Types.TYPE_DECLARATION_ADDED,
-    };
-
-    protected final static Message[] PACKAGE_MSGS = new Message[] {
-        Package.PACKAGE_REMOVED, 
-        Package.PACKAGE_RENAMED,
-        Package.PACKAGE_ADDED,
-    };
-
-    protected final static Message[] VARIABLE_MSGS = new Message[] {
-        Variables.VARIABLE_REMOVED,
-        Variables.VARIABLE_CHANGED, 
-        Variables.VARIABLE_ADDED,
     };
 
     public ItemsTest(String name) {

@@ -21,7 +21,6 @@ import org.incava.pmdx.SimpleNodeUtil;
 public class Method extends Function implements Diffable<Method> {
     public static final Message METHOD_REMOVED = new Message("method removed: {0}");
     public static final Message METHOD_ADDED = new Message("method added: {0}");
-    public static final Message METHOD_CHANGED = new Message("method changed from {0} to {1}");
     public static final Message RETURN_TYPE_CHANGED = new Message("return type changed from {0} to {1}");
     public static final Message METHOD_BLOCK_ADDED = new Message("method block added");
     public static final Message METHOD_BLOCK_REMOVED = new Message("method block removed");
