@@ -11,6 +11,7 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.AccessibleElement;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
+import org.incava.diffj.util.Messages;
 import org.incava.ijdk.text.Message;
 import org.incava.ijdk.util.CollectionExt;
 import org.incava.pmdx.FieldUtil;
@@ -20,6 +21,7 @@ import org.incava.pmdx.VariableUtil;
 public class Field extends AccessibleElement implements Diffable<Field> {
     public static final Message FIELD_REMOVED = new Message("field removed: {0}");
     public static final Message FIELD_ADDED = new Message("field added: {0}");
+    public final static Messages FIELD_MSGS = new Messages(FIELD_ADDED, null, FIELD_REMOVED);
 
     private final ASTFieldDeclaration field;
 
@@ -39,11 +41,11 @@ public class Field extends AccessibleElement implements Diffable<Field> {
     }
 
     public Message getAddedMessage() {
-        return FIELD_ADDED;
+        return FIELD_MSGS.getAdded();
     }
 
     public Message getRemovedMessage() {
-        return FIELD_REMOVED;
+        return FIELD_MSGS.getDeleted();
     }
 
     protected FieldModifiers getModifiers() {

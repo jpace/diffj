@@ -13,6 +13,7 @@ import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
+import org.incava.diffj.util.Messages;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.MethodUtil;
 import org.incava.pmdx.ParameterUtil;
@@ -21,6 +22,8 @@ import org.incava.pmdx.SimpleNodeUtil;
 public class Method extends Function implements Diffable<Method> {
     public static final Message METHOD_REMOVED = new Message("method removed: {0}");
     public static final Message METHOD_ADDED = new Message("method added: {0}");
+    public final static Messages METHOD_MSGS = new Messages(METHOD_ADDED, null, METHOD_REMOVED);
+
     public static final Message RETURN_TYPE_CHANGED = new Message("return type changed from {0} to {1}");
     public static final Message METHOD_BLOCK_ADDED = new Message("method block added");
     public static final Message METHOD_BLOCK_REMOVED = new Message("method block removed");
@@ -142,10 +145,10 @@ public class Method extends Function implements Diffable<Method> {
     }
 
     public Message getAddedMessage() {
-        return METHOD_ADDED;
+        return METHOD_MSGS.getAdded();
     }
 
     public Message getRemovedMessage() {
-        return METHOD_REMOVED;
+        return METHOD_MSGS.getDeleted();
     }
 }
