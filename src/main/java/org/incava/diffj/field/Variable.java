@@ -6,6 +6,7 @@ import net.sourceforge.pmd.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.ast.ASTVariableInitializer;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.CodedElement;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.Message;
@@ -60,8 +61,8 @@ public class Variable extends CodedElement {
         return init != null;
     }
 
-    public List<Token> getCodeTokens() {
-        return SimpleNodeUtil.getChildTokens(init);
+    public TokenList getCodeTokens() {
+        return new TokenList(init);
     }    
     
     public String getTypeName() {

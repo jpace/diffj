@@ -4,13 +4,14 @@ import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.code.Code;
+import org.incava.diffj.code.TokenList;
 
 public abstract class CodedElement extends AccessibleElement {
     public CodedElement(SimpleNode node) {
         super(node);
     }
 
-    abstract protected List<Token> getCodeTokens();
+    abstract protected TokenList getCodeTokens();
 
     abstract protected String getName();
 

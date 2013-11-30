@@ -25,6 +25,11 @@ public class Code {
         this.tokenList = new TokenList(tokens);
     }
 
+    public Code(String name, TokenList tokens) {
+        this.name = name;
+        this.tokenList = tokens;
+    }
+
     public void diff(Code toCode, Differences differences) {
         TokenList toTokenList = toCode.tokenList;
         Differ<Token, TokenDifference> tokenDiff = tokenList.diff(toTokenList);

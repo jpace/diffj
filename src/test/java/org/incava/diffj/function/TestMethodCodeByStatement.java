@@ -9,6 +9,7 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
+import org.incava.diffj.code.Block;
 import org.incava.diffj.code.TokenList;
 import org.incava.diffj.code.TokenDifference;
 import org.incava.diffj.compunit.CompilationUnit;
@@ -58,6 +59,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
      */
     public SimpleNode getFirstMethod(ASTCompilationUnit ast) {
         SimpleNode typeDecl = getChildNode(ast, 0);
+        dump(typeDecl);
         SimpleNode clsDecl = getChildNode(typeDecl, 0);
         SimpleNode body = getChildNode(clsDecl, 0);
         SimpleNode bodyDecl = getChildNode(body, 0);
@@ -74,13 +76,13 @@ public class TestMethodCodeByStatement extends ItemsTest {
         tr.Ace.onRed("methNode", methNode);
         Method meth = new Method((net.sourceforge.pmd.ast.ASTMethodDeclaration)methNode);
         // SimpleNode methBlk = getChildNode(methNode, 2);
-        net.sourceforge.pmd.ast.ASTBlock methBlk = meth.getBlock();
+        Block methBlk = meth.getBlock();
         tr.Ace.onRed("methBlk", methBlk);
-        dump(methBlk);
+        // dump(methBlk);
 
         List<TokenList> tokenLists = new ArrayList<TokenList>();
 
-        List<SimpleNode> statements = getStatements(methBlk);
+        List<SimpleNode> statements = methBlk.getStatements();
         for (SimpleNode stmt : statements) {
             tr.Ace.yellow("stmt", stmt);
             dumpTokens(stmt);
@@ -125,12 +127,13 @@ public class TestMethodCodeByStatement extends ItemsTest {
     public List<TokenList> showCtor(String fileName) throws Exception {
         ASTCompilationUnit ast = getCompilationUnit(fileName).getAstCompUnit();
         SimpleNode typeDecl = getChildNode(ast, 0);
+        dump(typeDecl);
         SimpleNode clsDecl = getChildNode(typeDecl, 0);
         SimpleNode body = getChildNode(clsDecl, 0);
         SimpleNode bodyDecl = getChildNode(body, 0);
         SimpleNode ctorDecl = getChildNode(bodyDecl, 0);
 
-        dump(ctorDecl);
+        // dump(ctorDecl);
         
         List<TokenList> tokenLists = new ArrayList<TokenList>();
 

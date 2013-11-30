@@ -7,6 +7,7 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
@@ -44,13 +45,13 @@ public class Ctor extends Function implements Diffable<Ctor> {
         return CtorUtil.getFullName(ctor);
     }    
 
-    protected List<Token> getCodeTokens() {
+    protected TokenList getCodeTokens() {
         // removes all tokens up to the first left brace. This is because ctors
         // don't have their own blocks, unlike methods.
         
-        List<Token> children = SimpleNodeUtil.getChildTokens(ctor);
+        List<Token> tokens = SimpleNodeUtil.getChildTokens(ctor);
         
-        Iterator<Token> it = children.iterator();
+        Iterator<Token> it = tokens.iterator();
         while (it.hasNext()) {
             Token tk = it.next();
             if (tk.kind == JavaParserConstants.LBRACE) {
@@ -61,7 +62,7 @@ public class Ctor extends Function implements Diffable<Ctor> {
             }
         }
 
-        return children;
+        return new TokenList(tokens);
     }
 
     public double getMatchScore(Ctor toCtor) {

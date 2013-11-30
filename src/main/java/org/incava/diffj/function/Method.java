@@ -8,6 +8,9 @@ import net.sourceforge.pmd.ast.ASTMethodDeclarator;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.code.Block;
+import org.incava.diffj.code.Code;
+import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
@@ -25,12 +28,13 @@ public class Method extends Function implements Diffable<Method> {
     public static final Message METHOD_BLOCK_REMOVED = new Message("method block removed");
 
     private final ASTMethodDeclaration method;
-    private final ASTBlock block;
+    private final Block block;
 
     public Method(ASTMethodDeclaration method) {
         super(method);
         this.method = method;
-        this.block = SimpleNodeUtil.findChild(method, net.sourceforge.pmd.ast.ASTBlock.class);
+        ASTBlock astBlk = SimpleNodeUtil.findChild(method, ASTBlock.class);
+        block = astBlk == null ? null : new Block(astBlk);
     }
 
     public void diff(Method toMethod, Differences differences) {
@@ -50,7 +54,7 @@ public class Method extends Function implements Diffable<Method> {
         return MethodUtil.getThrowsList(method);
     }
 
-    protected ASTBlock getBlock() {
+    protected Block getBlock() {
         return block;
     }
 
@@ -82,7 +86,9 @@ public class Method extends Function implements Diffable<Method> {
     protected void compareBodies(Method toMethod, Differences differences) {
         if (hasBlock()) {
             if (toMethod.hasBlock()) {
-                compareCode(toMethod, differences);
+                Code fromCode = new Code(getName(), block.getCodeTokens());
+                Code toCode = new Code(getName(), toMethod.block.getCodeTokens());
+                fromCode.diff(toCode, differences);
             }
             else {
                 differences.changed(this, toMethod, METHOD_BLOCK_REMOVED);
@@ -104,8 +110,8 @@ public class Method extends Function implements Diffable<Method> {
     //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(toBlock));        
     // }
 
-    protected List<Token> getCodeTokens() {
-        return SimpleNodeUtil.getChildTokens(block);
+    protected TokenList getCodeTokens() {
+        return block.getCodeTokens();
     }
 
     protected void compareReturnTypes(Method toMethod, Differences differences) {
