@@ -1,6 +1,6 @@
 package org.incava.diffj.code;
 
-import java.util.*;
+import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlock;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
@@ -27,17 +27,13 @@ public class Block {
         this.tokens = tokens;
     }
 
-    public TokenList getCodeTokens() {
-        return tokens;
-    }
-
     public List<SimpleNode> getStatements() {
         return statements;
     }
 
     public void compareCode(Block toBlock, Differences differences) {
-        Code fromCode = new Code(name, getCodeTokens());
-        Code toCode = new Code(name, toBlock.getCodeTokens());
+        Code fromCode = new Code(name, tokens);
+        Code toCode = new Code(name, toBlock.tokens);
         fromCode.diff(toCode, differences);
     }
 }

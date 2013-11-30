@@ -7,6 +7,7 @@ import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.code.Code;
 import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
@@ -46,6 +47,12 @@ public class Ctor extends Function implements Diffable<Ctor> {
     public String getName() {
         return CtorUtil.getFullName(ctor);
     }    
+
+    public void compareCode(Ctor toCtor, Differences differences) {
+        Code fromCode = new Code(getName(), getCodeTokens());
+        Code toCode = new Code(toCtor.getName(), toCtor.getCodeTokens());
+        fromCode.diff(toCode, differences);
+    }
 
     protected TokenList getCodeTokens() {
         // removes all tokens up to the first left brace. This is because ctors

@@ -6,6 +6,7 @@ import net.sourceforge.pmd.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.ast.ASTVariableInitializer;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.code.Code;
 import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.CodedElement;
 import org.incava.diffj.element.Differences;
@@ -60,10 +61,6 @@ public class Variable extends CodedElement {
     public boolean hasInitializer() {
         return init != null;
     }
-
-    public TokenList getCodeTokens() {
-        return new TokenList(init);
-    }    
     
     public String getTypeName() {
         return SimpleNodeUtil.toString(type);
@@ -75,7 +72,9 @@ public class Variable extends CodedElement {
 
         if (hasInitializer()) {
             if (toVariable.hasInitializer()) {
-                compareCode(toVariable, differences);
+                Code fromCode = new Code(getName(), new TokenList(init));
+                Code toCode = new Code(toVariable.getName(), new TokenList(toVariable.init));
+                fromCode.diff(toCode, differences);
             }
             else {
                 differences.changed(init, toVariable.getNode(), INITIALIZER_REMOVED);

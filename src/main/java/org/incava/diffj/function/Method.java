@@ -108,10 +108,6 @@ public class Method extends Function implements Diffable<Method> {
     //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(toBlock));        
     // }
 
-    protected TokenList getCodeTokens() {
-        return block.getCodeTokens();
-    }
-
     protected void compareReturnTypes(Method toMethod, Differences differences) {
         SimpleNode fromRetType    = getReturnType();
         SimpleNode toRetType      = toMethod.getReturnType();
