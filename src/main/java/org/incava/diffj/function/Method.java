@@ -9,7 +9,6 @@ import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.code.Block;
-import org.incava.diffj.code.Code;
 import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
@@ -29,12 +28,14 @@ public class Method extends Function implements Diffable<Method> {
 
     private final ASTMethodDeclaration method;
     private final Block block;
+    private final String name;
 
     public Method(ASTMethodDeclaration method) {
         super(method);
         this.method = method;
         ASTBlock astBlk = SimpleNodeUtil.findChild(method, ASTBlock.class);
-        block = astBlk == null ? null : new Block(astBlk);
+        this.name = MethodUtil.getFullName(method);
+        this.block = astBlk == null ? null : new Block(name, astBlk);
     }
 
     public void diff(Method toMethod, Differences differences) {
@@ -66,7 +67,7 @@ public class Method extends Function implements Diffable<Method> {
      * This returns the full method name/signature, including parameters.
      */
     public String getName() {
-        return MethodUtil.getFullName(method);
+        return name;
     }
 
     protected MethodModifiers getModifiers() {
@@ -86,9 +87,7 @@ public class Method extends Function implements Diffable<Method> {
     protected void compareBodies(Method toMethod, Differences differences) {
         if (hasBlock()) {
             if (toMethod.hasBlock()) {
-                Code fromCode = new Code(getName(), block.getCodeTokens());
-                Code toCode = new Code(getName(), toMethod.block.getCodeTokens());
-                fromCode.diff(toCode, differences);
+                block.compareCode(toMethod.block, differences);
             }
             else {
                 differences.changed(this, toMethod, METHOD_BLOCK_REMOVED);

@@ -39,8 +39,4 @@ public abstract class Function extends CodedElement {
     protected Throws getThrows() {
         return new Throws(node, getThrowsList());
     }
-
-    protected Code getCode() {
-        return new Code(getName(), getCodeTokens());
-    }
 }
