@@ -4,12 +4,15 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import net.sourceforge.pmd.ast.ASTBlock;
+import net.sourceforge.pmd.ast.ASTBlockStatement;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.Lines;
 import org.incava.diffj.code.Block;
+import org.incava.diffj.code.Statement;
 import org.incava.diffj.code.TokenList;
 import org.incava.diffj.code.TokenDifference;
 import org.incava.diffj.compunit.CompilationUnit;
@@ -66,8 +69,8 @@ public class TestMethodCodeByStatement extends ItemsTest {
         return getChildNode(bodyDecl, 0);
     }
 
-    public List<SimpleNode> getStatements(SimpleNode node) {
-        return SimpleNodeUtil.findChildren(node);
+    public List<ASTBlockStatement> getStatements(SimpleNode node) {
+        return SimpleNodeUtil.findChildren(node, ASTBlockStatement.class);
     }
 
     public List<TokenList> showMethod(String fileName) throws Exception {
@@ -80,13 +83,21 @@ public class TestMethodCodeByStatement extends ItemsTest {
         tr.Ace.onRed("methBlk", methBlk);
         // dump(methBlk);
 
+        ASTBlock astBlk = SimpleNodeUtil.findChild(methNode, ASTBlock.class);
+        List<Token> tokens = SimpleNodeUtil.getChildTokens(astBlk);
+        tr.Ace.log("tokens", tokens);
+
         List<TokenList> tokenLists = new ArrayList<TokenList>();
 
-        List<SimpleNode> statements = methBlk.getStatements();
-        for (SimpleNode stmt : statements) {
+        List<Statement> statements = methBlk.getStatements();
+        for (Statement stmt : statements) {
             tr.Ace.yellow("stmt", stmt);
-            dumpTokens(stmt);
-            tokenLists.add(new TokenList(stmt));
+            ASTBlockStatement blkStmt = stmt.getBlockStatement();
+            dumpTokens(blkStmt);
+            List<Token> stmtTokens = stmt.getTokens();
+            tr.Ace.log("stmtTokens", stmtTokens);
+            
+            tokenLists.add(new TokenList(stmtTokens));
         }
         return tokenLists;
     }
@@ -137,10 +148,10 @@ public class TestMethodCodeByStatement extends ItemsTest {
         
         List<TokenList> tokenLists = new ArrayList<TokenList>();
 
-        List<SimpleNode> statements = getStatements(ctorDecl);
+        List<ASTBlockStatement> statements = getStatements(ctorDecl);
         // the parameters list:
         statements.remove(0);
-        for (SimpleNode stmt : statements) {
+        for (ASTBlockStatement stmt : statements) {
             tr.Ace.yellow("stmt", stmt);
             dumpTokens(stmt);
             tokenLists.add(new TokenList(stmt));
