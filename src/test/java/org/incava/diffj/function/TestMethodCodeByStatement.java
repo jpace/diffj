@@ -103,7 +103,7 @@ public class TestMethodCodeByStatement extends ItemsTest {
     }
 
     public void runDiff(List<TokenList> a, List<TokenList> b) {
-        Diff<TokenList> diff = new Diff<TokenList>(a, b, new TokenList.TokenListComparator());
+        Diff<TokenList> diff = new Diff<TokenList>(a, b);
         List<Difference> diffs = diff.execute();
         tr.Ace.log("diffs", diffs);
         for (Difference df : diffs) {

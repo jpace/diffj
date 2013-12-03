@@ -13,63 +13,29 @@ import org.incava.pmdx.SimpleNodeUtil;
 /**
  * A list of tokens representing code.
  */
-public class TokenList {
-    public static class TokenComparator extends DefaultComparator<Token> {
-        public int doCompare(Token xt, Token yt) {
-            return compareTokens(xt, yt);
-        }
-    }
-
-    public static class TokenListComparator extends DefaultComparator<TokenList> {
-        public int doCompare(TokenList xList, TokenList yList) {
-            int cmp = new Integer(xList.tokens.size()).compareTo(yList.tokens.size());
-            if (cmp != 0) {
-                return cmp;
-            }
-
-            for (int idx = 0; idx < xList.tokens.size(); ++idx) {
-                Token xt = xList.tokens.get(idx);
-                Token yt = yList.tokens.get(idx);
-                cmp = compareTokens(xt, yt);
-                if (cmp != 0) {
-                    return cmp;
-                }
-            }
-
-            return cmp;
-        }
-    }
-
-    public static int compareTokens(Token xt, Token yt) {
-        Tkn x = new Tkn(xt);
-        Tkn y = new Tkn(yt);
-        return x.compareTo(y);
-    }
-
+public class TokenList implements Comparable<TokenList> {
     private final List<Token> tokens;
-
+    private final String name;
+    
     public TokenList(List<Token> tokens) {
-        this.tokens = tokens;
+        this(null, tokens);
     }
 
     public TokenList(SimpleNode node) {
-        tokens = SimpleNodeUtil.getChildTokens(node);
+        this(null, node);
+    }
+
+    public TokenList(String name, List<Token> tokens) {
+        this.name = name;
+        this.tokens = tokens;
+    }
+
+    public TokenList(String name, SimpleNode node) {
+        this(name, SimpleNodeUtil.getChildTokens(node));
     }
 
     public Differ<Token, TokenDifference> diff(TokenList toTokenList) {
-        return new Differ<Token, TokenDifference>(tokens, toTokenList.tokens, new TokenComparator()) {
-            public TokenDifference createDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
-                if (delEnd == Difference.NONE) {
-                    return new TokenDifferenceAdd(delStart, delEnd, addStart, addEnd);
-                }
-                else if (addEnd == Difference.NONE) {
-                    return new TokenDifferenceDelete(delStart, delEnd, addStart, addEnd);
-                }
-                else {
-                    return new TokenDifferenceChange(delStart, delEnd, addStart, addEnd);
-                }
-            }
-        };
+        return new TokenDiffer(tokens, toTokenList.tokens);
     }
 
     public LocationRange getLocationRange(Integer start, Integer end) {
@@ -95,5 +61,25 @@ public class TokenList {
             sb.append("^").append(tk.image);
         }
         return sb.toString();
+    }
+
+    public int compareTo(TokenList other) {
+        int cmp = new Integer(tokens.size()).compareTo(other.tokens.size());
+        if (cmp != 0) {
+            return cmp;
+        }
+
+        for (int idx = 0; idx < tokens.size(); ++idx) {
+            Token xt = tokens.get(idx);
+            Token yt = other.tokens.get(idx);
+            Tkn x = new Tkn(xt);
+            Tkn y = new Tkn(yt);
+            cmp = x.compareTo(y);
+            if (cmp != 0) {
+                return cmp;
+            }
+        }
+
+        return cmp;
     }
 }
