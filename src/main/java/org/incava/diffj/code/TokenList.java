@@ -60,13 +60,13 @@ public class TokenList {
         return new Differ<Token, TokenDifference>(tokens, toTokenList.tokens, new TokenComparator()) {
             public TokenDifference createDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
                 if (delEnd == Difference.NONE) {
-                    return new TokenDifference(delStart, delEnd, addStart, addEnd);
+                    return new TokenDifferenceAdd(delStart, delEnd, addStart, addEnd);
                 }
                 else if (addEnd == Difference.NONE) {
-                    return new TokenDifference(delStart, delEnd, addStart, addEnd);
+                    return new TokenDifferenceDelete(delStart, delEnd, addStart, addEnd);
                 }
                 else {
-                    return new TokenDifference(delStart, delEnd, addStart, addEnd);
+                    return new TokenDifferenceChange(delStart, delEnd, addStart, addEnd);
                 }
             }
         };

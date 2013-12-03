@@ -2,12 +2,14 @@ package org.incava.diffj.function;
 
 import java.util.Iterator;
 import java.util.List;
+import net.sourceforge.pmd.ast.ASTBlockStatement;
 import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.code.Code;
+import org.incava.diffj.code.Statement;
 import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
@@ -55,22 +57,12 @@ public class Ctor extends Function implements Diffable<Ctor> {
     }
 
     protected TokenList getCodeTokens() {
-        // removes all tokens up to the first left brace. This is because ctors
-        // don't have their own blocks, unlike methods.
-        
-        List<Token> tokens = SimpleNodeUtil.getChildTokens(ctor);
-        
-        Iterator<Token> it = tokens.iterator();
-        while (it.hasNext()) {
-            Token tk = it.next();
-            if (tk.kind == JavaParserConstants.LBRACE) {
-                break;
-            }
-            else {
-                it.remove();
-            }
+        List<ASTBlockStatement> stmts = SimpleNodeUtil.findChildren(ctor, ASTBlockStatement.class);
+        List<Token> tokens = new java.util.ArrayList<Token>();
+        for (ASTBlockStatement blkStmt : stmts) {
+            Statement stmt = new Statement(blkStmt);
+            tokens.addAll(stmt.getTokens());
         }
-
         return new TokenList(tokens);
     }
 

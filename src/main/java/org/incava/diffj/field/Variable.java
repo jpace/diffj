@@ -72,6 +72,7 @@ public class Variable extends CodedElement {
 
         if (hasInitializer()) {
             if (toVariable.hasInitializer()) {
+                // this is an Expression:
                 Code fromCode = new Code(getName(), new TokenList(init));
                 Code toCode = new Code(toVariable.getName(), new TokenList(toVariable.init));
                 fromCode.diff(toCode, differences);

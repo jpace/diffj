@@ -24,9 +24,10 @@ public class Block {
         // this.tokens = new TokenList(blk);
         List<Token> allTokens = new java.util.ArrayList<Token>();
         this.statements = new ArrayList<Statement>();
-        for (ASTBlockStatement stmt : stmts) {
-            allTokens.addAll(SimpleNodeUtil.getChildTokens(stmt));
-            statements.add(new Statement(stmt));
+        for (ASTBlockStatement blkStmt : stmts) {
+            Statement stmt = new Statement(blkStmt);
+            allTokens.addAll(stmt.getTokens());
+            statements.add(stmt);
         }
         this.tokens = new TokenList(allTokens);
         tr.Ace.bold("tokens", tokens);
