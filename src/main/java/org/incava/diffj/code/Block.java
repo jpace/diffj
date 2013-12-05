@@ -2,25 +2,26 @@ package org.incava.diffj.code;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTBlock;
 import net.sourceforge.pmd.ast.ASTBlockStatement;
+import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Differences;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Block {
     private final String name;
-    private final ASTBlock blk;
     private final List<Statement> statements;
 
-    public Block(String name, ASTBlock blk) {
+    public Block(String name, SimpleNode blk) {
+        this(name, SimpleNodeUtil.findChildren(blk, ASTBlockStatement.class));
+    }
+
+    public Block(String name, List<ASTBlockStatement> blkStatements) {
         this.name = name;
-        this.blk = blk;
-        List<ASTBlockStatement> stmts = SimpleNodeUtil.findChildren(blk, ASTBlockStatement.class);
         
-        tr.Ace.bold("stmts", stmts);
+        tr.Ace.bold("blkStatements", blkStatements);
         this.statements = new ArrayList<Statement>();
-        for (ASTBlockStatement blkStmt : stmts) {
+        for (ASTBlockStatement blkStmt : blkStatements) {
             Statement stmt = new Statement(blkStmt);
             statements.add(stmt);
         }
@@ -32,7 +33,6 @@ public class Block {
 
     public TokenList getTokens() {
         tr.Ace.bold("statements", statements);
-        // this.tokens = new TokenList(blk);
         List<Token> allTokens = new java.util.ArrayList<Token>();
         for (Statement stmt : statements) {
             allTokens.addAll(stmt.getTokens());

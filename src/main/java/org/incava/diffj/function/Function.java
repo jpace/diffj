@@ -7,6 +7,7 @@ import org.incava.diffj.code.Code;
 import org.incava.diffj.element.CodedElement;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
+import org.incava.pmdx.FunctionUtil;
 
 public abstract class Function extends CodedElement {
     private final SimpleNode node;
@@ -16,7 +17,9 @@ public abstract class Function extends CodedElement {
         this.node = node;
     }
 
-    abstract protected ASTNameList getThrowsList();
+    protected ASTNameList getThrowsList() {
+        return FunctionUtil.getThrowsList(node);
+    }
 
     abstract protected ASTFormalParameters getFormalParameters();
 

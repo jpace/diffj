@@ -53,10 +53,6 @@ public class Method extends Function implements Diffable<Method> {
         return MethodUtil.getParameters(method);
     }
 
-    protected ASTNameList getThrowsList() {
-        return MethodUtil.getThrowsList(method);
-    }
-
     protected Block getBlock() {
         return block;
     }
@@ -99,17 +95,6 @@ public class Method extends Function implements Diffable<Method> {
             differences.changed(this, toMethod, METHOD_BLOCK_ADDED);
         }
     }
-
-    // protected void compareBlocks(String fromName, ASTBlock fromBlock, String toName, ASTBlock toBlock)
-    // {
-    //     tr.Ace.cyan("fromBlock", fromBlock);
-    //     SimpleNodeUtil.dump(fromBlock, "");
-    //     tr.Ace.cyan("toBlock", toBlock);
-    //     SimpleNodeUtil.dump(toBlock, "");
-    //     // walk through, looking for common if and for statements ...
-    //     tr.Ace.cyan("aChildren(null)", SimpleNodeUtil.findChildren(fromBlock));
-    //     tr.Ace.cyan("bChildren(null)", SimpleNodeUtil.findChildren(toBlock));        
-    // }
 
     protected void compareReturnTypes(Method toMethod, Differences differences) {
         SimpleNode fromRetType    = getReturnType();

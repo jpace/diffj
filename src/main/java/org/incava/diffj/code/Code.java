@@ -17,11 +17,6 @@ public class Code {
     private final String name;
     private final TokenList tokenList;
 
-    public Code(String name, List<Token> tokens) {
-        this.name = name;
-        this.tokenList = new TokenList(tokens);
-    }
-
     public Code(String name, TokenList tokens) {
         this.name = name;
         this.tokenList = tokens;
