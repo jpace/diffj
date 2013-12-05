@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlock;
 import net.sourceforge.pmd.ast.ASTBlockStatement;
-import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.Differences;
 import org.incava.pmdx.SimpleNodeUtil;
@@ -13,7 +12,6 @@ public class Block {
     private final String name;
     private final ASTBlock blk;
     private final List<Statement> statements;
-    private final TokenList tokens;
 
     public Block(String name, ASTBlock blk) {
         this.name = name;
@@ -21,25 +19,32 @@ public class Block {
         List<ASTBlockStatement> stmts = SimpleNodeUtil.findChildren(blk, ASTBlockStatement.class);
         
         tr.Ace.bold("stmts", stmts);
-        // this.tokens = new TokenList(blk);
-        List<Token> allTokens = new java.util.ArrayList<Token>();
         this.statements = new ArrayList<Statement>();
         for (ASTBlockStatement blkStmt : stmts) {
             Statement stmt = new Statement(blkStmt);
-            allTokens.addAll(stmt.getTokens());
             statements.add(stmt);
         }
-        this.tokens = new TokenList(allTokens);
-        tr.Ace.bold("tokens", tokens);
     }
 
     public List<Statement> getStatements() {
         return statements;
     }
 
+    public TokenList getTokens() {
+        tr.Ace.bold("statements", statements);
+        // this.tokens = new TokenList(blk);
+        List<Token> allTokens = new java.util.ArrayList<Token>();
+        for (Statement stmt : statements) {
+            allTokens.addAll(stmt.getTokens());
+        }
+        TokenList tokens = new TokenList(allTokens);
+        tr.Ace.bold("tokens", tokens);
+        return tokens;
+    }
+
     public void compareCode(Block toBlock, Differences differences) {
-        Code fromCode = new Code(name, tokens);
-        Code toCode = new Code(name, toBlock.tokens);
+        Code fromCode = new Code(name, getTokens());
+        Code toCode = new Code(name, toBlock.getTokens());
         fromCode.diff(toCode, differences);
     }
 }
