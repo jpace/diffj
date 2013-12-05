@@ -1,12 +1,9 @@
 package org.incava.diffj.code;
 
-import java.text.MessageFormat;
 import java.util.List;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
-import org.incava.analysis.FileDiffCodeAdded;
-import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.text.Message;
@@ -32,10 +29,8 @@ public class Code {
 
     public void diff(Code toCode, Differences differences) {
         TokenList toTokenList = toCode.tokenList;
-        Differ<Token, TokenDifference> tokenDiff = tokenList.diff(toTokenList);
-        
         FileDiff currFileDiff = null;
-        List<TokenDifference> diffList = tokenDiff.execute();
+        List<TokenDifference> diffList = tokenList.diff(toTokenList);
 
         for (TokenDifference diff : diffList) {
             currFileDiff = processDifference(diff, toTokenList, currFileDiff, differences);
@@ -49,48 +44,19 @@ public class Code {
         String newMsg = CODE_CHANGED.format(name);
         FileDiff newDiff = new FileDiffChange(newMsg, fileDiff, fromLocRg, toLocRg);
         differences.getFileDiffs().remove(fileDiff);
-        return addFileDiff(newDiff, differences);
-    }
-
-    protected FileDiff addFileDiff(FileDiff fileDiff, Differences differences) {
-        differences.add(fileDiff);
-        return fileDiff;
-    }
-
-    protected FileDiff codeAdded(LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        String str = CODE_ADDED.format(name);
-        
-        // this will show as add when highlighted, as change when not.
-        FileDiff fileDiff = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
-        return addFileDiff(fileDiff, differences);
-    }
-
-    protected FileDiff codeRemoved(LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        String str = CODE_REMOVED.format(name);
-        FileDiff fileDiff = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
-        return addFileDiff(fileDiff, differences);
-    }    
-
-    protected FileDiff codeChanged(LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        String str = CODE_CHANGED.format(name);
-        FileDiff fileDiff = new FileDiffChange(str, fromLocRg, toLocRg);
-        return addFileDiff(fileDiff, differences);
+        differences.add(newDiff);
+        return newDiff;
     }
     
     protected FileDiff processDifference(TokenDifference diff, TokenList toTokenList, FileDiff currFileDiff, Differences differences) {
-        int delStart = diff.getDeletedStart();
-        int delEnd   = diff.getDeletedEnd();
-        int addStart = diff.getAddedStart();
-        int addEnd   = diff.getAddedEnd();
-
-        LocationRange fromLocRg = tokenList.getLocationRange(delStart, delEnd);
-        LocationRange toLocRg = toTokenList.getLocationRange(addStart, addEnd);
+        LocationRange fromLocRg = diff.getDeletedRange(tokenList);
+        LocationRange toLocRg = diff.getAddedRange(toTokenList);
 
         if (currFileDiff != null && currFileDiff.isOnSameLine(fromLocRg)) {
             return replaceReference(currFileDiff, fromLocRg, toLocRg, differences);
         }
         else {
-            return diff.execute(this, fromLocRg, toLocRg, differences);
+            return diff.execute(name, fromLocRg, toLocRg, differences);
         }
     }
 }

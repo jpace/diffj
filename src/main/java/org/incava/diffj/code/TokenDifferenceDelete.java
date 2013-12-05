@@ -1,6 +1,7 @@
 package org.incava.diffj.code;
 
 import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.Difference;
@@ -10,7 +11,9 @@ public class TokenDifferenceDelete extends TokenDifference {
         super(delStart, delEnd, addStart, addEnd);
     }
 
-    public FileDiff execute(Code code, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
-        return code.codeRemoved(fromLocRg, toLocRg, differences);
+    public FileDiff execute(String name, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
+        String str = Code.CODE_REMOVED.format(name);
+        FileDiff fileDiff = new FileDiffCodeDeleted(str, fromLocRg, toLocRg);
+        return addFileDiff(fileDiff, differences);
     }
 }

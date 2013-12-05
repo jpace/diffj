@@ -4,7 +4,6 @@ import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.ijdk.text.LocationRange;
-import org.incava.ijdk.util.DefaultComparator;
 import org.incava.ijdk.util.ListExt;
 import org.incava.ijdk.util.diff.Differ;
 import org.incava.ijdk.util.diff.Difference;
@@ -34,8 +33,9 @@ public class TokenList implements Comparable<TokenList> {
         this(name, SimpleNodeUtil.getChildTokens(node));
     }
 
-    public Differ<Token, TokenDifference> diff(TokenList toTokenList) {
-        return new TokenDiffer(tokens, toTokenList.tokens);
+    public List<TokenDifference> diff(TokenList toTokenList) {
+        TokenDiffer td = new TokenDiffer(tokens, toTokenList.tokens);
+        return td.execute();
     }
 
     public LocationRange getLocationRange(Integer start, Integer end) {

@@ -10,5 +10,18 @@ public abstract class TokenDifference extends Difference {
         super(delStart, delEnd, addStart, addEnd);
     }
 
-    public abstract FileDiff execute(Code code, LocationRange fromLocRg, LocationRange toLocRg, Differences differences);
+    public abstract FileDiff execute(String name, LocationRange fromLocRg, LocationRange toLocRg, Differences differences);
+
+    protected FileDiff addFileDiff(FileDiff fileDiff, Differences differences) {
+        differences.add(fileDiff);
+        return fileDiff;
+    }
+
+    public LocationRange getDeletedRange(TokenList tokenList) {
+        return tokenList.getLocationRange(getDeletedStart(), getDeletedEnd());
+    }
+
+    public LocationRange getAddedRange(TokenList tokenList) {
+        return tokenList.getLocationRange(getAddedStart(), getAddedEnd());
+    }
 }

@@ -117,12 +117,8 @@ public class TestMethodCodeByStatement extends ItemsTest {
                 TokenList blist = b.get(df.getAddedStart());
                 tr.Ace.log("blist", blist);
 
-                Differ<Token, TokenDifference> differ = alist.diff(blist);
-                tr.Ace.log("differ", differ);
-                List<TokenDifference> tkDiffs = differ.execute();
-                tr.Ace.log("tkDiffs", tkDiffs);
-                
-                // Differ<Token, TokenDifference> diff(TokenList toTokenList) 
+                List<TokenDifference> tkDiffs = alist.diff(blist);
+                tr.Ace.yellow("tkDiffs", tkDiffs);
             }
         }
     }
