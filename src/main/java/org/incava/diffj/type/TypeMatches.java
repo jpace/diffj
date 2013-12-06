@@ -89,7 +89,7 @@ public class TypeMatches<ElementType extends Diffable<ElementType>> {
 
             if (unprocFromItems.contains(fromType) && unprocToItems.contains(toType)) {
                 fromType.diff(toType, differences);
-                    
+                
                 procFromItems.add(fromType);
                 procToItems.add(toType);
             }

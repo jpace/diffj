@@ -10,29 +10,13 @@ public class ParameterTypes {
         this.paramTypes = paramTypes;
     }
 
-    protected boolean isEmpty() {
-        return paramTypes.isEmpty();
-    }
-
-    private Pair<Integer, Integer> getMatchListScore(List<String> aParamTypes, List<String> bParamTypes, Pair<Integer, Integer> matches) {
-        for (int idx = 0; idx < aParamTypes.size(); ++idx) {
-            Integer paramMatch = getListMatch(aParamTypes, idx, bParamTypes);
-            if (paramMatch == null) {
-                continue;
-            }
-            else if (paramMatch == idx) {
-                matches = Pair.create(matches.getFirst() + 1, matches.getSecond());
-            }
-            else {
-                matches = Pair.create(matches.getFirst(), matches.getSecond() + 1);
-            }
-        }
-        return matches;
-    }
-
     public double getMatchScore(ParameterTypes toParmTyp) {
-        if (isEmpty() && toParmTyp.isEmpty()) {
-            return 1.0;
+        return getMatchScore(toParmTyp.paramTypes);
+    }
+
+    public double getMatchScore(List<String> toParamTypes) {
+        if (paramTypes.isEmpty() && toParamTypes.isEmpty()) {
+            return 3;
         }
         
         // (int[], double, String) <=> (int[], double, String) ==> 100% (3 of 3)
@@ -41,47 +25,17 @@ public class ParameterTypes {
         // (int[], double, String) <=> (String) ==> 33% (1 of 3 params)
         // (int[], double) <=> (String) ==> 0 (0 of 3)
 
-        List<String> toParamTypes = toParmTyp.paramTypes;
+        ParameterTypeComparator ptc = new ParameterTypeComparator(paramTypes, toParamTypes);
 
         // first == number of exact matches; second == number of misordered matches:
-        Pair<Integer, Integer> matches = getMatchListScore(paramTypes, toParamTypes, Pair.create(0, 0));
-        matches = getMatchListScore(toParamTypes, paramTypes, matches);
+        Pair<Integer, Integer> matches = ptc.getMatchListScore();
+
+        // I used to diff both ways ((paramTypes, toParamTypes) and
+        // (toParamTypes, paramTypes)), but that doesn't appear to be necessary.
         
         int numParams = Math.max(paramTypes.size(), toParamTypes.size());
-
-        double matchCount = (double)matches.getFirst() / numParams + (double)matches.getSecond() / (2 * numParams);
-
-        return 0.5 + (matchCount / 2.0);
-    }
-
-    private void clearMatchList(List<String> fromList, int fromIndex, List<String> toList, int toIndex) {
-        fromList.set(fromIndex, null);
-        toList.set(toIndex, null);
-    }
-
-    public Integer getListMatch(List<String> fromList, int fromIndex, List<String> toList) {
-        int fromSize = fromList.size();
-        String fromStr = fromIndex < fromSize ? fromList.get(fromIndex) : null;
-        
-        if (fromStr == null) {
-            return null;
-        }
-
-        int toSize = toList.size();
-        String toStr = fromIndex < toSize ? toList.get(fromIndex) : null;
-        
-        if (fromStr.equals(toStr)) {
-            clearMatchList(fromList, fromIndex, toList, fromIndex);
-            return fromIndex;
-        }
-        
-        for (int toIdx = 0; toIdx < toSize; ++toIdx) {
-            toStr = toList.get(toIdx);
-            if (fromStr.equals(toStr)) {
-                clearMatchList(fromList, fromIndex, toList, toIdx);
-                return toIdx;
-            }
-        }
-        return null;
+        int exactMatches = matches.getFirst();
+        int misorderedMatches = matches.getSecond();
+        return 1 + (exactMatches * 2 + misorderedMatches) / numParams;
     }
 }
