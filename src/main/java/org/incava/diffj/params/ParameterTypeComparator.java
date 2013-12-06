@@ -2,7 +2,6 @@ package org.incava.diffj.params;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.incava.ijdk.lang.Pair;
 
 public class ParameterTypeComparator {
     private final List<String> fromParams;
@@ -13,22 +12,22 @@ public class ParameterTypeComparator {
         this.toParams = new ArrayList<String>(toParams);
     }
 
-    public Pair<Integer, Integer> getMatchListScore() {
+    public ParameterTypeComparison getComparison() {
         // first: exact; second: misordered
-        Pair<Integer, Integer> matches = Pair.create(0, 0);
+        ParameterTypeComparison comp = new ParameterTypeComparison(0, 0);
         for (int idx = 0; idx < fromParams.size(); ++idx) {
             Integer paramMatch = getListMatch(idx);
             if (paramMatch == null) {
                 continue;
             }
             else if (paramMatch == idx) {
-                matches = Pair.create(matches.getFirst() + 1, matches.getSecond());
+                comp = comp.addExactMatch();
             }
             else {
-                matches = Pair.create(matches.getFirst(), matches.getSecond() + 1);
+                comp = comp.addMisorderedMatch();
             }
         }
-        return matches;
+        return comp;
     }
     
     public void clearMatchList(int fromIndex, int toIndex) {

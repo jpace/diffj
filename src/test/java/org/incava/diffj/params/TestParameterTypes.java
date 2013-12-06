@@ -3,7 +3,6 @@ package org.incava.diffj.params;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.incava.ijdk.lang.Pair;
 import org.incava.test.IncavaTestCase;
 import org.incava.ijdk.util.IUtil;
 import static org.incava.ijdk.util.IUtil.*;

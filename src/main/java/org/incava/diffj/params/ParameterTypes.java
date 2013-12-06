@@ -1,7 +1,6 @@
 package org.incava.diffj.params;
 
 import java.util.List;
-import org.incava.ijdk.lang.Pair;
 
 public class ParameterTypes {
     private final List<String> paramTypes;
@@ -28,14 +27,12 @@ public class ParameterTypes {
         ParameterTypeComparator ptc = new ParameterTypeComparator(paramTypes, toParamTypes);
 
         // first == number of exact matches; second == number of misordered matches:
-        Pair<Integer, Integer> matches = ptc.getMatchListScore();
+        ParameterTypeComparison comp = ptc.getComparison();
 
         // I used to diff both ways ((paramTypes, toParamTypes) and
         // (toParamTypes, paramTypes)), but that doesn't appear to be necessary.
         
         int numParams = Math.max(paramTypes.size(), toParamTypes.size());
-        int exactMatches = matches.getFirst();
-        int misorderedMatches = matches.getSecond();
-        return 1 + (exactMatches * 2 + misorderedMatches) / numParams;
+        return 1 + (comp.getExactMatches() * 2 + comp.getMisorderedMatches()) / numParams;
     }
 }
