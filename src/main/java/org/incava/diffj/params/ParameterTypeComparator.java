@@ -13,18 +13,17 @@ public class ParameterTypeComparator {
     }
 
     public ParameterTypeComparison getComparison() {
-        // first: exact; second: misordered
-        ParameterTypeComparison comp = new ParameterTypeComparison(0, 0);
+        ParameterTypeComparison comp = new ParameterTypeComparison();
         for (int idx = 0; idx < fromParams.size(); ++idx) {
             Integer paramMatch = getListMatch(idx);
             if (paramMatch == null) {
                 continue;
             }
             else if (paramMatch == idx) {
-                comp = comp.addExactMatch();
+                comp.addExactMatch(idx);
             }
             else {
-                comp = comp.addMisorderedMatch();
+                comp.addMisorderedMatch(idx, paramMatch);
             }
         }
         return comp;

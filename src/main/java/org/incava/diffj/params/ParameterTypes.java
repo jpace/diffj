@@ -33,6 +33,6 @@ public class ParameterTypes {
         // (toParamTypes, paramTypes)), but that doesn't appear to be necessary.
         
         int numParams = Math.max(paramTypes.size(), toParamTypes.size());
-        return 1 + (comp.getExactMatches() * 2 + comp.getMisorderedMatches()) / numParams;
+        return 1 + (comp.getExactMatches().size() * 2 + comp.getMisorderedMatches().keySet().size()) / numParams;
     }
 }
