@@ -1,6 +1,8 @@
 package org.incava.diffj.params;
 
 import java.util.List;
+import org.incava.ijdk.util.ListComparator;
+import org.incava.ijdk.util.ListComparison;
 
 public class ParameterTypes {
     private final List<String> paramTypes;
@@ -24,10 +26,9 @@ public class ParameterTypes {
         // (int[], double, String) <=> (String) ==> 33% (1 of 3 params)
         // (int[], double) <=> (String) ==> 0 (0 of 3)
 
-        ParameterTypeComparator ptc = new ParameterTypeComparator(paramTypes, toParamTypes);
+        ListComparator lc = new ListComparator<String>(paramTypes, toParamTypes);
 
-        // first == number of exact matches; second == number of misordered matches:
-        ParameterTypeComparison comp = ptc.getComparison();
+        ListComparison comp = lc.getComparison();
 
         // I used to diff both ways ((paramTypes, toParamTypes) and
         // (toParamTypes, paramTypes)), but that doesn't appear to be necessary.
