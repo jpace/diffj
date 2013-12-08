@@ -1,6 +1,5 @@
 package org.incava.diffj.function;
 
-import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlock;
 import net.sourceforge.pmd.ast.ASTFormalParameters;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
@@ -9,14 +8,12 @@ import net.sourceforge.pmd.ast.ASTNameList;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.code.Block;
-import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.params.Parameters;
 import org.incava.diffj.util.Messages;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.MethodUtil;
-import org.incava.pmdx.ParameterUtil;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Method extends Function implements Diffable<Method> {

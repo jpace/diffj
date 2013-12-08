@@ -13,6 +13,10 @@ public class Tkn {
 
     public Tkn(Token token) {
         this.token = token;
+        // tr.Ace.yellow("token          ", token);
+        // tr.Ace.yellow("token.image    ", token == null ? null : token.image);
+        // tr.Ace.yellow("token.endLine  ", token == null ? null : token.endLine);
+        // tr.Ace.yellow("token.endColumn", token == null ? null : token.endColumn);
     }
 
     public Token getToken() {
@@ -28,6 +32,9 @@ public class Tkn {
     }
     
     public Location getEndLocation() {
+        // tr.Ace.log("token          ", token);
+        // tr.Ace.log("token.endLine  ", token == null ? null : token.endLine);
+        // tr.Ace.log("token.endColumn", token == null ? null : token.endColumn);
         return token == null ? null : new Location(token.endLine, token.endColumn);
     }
 

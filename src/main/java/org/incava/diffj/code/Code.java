@@ -1,13 +1,11 @@
 package org.incava.diffj.code;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.text.Message;
-import org.incava.ijdk.util.diff.Differ;
 
 public class Code {    
     public static final Message CODE_CHANGED = new Message("code changed in {0}");
@@ -28,6 +26,7 @@ public class Code {
         List<TokenDifference> diffList = tokenList.diff(toTokenList);
 
         for (TokenDifference diff : diffList) {
+            tr.Ace.log("diff", diff);
             currFileDiff = processDifference(diff, toTokenList, currFileDiff, differences);
             if (currFileDiff == null) {
                 break;
@@ -37,7 +36,9 @@ public class Code {
 
     protected FileDiff replaceReference(FileDiff fileDiff, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
         String newMsg = CODE_CHANGED.format(name);
+        tr.Ace.reverse("newMsg", newMsg);
         FileDiff newDiff = new FileDiffChange(newMsg, fileDiff, fromLocRg, toLocRg);
+        tr.Ace.reverse("newDiff", newDiff);
         differences.getFileDiffs().remove(fileDiff);
         differences.add(newDiff);
         return newDiff;
@@ -45,7 +46,9 @@ public class Code {
     
     protected FileDiff processDifference(TokenDifference diff, TokenList toTokenList, FileDiff currFileDiff, Differences differences) {
         LocationRange fromLocRg = diff.getDeletedRange(tokenList);
+        tr.Ace.log("fromLocRg", fromLocRg);
         LocationRange toLocRg = diff.getAddedRange(toTokenList);
+        tr.Ace.log("toLocRg", toLocRg);
 
         if (currFileDiff != null && currFileDiff.isOnSameLine(fromLocRg)) {
             return replaceReference(currFileDiff, fromLocRg, toLocRg, differences);
@@ -53,5 +56,9 @@ public class Code {
         else {
             return diff.execute(name, fromLocRg, toLocRg, differences);
         }
+    }
+
+    public String toString() {
+        return tokenList.toString();
     }
 }

@@ -7,6 +7,7 @@ import static org.incava.diffj.code.Code.*;
 public class TestCtorCode extends ItemsTest {
     public TestCtorCode(String name) {
         super(name);
+        tr.Ace.setVerbose(true);
     }
 
     public void testCodeNotChanged() {
@@ -41,6 +42,22 @@ public class TestCtorCode extends ItemsTest {
                  
                  makeCodeChangedRef(CODE_CHANGED, "Test()", locrg(2, 23, 23), locrg(4, 18, 18)));
     }
+
+    public void testCodeChangedInserted() {
+        evaluate(new Lines("class Test {",
+                           "    Test() { int i; }",
+                           "",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "",
+                           "    Test() { ",
+                           "        int i = -2;",
+                           "    }",
+                           "}"),
+                 
+                 makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 19, 19), locrg(4, 15, 18)));
+    }
     
     public void testCodeInsertedSameLine() {
         evaluate(new Lines("class Test {",
@@ -58,6 +75,41 @@ public class TestCtorCode extends ItemsTest {
                  
                  makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 18, 18), locrg(4, 13, 5, 11)));
     }
+
+    public void testCodeChangedOneStatementToTwo() {
+        evaluate(new Lines("class Test {",
+                           "    Test(int i) { i = 1; }",
+                           "",
+                           "}"),
+                         
+                 new Lines("class Test {" +
+                           "" +
+                           "    Test(int i) { ",
+                           "        int j = 0;",
+                           "        i = 2; ",
+                           "    }",
+                           "}"),
+                 
+                 makeCodeChangedRef(CODE_CHANGED, "Test(int)", locrg(2, 19, 23), locrg(2, 9, 3, 13)));
+    }
+
+    public void testCodeChangedTwoStatementsToOne() {
+        evaluate(new Lines("class Test {",
+                           "    Test(int i) { i = 1; int j = 2; }",
+                           "",
+                           "}"),
+                         
+                 new Lines("class Test {" +
+                           "" +
+                           "    Test(int i) { ",
+                           "        int j = 0;",
+                           "    }",
+                           "}"),
+                 
+                 makeCodeChangedRef(CODE_CHANGED, "Test(int)", locrg(2, 19, 34), locrg(2, 9, 17)));
+    }
+
+    // do the same for 3:1, 3:2, 2:3, 1:3
 
     public void testCodeAddedOwnLine() {
         evaluate(new Lines("class Test {",
