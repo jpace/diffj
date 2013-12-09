@@ -37,6 +37,10 @@ public class TokenList implements Comparable<TokenList> {
         TokenDiffer td = new TokenDiffer(tokens, toTokenList.tokens);
         return td.execute();
     }
+    
+    public void add(TokenList tokenList) {
+        tokens.addAll(tokenList.tokens);
+    }
 
     public LocationRange getLocationRange(Integer start, Integer end) {
         Token startTk = getStart(start);

@@ -5,7 +5,10 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlockStatement;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.analysis.FileDiff;
+import org.incava.analysis.FileDiffCodeAdded;
 import org.incava.diffj.element.Differences;
+import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.*;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -18,9 +21,7 @@ public class Block {
     }
 
     public Block(String name, List<ASTBlockStatement> blkStatements) {
-        this.name = name;
-        
-        tr.Ace.bold("blkStatements", blkStatements);
+        this.name = name;        
         this.statements = new ArrayList<Statement>();
         for (ASTBlockStatement blkStmt : blkStatements) {
             Statement stmt = new Statement(blkStmt);
@@ -33,23 +34,18 @@ public class Block {
     }
 
     public TokenList getTokens() {
-        tr.Ace.bold("statements", statements);
         List<Token> allTokens = new ArrayList<Token>();
         for (Statement stmt : statements) {
             allTokens.addAll(stmt.getTokens());
         }
-        TokenList tokens = new TokenList(allTokens);
-        tr.Ace.bold("tokens", tokens);
-        return tokens;
+        return new TokenList(allTokens);
     }
 
     public List<TokenList> getTokenLists() {
-        tr.Ace.bold("statements", statements);
         List<TokenList> tokenLists = new ArrayList<TokenList>();
         for (Statement stmt : statements) {
             tokenLists.add(new TokenList(stmt.getTokens()));
         }
-        tr.Ace.log("tokenLists", tokenLists);
         return tokenLists;
     }
 
@@ -59,12 +55,79 @@ public class Block {
         fromCode.diff(toCode, differences);
     }
 
-    public void compareCodeNew(Block toBlock, Differences differences) {
-        Code fromCode = new Code(name, getTokens());
-        tr.Ace.log("fromCode", fromCode);
-        Code toCode = new Code(name, toBlock.getTokens());
-        tr.Ace.log("toCode", toCode);
+    public void processAddedStatements(List<TokenList> fromTokenLists, 
+                                       List<TokenList> toTokenLists, 
+                                       Difference df, Differences differences) {
+        tr.Ace.onRed("df", df);
+        int from = df.getDeletedStart();
+        int to = df.getAddedStart();
+        tr.Ace.log("from", from);
+        tr.Ace.log("to", to);
 
+        TokenList alist = fromTokenLists.get(df.getDeletedStart());
+        tr.Ace.log("alist", alist);
+        ++from;
+
+        while (from <= df.getDeletedEnd()) {
+            alist.add(fromTokenLists.get(from));
+            ++from;
+        }
+        TokenList blist = toTokenLists.get(df.getAddedStart());
+        tr.Ace.log("blist", blist);
+        ++to;
+        while (to <= df.getAddedEnd()) {
+            blist.add(toTokenLists.get(to));
+            ++to;
+        }
+
+        tr.Ace.log("alist", alist);
+        tr.Ace.log("blist", blist);
+
+        LocationRange fromLocRg = alist.getLocationRange(df.getDeletedStart(), df.getDeletedEnd());
+        tr.Ace.log("fromLocRg", fromLocRg);
+        LocationRange toLocRg = blist.getLocationRange(df.getAddedStart(), df.getAddedEnd());
+        tr.Ace.log("toLocRg", toLocRg);
+
+        String str = Code.CODE_ADDED.format(name);        
+        FileDiff fileDiff = new FileDiffCodeAdded(str, fromLocRg, toLocRg);
+        differences.add(fileDiff);
+    }
+
+    public void processChangedStatements(List<TokenList> fromTokenLists,
+                                         List<TokenList> toTokenLists, 
+                                         Difference df, Differences differences) {
+        int from = df.getDeletedStart();
+        int to = df.getAddedStart();
+        tr.Ace.log("from", from);
+        tr.Ace.log("to", to);
+        TokenList alist = fromTokenLists.get(df.getDeletedStart());
+        tr.Ace.log("alist", alist);
+        ++from;
+
+        while (from <= df.getDeletedEnd()) {
+            alist.add(fromTokenLists.get(from));
+            ++from;
+        }
+        TokenList blist = toTokenLists.get(df.getAddedStart());
+        tr.Ace.log("blist", blist);
+        ++to;
+        while (to <= df.getAddedEnd()) {
+            blist.add(toTokenLists.get(to));
+            ++to;
+        }
+
+        tr.Ace.log("alist", alist);
+        tr.Ace.log("blist", blist);
+
+        Code fc = new Code(name, alist);
+        tr.Ace.log("fc", fc);
+        Code tc = new Code(name, blist);
+        tr.Ace.log("tc", tc);
+
+        fc.diff(tc, differences);
+    }
+    
+    public void compareCodeNew(Block toBlock, Differences differences) {
         List<TokenList> fromTokenLists = getTokenLists();
         List<TokenList> toTokenLists = toBlock.getTokenLists();
         tr.Ace.cyan("fromTokenLists", fromTokenLists);
@@ -79,25 +142,10 @@ public class Block {
             tr.Ace.yellow("df.change?", df.isChange());
             tr.Ace.yellow("df.delete?", df.isDelete());
             if (df.isAdd()) {
-                tr.Ace.onRed("df", df);
+                processAddedStatements(fromTokenLists, toTokenLists, df, differences);
             }
             else if (df.isChange()) {
-                int from = df.getDeletedStart();
-                int to = df.getAddedEnd();
-                tr.Ace.log("from", from);
-                tr.Ace.log("to", to);
-                TokenList alist = fromTokenLists.get(df.getDeletedStart());
-                tr.Ace.log("alist", alist);
-                
-                TokenList blist = toTokenLists.get(df.getAddedEnd());
-                tr.Ace.log("blist", blist);
-
-                Code fc = new Code(name, alist);
-                tr.Ace.log("fc", fc);
-                Code tc = new Code(name, blist);
-                tr.Ace.log("tc", tc);
-
-                fc.diff(tc, differences);
+                processChangedStatements(fromTokenLists, toTokenLists, df, differences);
             }
             else if (df.isDelete()) {
                 tr.Ace.onRed("df", df);

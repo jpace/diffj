@@ -169,14 +169,7 @@ public class DiffJTest extends IncavaTestCase {
         // tr.Ace.yellow("expectedDiff", expectedDiff);
         // tr.Ace.yellow("actualDiff", actualDiff);
 
-        assertNotNull("reference not null", actualDiff);
-
-        assertEquals("expectedDiffs[" + di + "].type",    expectedDiff.getType(),           actualDiff.getType());
-        assertEquals("expectedDiffs[" + di + "].message", expectedDiff.getMessage(),        actualDiff.getMessage());
-        assertEquals("expectedDiffs[" + di + "].first",   expectedDiff.getFirstLocation(),  actualDiff.getFirstLocation());
-        assertEquals("expectedDiffs[" + di + "].second",  expectedDiff.getSecondLocation(), actualDiff.getSecondLocation());
-
-        ++di;
+        assertEquals("diff[" + di + "]", expectedDiff, actualDiff);
     }
 
     public Report makeReport(StringWriter writer) {

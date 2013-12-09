@@ -20,12 +20,12 @@ public abstract class OutputContextTest extends OutputTest {
         return true;
     }
 
-    public void testImportAdded() {
+    public void xtestImportAdded() {
         String[] output = doImportAddedTest();
         tr.Ace.onBlue("output", output);
     }
 
-    public void testCodeChangedSingleLine() {
+    public void xtestCodeChangedSingleLine() {
         String[] output = doCodeChangedSingleLineTest();        
         tr.Ace.log("output", output);        
     }
@@ -53,7 +53,7 @@ public abstract class OutputContextTest extends OutputTest {
         assertEquals(expected, Arrays.asList(output));
     }
 
-    public void testCodeDeleted() {
+    public void xtestCodeDeleted() {
         String[] output = doCodeDeletedTest();
         
         tr.Ace.log("output", output);
@@ -72,7 +72,7 @@ public abstract class OutputContextTest extends OutputTest {
         assertEquals(expected, Arrays.asList(output));
     }
 
-    public void testCodeAdded() {
+    public void xtestCodeAdded() {
         String[] output = doCodeAddedTest();
         
         tr.Ace.log("output", output);
@@ -91,7 +91,7 @@ public abstract class OutputContextTest extends OutputTest {
         assertEquals(expected, Arrays.asList(output));
     }
 
-    public void testImportRemoved() {
+    public void xtestImportRemoved() {
         String[] output = doImportRemovedTest();
         
         tr.Ace.log("output", output);

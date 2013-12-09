@@ -51,6 +51,7 @@ public class Code {
         tr.Ace.log("toLocRg", toLocRg);
 
         if (currFileDiff != null && currFileDiff.isOnSameLine(fromLocRg)) {
+            tr.Ace.onGreen("currFileDiff", currFileDiff);
             return replaceReference(currFileDiff, fromLocRg, toLocRg, differences);
         }
         else {
