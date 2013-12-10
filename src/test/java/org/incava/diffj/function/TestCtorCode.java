@@ -10,7 +10,7 @@ public class TestCtorCode extends ItemsTest {
         tr.Ace.setVerbose(true);
     }
 
-    public void xtestCodeNotChanged() {
+    public void testCodeNotChanged() {
         evaluate(new Lines("class Test {",
                            "    Test() { i = -1; }",
                            "",
@@ -27,7 +27,7 @@ public class TestCtorCode extends ItemsTest {
                  NO_CHANGES);
     }
 
-    public void xtestCodeChanged() {
+    public void testCodeChanged() {
         evaluate(new Lines("class Test {",
                            "    Test() { int i = -1; }",
                            "",
@@ -43,7 +43,7 @@ public class TestCtorCode extends ItemsTest {
                  makeCodeChangedRef(CODE_CHANGED, "Test()", locrg(2, 23, 23), locrg(4, 18, 18)));
     }
 
-    public void xtestCodeChangedInserted() {
+    public void testCodeChangedInserted() {
         evaluate(new Lines("class Test {",
                            "    Test() { int i; }",
                            "",
@@ -74,13 +74,13 @@ public class TestCtorCode extends ItemsTest {
                            "}"),
                  
                  // the new implementation:
-                 // makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 14, 16), locrg(4, 9, 18)));
+                 makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 14, 16), locrg(4, 9, 18)));
 
                  // the old one:
-                 makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 18, 18), locrg(4, 13, 5, 11)));
+                 // makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 18, 18), locrg(4, 13, 5, 11)));
     }
 
-    public void xtestCodeChangedOneStatementToTwo() {
+    public void testCodeChangedOneStatementToTwo() {
         evaluate(new Lines("class Test {",
                            "    Test(int i) { i = 1; }",
                            "",
@@ -97,7 +97,7 @@ public class TestCtorCode extends ItemsTest {
                  makeCodeChangedRef(CODE_CHANGED, "Test(int)", locrg(2, 19, 23), locrg(2, 9, 3, 13)));
     }
 
-    public void xtestCodeChangedTwoStatementsToOne() {
+    public void testCodeChangedTwoStatementsToOne() {
         evaluate(new Lines("class Test {",
                            "    Test(int i) { i = 1; int j = 2; }",
                            "",
@@ -115,7 +115,7 @@ public class TestCtorCode extends ItemsTest {
 
     // do the same for 3:1, 3:2, 2:3, 1:3
 
-    public void xtestCodeAddedOwnLine() {
+    public void testCodeAddedOwnLine() {
         evaluate(new Lines("class Test {",
                            "    Test() { ",
                            "        char ch;",
@@ -136,7 +136,7 @@ public class TestCtorCode extends ItemsTest {
                  makeCodeAddedRef(CODE_ADDED, "Test()", locrg(4, 9, 11), locrg(5, 9, 21)));
     }
 
-    public void xtestCodeDeleted() {
+    public void testCodeDeleted() {
         evaluate(new Lines("class Test {",
                            "    Test() { ",
                            "        int j = 0;",
@@ -150,10 +150,11 @@ public class TestCtorCode extends ItemsTest {
                            "    Test() { int i = -1; }",
                            "}"),
                  
-                 makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 13, 4, 11), locrg(3, 18, 18)));
+                 // makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 13, 4, 11), locrg(3, 18, 18)));
+                 makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 9, 18), locrg(3, 14, 16)));
     }
     
-    public void xtestCodeInsertedAndChanged() {
+    public void testCodeInsertedAndChanged() {
         evaluate(new Lines("class Test {",
                            "    Test(int i) { i = 1; }",
                            "",

@@ -7,6 +7,7 @@ import org.incava.ijdk.util.ANSI;
 public class TestOutputContextHighlight extends OutputContextTest {
     public TestOutputContextHighlight(String name) {
         super(name);
+        tr.Ace.setVerbose(true);
     }
 
     public boolean highlight() {

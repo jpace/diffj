@@ -20,12 +20,12 @@ public abstract class OutputContextTest extends OutputTest {
         return true;
     }
 
-    public void xtestImportAdded() {
+    public void testImportAdded() {
         String[] output = doImportAddedTest();
         tr.Ace.onBlue("output", output);
     }
 
-    public void xtestCodeChangedSingleLine() {
+    public void testCodeChangedSingleLine() {
         String[] output = doCodeChangedSingleLineTest();        
         tr.Ace.log("output", output);        
     }
@@ -53,18 +53,18 @@ public abstract class OutputContextTest extends OutputTest {
         assertEquals(expected, Arrays.asList(output));
     }
 
-    public void xtestCodeDeleted() {
+    public void testCodeDeleted() {
         String[] output = doCodeDeletedTest();
         
         tr.Ace.log("output", output);
 
         List<String> expected = new ArrayList<String>();
         expected.add("- <=> -");
-        expected.add("3,4d3 code removed in Test()");
+        expected.add("3d3 code removed in Test()");
         expected.add("  class Test {");
         expected.add("      Test() { ");
-        expected.add("!         int " + adorn("j = 0;", true));
-        expected.add("! " + adorn("        int", true) + " i = -1;");
+        expected.add("!         " + adorn("int j = 0;", true));
+        expected.add("          int i = -1;");
         expected.add("      }");
         expected.add("  }");
         expected.add("");
@@ -72,7 +72,7 @@ public abstract class OutputContextTest extends OutputTest {
         assertEquals(expected, Arrays.asList(output));
     }
 
-    public void xtestCodeAdded() {
+    public void testCodeAdded() {
         String[] output = doCodeAddedTest();
         
         tr.Ace.log("output", output);
@@ -91,7 +91,7 @@ public abstract class OutputContextTest extends OutputTest {
         assertEquals(expected, Arrays.asList(output));
     }
 
-    public void xtestImportRemoved() {
+    public void testImportRemoved() {
         String[] output = doImportRemovedTest();
         
         tr.Ace.log("output", output);

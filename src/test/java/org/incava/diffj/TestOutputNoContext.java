@@ -58,9 +58,8 @@ public class TestOutputNoContext extends OutputTest {
         // @todo change so that the non-context output shows the previous block.
 
         expected.add("- <=> -");
-        expected.add("3,4d3 code removed in Test()");
+        expected.add("3d3 code removed in Test()");
         expected.add("<         int j = 0;");
-        expected.add("<         int i = -1;");
         expected.add("---");
         expected.add(">     Test() { int i = -1; }");
         expected.add("");

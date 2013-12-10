@@ -74,6 +74,7 @@ public class TestMethodCode extends ItemsTest {
                            "    int bar() { return -1; }",
                            "}"),
                  
+                 // makeCodeDeletedRef(CODE_REMOVED, "bar()", locrg(3, 9, 18), locrg(3, 17, 22)));
                  makeCodeDeletedRef(CODE_REMOVED, "bar()", locrg(3, 9, 18), locrg(3, 17, 22)));
     }
 

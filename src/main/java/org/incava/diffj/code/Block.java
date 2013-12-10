@@ -7,6 +7,7 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffCodeAdded;
+import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.*;
@@ -50,7 +51,7 @@ public class Block {
     }
 
     public void compareCode(Block toBlock, Differences differences) {
-        compareCodeOld(toBlock, differences);
+        compareCodeNew(toBlock, differences);
     }
 
     public void compareCodeOld(Block toBlock, Differences differences) {
@@ -71,7 +72,7 @@ public class Block {
         TokenList alist = fromTokenLists.get(df.getDeletedStart());
         tr.Ace.log("alist", alist);
 
-        LocationRange flr = alist.getLocationRange(0, 0);
+        LocationRange flr = alist.getLocationRange(0, Difference.NONE);
         tr.Ace.cyan("flr", flr);
 
         ++from;
@@ -137,6 +138,51 @@ public class Block {
 
         fc.diff(tc, differences);
     }
+
+    public void processDeletedStatements(List<TokenList> fromTokenLists,
+                                         List<TokenList> toTokenLists, 
+                                         Difference df, Differences differences) {
+        tr.Ace.onRed("df", df);
+        int from = df.getDeletedStart();
+        int to = df.getAddedStart();
+        tr.Ace.log("from", from);
+        tr.Ace.log("to", to);
+
+        TokenList alist = fromTokenLists.get(df.getDeletedStart());
+        tr.Ace.log("alist", alist);
+
+        LocationRange flr = alist.fetchLocationRange(0, -1);
+        tr.Ace.cyan("flr", flr);
+
+        ++from;
+
+        while (from <= df.getDeletedEnd()) {
+            alist.add(fromTokenLists.get(from));
+            ++from;
+        }
+        TokenList blist = toTokenLists.get(df.getAddedStart());
+        tr.Ace.log("blist", blist);
+        ++to;
+        while (to <= df.getAddedEnd()) {
+            blist.add(toTokenLists.get(to));
+            ++to;
+        }
+
+        LocationRange tlr = blist.getLocationRange(0, Difference.NONE);
+        tr.Ace.cyan("tlr", tlr);
+
+        tr.Ace.log("alist", alist);
+        tr.Ace.log("blist", blist);
+
+        // LocationRange fromLocRg = alist.getLocationRange(df.getDeletedStart(), df.getDeletedEnd());
+        // tr.Ace.log("fromLocRg", fromLocRg);
+        // LocationRange toLocRg = blist.getLocationRange(df.getAddedStart(), df.getAddedEnd());
+        // tr.Ace.log("toLocRg", toLocRg);
+
+        String str = Code.CODE_REMOVED.format(name);
+        FileDiff fileDiff = new FileDiffCodeDeleted(str, flr, tlr);
+        differences.add(fileDiff);
+    }
     
     public void compareCodeNew(Block toBlock, Differences differences) {
         List<TokenList> fromTokenLists = getTokenLists();
@@ -159,10 +205,7 @@ public class Block {
                 processChangedStatements(fromTokenLists, toTokenLists, df, differences);
             }
             else if (df.isDelete()) {
-                tr.Ace.onRed("df", df);
-                TokenDifferenceDelete tdd = new TokenDifferenceDelete(df.getDeletedStart(), df.getDeletedEnd(), 
-                                                                      df.getAddedStart(), df.getAddedEnd());
-                tr.Ace.red("tdd", tdd);
+                processDeletedStatements(fromTokenLists, toTokenLists, df, differences);
             }
         }
 
