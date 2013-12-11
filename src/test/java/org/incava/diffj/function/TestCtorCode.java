@@ -136,7 +136,7 @@ public class TestCtorCode extends ItemsTest {
                  makeCodeAddedRef(CODE_ADDED, "Test()", locrg(4, 9, 11), locrg(5, 9, 21)));
     }
 
-    public void testCodeDeleted() {
+    public void testCodeDeletedOneLine() {
         evaluate(new Lines("class Test {",
                            "    Test() { ",
                            "        int j = 0;",
@@ -152,6 +152,41 @@ public class TestCtorCode extends ItemsTest {
                  
                  // makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 13, 4, 11), locrg(3, 18, 18)));
                  makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 9, 18), locrg(3, 14, 16)));
+    }
+
+    public void testCodeDeletedTwoSequentialLines() {
+        evaluate(new Lines("class Test {",
+                           "    Test() { ",
+                           "        int j = 0;",
+                           "        double k;",
+                           "        int i = -1;",
+                           "    }",
+                           "",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "",
+                           "    Test() { int i = -1; }",
+                           "}"),
+                 
+                 makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 9, 4, 17), locrg(3, 14, 16)));
+    }
+
+    public void testCodeAddedTwoSequentialLines() {
+        evaluate(new Lines("class Test {",
+                           "    Test() { int i = -1; }",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "",
+                           "    Test() { ",
+                           "        int j = 0;",
+                           "        double k;",
+                           "        int i = -1;",
+                           "    }",
+                           "}"),
+                 
+                 makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 14, 16), locrg(4, 9, 5, 17)));
     }
     
     public void testCodeInsertedAndChanged() {

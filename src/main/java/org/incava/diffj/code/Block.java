@@ -60,45 +60,32 @@ public class Block {
         fromCode.diff(toCode, differences);
     }
 
+    public TokenList getAsTokenList(List<TokenList> tokenLists, int from, int to) {
+        int idx = from;
+        TokenList list = tokenLists.get(idx++);
+        while (idx <= to) {
+            list.add(tokenLists.get(idx++));
+        }
+
+        return list;
+    }
+
     public void processAddedStatements(List<TokenList> fromTokenLists, 
                                        List<TokenList> toTokenLists, 
                                        Difference df, Differences differences) {
         tr.Ace.onRed("df", df);
-        int from = df.getDeletedStart();
-        int to = df.getAddedStart();
-        tr.Ace.log("from", from);
-        tr.Ace.log("to", to);
-
-        TokenList alist = fromTokenLists.get(df.getDeletedStart());
+        TokenList alist = getAsTokenList(fromTokenLists, df.getDeletedStart(), df.getDeletedEnd());
         tr.Ace.log("alist", alist);
 
         LocationRange flr = alist.getLocationRange(0, Difference.NONE);
         tr.Ace.cyan("flr", flr);
-
-        ++from;
-
-        while (from <= df.getDeletedEnd()) {
-            alist.add(fromTokenLists.get(from));
-            ++from;
-        }
-        TokenList blist = toTokenLists.get(df.getAddedStart());
-        tr.Ace.log("blist", blist);
-        ++to;
-        while (to <= df.getAddedEnd()) {
-            blist.add(toTokenLists.get(to));
-            ++to;
-        }
-
-        LocationRange tlr = blist.fetchLocationRange(0, -1);
+        
+        TokenList blist = getAsTokenList(toTokenLists, df.getAddedStart(), df.getAddedEnd());
+        LocationRange tlr = blist.getAsLocationRange();
         tr.Ace.cyan("tlr", tlr);
 
         tr.Ace.log("alist", alist);
         tr.Ace.log("blist", blist);
-
-        // LocationRange fromLocRg = alist.getLocationRange(df.getDeletedStart(), df.getDeletedEnd());
-        // tr.Ace.log("fromLocRg", fromLocRg);
-        // LocationRange toLocRg = blist.getLocationRange(df.getAddedStart(), df.getAddedEnd());
-        // tr.Ace.log("toLocRg", toLocRg);
 
         String str = Code.CODE_ADDED.format(name);        
         FileDiff fileDiff = new FileDiffCodeAdded(str, flr, tlr);
@@ -108,25 +95,8 @@ public class Block {
     public void processChangedStatements(List<TokenList> fromTokenLists,
                                          List<TokenList> toTokenLists, 
                                          Difference df, Differences differences) {
-        int from = df.getDeletedStart();
-        int to = df.getAddedStart();
-        tr.Ace.log("from", from);
-        tr.Ace.log("to", to);
-        TokenList alist = fromTokenLists.get(df.getDeletedStart());
-        tr.Ace.log("alist", alist);
-        ++from;
-
-        while (from <= df.getDeletedEnd()) {
-            alist.add(fromTokenLists.get(from));
-            ++from;
-        }
-        TokenList blist = toTokenLists.get(df.getAddedStart());
-        tr.Ace.log("blist", blist);
-        ++to;
-        while (to <= df.getAddedEnd()) {
-            blist.add(toTokenLists.get(to));
-            ++to;
-        }
+        TokenList alist = getAsTokenList(fromTokenLists, df.getDeletedStart(), df.getDeletedEnd());        
+        TokenList blist = getAsTokenList(toTokenLists, df.getAddedStart(), df.getAddedEnd());
 
         tr.Ace.log("alist", alist);
         tr.Ace.log("blist", blist);
@@ -143,41 +113,17 @@ public class Block {
                                          List<TokenList> toTokenLists, 
                                          Difference df, Differences differences) {
         tr.Ace.onRed("df", df);
-        int from = df.getDeletedStart();
-        int to = df.getAddedStart();
-        tr.Ace.log("from", from);
-        tr.Ace.log("to", to);
-
-        TokenList alist = fromTokenLists.get(df.getDeletedStart());
-        tr.Ace.log("alist", alist);
-
-        LocationRange flr = alist.fetchLocationRange(0, -1);
+        TokenList alist = getAsTokenList(fromTokenLists, df.getDeletedStart(), df.getDeletedEnd());        
+        LocationRange flr = alist.getAsLocationRange();
         tr.Ace.cyan("flr", flr);
 
-        ++from;
-
-        while (from <= df.getDeletedEnd()) {
-            alist.add(fromTokenLists.get(from));
-            ++from;
-        }
-        TokenList blist = toTokenLists.get(df.getAddedStart());
-        tr.Ace.log("blist", blist);
-        ++to;
-        while (to <= df.getAddedEnd()) {
-            blist.add(toTokenLists.get(to));
-            ++to;
-        }
-
+        TokenList blist = getAsTokenList(toTokenLists, df.getAddedStart(), df.getAddedEnd());
         LocationRange tlr = blist.getLocationRange(0, Difference.NONE);
+        
         tr.Ace.cyan("tlr", tlr);
 
         tr.Ace.log("alist", alist);
         tr.Ace.log("blist", blist);
-
-        // LocationRange fromLocRg = alist.getLocationRange(df.getDeletedStart(), df.getDeletedEnd());
-        // tr.Ace.log("fromLocRg", fromLocRg);
-        // LocationRange toLocRg = blist.getLocationRange(df.getAddedStart(), df.getAddedEnd());
-        // tr.Ace.log("toLocRg", toLocRg);
 
         String str = Code.CODE_REMOVED.format(name);
         FileDiff fileDiff = new FileDiffCodeDeleted(str, flr, tlr);
@@ -208,7 +154,5 @@ public class Block {
                 processDeletedStatements(fromTokenLists, toTokenLists, df, differences);
             }
         }
-
-        // fromCode.diff(toCode, differences);
     }
 }

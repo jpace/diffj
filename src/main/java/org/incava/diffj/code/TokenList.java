@@ -60,6 +60,21 @@ public class TokenList implements Comparable<TokenList> {
         Tkn startTkn = new Tkn(startTk);
         Tkn endTkn = new Tkn(endTk);
         return new LocationRange(startTkn.getBeginLocation(), endTkn.getEndLocation());
+    }
+
+    public LocationRange getAsLocationRange() {
+        Token startTk = getStart(0);
+        Token endTk = ListExt.get(tokens, -1);
+        Tkn startTkn = new Tkn(startTk);
+        Tkn endTkn = new Tkn(endTk);
+        return new LocationRange(startTkn.getBeginLocation(), endTkn.getEndLocation());
+    }    
+
+    /**
+     * Returns a location range for the given index.
+     */
+    public LocationRange fetchLocationRange(Integer start) {
+        return getLocationRange(start, Difference.NONE);
     }    
     
     public Token getStart(int start) {
