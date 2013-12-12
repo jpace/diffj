@@ -59,86 +59,6 @@ public class Block {
         Code toCode = new Code(name, toBlock.getTokens());
         fromCode.diff(toCode, differences);
     }
-
-    public TokenList getAsTokenList(List<TokenList> tokenLists, int from, int to) {
-        int idx = from;
-        TokenList list = tokenLists.get(idx++);
-        while (idx <= to) {
-            list.add(tokenLists.get(idx++));
-        }
-
-        return list;
-    }
-
-    public TokenList getFromList(List<TokenList> fromTokenLists, Difference df) {
-        tr.Ace.onRed("df", df);
-        TokenList fromList = getAsTokenList(fromTokenLists, df.getDeletedStart(), df.getDeletedEnd());
-        tr.Ace.log("fromList", fromList);
-        return fromList;
-    }
-
-    public TokenList getToList(List<TokenList> toTokenLists, Difference df) {
-        tr.Ace.onRed("df", df);
-        TokenList toList = getAsTokenList(toTokenLists, df.getAddedStart(), df.getAddedEnd());
-        tr.Ace.log("toList", toList);
-        return toList;
-    }
-
-    public void processAddedStatements(List<TokenList> fromTokenLists, 
-                                       List<TokenList> toTokenLists, 
-                                       Difference df, Differences differences) {
-        tr.Ace.onRed("df", df);
-        TokenList fromList = getFromList(fromTokenLists, df);
-        tr.Ace.log("fromList", fromList);
-
-        LocationRange flr = fromList.getLocationRange(0, Difference.NONE);
-        tr.Ace.cyan("flr", flr);
-        
-        TokenList toList = getToList(toTokenLists, df);
-        LocationRange tlr = toList.getAsLocationRange();
-        tr.Ace.cyan("tlr", tlr);
-
-        tr.Ace.log("fromList", fromList);
-        tr.Ace.log("toList", toList);
-
-        String str = Code.CODE_ADDED.format(name);        
-        FileDiff fileDiff = new FileDiffCodeAdded(str, flr, tlr);
-        differences.add(fileDiff);
-    }
-
-    public void processChangedStatements(List<TokenList> fromTokenLists,
-                                         List<TokenList> toTokenLists, 
-                                         Difference df, Differences differences) {
-        TokenList fromList = getFromList(fromTokenLists, df);
-        TokenList toList = getToList(toTokenLists, df);
-
-        tr.Ace.log("fromList", fromList);
-        tr.Ace.log("toList", toList);
-
-        Code fc = new Code(name, fromList);
-        tr.Ace.log("fc", fc);
-        Code tc = new Code(name, toList);
-        tr.Ace.log("tc", tc);
-
-        fc.diff(tc, differences);
-    }
-
-    public void processDeletedStatements(List<TokenList> fromTokenLists,
-                                         List<TokenList> toTokenLists, 
-                                         Difference df, Differences differences) {
-        tr.Ace.onRed("df", df);
-        TokenList fromList = getFromList(fromTokenLists, df);
-        LocationRange flr = fromList.getAsLocationRange();
-        tr.Ace.cyan("flr", flr);
-
-        TokenList toList = getToList(toTokenLists, df);
-        LocationRange tlr = toList.getLocationRange(0, Difference.NONE);
-        tr.Ace.cyan("tlr", tlr);
-
-        String str = Code.CODE_REMOVED.format(name);
-        FileDiff fileDiff = new FileDiffCodeDeleted(str, flr, tlr);
-        differences.add(fileDiff);
-    }
     
     public void compareCodeNew(Block toBlock, Differences differences) {
         List<TokenList> fromTokenLists = getTokenLists();
@@ -146,22 +66,22 @@ public class Block {
         tr.Ace.cyan("fromTokenLists", fromTokenLists);
         tr.Ace.yellow("toTokenLists", toTokenLists);
 
-        Diff<TokenList> diff = new Diff<TokenList>(fromTokenLists, toTokenLists);
-        List<Difference> diffs = diff.execute();
+        TokenListDiffer diff = new TokenListDiffer(fromTokenLists, toTokenLists);
+        List<TokenListDifference> diffs = diff.execute();
         tr.Ace.log("diffs", diffs);
-        for (Difference df : diffs) {
+        for (TokenListDifference df : diffs) {
             tr.Ace.yellow("df", df);
             tr.Ace.yellow("df.add?", df.isAdd());
             tr.Ace.yellow("df.change?", df.isChange());
             tr.Ace.yellow("df.delete?", df.isDelete());
             if (df.isAdd()) {
-                processAddedStatements(fromTokenLists, toTokenLists, df, differences);
+                df.processAddedStatements(name, fromTokenLists, toTokenLists, differences);
             }
             else if (df.isChange()) {
-                processChangedStatements(fromTokenLists, toTokenLists, df, differences);
+                df.processChangedStatements(name, fromTokenLists, toTokenLists, differences);
             }
             else if (df.isDelete()) {
-                processDeletedStatements(fromTokenLists, toTokenLists, df, differences);
+                df.processDeletedStatements(name, fromTokenLists, toTokenLists, differences);
             }
         }
     }
