@@ -7,9 +7,9 @@ import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.Difference;
 
-public class TokenListDifferenceAdd extends TokenListDifference {
-    public TokenListDifferenceAdd(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
-                                  Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
+public class StatementListDifferenceAdd extends StatementListDifference {
+    public StatementListDifferenceAdd(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
+                                      Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
         super(fromTokenLists, toTokenLists, delStart, delEnd, addStart, addEnd);
     }
 

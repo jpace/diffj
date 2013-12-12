@@ -4,9 +4,9 @@ import java.util.List;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.util.diff.Difference;
 
-public class TokenListDifferenceChange extends TokenListDifference {
-    public TokenListDifferenceChange(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
-                                     Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
+public class StatementListDifferenceChange extends StatementListDifference {
+    public StatementListDifferenceChange(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
+                                         Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
         super(fromTokenLists, toTokenLists, delStart, delEnd, addStart, addEnd);
     }
 

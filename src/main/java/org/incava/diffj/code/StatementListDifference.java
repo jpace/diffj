@@ -6,12 +6,12 @@ import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.Difference;
 
-public abstract class TokenListDifference extends Difference {
+public abstract class StatementListDifference extends Difference {
     private final List<TokenList> fromTokenLists;
     private final List<TokenList> toTokenLists;    
 
-    public TokenListDifference(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
-                               Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
+    public StatementListDifference(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
+                                   Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
         super(delStart, delEnd, addStart, addEnd);
         this.fromTokenLists = fromTokenLists;
         this.toTokenLists = toTokenLists;

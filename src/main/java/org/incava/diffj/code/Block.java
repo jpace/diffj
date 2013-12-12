@@ -44,7 +44,7 @@ public class Block {
 
     public List<TokenList> getTokenLists() {
         List<TokenList> tokenLists = new ArrayList<TokenList>();
-        for (Statement stmt : statements) {
+        for (Statement stmt : getStatements()) {
             tokenLists.add(new TokenList(stmt.getTokens()));
         }
         return tokenLists;
@@ -66,10 +66,10 @@ public class Block {
         tr.Ace.cyan("fromTokenLists", fromTokenLists);
         tr.Ace.yellow("toTokenLists", toTokenLists);
 
-        TokenListDiffer diff = new TokenListDiffer(fromTokenLists, toTokenLists);
-        List<TokenListDifference> diffs = diff.execute();
+        StatementListDiffer diff = new StatementListDiffer(fromTokenLists, toTokenLists);
+        List<StatementListDifference> diffs = diff.execute();
         tr.Ace.log("diffs", diffs);
-        for (TokenListDifference df : diffs) {
+        for (StatementListDifference df : diffs) {
             tr.Ace.yellow("df", df);
             df.execute(name, differences);
         }
