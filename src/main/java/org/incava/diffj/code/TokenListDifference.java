@@ -7,11 +7,17 @@ import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.Difference;
 
 public abstract class TokenListDifference extends Difference {
-    public TokenListDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
+    private final List<TokenList> fromTokenLists;
+    private final List<TokenList> toTokenLists;    
+
+    public TokenListDifference(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
+                               Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
         super(delStart, delEnd, addStart, addEnd);
+        this.fromTokenLists = fromTokenLists;
+        this.toTokenLists = toTokenLists;
     }
 
-    public TokenList getAsTokenList(List<TokenList> tokenLists, int from, int to) {
+    private TokenList getAsTokenList(List<TokenList> tokenLists, int from, int to) {
         int idx = from;
         TokenList list = tokenLists.get(idx++);
         while (idx <= to) {
@@ -21,19 +27,13 @@ public abstract class TokenListDifference extends Difference {
         return list;
     }
 
-    public abstract void execute(String name, List<TokenList> fromTokenLists, List<TokenList> toTokenLists, Differences differences);
+    public abstract void execute(String name, Differences differences);
 
-    public TokenList getFromList(List<TokenList> fromTokenLists) {
-        tr.Ace.onRed("this", this);
-        TokenList fromList = getAsTokenList(fromTokenLists, getDeletedStart(), getDeletedEnd());
-        tr.Ace.log("fromList", fromList);
-        return fromList;
+    public TokenList getFromList() {
+        return getAsTokenList(fromTokenLists, getDeletedStart(), getDeletedEnd());
     }
 
-    public TokenList getToList(List<TokenList> toTokenLists) {
-        tr.Ace.onRed("this", this);
-        TokenList toList = getAsTokenList(toTokenLists, getAddedStart(), getAddedEnd());
-        tr.Ace.log("toList", toList);
-        return toList;
+    public TokenList getToList() {
+        return getAsTokenList(toTokenLists, getAddedStart(), getAddedEnd());
     }
 }

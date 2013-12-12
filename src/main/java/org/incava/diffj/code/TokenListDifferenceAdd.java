@@ -8,25 +8,23 @@ import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.Difference;
 
 public class TokenListDifferenceAdd extends TokenListDifference {
-    public TokenListDifferenceAdd(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
-        super(delStart, delEnd, addStart, addEnd);
+    public TokenListDifferenceAdd(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
+                                  Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
+        super(fromTokenLists, toTokenLists, delStart, delEnd, addStart, addEnd);
     }
 
     public String getMessage(String name) {
         return Code.CODE_ADDED.format(name);
     }
 
-    public void execute(String name,
-                        List<TokenList> fromTokenLists, 
-                        List<TokenList> toTokenLists, 
-                        Differences differences) {
+    public void execute(String name, Differences differences) {
         tr.Ace.onBlue("this", this);
         
-        TokenList fromList = getFromList(fromTokenLists);
+        TokenList fromList = getFromList();
         LocationRange flr = fromList.getLocationRange(0, Difference.NONE);
         tr.Ace.cyan("flr", flr);
         
-        TokenList toList = getToList(toTokenLists);
+        TokenList toList = getToList();
         LocationRange tlr = toList.getAsLocationRange();        
         tr.Ace.cyan("tlr", tlr);
 

@@ -71,7 +71,7 @@ public class Block {
         tr.Ace.log("diffs", diffs);
         for (TokenListDifference df : diffs) {
             tr.Ace.yellow("df", df);
-            df.execute(name, fromTokenLists, toTokenLists, differences);
+            df.execute(name, differences);
         }
     }
 }
