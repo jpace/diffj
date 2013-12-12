@@ -71,18 +71,7 @@ public class Block {
         tr.Ace.log("diffs", diffs);
         for (TokenListDifference df : diffs) {
             tr.Ace.yellow("df", df);
-            tr.Ace.yellow("df.add?", df.isAdd());
-            tr.Ace.yellow("df.change?", df.isChange());
-            tr.Ace.yellow("df.delete?", df.isDelete());
-            if (df.isAdd()) {
-                df.processAddedStatements(name, fromTokenLists, toTokenLists, differences);
-            }
-            else if (df.isChange()) {
-                df.processChangedStatements(name, fromTokenLists, toTokenLists, differences);
-            }
-            else if (df.isDelete()) {
-                df.processDeletedStatements(name, fromTokenLists, toTokenLists, differences);
-            }
+            df.execute(name, fromTokenLists, toTokenLists, differences);
         }
     }
 }
