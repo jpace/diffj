@@ -17,7 +17,11 @@ public abstract class StatementListDifference extends Difference {
         this.toTokenLists = toTokenLists;
     }
 
-    private TokenList getAsTokenList(List<TokenList> tokenLists, int from, int to) {
+    private TokenList getAsTokenList(List<TokenList> tokenLists, Integer from, Integer to) {
+        if (to == Difference.NONE) {
+            return tokenLists.get(from);
+        }
+        
         int idx = from;
         TokenList list = tokenLists.get(idx++);
         while (idx <= to) {
