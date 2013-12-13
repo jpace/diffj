@@ -18,10 +18,7 @@ public abstract class TokenDifference extends Difference {
     }
 
     public LocationRange getDeletedRange(TokenList tokenList) {
-        tr.Ace.onRed("getDeletedEnd()", getDeletedEnd());
-        LocationRange lr = tokenList.getLocationRange(getDeletedStart(), getDeletedEnd());
-        tr.Ace.log("lr", lr);
-        return lr;
+        return tokenList.getLocationRange(getDeletedStart(), getDeletedEnd());
     }
 
     public LocationRange getAddedRange(TokenList tokenList) {
