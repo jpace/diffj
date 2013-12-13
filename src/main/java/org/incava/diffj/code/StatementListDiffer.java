@@ -13,6 +13,10 @@ public class StatementListDiffer extends Differ<TokenList, StatementListDifferen
         this.fromTokenLists = fromTokenLists;
         this.toTokenLists = toTokenLists;
     }
+    
+    public StatementListDiffer(Block fromBlock, Block toBlock) {
+        this(fromBlock.getTokenLists(), toBlock.getTokenLists());
+    }
 
     public StatementListDifference createDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
         if (delEnd == Difference.NONE) {

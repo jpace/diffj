@@ -61,12 +61,7 @@ public class Block {
     }
     
     public void compareCodeNew(Block toBlock, Differences differences) {
-        List<TokenList> fromTokenLists = getTokenLists();
-        List<TokenList> toTokenLists = toBlock.getTokenLists();
-        tr.Ace.cyan("fromTokenLists", fromTokenLists);
-        tr.Ace.yellow("toTokenLists", toTokenLists);
-
-        StatementListDiffer diff = new StatementListDiffer(fromTokenLists, toTokenLists);
+        StatementListDiffer diff = new StatementListDiffer(this, toBlock);
         List<StatementListDifference> diffs = diff.execute();
         tr.Ace.log("diffs", diffs);
         for (StatementListDifference df : diffs) {
