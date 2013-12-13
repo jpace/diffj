@@ -44,6 +44,11 @@ public class TokenList implements Comparable<TokenList> {
         return getLocationRange(startTk, endTk);
     }    
 
+    public LocationRange getTokenLocationRange(Integer idx) {
+        Token tk = getStart(idx);
+        return getLocationRange(tk, tk);
+    }    
+
     public LocationRange getFullLocationRange() {
         Token startTk = getStart(0);
         Token endTk = ListExt.get(tokens, -1);

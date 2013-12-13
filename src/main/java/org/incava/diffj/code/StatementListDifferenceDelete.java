@@ -5,7 +5,6 @@ import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
-import org.incava.ijdk.util.diff.Difference;
 
 public class StatementListDifferenceDelete extends StatementListDifference {
     public StatementListDifferenceDelete(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
@@ -17,15 +16,13 @@ public class StatementListDifferenceDelete extends StatementListDifference {
         return Code.CODE_REMOVED.format(name);
     }
 
-    public void execute(String name, Differences differences) {
+    public void process(String name, TokenList fromList, TokenList toList, Differences differences) {
         tr.Ace.onBlue("this", this);
 
-        TokenList fromList = getFromList();
         LocationRange flr = fromList.getFullLocationRange();
         tr.Ace.cyan("flr", flr);
 
-        TokenList toList = getToList();
-        LocationRange tlr = toList.getLocationRange(0, Difference.NONE);
+        LocationRange tlr = toList.getTokenLocationRange(0);
         tr.Ace.cyan("tlr", tlr);
 
         String msg = getMessage(name);

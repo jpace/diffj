@@ -31,7 +31,11 @@ public abstract class StatementListDifference extends Difference {
         return list;
     }
 
-    public abstract void execute(String name, Differences differences);
+    public void execute(String name, Differences differences) {
+        process(name, getFromList(), getToList(), differences);
+    }
+
+    public abstract void process(String name, TokenList fromList, TokenList toList, Differences differences);
 
     public TokenList getFromList() {
         return getAsTokenList(fromTokenLists, getDeletedStart(), getDeletedEnd());
