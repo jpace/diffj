@@ -94,10 +94,10 @@ public class TestMethodCodeByStatement extends ItemsTest {
             tr.Ace.yellow("stmt", stmt);
             ASTBlockStatement blkStmt = stmt.getBlockStatement();
             dumpTokens(blkStmt);
-            List<Token> stmtTokens = stmt.getTokens();
-            tr.Ace.log("stmtTokens", stmtTokens);
+            TokenList stmtTokenList = stmt.getTokenList();
+            tr.Ace.log("stmtTokenList", stmtTokenList);
             
-            tokenLists.add(new TokenList(stmtTokens));
+            tokenLists.add(stmtTokenList);
         }
         return tokenLists;
     }

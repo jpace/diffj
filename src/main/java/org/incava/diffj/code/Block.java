@@ -45,7 +45,7 @@ public class Block {
     public List<TokenList> getTokenLists() {
         List<TokenList> tokenLists = new ArrayList<TokenList>();
         for (Statement stmt : getStatements()) {
-            tokenLists.add(new TokenList(stmt.getTokens()));
+            tokenLists.add(stmt.getTokenList());
         }
         return tokenLists;
     }
