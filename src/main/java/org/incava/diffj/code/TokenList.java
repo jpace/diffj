@@ -13,24 +13,14 @@ import org.incava.pmdx.SimpleNodeUtil;
  * A list of tokens representing code.
  */
 public class TokenList implements Comparable<TokenList> {
-    private final List<Token> tokens;
-    private final String name;
-    
+    private final List<Token> tokens;    
+
     public TokenList(List<Token> tokens) {
-        this(null, tokens);
-    }
-
-    public TokenList(SimpleNode node) {
-        this(null, node);
-    }
-
-    public TokenList(String name, List<Token> tokens) {
-        this.name = name;
         this.tokens = tokens;
     }
 
-    public TokenList(String name, SimpleNode node) {
-        this(name, SimpleNodeUtil.getChildTokens(node));
+    public TokenList(SimpleNode node) {
+        this(SimpleNodeUtil.getChildTokens(node));
     }
 
     public List<TokenDifference> diff(TokenList toTokenList) {
@@ -42,39 +32,22 @@ public class TokenList implements Comparable<TokenList> {
         tokens.addAll(tokenList.tokens);
     }
 
+    private LocationRange getLocationRange(Token startTk, Token endTk) {
+        Tkn startTkn = new Tkn(startTk);
+        Tkn endTkn = new Tkn(endTk);
+        return new LocationRange(startTkn.getBeginLocation(), endTkn.getEndLocation());
+    }    
+
     public LocationRange getLocationRange(Integer start, Integer end) {
         Token startTk = getStart(start);
         Token endTk = end == Difference.NONE ? startTk : tokens.get(end);
-        Tkn startTkn = new Tkn(startTk);
-        Tkn endTkn = new Tkn(endTk);
-        return new LocationRange(startTkn.getBeginLocation(), endTkn.getEndLocation());
+        return getLocationRange(startTk, endTk);
     }    
 
-    /**
-     * Returns a location range, accepting negative indices, which go from the
-     * end.
-     */
-    public LocationRange fetchLocationRange(Integer start, Integer end) {
-        Token startTk = getStart(start);
-        Token endTk = ListExt.get(tokens, end);
-        Tkn startTkn = new Tkn(startTk);
-        Tkn endTkn = new Tkn(endTk);
-        return new LocationRange(startTkn.getBeginLocation(), endTkn.getEndLocation());
-    }
-
-    public LocationRange getAsLocationRange() {
+    public LocationRange getFullLocationRange() {
         Token startTk = getStart(0);
         Token endTk = ListExt.get(tokens, -1);
-        Tkn startTkn = new Tkn(startTk);
-        Tkn endTkn = new Tkn(endTk);
-        return new LocationRange(startTkn.getBeginLocation(), endTkn.getEndLocation());
-    }    
-
-    /**
-     * Returns a location range for the given index.
-     */
-    public LocationRange fetchLocationRange(Integer start) {
-        return getLocationRange(start, Difference.NONE);
+        return getLocationRange(startTk, endTk);
     }    
     
     public Token getStart(int start) {

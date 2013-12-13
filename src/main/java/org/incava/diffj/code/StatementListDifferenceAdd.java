@@ -25,7 +25,7 @@ public class StatementListDifferenceAdd extends StatementListDifference {
         tr.Ace.cyan("flr", flr);
         
         TokenList toList = getToList();
-        LocationRange tlr = toList.getAsLocationRange();        
+        LocationRange tlr = toList.getFullLocationRange();        
         tr.Ace.cyan("tlr", tlr);
 
         tr.Ace.log("fromList", fromList);

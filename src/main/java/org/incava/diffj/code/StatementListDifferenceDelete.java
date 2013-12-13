@@ -21,7 +21,7 @@ public class StatementListDifferenceDelete extends StatementListDifference {
         tr.Ace.onBlue("this", this);
 
         TokenList fromList = getFromList();
-        LocationRange flr = fromList.getAsLocationRange();
+        LocationRange flr = fromList.getFullLocationRange();
         tr.Ace.cyan("flr", flr);
 
         TokenList toList = getToList();

@@ -1,32 +1,48 @@
 package org.incava.diffj.code;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.incava.ijdk.util.diff.Differ;
 import org.incava.ijdk.util.diff.Difference;
 
-public class StatementListDiffer extends Differ<TokenList, StatementListDifference> {
-    private final List<TokenList> fromTokenLists;
-    private final List<TokenList> toTokenLists;
-    
-    public StatementListDiffer(List<TokenList> fromTokenLists, List<TokenList> toTokenLists) {
-        super(fromTokenLists, toTokenLists);
-        this.fromTokenLists = fromTokenLists;
-        this.toTokenLists = toTokenLists;
+public class StatementListDiffer extends Differ<Statement, StatementListDifference> {
+    public static List<TokenList> getTokenLists(List<Statement> stmts) {
+        List<TokenList> tokenLists = new ArrayList<TokenList>();
+        for (Statement stmt : stmts) {
+            tokenLists.add(stmt.getTokenList());
+        }
+        return tokenLists;
     }
+
+    private final List<Statement> fromStatements;
+    private final List<Statement> toStatements;
     
     public StatementListDiffer(Block fromBlock, Block toBlock) {
-        this(fromBlock.getTokenLists(), toBlock.getTokenLists());
+        super(fromBlock.getStatements(), toBlock.getStatements());
+        this.fromStatements = fromBlock.getStatements();
+        this.toStatements = toBlock.getStatements();
+    }
+
+    public List<TokenList> getFromTokenLists() {
+        return getTokenLists(fromStatements);
+    }
+
+    public List<TokenList> getToTokenLists() {
+        return getTokenLists(toStatements);
     }
 
     public StatementListDifference createDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
+        List<TokenList> fromLists = getFromTokenLists();
+        List<TokenList> toLists = getToTokenLists();
+        
         if (delEnd == Difference.NONE) {
-            return new StatementListDifferenceAdd(fromTokenLists, toTokenLists, delStart, delEnd, addStart, addEnd);
+            return new StatementListDifferenceAdd(fromLists, toLists, delStart, delEnd, addStart, addEnd);
         }
         else if (addEnd == Difference.NONE) {
-            return new StatementListDifferenceDelete(fromTokenLists, toTokenLists, delStart, delEnd, addStart, addEnd);
+            return new StatementListDifferenceDelete(fromLists, toLists, delStart, delEnd, addStart, addEnd);
         }
         else {
-            return new StatementListDifferenceChange(fromTokenLists, toTokenLists, delStart, delEnd, addStart, addEnd);
+            return new StatementListDifferenceChange(fromLists, toLists, delStart, delEnd, addStart, addEnd);
         }
     }
 }
