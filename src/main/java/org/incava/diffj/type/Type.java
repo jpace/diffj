@@ -6,6 +6,7 @@ import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
 import net.sourceforge.pmd.ast.ASTFieldDeclaration;
+import net.sourceforge.pmd.ast.ASTInitializer;
 import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
@@ -16,6 +17,7 @@ import org.incava.diffj.element.Differences;
 import org.incava.diffj.field.Field;
 import org.incava.diffj.function.Ctor;
 import org.incava.diffj.function.Method;
+import org.incava.diffj.function.Initializer;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
@@ -35,6 +37,9 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     public Type(ASTClassOrInterfaceDeclaration decl) {
         super(decl);
         this.decl = decl;
+        tr.Ace.setVerbose(true);
+        tr.Ace.bold("decl", decl);
+        SimpleNodeUtil.dump(decl);
     }
 
     public void diff(Type toType, Differences differences) {
@@ -57,7 +62,11 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
 
     public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(Class<ItemType> cls) {
+        tr.Ace.red("cls", cls);
+        tr.Ace.red("decl", decl);
+        SimpleNodeUtil.dump(decl);
         TypeDeclarationList tdl = new TypeDeclarationList(decl);
+        tr.Ace.red("tdl", tdl);
         return tdl.getDeclarationsOfClass(cls);
     }
 
@@ -78,7 +87,7 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
 
     protected Items<Method, ASTMethodDeclaration> getMethods() {
-        return new Items<Method, ASTMethodDeclaration>(decl, net.sourceforge.pmd.ast.ASTMethodDeclaration.class) {
+        return new Items<Method, ASTMethodDeclaration>(decl, ASTMethodDeclaration.class) {
             public Method getAstType(ASTMethodDeclaration methodDecl) {
                 return new Method(methodDecl);
             }
@@ -86,7 +95,7 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
 
     protected Items<Field, ASTFieldDeclaration> getFields() {
-        return new Items<Field, ASTFieldDeclaration>(decl, net.sourceforge.pmd.ast.ASTFieldDeclaration.class) {
+        return new Items<Field, ASTFieldDeclaration>(decl, ASTFieldDeclaration.class) {
             public Field getAstType(ASTFieldDeclaration fieldDecl) {
                 return new Field(fieldDecl);
             }
@@ -94,7 +103,7 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
 
     protected Items<Ctor, ASTConstructorDeclaration> getCtors() {
-        return new Items<Ctor, ASTConstructorDeclaration>(decl, net.sourceforge.pmd.ast.ASTConstructorDeclaration.class) {
+        return new Items<Ctor, ASTConstructorDeclaration>(decl, ASTConstructorDeclaration.class) {
             public Ctor getAstType(ASTConstructorDeclaration ctorDecl) {
                 return new Ctor(ctorDecl);
             }
@@ -102,9 +111,17 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
             
     protected Items<Type, ASTClassOrInterfaceDeclaration> getInnerTypes() {
-        return new Items<Type, ASTClassOrInterfaceDeclaration>(decl, net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration.class) {
+        return new Items<Type, ASTClassOrInterfaceDeclaration>(decl, ASTClassOrInterfaceDeclaration.class) {
             public Type getAstType(ASTClassOrInterfaceDeclaration decl) {
                 return new Type(decl);
+            }
+        };
+    }
+
+    protected Items<Initializer, ASTInitializer> getInitializers() {
+        return new Items<Initializer, ASTInitializer>(decl, ASTInitializer.class) {
+            public Initializer getAstType(ASTInitializer init) {
+                return new Initializer(init);
             }
         };
     }
@@ -132,17 +149,24 @@ public class Type extends AccessibleElement implements Diffable<Type> {
         Items<Method, ASTMethodDeclaration> toMethods = toType.getMethods();
         fromMethods.diff(toMethods, differences);
         
-        Items<Field, ASTFieldDeclaration> fromFields = getFields();
-        Items<Field, ASTFieldDeclaration> toFields = toType.getFields();
-        fromFields.diff(toFields, differences);
+        // Items<Field, ASTFieldDeclaration> fromFields = getFields();
+        // Items<Field, ASTFieldDeclaration> toFields = toType.getFields();
+        // fromFields.diff(toFields, differences);
         
-        Items<Ctor, ASTConstructorDeclaration> fromCtors = getCtors();
-        Items<Ctor, ASTConstructorDeclaration> toCtors = toType.getCtors();
-        fromCtors.diff(toCtors, differences);
+        // Items<Ctor, ASTConstructorDeclaration> fromCtors = getCtors();
+        // Items<Ctor, ASTConstructorDeclaration> toCtors = toType.getCtors();
+        // fromCtors.diff(toCtors, differences);
         
         Items<Type, ASTClassOrInterfaceDeclaration> fromInnerTypes = getInnerTypes();
+        tr.Ace.log("fromInnerTypes", fromInnerTypes);
         Items<Type, ASTClassOrInterfaceDeclaration> toInnerTypes = toType.getInnerTypes();
+        tr.Ace.log("toInnerTypes", toInnerTypes);
         fromInnerTypes.diff(toInnerTypes, differences);
+
+        List<ASTInitializer> fromInits = getDeclarationsOfClass(ASTInitializer.class);
+        tr.Ace.blue("fromInits", fromInits);
+        List<ASTInitializer> toInits = toType.getDeclarationsOfClass(ASTInitializer.class);
+        tr.Ace.blue("toInits", toInits);
     }
 
     public String getName() {

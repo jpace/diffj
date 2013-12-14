@@ -2,7 +2,6 @@ package org.incava.diffj.type;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.diffj.element.Diffable;
