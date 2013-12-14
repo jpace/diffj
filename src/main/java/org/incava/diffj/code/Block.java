@@ -63,9 +63,7 @@ public class Block {
     public void compareCodeNew(Block toBlock, Differences differences) {
         StatementListDiffer diff = new StatementListDiffer(this, toBlock);
         List<StatementListDifference> diffs = diff.execute();
-        tr.Ace.log("diffs", diffs);
         for (StatementListDifference df : diffs) {
-            tr.Ace.yellow("df", df);
             df.execute(name, differences);
         }
     }

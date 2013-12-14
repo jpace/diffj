@@ -1,32 +1,35 @@
 package org.incava.diffj.function;
 
+import net.sourceforge.pmd.ast.ASTBlock;
 import net.sourceforge.pmd.ast.ASTInitializer;
-import org.incava.diffj.element.CodedElement;
+import net.sourceforge.pmd.ast.SimpleNode;
+import org.incava.diffj.code.Block;
+import org.incava.diffj.element.Diffable;
+import org.incava.diffj.element.Differences;
 import org.incava.diffj.util.Messages;
 import org.incava.ijdk.text.Message;
+import org.incava.pmdx.SimpleNodeUtil;
 
 public class Initializer implements Diffable<Initializer> {
-    // public static final Message METHOD_REMOVED = new Message("method removed: {0}");
-    // public static final Message METHOD_ADDED = new Message("method added: {0}");
-    // public final static Messages METHOD_MSGS = new Messages(METHOD_ADDED, null, METHOD_REMOVED);
-
-    // public static final Message RETURN_TYPE_CHANGED = new Message("return type changed from {0} to {1}");
-    // public static final Message METHOD_BLOCK_ADDED = new Message("method block added");
-    // public static final Message METHOD_BLOCK_REMOVED = new Message("method block removed");
+    public static final Message STATIC_BLOCK_REMOVED = new Message("static block removed");
+    public static final Message STATIC_BLOCK_ADDED = new Message("static block added");
+    public final static Messages STATIC_BLOCK_MSGS = new Messages(STATIC_BLOCK_ADDED, null, STATIC_BLOCK_REMOVED);
 
     private final ASTInitializer init;
-    // private final Block block;
-    // private final String name;
+    private final Block block;
 
     public Initializer(ASTInitializer init) {
         this.init = init;
+        ASTBlock astBlk = SimpleNodeUtil.findChild(init, ASTBlock.class);
+        this.block = astBlk == null ? null : new Block("static block", astBlk);
     }
 
-    public double getMatchScore(DiffType toDiffable) {
-        return -1;
+    public double getMatchScore(Initializer toDiffable) {
+        return 1.0;
     }
 
-    public void diff(DiffType toDiffable, Differences differences) {
+    public void diff(Initializer toInit, Differences differences) {
+        block.compareCode(toInit.block, differences);
     }
 
     public String getName() {
@@ -34,14 +37,14 @@ public class Initializer implements Diffable<Initializer> {
     }
 
     public Message getAddedMessage() {
-        return null;
+        return STATIC_BLOCK_MSGS.getAdded();
     }
 
     public Message getRemovedMessage() {
-        return null;
+        return STATIC_BLOCK_MSGS.getDeleted();
     }
 
     public SimpleNode getNode() {
-        return null;
+        return init;
     }
 }

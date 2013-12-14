@@ -37,9 +37,6 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     public Type(ASTClassOrInterfaceDeclaration decl) {
         super(decl);
         this.decl = decl;
-        tr.Ace.setVerbose(true);
-        tr.Ace.bold("decl", decl);
-        SimpleNodeUtil.dump(decl);
     }
 
     public void diff(Type toType, Differences differences) {
@@ -62,11 +59,7 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
 
     public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(Class<ItemType> cls) {
-        tr.Ace.red("cls", cls);
-        tr.Ace.red("decl", decl);
-        SimpleNodeUtil.dump(decl);
         TypeDeclarationList tdl = new TypeDeclarationList(decl);
-        tr.Ace.red("tdl", tdl);
         return tdl.getDeclarationsOfClass(cls);
     }
 
@@ -149,24 +142,21 @@ public class Type extends AccessibleElement implements Diffable<Type> {
         Items<Method, ASTMethodDeclaration> toMethods = toType.getMethods();
         fromMethods.diff(toMethods, differences);
         
-        // Items<Field, ASTFieldDeclaration> fromFields = getFields();
-        // Items<Field, ASTFieldDeclaration> toFields = toType.getFields();
-        // fromFields.diff(toFields, differences);
+        Items<Field, ASTFieldDeclaration> fromFields = getFields();
+        Items<Field, ASTFieldDeclaration> toFields = toType.getFields();
+        fromFields.diff(toFields, differences);
         
-        // Items<Ctor, ASTConstructorDeclaration> fromCtors = getCtors();
-        // Items<Ctor, ASTConstructorDeclaration> toCtors = toType.getCtors();
-        // fromCtors.diff(toCtors, differences);
+        Items<Ctor, ASTConstructorDeclaration> fromCtors = getCtors();
+        Items<Ctor, ASTConstructorDeclaration> toCtors = toType.getCtors();
+        fromCtors.diff(toCtors, differences);
         
         Items<Type, ASTClassOrInterfaceDeclaration> fromInnerTypes = getInnerTypes();
-        tr.Ace.log("fromInnerTypes", fromInnerTypes);
         Items<Type, ASTClassOrInterfaceDeclaration> toInnerTypes = toType.getInnerTypes();
-        tr.Ace.log("toInnerTypes", toInnerTypes);
         fromInnerTypes.diff(toInnerTypes, differences);
 
-        List<ASTInitializer> fromInits = getDeclarationsOfClass(ASTInitializer.class);
-        tr.Ace.blue("fromInits", fromInits);
-        List<ASTInitializer> toInits = toType.getDeclarationsOfClass(ASTInitializer.class);
-        tr.Ace.blue("toInits", toInits);
+        Items<Initializer, ASTInitializer> fromInits = getInitializers();
+        Items<Initializer, ASTInitializer> toInits = toType.getInitializers();
+        fromInits.diff(toInits, differences);
     }
 
     public String getName() {
