@@ -1,23 +1,17 @@
 package org.incava.diffj.type;
 
-import java.util.ArrayList;
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
-import net.sourceforge.pmd.ast.ASTFieldDeclaration;
-import net.sourceforge.pmd.ast.ASTInitializer;
-import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.ast.JavaParserConstants;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.element.AccessibleElement;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
-import org.incava.diffj.field.Field;
-import org.incava.diffj.function.Ctor;
-import org.incava.diffj.function.Method;
-import org.incava.diffj.function.Initializer;
+import org.incava.diffj.field.Fields;
+import org.incava.diffj.function.Ctors;
+import org.incava.diffj.function.Methods;
+import org.incava.diffj.function.Initializers;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.SimpleNodeUtil;
 import org.incava.pmdx.TypeDeclarationUtil;
@@ -79,84 +73,56 @@ public class Type extends AccessibleElement implements Diffable<Type> {
         return new Implements(decl);
     }
 
-    protected Items<Method, ASTMethodDeclaration> getMethods() {
-        return new Items<Method, ASTMethodDeclaration>(decl, ASTMethodDeclaration.class) {
-            public Method getAstType(ASTMethodDeclaration methodDecl) {
-                return new Method(methodDecl);
-            }
-        };
+    protected Methods getMethods() {
+        return new Methods(decl);
     }
 
-    protected Items<Field, ASTFieldDeclaration> getFields() {
-        return new Items<Field, ASTFieldDeclaration>(decl, ASTFieldDeclaration.class) {
-            public Field getAstType(ASTFieldDeclaration fieldDecl) {
-                return new Field(fieldDecl);
-            }
-        };
+    protected Fields getFields() {
+        return new Fields(decl);
     }
 
-    protected Items<Ctor, ASTConstructorDeclaration> getCtors() {
-        return new Items<Ctor, ASTConstructorDeclaration>(decl, ASTConstructorDeclaration.class) {
-            public Ctor getAstType(ASTConstructorDeclaration ctorDecl) {
-                return new Ctor(ctorDecl);
-            }
-        };
+    protected Ctors getCtors() {
+        return new Ctors(decl);
     }
             
-    protected Items<Type, ASTClassOrInterfaceDeclaration> getInnerTypes() {
-        return new Items<Type, ASTClassOrInterfaceDeclaration>(decl, ASTClassOrInterfaceDeclaration.class) {
-            public Type getAstType(ASTClassOrInterfaceDeclaration decl) {
-                return new Type(decl);
-            }
-        };
+    protected InnerTypes getInnerTypes() {
+        return new InnerTypes(decl);
     }
 
-    protected Items<Initializer, ASTInitializer> getInitializers() {
-        return new Items<Initializer, ASTInitializer>(decl, ASTInitializer.class) {
-            public Initializer getAstType(ASTInitializer init) {
-                return new Initializer(init);
-            }
-        };
+    protected Initializers getInitializers() {
+        return new Initializers(decl);
     }
 
     protected void compareModifiers(Type toType, Differences differences) {
         TypeModifiers fromMods = getModifiers();
-        TypeModifiers toMods = toType.getModifiers();
-        fromMods.diff(toMods, differences);
+        fromMods.diff(toType.getModifiers(), differences);
     }
 
     protected void compareExtends(Type toType, Differences differences) {
         Extends fromExtends = getExtends();
-        Extends toExtends = toType.getExtends();
-        fromExtends.diff(toExtends, differences);
+        fromExtends.diff(toType.getExtends(), differences);
     }
 
     protected void compareImplements(Type toType, Differences differences) {
         Implements fromImplements = getImplements();
-        Implements toImplements = toType.getImplements();
-        fromImplements.diff(toImplements, differences);
+        fromImplements.diff(toType.getImplements(), differences);
     }
 
     protected void compareDeclarations(Type toType, Differences differences) {
-        Items<Method, ASTMethodDeclaration> fromMethods = getMethods();
-        Items<Method, ASTMethodDeclaration> toMethods = toType.getMethods();
-        fromMethods.diff(toMethods, differences);
+        Methods fromMethods = getMethods();
+        fromMethods.diff(toType.getMethods(), differences);
         
-        Items<Field, ASTFieldDeclaration> fromFields = getFields();
-        Items<Field, ASTFieldDeclaration> toFields = toType.getFields();
-        fromFields.diff(toFields, differences);
+        Fields fromFields = getFields();
+        fromFields.diff(toType.getFields(), differences);
         
-        Items<Ctor, ASTConstructorDeclaration> fromCtors = getCtors();
-        Items<Ctor, ASTConstructorDeclaration> toCtors = toType.getCtors();
-        fromCtors.diff(toCtors, differences);
+        Ctors fromCtors = getCtors();
+        fromCtors.diff(toType.getCtors(), differences);
         
-        Items<Type, ASTClassOrInterfaceDeclaration> fromInnerTypes = getInnerTypes();
-        Items<Type, ASTClassOrInterfaceDeclaration> toInnerTypes = toType.getInnerTypes();
-        fromInnerTypes.diff(toInnerTypes, differences);
+        InnerTypes fromInnerTypes = getInnerTypes();
+        fromInnerTypes.diff(toType.getInnerTypes(), differences);
 
-        Items<Initializer, ASTInitializer> fromInits = getInitializers();
-        Items<Initializer, ASTInitializer> toInits = toType.getInitializers();
-        fromInits.diff(toInits, differences);
+        Initializers fromInits = getInitializers();
+        fromInits.diff(toType.getInitializers(), differences);
     }
 
     public String getName() {
