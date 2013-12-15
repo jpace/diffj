@@ -15,14 +15,9 @@ public class StatementListDifferenceDelete extends StatementListDifference {
         return Code.CODE_REMOVED.format(name);
     }
 
-    public void process(String name, TokenList fromList, TokenList toList, Differences differences) {
-        tr.Ace.onBlue("this", this);
-
-        LocationRange flr = fromList.getFullLocationRange();
-        tr.Ace.cyan("flr", flr);
-
-        LocationRange tlr = toList.getTokenLocationRange(0);
-        tr.Ace.cyan("tlr", tlr);
+    public void process(String name, StatementList fromStatements, StatementList toStatements, Differences differences) {
+        LocationRange flr = fromStatements.getRangeOf(getDeletedStart(), getDeletedEnd());
+        LocationRange tlr = toStatements.getRangeAt(getAddedStart());
 
         String msg = getMessage(name);
         FileDiff fileDiff = new FileDiffCodeDeleted(msg, flr, tlr);

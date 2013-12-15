@@ -9,6 +9,7 @@ public class StatementListDiffer extends Differ<Statement, StatementListDifferen
     
     public StatementListDiffer(Block fromBlock, Block toBlock) {
         super(fromBlock.getStatements(), toBlock.getStatements());
+        
         this.fromStatements = new StatementList(fromBlock.getStatements());
         this.toStatements = new StatementList(toBlock.getStatements());
     }

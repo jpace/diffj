@@ -15,14 +15,9 @@ public class StatementListDifferenceAdd extends StatementListDifference {
         return Code.CODE_ADDED.format(name);
     }
 
-    public void process(String name, TokenList fromList, TokenList toList, Differences differences) {
-        tr.Ace.onBlue("this", this);
-        
-        LocationRange flr = fromList.getTokenLocationRange(0);
-        tr.Ace.cyan("flr", flr);
-        
-        LocationRange tlr = toList.getFullLocationRange();        
-        tr.Ace.cyan("tlr", tlr);
+    public void process(String name, StatementList fromStatements, StatementList toStatements, Differences differences) {
+        LocationRange flr = fromStatements.getRangeAt(getDeletedStart());
+        LocationRange tlr = toStatements.getRangeOf(getAddedStart(), getAddedEnd());
 
         String msg = getMessage(name);        
         FileDiff fileDiff = new FileDiffCodeAdded(msg, flr, tlr);

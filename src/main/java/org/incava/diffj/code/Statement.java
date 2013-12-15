@@ -31,4 +31,12 @@ public class Statement implements Comparable<Statement> {
     public int compareTo(Statement other) {
         return tokenList.compareTo(other.tokenList);
     }
+
+    public String toString() {
+        return tokenList.toString();
+    }
+
+    public Tkn getTkn(int idx) {
+        return new Tkn(tokenList.get(idx));
+    }
 }

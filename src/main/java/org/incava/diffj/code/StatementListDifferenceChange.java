@@ -8,7 +8,10 @@ public class StatementListDifferenceChange extends StatementListDifference {
         super(fromStatements, toStatements, delStart, delEnd, addStart, addEnd);
     }
 
-    public void process(String name, TokenList fromList, TokenList toList, Differences differences) {
+    public void process(String name, StatementList fromStatements, StatementList toStatements, Differences differences) {
+        TokenList fromList = fromStatements.getAsTokenList(getDeletedStart(), getDeletedEnd());
+        TokenList toList = toStatements.getAsTokenList(getAddedStart(), getAddedEnd());
+
         Code fc = new Code(name, fromList);
         Code tc = new Code(name, toList);
         fc.diff(tc, differences);
