@@ -1,13 +1,12 @@
 package org.incava.diffj.code;
 
-import java.util.List;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 
 public class StatementListDifferenceDelete extends StatementListDifference {
-    public StatementListDifferenceDelete(List<Statement> fromStatements, List<Statement> toStatements,
+    public StatementListDifferenceDelete(StatementList fromStatements, StatementList toStatements,
                                          Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
         super(fromStatements, toStatements, delStart, delEnd, addStart, addEnd);
     }

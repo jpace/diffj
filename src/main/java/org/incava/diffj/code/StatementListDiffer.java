@@ -1,23 +1,16 @@
 package org.incava.diffj.code;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.incava.ijdk.util.diff.Differ;
 import org.incava.ijdk.util.diff.Difference;
 
 public class StatementListDiffer extends Differ<Statement, StatementListDifference> {
-    public static List<TokenList> getTokenLists(List<Statement> stmts) {
-        StatementList sl = new StatementList(stmts);
-        return sl.getTokenLists();
-    }
-
-    private final List<Statement> fromStatements;
-    private final List<Statement> toStatements;
+    private final StatementList fromStatements;
+    private final StatementList toStatements;
     
     public StatementListDiffer(Block fromBlock, Block toBlock) {
         super(fromBlock.getStatements(), toBlock.getStatements());
-        this.fromStatements = fromBlock.getStatements();
-        this.toStatements = toBlock.getStatements();
+        this.fromStatements = new StatementList(fromBlock.getStatements());
+        this.toStatements = new StatementList(toBlock.getStatements());
     }
 
     public StatementListDifference createDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
