@@ -7,9 +7,9 @@ import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.LocationRange;
 
 public class StatementListDifferenceDelete extends StatementListDifference {
-    public StatementListDifferenceDelete(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
+    public StatementListDifferenceDelete(List<Statement> fromStatements, List<Statement> toStatements,
                                          Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
-        super(fromTokenLists, toTokenLists, delStart, delEnd, addStart, addEnd);
+        super(fromStatements, toStatements, delStart, delEnd, addStart, addEnd);
     }
 
     public String getMessage(String name) {

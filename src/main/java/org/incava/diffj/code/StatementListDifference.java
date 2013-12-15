@@ -10,11 +10,11 @@ public abstract class StatementListDifference extends Difference {
     private final List<TokenList> fromTokenLists;
     private final List<TokenList> toTokenLists;    
 
-    public StatementListDifference(List<TokenList> fromTokenLists, List<TokenList> toTokenLists,
+    public StatementListDifference(List<Statement> fromStatements, List<Statement> toStatements,
                                    Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
         super(delStart, delEnd, addStart, addEnd);
-        this.fromTokenLists = fromTokenLists;
-        this.toTokenLists = toTokenLists;
+        this.fromTokenLists = StatementListDiffer.getTokenLists(fromStatements);
+        this.toTokenLists = StatementListDiffer.getTokenLists(toStatements);
     }
 
     private TokenList getAsTokenList(List<TokenList> tokenLists, Integer from, Integer to) {

@@ -36,13 +36,13 @@ public class StatementListDiffer extends Differ<Statement, StatementListDifferen
         List<TokenList> toLists = getToTokenLists();
         
         if (delEnd == Difference.NONE) {
-            return new StatementListDifferenceAdd(fromLists, toLists, delStart, delEnd, addStart, addEnd);
+            return new StatementListDifferenceAdd(fromStatements, toStatements, delStart, delEnd, addStart, addEnd);
         }
         else if (addEnd == Difference.NONE) {
-            return new StatementListDifferenceDelete(fromLists, toLists, delStart, delEnd, addStart, addEnd);
+            return new StatementListDifferenceDelete(fromStatements, toStatements, delStart, delEnd, addStart, addEnd);
         }
         else {
-            return new StatementListDifferenceChange(fromLists, toLists, delStart, delEnd, addStart, addEnd);
+            return new StatementListDifferenceChange(fromStatements, toStatements, delStart, delEnd, addStart, addEnd);
         }
     }
 }

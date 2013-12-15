@@ -5,11 +5,7 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlockStatement;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.analysis.FileDiff;
-import org.incava.analysis.FileDiffCodeAdded;
-import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
-import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.diff.*;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -40,14 +36,6 @@ public class Block {
             allTokens.addAll(stmt.getTokens());
         }
         return new TokenList(allTokens);
-    }
-
-    public List<TokenList> getTokenLists() {
-        List<TokenList> tokenLists = new ArrayList<TokenList>();
-        for (Statement stmt : getStatements()) {
-            tokenLists.add(stmt.getTokenList());
-        }
-        return tokenLists;
     }
 
     public void compareCode(Block toBlock, Differences differences) {
