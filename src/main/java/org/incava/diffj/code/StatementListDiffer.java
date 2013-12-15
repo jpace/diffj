@@ -7,11 +7,8 @@ import org.incava.ijdk.util.diff.Difference;
 
 public class StatementListDiffer extends Differ<Statement, StatementListDifference> {
     public static List<TokenList> getTokenLists(List<Statement> stmts) {
-        List<TokenList> tokenLists = new ArrayList<TokenList>();
-        for (Statement stmt : stmts) {
-            tokenLists.add(stmt.getTokenList());
-        }
-        return tokenLists;
+        StatementList sl = new StatementList(stmts);
+        return sl.getTokenLists();
     }
 
     private final List<Statement> fromStatements;
@@ -23,18 +20,7 @@ public class StatementListDiffer extends Differ<Statement, StatementListDifferen
         this.toStatements = toBlock.getStatements();
     }
 
-    public List<TokenList> getFromTokenLists() {
-        return getTokenLists(fromStatements);
-    }
-
-    public List<TokenList> getToTokenLists() {
-        return getTokenLists(toStatements);
-    }
-
     public StatementListDifference createDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
-        List<TokenList> fromLists = getFromTokenLists();
-        List<TokenList> toLists = getToTokenLists();
-        
         if (delEnd == Difference.NONE) {
             return new StatementListDifferenceAdd(fromStatements, toStatements, delStart, delEnd, addStart, addEnd);
         }
