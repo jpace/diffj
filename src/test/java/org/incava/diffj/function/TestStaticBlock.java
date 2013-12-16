@@ -3,9 +3,9 @@ package org.incava.diffj.function;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffChange;
 import org.incava.analysis.FileDiffDelete;
-import org.incava.diffj.code.Code;
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.code.Code;
+import org.incava.diffj.util.Lines;
 
 public class TestStaticBlock extends ItemsTest {
     public TestStaticBlock(String name) {

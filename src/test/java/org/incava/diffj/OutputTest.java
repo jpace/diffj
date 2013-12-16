@@ -1,5 +1,7 @@
 package org.incava.diffj;
 
+import org.incava.diffj.util.Lines;
+
 public class OutputTest extends ItemsTest {
     public OutputTest(String name) {
         super(name);

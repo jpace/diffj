@@ -3,8 +3,8 @@ package org.incava.diffj.function;
 import java.text.MessageFormat;
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
 import org.incava.diffj.params.Parameters;
+import org.incava.diffj.util.Lines;
 import org.incava.ijdk.text.Location;
 
 public class TestMethodParameters extends ItemsTest {

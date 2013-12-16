@@ -1,7 +1,7 @@
 package org.incava.diffj.field;
 
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.util.Lines;
 
 public class TestFieldAccess extends ItemsTest {
     public TestFieldAccess(String name) {

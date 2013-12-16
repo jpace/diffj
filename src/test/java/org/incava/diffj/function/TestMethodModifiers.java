@@ -1,7 +1,7 @@
 package org.incava.diffj.function;
 
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.util.Lines;
 
 public class TestMethodModifiers extends ItemsTest {
     public TestMethodModifiers(String name) {

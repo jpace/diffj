@@ -3,8 +3,8 @@ package org.incava.diffj.type;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
 import org.incava.diffj.function.Method;
+import org.incava.diffj.util.Lines;
 
 public class TestInnerInterface extends ItemsTest {
     public TestInnerInterface(String name) {

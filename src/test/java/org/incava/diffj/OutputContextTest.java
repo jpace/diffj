@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.Report;
+import org.incava.diffj.util.Lines;
 
 public abstract class OutputContextTest extends OutputTest {
     public OutputContextTest(String name) {

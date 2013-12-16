@@ -5,7 +5,7 @@ import java.text.MessageFormat;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.util.Lines;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.ijdk.text.Message;
 import org.incava.java.Java;

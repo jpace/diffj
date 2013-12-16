@@ -2,7 +2,7 @@ package org.incava.diffj.field;
 
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.util.Lines;
 import org.incava.ijdk.text.Message;
 import static org.incava.diffj.field.Variable.*;
 import static org.incava.diffj.field.Variables.*;

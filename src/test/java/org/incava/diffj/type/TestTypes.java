@@ -4,7 +4,7 @@ import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.util.Lines;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
 

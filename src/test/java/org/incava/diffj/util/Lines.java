@@ -1,4 +1,4 @@
-package org.incava.diffj;
+package org.incava.diffj.util;
 
 import org.incava.ijdk.lang.StringExt;
 

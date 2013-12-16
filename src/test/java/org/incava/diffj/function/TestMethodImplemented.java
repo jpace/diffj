@@ -2,7 +2,7 @@ package org.incava.diffj.function;
 
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.util.Lines;
 import static org.incava.diffj.function.Method.*;
 
 public class TestMethodImplemented extends ItemsTest {

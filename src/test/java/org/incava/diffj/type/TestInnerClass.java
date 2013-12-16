@@ -3,7 +3,7 @@ package org.incava.diffj.type;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffDelete;
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.util.Lines;
 
 public class TestInnerClass extends ItemsTest {
     public TestInnerClass(String name) {

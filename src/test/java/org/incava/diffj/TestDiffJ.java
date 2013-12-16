@@ -3,6 +3,7 @@ package org.incava.diffj;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.incava.diffj.util.Lines;
 import org.incava.ijdk.io.IO;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.ijdk.util.ANSI;

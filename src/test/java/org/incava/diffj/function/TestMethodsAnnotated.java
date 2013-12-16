@@ -1,7 +1,7 @@
 package org.incava.diffj.function;
 
 import org.incava.diffj.ItemsTest;
-import org.incava.diffj.Lines;
+import org.incava.diffj.util.Lines;
 import org.incava.java.Java;
 
 public class TestMethodsAnnotated extends ItemsTest {
