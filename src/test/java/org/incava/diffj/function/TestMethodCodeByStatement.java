@@ -12,7 +12,6 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.code.Block;
 import org.incava.diffj.code.Statement;
-import org.incava.diffj.code.TokenDifference;
 import org.incava.diffj.code.TokenList;
 import org.incava.diffj.compunit.CompilationUnit;
 import org.incava.diffj.function.Method;
