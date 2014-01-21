@@ -77,9 +77,6 @@ public class JavaFile extends JavaFSElement {
         catch (FileNotFoundException e) {
             throw new DiffJException("Error opening file '" + file.getAbsolutePath() + "': " + e.getMessage(), e);
         }
-        catch (IOException e) {
-            throw new DiffJException("I/O error with file '" + file.getAbsolutePath() + "': " + e.getMessage(), e);
-        }
     }
 
     public JavaFile(String label, String contents, String sourceVersion) throws DiffJException {

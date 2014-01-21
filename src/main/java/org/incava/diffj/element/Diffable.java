@@ -6,7 +6,7 @@ import org.incava.ijdk.text.Message;
 /**
  * Something that can be compared against another.
  */
-public interface Diffable<DiffType extends Diffable> {
+public interface Diffable<DiffType extends Diffable<DiffType>> {
     public double getMatchScore(DiffType toDiffable);
 
     public void diff(DiffType toDiffable, Differences differences);

@@ -26,7 +26,7 @@ public class ParameterTypes {
         // (int[], double, String) <=> (String) ==> 33% (1 of 3 params)
         // (int[], double) <=> (String) ==> 0 (0 of 3)
 
-        ListComparator lc = new ListComparator<String>(paramTypes, toParamTypes);
+        ListComparator<String> lc = new ListComparator<String>(paramTypes, toParamTypes);
 
         ListComparison comp = lc.getComparison();
 

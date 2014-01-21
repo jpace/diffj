@@ -17,12 +17,12 @@ public class IncavaTestCase extends TestCase {
         return msg == null ? "" : msg + "; ";
     }
 
-    static public void assertEquals(String msg, Collection expected, Collection actual) {
+    static public void assertEquals(String msg, Collection<?> expected, Collection<?> actual) {
         String m = toMessage(msg);
 
         int count = Math.max(expected.size(), actual.size());
-        Iterator eit = expected.iterator();
-        Iterator ait = actual.iterator();
+        Iterator<?> eit = expected.iterator();
+        Iterator<?> ait = actual.iterator();
 
         for (int ni = 0; ni < count; ++ni) {
             Object e = eit.next();
@@ -32,7 +32,7 @@ public class IncavaTestCase extends TestCase {
         }
     }
 
-    static public void assertEquals(Collection expected, Collection actual) {
+    static public void assertEquals(Collection<?> expected, Collection<?> actual) {
         assertEquals(null, expected, actual);
     }
 

@@ -8,17 +8,17 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.ast.SimpleNode;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
-import org.incava.ijdk.lang.Pair;
+import org.incava.ijdk.lang.NCPair;
 import org.incava.ijdk.util.MultiMap;
 
 public class TypeMatches<ElementType extends Diffable<ElementType>> {
-    private final MultiMap<Double, Pair<ElementType, ElementType>> matches;
+    private final MultiMap<Double, NCPair<ElementType, ElementType>> matches;
     private final List<ElementType> unprocFromItems;
     private final List<ElementType> unprocToItems;
     private final List<ElementType> decls;
 
     public TypeMatches(List<ElementType> decls) {
-        this.matches = new MultiMap<Double, Pair<ElementType, ElementType>>();
+        this.matches = new MultiMap<Double, NCPair<ElementType, ElementType>>();
         this.unprocFromItems = new ArrayList<ElementType>();
         this.unprocToItems = new ArrayList<ElementType>();
         this.decls = decls;
@@ -33,10 +33,10 @@ public class TypeMatches<ElementType extends Diffable<ElementType>> {
     }
 
     public void add(double score, ElementType firstType, ElementType secondType) {
-        matches.put(score, Pair.create(firstType, secondType));
+        matches.add(score, NCPair.create(firstType, secondType));
     }
 
-    public Collection<Pair<ElementType, ElementType>> get(double score) {
+    public Collection<NCPair<ElementType, ElementType>> get(double score) {
         return matches.get(score);
     }
 
@@ -83,7 +83,7 @@ public class TypeMatches<ElementType extends Diffable<ElementType>> {
         List<ElementType> procFromItems = new ArrayList<ElementType>();
         List<ElementType> procToItems = new ArrayList<ElementType>();
 
-        for (Pair<ElementType, ElementType> declPair : get(score)) {
+        for (NCPair<ElementType, ElementType> declPair : get(score)) {
             ElementType fromType = declPair.getFirst();
             ElementType toType = declPair.getSecond();
 
