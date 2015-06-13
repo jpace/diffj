@@ -1,21 +1,41 @@
-package org.incava.diffj.code;
+package org.incava.diffj.code.statements;
 
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.code.Block;
+import org.incava.diffj.code.Statement;
+import org.incava.diffj.code.Tkn;
+import org.incava.diffj.code.TokenList;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.ListExt;
 import org.incava.ijdk.util.diff.Difference;
 import org.incava.pmdx.SimpleNodeUtil;
+import static org.incava.ijdk.util.IUtil.*;
 
 public class StatementList {
+    protected static final boolean log = Boolean.getBoolean("diffj.debug.statementlist");
+
     private final List<Statement> statements;
+    private final Block blk;
     
-    public StatementList(List<Statement> statements) {
-        this.statements = statements;
+    public StatementList(Block blk) {
+        this.blk = blk;
+        this.statements = blk.getStatements();
+        tr.Ace.stack("statements", statements);
+    }
+
+    public Block getBlock() {
+        return blk;
+    }
+
+    public String toString() {
+        return statements.toString();
     }
 
     public Statement get(int idx) {
+        log("idx", idx);
         return ListExt.get(statements, idx);
     }
 
@@ -47,8 +67,24 @@ public class StatementList {
      * index.
      */
     public LocationRange getRangeAt(int idx) {
-        Statement stmt = statements.get(idx);
+        tr.Ace.log("this", this);
+        log("idx", idx);
+        tr.Ace.log("statements", statements);
+        Statement stmt = get(idx);
+        log("stmt", stmt);
+        if (stmt == null) {
+            tr.Ace.onRed("stmt", stmt);
+            tr.Ace.onRed("blk", blk);
+            Token token = blk.getLastToken();
+            List<Token> tokens = list(token);
+            tr.Ace.log("tokens", tokens);
+            TokenList tokenList = new TokenList(tokens);
+            LocationRange rg = tokenList.getTokenLocationRange(-1);
+            tr.Ace.log("rg", rg);
+            return rg;
+        }
         TokenList tokenList = stmt.getTokenList();
+        log("tokenList", tokenList);
         return tokenList.getTokenLocationRange(0);
     }
 
@@ -61,5 +97,11 @@ public class StatementList {
         Tkn startTkn = fromStmt.getTkn(0);
         Tkn endTkn = toStmt.getTkn(-1);
         return startTkn.getLocationRange(endTkn);
-    }    
+    }
+
+    public void log(String msg, Object obj) {
+        if (log) {
+            tr.Ace.log(msg, obj);
+        }
+    }
 }

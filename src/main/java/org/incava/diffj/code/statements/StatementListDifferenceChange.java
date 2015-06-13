@@ -1,5 +1,7 @@
-package org.incava.diffj.code;
+package org.incava.diffj.code.statements;
 
+import org.incava.diffj.code.Code;
+import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Differences;
 
 public class StatementListDifferenceChange extends StatementListDifference {

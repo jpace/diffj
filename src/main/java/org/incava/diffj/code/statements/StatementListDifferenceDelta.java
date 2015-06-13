@@ -1,4 +1,4 @@
-package org.incava.diffj.code;
+package org.incava.diffj.code.statements;
 
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffCodeDeleted;

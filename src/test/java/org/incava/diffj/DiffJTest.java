@@ -130,7 +130,7 @@ public class DiffJTest extends IncavaTestCase {
         }
         catch (Exception e) {
             e.printStackTrace();
-            fail(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         if (expectations != null) {

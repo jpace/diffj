@@ -7,6 +7,7 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlock;
 import net.sourceforge.pmd.ast.ASTBlockStatement;
 import net.sourceforge.pmd.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.ItemsTest;
@@ -18,7 +19,6 @@ import org.incava.diffj.function.Method;
 import org.incava.diffj.io.JavaFile;
 import org.incava.diffj.util.Lines;
 import org.incava.ijdk.text.Location;
-import org.incava.ijdk.util.diff.*;
 import org.incava.pmdx.SimpleNodeUtil;
 import static org.incava.diffj.code.Code.*;
 
@@ -44,22 +44,32 @@ public class TestMethodCodeByStatement extends ItemsTest {
         return SimpleNodeUtil.findChild(parent, null, idx);
     }
 
+    public SimpleNode getDescendantNode(SimpleNode parent, int depth) {
+        if (depth <= 0) {
+            return null;
+        }
+        else {
+            SimpleNode child = SimpleNodeUtil.findChild(parent, null, 0);
+            return depth == 1 ? child : getDescendantNode(child, depth - 1);
+        }
+    }
+
     public CompilationUnit getCompilationUnit(String fileName) throws Exception {
         URL url = seek(fileName);
         File file = new File(url.toURI());
-        JavaFile javaFile = new JavaFile(file, fileName, "1.5");
+        JavaFile javaFile = new JavaFile(file, fileName, "1.6");
         return javaFile.compile();
     }
 
     /**
      * Returns the first method. Assumes type->class->body->method.
      */
-    public SimpleNode getFirstMethod(ASTCompilationUnit ast) {
+    public ASTMethodDeclaration getFirstMethod(ASTCompilationUnit ast) {
         SimpleNode typeDecl = getChildNode(ast, 0);
         SimpleNode clsDecl = getChildNode(typeDecl, 0);
         SimpleNode body = getChildNode(clsDecl, 0);
         SimpleNode bodyDecl = getChildNode(body, 0);
-        return getChildNode(bodyDecl, 0);
+        return (ASTMethodDeclaration)getChildNode(bodyDecl, 0);
     }
 
     public List<ASTBlockStatement> getStatements(SimpleNode node) {
@@ -68,8 +78,8 @@ public class TestMethodCodeByStatement extends ItemsTest {
 
     public List<TokenList> showMethod(String fileName) throws Exception {
         ASTCompilationUnit ast = getCompilationUnit(fileName).getAstCompUnit();
-        SimpleNode methNode = getFirstMethod(ast);
-        Method meth = new Method((net.sourceforge.pmd.ast.ASTMethodDeclaration)methNode);
+        ASTMethodDeclaration methNode = getFirstMethod(ast);
+        Method meth = new Method(methNode);
         Block methBlk = meth.getBlock();
         tr.Ace.onRed("methBlk", methBlk);
         meth.dump();
@@ -109,8 +119,8 @@ public class TestMethodCodeByStatement extends ItemsTest {
         SimpleNode ctorDecl = getChildNode(bodyDecl, 0);
         
         List<TokenList> tokenLists = new ArrayList<TokenList>();
-
         List<ASTBlockStatement> statements = getStatements(ctorDecl);
+
         // the parameters list:
         statements.remove(0);
         for (ASTBlockStatement stmt : statements) {

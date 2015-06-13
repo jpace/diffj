@@ -80,6 +80,8 @@ public class Method extends Function implements Diffable<Method> {
     }
 
     protected void compareBodies(Method toMethod, Differences differences) {
+        tr.Ace.log("name", getName());
+
         if (hasBlock()) {
             if (toMethod.hasBlock()) {
                 block.compareCode(toMethod.block, differences);

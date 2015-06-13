@@ -1,7 +1,8 @@
-package org.incava.diffj.code;
+package org.incava.diffj.code.statements;
 
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffCodeDeleted;
+import org.incava.diffj.code.Code;
 import org.incava.ijdk.text.LocationRange;
 
 public class StatementListDifferenceDelete extends StatementListDifferenceDelta {
@@ -19,10 +20,12 @@ public class StatementListDifferenceDelete extends StatementListDifferenceDelta 
     }
 
     public LocationRange getFromRange(StatementList fromStatements) {
+        tr.Ace.log("fromStatements", fromStatements);
         return fromStatements.getRangeOf(getDeletedStart(), getDeletedEnd());
     }
 
     public LocationRange getToRange(StatementList toStatements) {
+        tr.Ace.log("toStatements", toStatements);
         return toStatements.getRangeAt(getAddedStart());
     }
 }

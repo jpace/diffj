@@ -33,6 +33,10 @@ public class Differences {
         this(new FileDiffs());
     }
 
+    public String toString() {
+        return fileDiffs.toString();
+    }
+
     public FileDiffs getFileDiffs() {
         return fileDiffs;
     }

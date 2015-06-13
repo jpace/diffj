@@ -1,4 +1,4 @@
-package org.incava.diffj.code;
+package org.incava.diffj.code.statements;
 
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.util.diff.Difference;
@@ -10,6 +10,12 @@ public abstract class StatementListDifference extends Difference {
     public StatementListDifference(StatementList fromStatements, StatementList toStatements,
                                    Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {
         super(delStart, delEnd, addStart, addEnd);
+        tr.Ace.log("delStart", delStart);
+        tr.Ace.log("delEnd", delEnd);
+
+        tr.Ace.log("addStart", addStart);
+        tr.Ace.log("addEnd", addEnd);
+        
         this.fromStatements = fromStatements;
         this.toStatements = toStatements;
     }

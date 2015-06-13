@@ -1,5 +1,7 @@
-package org.incava.diffj.code;
+package org.incava.diffj.code.statements;
 
+import org.incava.diffj.code.Block;
+import org.incava.diffj.code.Statement;
 import org.incava.ijdk.util.diff.Differ;
 import org.incava.ijdk.util.diff.Difference;
 
@@ -10,8 +12,8 @@ public class StatementListDiffer extends Differ<Statement, StatementListDifferen
     public StatementListDiffer(Block fromBlock, Block toBlock) {
         super(fromBlock.getStatements(), toBlock.getStatements());
         
-        this.fromStatements = new StatementList(fromBlock.getStatements());
-        this.toStatements = new StatementList(toBlock.getStatements());
+        this.fromStatements = new StatementList(fromBlock);
+        this.toStatements = new StatementList(toBlock);
     }
 
     public StatementListDifference createDifference(Integer delStart, Integer delEnd, Integer addStart, Integer addEnd) {

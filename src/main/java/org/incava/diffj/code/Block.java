@@ -5,6 +5,8 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlockStatement;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diffj.code.statements.StatementListDiffer;
+import org.incava.diffj.code.statements.StatementListDifference;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.util.diff.*;
 import org.incava.pmdx.SimpleNodeUtil;
@@ -12,14 +14,16 @@ import org.incava.pmdx.SimpleNodeUtil;
 public class Block {
     private final String name;
     private final List<Statement> statements;
+    private final SimpleNode blk;
 
     public Block(String name, SimpleNode blk) {
-        this(name, SimpleNodeUtil.findChildren(blk, ASTBlockStatement.class));
+        this(name, blk, SimpleNodeUtil.findChildren(blk, ASTBlockStatement.class));
     }
 
-    public Block(String name, List<ASTBlockStatement> blkStatements) {
+    public Block(String name, SimpleNode blk, List<ASTBlockStatement> blkStatements) {
         this.name = name;        
         this.statements = new ArrayList<Statement>();
+        this.blk = blk;
         for (ASTBlockStatement blkStmt : blkStatements) {
             Statement stmt = new Statement(blkStmt);
             statements.add(stmt);
@@ -29,6 +33,10 @@ public class Block {
     public List<Statement> getStatements() {
         return statements;
     }
+
+    public Token getLastToken() {
+        return blk.getLastToken();
+    }    
 
     public TokenList getTokens() {
         List<Token> allTokens = new ArrayList<Token>();

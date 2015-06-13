@@ -1,7 +1,8 @@
-package org.incava.diffj.code;
+package org.incava.diffj.code.statements;
 
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffCodeAdded;
+import org.incava.diffj.code.Code;
 import org.incava.ijdk.text.LocationRange;
 
 public class StatementListDifferenceAdd extends StatementListDifferenceDelta {

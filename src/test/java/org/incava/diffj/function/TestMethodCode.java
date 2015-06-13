@@ -8,9 +8,11 @@ import static org.incava.diffj.code.Code.*;
 public class TestMethodCode extends ItemsTest {
     public TestMethodCode(String name) {
         super(name);
+        tr.Ace.setVerbose(true);
     }
 
     public void testCodeNotChanged() {
+        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { return -1; }",
                            "",
@@ -28,6 +30,7 @@ public class TestMethodCode extends ItemsTest {
     }
 
     public void testCodeChanged() {
+        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { return -1; }",
                            "",
@@ -44,6 +47,7 @@ public class TestMethodCode extends ItemsTest {
     }
     
     public void testCodeInserted() {
+        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { return -1; }",
                            "",
@@ -61,6 +65,7 @@ public class TestMethodCode extends ItemsTest {
     }
 
     public void testCodeDeleted() {
+        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { ",
                            "        int i = 0;",
@@ -74,11 +79,11 @@ public class TestMethodCode extends ItemsTest {
                            "    int bar() { return -1; }",
                            "}"),
                  
-                 // makeCodeDeletedRef(CODE_REMOVED, "bar()", locrg(3, 9, 18), locrg(3, 17, 22)));
                  makeCodeDeletedRef(CODE_REMOVED, "bar()", locrg(3, 9, 18), locrg(3, 17, 22)));
     }
 
     public void testCodeInsertedAndChanged() {
+        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { return -1; }",
                            "",
@@ -98,6 +103,7 @@ public class TestMethodCode extends ItemsTest {
     // See comment in TestDiff.java, with regard to misleading LCSes.
 
     public void misleading_diffs_testZipDiff() {
+        tr.Ace.onRed("this", this);
         evaluate(new Lines("/**",
                            " * This class implements an output stream filter for writing files in the",
                            " * ZIP file format. Includes support for both compressed and uncompressed",
@@ -209,5 +215,38 @@ public class TestMethodCode extends ItemsTest {
                            "        }"),
                  
                  makeCodeChangedRef(CODE_CHANGED, "bar()", locrg(2, 17, 25), locrg(4, 9, 5, 17)));
+    }
+
+    public void testCodeDeletedAtEnd() {
+        evaluate(new Lines("class Test {",
+                           "    void bar() {",
+                           "        String x = null;",
+                           "        String y = null;",
+                           "    }",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "    void bar() {",
+                           "        String x = null;",
+                           "    }",
+                           "}"),
+                 
+                 makeCodeDeletedRef(CODE_REMOVED, "bar()", locrg(4, 9, 24), locrg(4, 5, 5)));
+    }
+
+    public void testCodeAllDeleted() {
+        evaluate(new Lines("class Test {",
+                           "    void bar() {",
+                           "        String x = null;",
+                           "        String y = null;",
+                           "    }",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "    void bar() {",
+                           "    }",
+                           "}"),
+                 
+                 makeCodeDeletedRef(CODE_REMOVED, "bar()", locrg(3, 9, 4, 24), locrg(3, 5, 5)));
     }
 }
