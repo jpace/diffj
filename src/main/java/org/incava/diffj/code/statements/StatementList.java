@@ -8,6 +8,7 @@ import org.incava.diffj.code.Block;
 import org.incava.diffj.code.Statement;
 import org.incava.diffj.code.Tkn;
 import org.incava.diffj.code.TokenList;
+import org.incava.diffj.util.DiffPoint;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.ListExt;
 import org.incava.ijdk.util.diff.Difference;
@@ -23,7 +24,7 @@ public class StatementList {
     public StatementList(Block blk) {
         this.blk = blk;
         this.statements = blk.getStatements();
-        tr.Ace.stack("statements", statements);
+        log("statements", statements);
     }
 
     public Block getBlock() {
@@ -47,6 +48,10 @@ public class StatementList {
         return tokenLists;
     }
 
+    public TokenList getAsTokenList(DiffPoint diffPoint) {
+        return getAsTokenList(diffPoint.getStart(), diffPoint.getEnd());
+    }
+
     public TokenList getAsTokenList(Integer from, Integer to) {
         List<TokenList> tokenLists = getTokenLists();
         if (to == Difference.NONE) {
@@ -67,20 +72,14 @@ public class StatementList {
      * index.
      */
     public LocationRange getRangeAt(int idx) {
-        tr.Ace.log("this", this);
         log("idx", idx);
-        tr.Ace.log("statements", statements);
         Statement stmt = get(idx);
         log("stmt", stmt);
         if (stmt == null) {
-            tr.Ace.onRed("stmt", stmt);
-            tr.Ace.onRed("blk", blk);
             Token token = blk.getLastToken();
             List<Token> tokens = list(token);
-            tr.Ace.log("tokens", tokens);
             TokenList tokenList = new TokenList(tokens);
             LocationRange rg = tokenList.getTokenLocationRange(-1);
-            tr.Ace.log("rg", rg);
             return rg;
         }
         TokenList tokenList = stmt.getTokenList();
@@ -89,9 +88,11 @@ public class StatementList {
     }
 
     /**
-     * Returns the range for the given statements within from and to, inclusive.
+     * Returns the range for the given statements for the diff point, inclusive.
      */
-    public LocationRange getRangeOf(int from, int to) {
+    public LocationRange getRangeOf(DiffPoint diffPoint) {
+        int from = diffPoint.getStart();
+        int to = diffPoint.getEnd();
         Statement fromStmt = get(from);
         Statement toStmt = get(to);
         Tkn startTkn = fromStmt.getTkn(0);
@@ -101,6 +102,7 @@ public class StatementList {
 
     public void log(String msg, Object obj) {
         if (log) {
+            tr.Ace.setVerbose(true);
             tr.Ace.log(msg, obj);
         }
     }
