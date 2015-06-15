@@ -16,15 +16,13 @@ import org.incava.pmdx.SimpleNodeUtil;
 import static org.incava.ijdk.util.IUtil.*;
 
 public class StatementList {
-    protected static final boolean log = Boolean.getBoolean("diffj.debug.statementlist");
-
     private final List<Statement> statements;
     private final Block blk;
     
     public StatementList(Block blk) {
         this.blk = blk;
         this.statements = blk.getStatements();
-        log("statements", statements);
+        SLLogger.log("statements", statements);
     }
 
     public Block getBlock() {
@@ -36,7 +34,7 @@ public class StatementList {
     }
 
     public Statement get(int idx) {
-        log("idx", idx);
+        SLLogger.log("idx", idx);
         return ListExt.get(statements, idx);
     }
 
@@ -72,9 +70,9 @@ public class StatementList {
      * index.
      */
     public LocationRange getRangeAt(int idx) {
-        log("idx", idx);
+        SLLogger.log("idx", idx);
         Statement stmt = get(idx);
-        log("stmt", stmt);
+        SLLogger.log("stmt", stmt);
         if (stmt == null) {
             Token token = blk.getLastToken();
             List<Token> tokens = list(token);
@@ -83,7 +81,7 @@ public class StatementList {
             return rg;
         }
         TokenList tokenList = stmt.getTokenList();
-        log("tokenList", tokenList);
+        SLLogger.log("tokenList", tokenList);
         return tokenList.getTokenLocationRange(0);
     }
 
@@ -98,12 +96,5 @@ public class StatementList {
         Tkn startTkn = fromStmt.getTkn(0);
         Tkn endTkn = toStmt.getTkn(-1);
         return startTkn.getLocationRange(endTkn);
-    }
-
-    public void log(String msg, Object obj) {
-        if (log) {
-            tr.Ace.setVerbose(true);
-            tr.Ace.log(msg, obj);
-        }
     }
 }

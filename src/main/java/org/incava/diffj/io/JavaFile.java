@@ -27,7 +27,7 @@ public class JavaFile extends JavaFSElement {
     public static final long serialVersionUID = 1L;
 
     public static JavaFile createFile(File dir, JavaFSElement otherElmt) throws DiffJException {
-        tr.Ace.onRed("dir: " + dir + "; otherElmt: " + otherElmt);
+        tr.Ace.log("dir: " + dir + "; otherElmt: " + otherElmt);
         try {
             JavaElementFactory jef = new JavaElementFactory();
             return jef.createFile(new File(dir, otherElmt.getName()), null, otherElmt.getSourceVersion());
@@ -43,7 +43,7 @@ public class JavaFile extends JavaFSElement {
     }
 
     public static int compare(Report report, JavaFile fromFile, JavaFile toFile) throws DiffJException {
-        tr.Ace.onRed("fromFile: " + fromFile + "; toFile: " + toFile);
+        tr.Ace.log("fromFile: " + fromFile + "; toFile: " + toFile);
         try {
             fromFile.compare(report, toFile);
         }
@@ -165,7 +165,7 @@ public class JavaFile extends JavaFSElement {
             }
         }
         catch (DiffJException de) {
-            tr.Ace.red("de", de);
+            tr.Ace.log("de", de);
             System.err.println("Error: " + de.getMessage());
             throw de;
         }

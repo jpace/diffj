@@ -117,7 +117,7 @@ public class DiffJ {
                 break;
             }
         }
-        tr.Ace.onGreen("exitValue", "" + exitValue);
+        tr.Ace.log("exitValue", "" + exitValue);
     }
 
     public static void main(String[] args) {

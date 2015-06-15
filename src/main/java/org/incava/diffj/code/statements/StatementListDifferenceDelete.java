@@ -21,12 +21,12 @@ public class StatementListDifferenceDelete extends StatementListDifferenceDelta 
     }
 
     public LocationRange getFromRange(StatementList fromStatements) {
-        tr.Ace.log("fromStatements", fromStatements);
+        SLLogger.log("fromStatements", fromStatements);
         return fromStatements.getRangeOf(getDeletedPoint());
     }
 
     public LocationRange getToRange(StatementList toStatements) {
-        tr.Ace.log("toStatements", toStatements);
+        SLLogger.log("toStatements", toStatements);
         return toStatements.getRangeAt(getAddedStart());
     }
 }
