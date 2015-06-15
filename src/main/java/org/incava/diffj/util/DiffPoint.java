@@ -1,7 +1,5 @@
 package org.incava.diffj.util;
 
-import java.util.*;
-
 public class DiffPoint {
     private final Integer startPoint;
     private final Integer endPoint;

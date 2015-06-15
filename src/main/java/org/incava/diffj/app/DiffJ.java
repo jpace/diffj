@@ -9,7 +9,6 @@ import org.incava.analysis.BriefReport;
 import org.incava.analysis.DetailedReport;
 import org.incava.analysis.FileDiffs;
 import org.incava.analysis.Report;
-import org.incava.diffj.*;
 import org.incava.diffj.io.JavaElementFactory;
 import org.incava.diffj.io.JavaFSElement;
 import org.incava.diffj.lang.DiffJException;

@@ -3,7 +3,6 @@ package org.incava.diffj;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.incava.analysis.*;
 import org.incava.ijdk.util.ANSI;
 
 public class TestOutputNoContext extends OutputTest {

@@ -9,8 +9,8 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
-import org.incava.ijdk.io.*;
-import org.incava.ijdk.lang.*;
+import org.incava.ijdk.io.ReadOptionType;
+import org.incava.ijdk.io.ReaderExt;
 import org.incava.ijdk.util.ANSI;
 
 /**

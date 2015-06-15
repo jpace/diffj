@@ -2,7 +2,6 @@ package org.incava.analysis;
 
 import java.util.List;
 import org.incava.ijdk.io.IO;
-import org.incava.ijdk.lang.*;
 
 /**
  * Writes differences. Actually returns the differences as strings. Writing is

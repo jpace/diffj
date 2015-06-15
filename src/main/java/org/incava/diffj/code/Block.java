@@ -8,7 +8,6 @@ import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.code.statements.StatementListDiffer;
 import org.incava.diffj.code.statements.StatementListDifference;
 import org.incava.diffj.element.Differences;
-import org.incava.ijdk.util.diff.*;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Block {
