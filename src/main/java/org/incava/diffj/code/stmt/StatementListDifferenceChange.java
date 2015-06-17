@@ -1,4 +1,4 @@
-package org.incava.diffj.code.statements;
+package org.incava.diffj.code.stmt;
 
 import org.incava.diffj.code.Code;
 import org.incava.diffj.code.TokenList;

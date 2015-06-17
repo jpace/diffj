@@ -1,4 +1,4 @@
-package org.incava.diffj.code.statements;
+package org.incava.diffj.code.stmt;
 
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.util.DiffPoint;

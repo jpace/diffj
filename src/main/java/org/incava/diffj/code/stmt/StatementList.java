@@ -1,4 +1,4 @@
-package org.incava.diffj.code.statements;
+package org.incava.diffj.code.stmt;
 
 import java.util.ArrayList;
 import java.util.List;

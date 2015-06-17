@@ -5,8 +5,8 @@ import java.util.List;
 import net.sourceforge.pmd.ast.ASTBlockStatement;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
-import org.incava.diffj.code.statements.StatementListDiffer;
-import org.incava.diffj.code.statements.StatementListDifference;
+import org.incava.diffj.code.stmt.StatementListDiffer;
+import org.incava.diffj.code.stmt.StatementListDifference;
 import org.incava.diffj.element.Differences;
 import org.incava.pmdx.SimpleNodeUtil;
 

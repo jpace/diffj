@@ -1,4 +1,4 @@
-package org.incava.diffj.code.statements;
+package org.incava.diffj.code.stmt;
 
 import org.incava.diffj.code.Block;
 import org.incava.diffj.code.Statement;

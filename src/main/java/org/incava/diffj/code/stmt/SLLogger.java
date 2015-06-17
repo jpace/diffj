@@ -1,4 +1,4 @@
-package org.incava.diffj.code.statements;
+package org.incava.diffj.code.stmt;
 
 public class SLLogger {
     protected static final boolean debug = Boolean.getBoolean("diffj.debug.statementlist");
