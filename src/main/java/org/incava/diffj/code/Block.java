@@ -6,7 +6,7 @@ import net.sourceforge.pmd.ast.ASTBlockStatement;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diffj.code.stmt.StatementListDiffer;
-import org.incava.diffj.code.stmt.StatementListDifference;
+import org.incava.diffj.code.stmt.StatementsDiff;
 import org.incava.diffj.element.Differences;
 import org.incava.pmdx.SimpleNodeUtil;
 
@@ -57,8 +57,8 @@ public class Block {
     
     public void compareCodeNew(Block toBlock, Differences differences) {
         StatementListDiffer diff = new StatementListDiffer(this, toBlock);
-        List<StatementListDifference> diffs = diff.execute();
-        for (StatementListDifference df : diffs) {
+        List<StatementsDiff> diffs = diff.execute();
+        for (StatementsDiff df : diffs) {
             df.execute(name, differences);
         }
     }

@@ -6,8 +6,8 @@ import org.incava.diffj.element.Differences;
 import org.incava.diffj.util.DiffPoint;
 import org.incava.ijdk.text.LocationRange;
 
-public abstract class StatementListDifferenceDelta extends StatementListDifference {
-    public StatementListDifferenceDelta(StatementList fromStatements, StatementList toStatements,
+public abstract class StatementsDiffDelta extends StatementsDiff {
+    public StatementsDiffDelta(StatementList fromStatements, StatementList toStatements,
                                         DiffPoint delPoint, DiffPoint addPoint) {
         super(fromStatements, toStatements, delPoint, addPoint);
     }

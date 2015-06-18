@@ -5,8 +5,8 @@ import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.util.DiffPoint;
 
-public class StatementListDifferenceChange extends StatementListDifference {
-    public StatementListDifferenceChange(StatementList fromStatements, StatementList toStatements,
+public class StatementsDiffChange extends StatementsDiff {
+    public StatementsDiffChange(StatementList fromStatements, StatementList toStatements,
                                          DiffPoint delPoint, DiffPoint addPoint) {
         super(fromStatements, toStatements, delPoint, addPoint);
     }
