@@ -6,6 +6,7 @@ import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
 import org.incava.diff.Difference;
 import org.incava.diffj.code.Block;
+import org.incava.diffj.code.Code;
 import org.incava.diffj.code.Statement;
 import org.incava.diffj.code.Tkn;
 import org.incava.diffj.code.TokenList;
@@ -46,11 +47,15 @@ public class StatementList {
         return tokenLists;
     }
 
-    public TokenList getAsTokenList(DiffPoint diffPoint) {
-        return getAsTokenList(diffPoint.getStart(), diffPoint.getEnd());
+    public Code getAsCode(String name, DiffPoint diffPoint) {
+        TokenList tokenList = getAsTokenList(diffPoint);
+        return new Code(name, tokenList);
     }
 
-    public TokenList getAsTokenList(Integer from, Integer to) {
+    public TokenList getAsTokenList(DiffPoint diffPoint) {
+        Integer from = diffPoint.getStart();
+        Integer to = diffPoint.getEnd();
+
         List<TokenList> tokenLists = getTokenLists();
         if (to == Difference.NONE) {
             return tokenLists.get(from);
@@ -80,21 +85,27 @@ public class StatementList {
             LocationRange rg = tokenList.getTokenLocationRange(-1);
             return rg;
         }
-        TokenList tokenList = stmt.getTokenList();
-        SLLogger.log("tokenList", tokenList);
-        return tokenList.getTokenLocationRange(0);
+        else {
+            TokenList tokenList = stmt.getTokenList();
+            SLLogger.log("tokenList", tokenList);
+            return tokenList.getTokenLocationRange(0);
+        }
+    }
+
+    /**
+     * Returns the token for the given statement.
+     */
+    public Tkn getToken(int stmtIdx, int tokenIdx) {
+        Statement stmt = get(stmtIdx);
+        return stmt.getTkn(tokenIdx);
     }
 
     /**
      * Returns the range for the given statements for the diff point, inclusive.
      */
     public LocationRange getRangeOf(DiffPoint diffPoint) {
-        int from = diffPoint.getStart();
-        int to = diffPoint.getEnd();
-        Statement fromStmt = get(from);
-        Statement toStmt = get(to);
-        Tkn startTkn = fromStmt.getTkn(0);
-        Tkn endTkn = toStmt.getTkn(-1);
+        Tkn startTkn = getToken(diffPoint.getStart(), 0);
+        Tkn endTkn = getToken(diffPoint.getEnd(), -1);
         return startTkn.getLocationRange(endTkn);
     }
 }

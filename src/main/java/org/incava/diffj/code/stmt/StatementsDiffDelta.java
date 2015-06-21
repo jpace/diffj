@@ -1,7 +1,6 @@
 package org.incava.diffj.code.stmt;
 
 import org.incava.analysis.FileDiff;
-import org.incava.analysis.FileDiffCodeDeleted;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.util.DiffPoint;
 import org.incava.ijdk.text.LocationRange;
@@ -23,7 +22,7 @@ public abstract class StatementsDiffDelta extends StatementsDiff {
     public void process(String name, StatementList fromStatements, StatementList toStatements, Differences differences) {
         LocationRange fromLocRg = getFromRange(fromStatements);
         LocationRange toLocRg = getToRange(toStatements);
-
+        
         String msg = getMessage(name);
         FileDiff fileDiff = getFileDiff(msg, fromLocRg, toLocRg);
         differences.add(fileDiff);
