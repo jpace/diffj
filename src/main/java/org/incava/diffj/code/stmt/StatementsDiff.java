@@ -1,8 +1,8 @@
 package org.incava.diffj.code.stmt;
 
+import org.incava.diff.Difference;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.util.DiffPoint;
-import org.incava.ijdk.util.diff.Difference;
 
 public abstract class StatementsDiff extends Difference {
     protected final StatementList fromStatements;
@@ -11,7 +11,7 @@ public abstract class StatementsDiff extends Difference {
     private final DiffPoint addPoint;
 
     public StatementsDiff(StatementList fromStatements, StatementList toStatements,
-                                   DiffPoint delPoint, DiffPoint addPoint) {
+                          DiffPoint delPoint, DiffPoint addPoint) {
         super(delPoint.getStart(), delPoint.getEnd(), addPoint.getStart(), addPoint.getEnd());
         this.fromStatements = fromStatements;
         this.toStatements = toStatements;

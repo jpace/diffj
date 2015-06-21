@@ -7,7 +7,7 @@ import org.incava.diffj.util.DiffPoint;
 
 public class StatementsDiffChange extends StatementsDiff {
     public StatementsDiffChange(StatementList fromStatements, StatementList toStatements,
-                                         DiffPoint delPoint, DiffPoint addPoint) {
+                                DiffPoint delPoint, DiffPoint addPoint) {
         super(fromStatements, toStatements, delPoint, addPoint);
     }
 

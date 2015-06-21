@@ -1,10 +1,10 @@
 package org.incava.diffj.code.stmt;
 
+import org.incava.diff.Differ;
+import org.incava.diff.Difference;
 import org.incava.diffj.code.Block;
 import org.incava.diffj.code.Statement;
 import org.incava.diffj.util.DiffPoint;
-import org.incava.ijdk.util.diff.Differ;
-import org.incava.ijdk.util.diff.Difference;
 
 public class StatementListDiffer extends Differ<Statement, StatementsDiff> {
     private final StatementList fromStatements;

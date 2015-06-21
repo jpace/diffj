@@ -8,7 +8,7 @@ import org.incava.ijdk.text.LocationRange;
 
 public class StatementsDiffDelete extends StatementsDiffDelta {
     public StatementsDiffDelete(StatementList fromStatements, StatementList toStatements,
-                                         DiffPoint delPoint, DiffPoint addPoint) {
+                                DiffPoint delPoint, DiffPoint addPoint) {
         super(fromStatements, toStatements, delPoint, addPoint);
     }
 
