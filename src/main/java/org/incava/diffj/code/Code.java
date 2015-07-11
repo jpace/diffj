@@ -21,12 +21,14 @@ public class Code {
     }
 
     public void diff(Code toCode, Differences differences) {
+        tr.Ace.onRed("this", this);
+        tr.Ace.stack("this", this);
         TokenList toTokenList = toCode.tokenList;
         FileDiff currFileDiff = null;
         List<TokenDifference> diffList = tokenList.diff(toTokenList);
 
         for (TokenDifference diff : diffList) {
-            tr.Ace.log("diff", diff);
+            CodeLogger.log("diff", diff);
             currFileDiff = processDifference(diff, toTokenList, currFileDiff, differences);
             if (currFileDiff == null) {
                 break;
@@ -36,9 +38,9 @@ public class Code {
 
     protected FileDiff replaceReference(FileDiff fileDiff, LocationRange fromLocRg, LocationRange toLocRg, Differences differences) {
         String newMsg = CODE_CHANGED.format(name);
-        tr.Ace.reverse("newMsg", newMsg);
+        CodeLogger.log("newMsg", newMsg);
         FileDiff newDiff = new FileDiffChange(newMsg, fileDiff, fromLocRg, toLocRg);
-        tr.Ace.reverse("newDiff", newDiff);
+        CodeLogger.log("newDiff", newDiff);
         differences.getFileDiffs().remove(fileDiff);
         differences.add(newDiff);
         return newDiff;
@@ -46,12 +48,12 @@ public class Code {
     
     protected FileDiff processDifference(TokenDifference diff, TokenList toTokenList, FileDiff currFileDiff, Differences differences) {
         LocationRange fromLocRg = diff.getDeletedRange(tokenList);
-        tr.Ace.log("fromLocRg", fromLocRg);
+        CodeLogger.log("fromLocRg", fromLocRg);
         LocationRange toLocRg = diff.getAddedRange(toTokenList);
-        tr.Ace.log("toLocRg", toLocRg);
+        CodeLogger.log("toLocRg", toLocRg);
 
         if (currFileDiff != null && currFileDiff.isOnSameLine(fromLocRg)) {
-            tr.Ace.onGreen("currFileDiff", currFileDiff);
+            CodeLogger.log("currFileDiff", currFileDiff);
             return replaceReference(currFileDiff, fromLocRg, toLocRg, differences);
         }
         else {
