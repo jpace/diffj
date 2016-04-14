@@ -15,12 +15,13 @@ dependencies {
     compile files('libs/ijdk-2.0.0.jar')
     compile files('libs/jagol-1.0.0.jar')
     compile files('libs/java-diff-1.0.0.jar')
-    compile files('libs/qualog-2.1.0.jar')
+    compile files('libs/qualog-2.0.0.jar')
+    compile files('libs/pmdx-2.0.0.jar')
     testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
 allprojects {
-    tasks.withType(Compile).all { Compile compile ->
+    tasks.withType(JavaCompile).all { JavaCompile compile ->
         compile.options.debug = true
         compile.options.compilerArgs = ['-Xlint:all']
     }
