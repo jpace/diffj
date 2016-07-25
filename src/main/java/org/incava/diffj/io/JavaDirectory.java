@@ -48,7 +48,7 @@ public class JavaDirectory extends JavaFSElement {
         }
         
         for (File file : files) {
-            if (file.isDirectory() || (file.isFile() && file.getName().endsWith(".java"))) {
+            if (file.isDirectory() || file.isFile() && file.getName().endsWith(".java")) {
                 names.add(file.getName());
             }
         }
@@ -73,7 +73,7 @@ public class JavaDirectory extends JavaFSElement {
             JavaFSElement fromElmt = fromDir.getElement(name);
             JavaFSElement toElmt = getElement(name);
 
-            if (fromElmt != null && toElmt != null && (fromElmt.isFile() || (fromElmt.isDirectory() && canRecurse))) {
+            if (fromElmt != null && toElmt != null && (fromElmt.isFile() || fromElmt.isDirectory() && canRecurse)) {
                 fromElmt.compareTo(report, toElmt);
             }
         }

@@ -23,7 +23,7 @@ public class JavaElementFactory {
     }
 
     public JavaFile createFile(File file, String label, String source) throws DiffJException {
-        if (file == null || file.getName().equals("-") || (file.isFile() && verifyExists(file, label))) {
+        if (file == null || file.getName().equals("-") || file.isFile() && verifyExists(file, label)) {
             return new JavaFile(file, label, source);
         }
         else {
