@@ -6,6 +6,10 @@ import org.incava.ijdk.text.Location;
 public class TestFileDiff extends TestCase {
     public TestFileDiff(String name) {
         super(name);
+
+
+
+        
         tr.Ace.setVerbose(true);
     }
 

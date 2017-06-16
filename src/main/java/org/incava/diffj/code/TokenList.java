@@ -3,10 +3,10 @@ package org.incava.diffj.code;
 import java.util.List;
 import net.sourceforge.pmd.ast.SimpleNode;
 import net.sourceforge.pmd.ast.Token;
+import org.incava.diff.Differ;
+import org.incava.diff.Difference;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.ListExt;
-import org.incava.ijdk.util.diff.Differ;
-import org.incava.ijdk.util.diff.Difference;
 import org.incava.pmdx.SimpleNodeUtil;
 
 /**
