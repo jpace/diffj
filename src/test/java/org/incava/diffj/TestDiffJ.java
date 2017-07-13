@@ -7,11 +7,11 @@ import org.incava.diffj.util.Lines;
 import org.incava.ijdk.io.IO;
 import org.incava.ijdk.lang.StringExt;
 import org.incava.ijdk.util.ANSI;
+import org.incava.pmdx.Node;
 
 public class TestDiffJ extends DiffJTest {
     public TestDiffJ(String name) {
         super(name);
-        tr.Ace.setVerbose(true);
     }
 
     public boolean showContext() {

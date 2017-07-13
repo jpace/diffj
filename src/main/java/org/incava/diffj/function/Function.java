@@ -1,8 +1,8 @@
 package org.incava.diffj.function;
 
-import net.sourceforge.pmd.ast.ASTFormalParameters;
-import net.sourceforge.pmd.ast.ASTNameList;
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.ASTFormalParameters;
+import net.sourceforge.pmd.lang.java.ast.ASTNameList;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import org.incava.diffj.code.Code;
 import org.incava.diffj.element.CodedElement;
 import org.incava.diffj.element.Differences;
@@ -10,9 +10,9 @@ import org.incava.diffj.params.Parameters;
 import org.incava.pmdx.FunctionUtil;
 
 public abstract class Function extends CodedElement {
-    private final SimpleNode node;
+    private final AbstractJavaNode node;
     
-    public Function(SimpleNode node) {
+    public Function(AbstractJavaNode node) {
         super(node);
         this.node = node;
     }

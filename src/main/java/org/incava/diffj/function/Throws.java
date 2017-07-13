@@ -1,12 +1,12 @@
 package org.incava.diffj.function;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTName;
-import net.sourceforge.pmd.ast.ASTNameList;
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.ASTName;
+import net.sourceforge.pmd.lang.java.ast.ASTNameList;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.Message;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 import org.incava.pmdx.ThrowsUtil;
 
 public class Throws {
@@ -14,10 +14,10 @@ public class Throws {
     public static final Message THROWS_ADDED = new Message("throws added: {0}");
     public static final Message THROWS_REORDERED = new Message("throws {0} reordered from argument {1} to {2}");
 
-    private final SimpleNode node;
+    private final AbstractJavaNode node;
     private final ASTNameList nameList;
     
-    public Throws(SimpleNode node, ASTNameList nameList) {
+    public Throws(AbstractJavaNode node, ASTNameList nameList) {
         this.node = node;
         this.nameList = nameList;
     }
@@ -41,11 +41,11 @@ public class Throws {
     }
 
     public List<ASTName> getChildNames() {
-        return SimpleNodeUtil.findChildren(nameList, ASTName.class);
+        return Node.of(nameList).findChildren(ASTName.class);
     }
 
-    protected void changeThrows(SimpleNode fromNode, SimpleNode toNode, Message msg, ASTName name, Differences differences) {
-        differences.changed(fromNode, toNode, msg, SimpleNodeUtil.toString(name));
+    protected void changeThrows(AbstractJavaNode fromNode, AbstractJavaNode toNode, Message msg, ASTName name, Differences differences) {
+        differences.changed(fromNode, toNode, msg, Node.of(name).toString());
     }
 
     protected void addAllThrows(Throws toThrows, Differences differences) {
@@ -81,7 +81,7 @@ public class Throws {
             }
             else if (throwsMatch != fromIdx) {
                 ASTName toName = toThrows.getName(throwsMatch);
-                String fromNameStr = SimpleNodeUtil.toString(fromName);
+                String fromNameStr = Node.of(fromName).toString();
                 differences.changed(fromName, toName, THROWS_REORDERED, fromNameStr, fromIdx, throwsMatch);
             }
         }
@@ -95,10 +95,10 @@ public class Throws {
     }
 
     protected Integer getMatch(List<ASTName> fromNames, int fromIdx, List<ASTName> toNames) {
-        String fromNameStr = SimpleNodeUtil.toString(fromNames.get(fromIdx));
+        String fromNameStr = Node.of(fromNames.get(fromIdx)).toString();
 
         for (int toIdx = 0; toIdx < toNames.size(); ++toIdx) {
-            if (toNames.get(toIdx) != null && SimpleNodeUtil.toString(toNames.get(toIdx)).equals(fromNameStr)) {
+            if (toNames.get(toIdx) != null && Node.of(toNames.get(toIdx)).toString().equals(fromNameStr)) {
                 fromNames.set(fromIdx, null);
                 toNames.set(toIdx, null); // mark as consumed
                 return toIdx;

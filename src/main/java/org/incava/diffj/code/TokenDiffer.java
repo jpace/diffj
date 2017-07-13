@@ -1,7 +1,7 @@
 package org.incava.diffj.code;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diff.Differ;
 import org.incava.diff.Difference;
 

@@ -1,7 +1,7 @@
 package org.incava.diffj.function;
 
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTConstructorDeclaration;
 import org.incava.diffj.type.Items;
 
 public class Ctors extends Items<Ctor, ASTConstructorDeclaration> {

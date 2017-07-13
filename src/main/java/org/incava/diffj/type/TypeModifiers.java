@@ -1,7 +1,7 @@
 package org.incava.diffj.type;
 
-import net.sourceforge.pmd.ast.JavaParserConstants;
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.JavaParserConstants;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import org.incava.diffj.element.Modifiers;
 
 public class TypeModifiers extends Modifiers {
@@ -12,7 +12,7 @@ public class TypeModifiers extends Modifiers {
         JavaParserConstants.STRICTFP
     };
 
-    public TypeModifiers(SimpleNode node) {
+    public TypeModifiers(AbstractJavaNode node) {
         super(node);
     }
 

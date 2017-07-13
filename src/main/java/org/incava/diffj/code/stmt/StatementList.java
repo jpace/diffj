@@ -2,8 +2,7 @@ package org.incava.diffj.code.stmt;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diff.Difference;
 import org.incava.diffj.code.Block;
 import org.incava.diffj.code.Code;
@@ -13,7 +12,7 @@ import org.incava.diffj.code.TokenList;
 import org.incava.diffj.util.DiffPoint;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.ListExt;
-import org.incava.pmdx.SimpleNodeUtil;
+
 import static org.incava.ijdk.util.IUtil.*;
 
 public class StatementList {

@@ -1,7 +1,7 @@
 package org.incava.diffj.field;
 
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.ast.ASTFieldDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
 import org.incava.diffj.type.Items;
 
 public class Fields extends Items<Field, ASTFieldDeclaration> {

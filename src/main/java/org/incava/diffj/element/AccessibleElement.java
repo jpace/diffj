@@ -1,10 +1,10 @@
 package org.incava.diffj.element;
 
-import net.sourceforge.pmd.ast.SimpleNode;
-import org.incava.pmdx.SimpleNodeUtil;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import org.incava.pmdx.Node;
 
 public class AccessibleElement extends Element {
-    public AccessibleElement(SimpleNode node) {
+    public AccessibleElement(AbstractJavaNode node) {
         super(node);
     }
 
@@ -13,8 +13,8 @@ public class AccessibleElement extends Element {
         acc.diff(toElement.getParent(), differences);
     }
 
-    public SimpleNode getParent() {
-        SimpleNode node = getNode();
-        return SimpleNodeUtil.getParent(node);
+    public AbstractJavaNode getParent() {
+        Node<AbstractJavaNode> node = Node.of(getNode());
+        return node.getParent();
     }
 }

@@ -1,6 +1,6 @@
 package org.incava.diffj.code;
 
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.ijdk.util.DefaultComparator;
 
 public class TokenComparator extends DefaultComparator<Token> {

@@ -1,19 +1,19 @@
 package org.incava.diffj.type;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.ast.JavaParserConstants;
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import net.sourceforge.pmd.lang.java.ast.JavaParserConstants;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diffj.element.AccessibleElement;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.field.Fields;
 import org.incava.diffj.function.Ctors;
-import org.incava.diffj.function.Methods;
 import org.incava.diffj.function.Initializers;
+import org.incava.diffj.function.Methods;
 import org.incava.ijdk.text.Message;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 import org.incava.pmdx.TypeDeclarationUtil;
 
 public class Type extends AccessibleElement implements Diffable<Type> {
@@ -52,7 +52,7 @@ public class Type extends AccessibleElement implements Diffable<Type> {
         return decl;
     }
 
-    public <ItemType extends SimpleNode> List<ItemType> getDeclarationsOfClass(Class<ItemType> cls) {
+    public <ItemType extends AbstractJavaNode> List<ItemType> getDeclarationsOfClass(Class<ItemType> cls) {
         TypeDeclarationList tdl = new TypeDeclarationList(decl);
         return tdl.getDeclarationsOfClass(cls);
     }
@@ -126,7 +126,7 @@ public class Type extends AccessibleElement implements Diffable<Type> {
     }
 
     public String getName() {
-        return SimpleNodeUtil.findToken(decl, JavaParserConstants.IDENTIFIER).image;
+        return Node.of(decl).findToken(JavaParserConstants.IDENTIFIER).image;
     }
 
     public double getMatchScore(Type toType) {

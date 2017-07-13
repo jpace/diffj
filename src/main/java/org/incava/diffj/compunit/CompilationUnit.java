@@ -1,6 +1,6 @@
 package org.incava.diffj.compunit;
 
-import net.sourceforge.pmd.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
 import org.incava.analysis.Report;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.type.Types;

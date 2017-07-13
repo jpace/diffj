@@ -1,14 +1,14 @@
 package org.incava.diffj.function;
 
-import net.sourceforge.pmd.ast.ASTBlock;
-import net.sourceforge.pmd.ast.ASTInitializer;
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.ASTBlock;
+import net.sourceforge.pmd.lang.java.ast.ASTInitializer;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import org.incava.diffj.code.Block;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 import org.incava.diffj.util.Messages;
 import org.incava.ijdk.text.Message;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 
 public class Initializer implements Diffable<Initializer> {
     public static final Message STATIC_BLOCK_REMOVED = new Message("static block removed");
@@ -20,7 +20,7 @@ public class Initializer implements Diffable<Initializer> {
 
     public Initializer(ASTInitializer init) {
         this.init = init;
-        ASTBlock astBlk = SimpleNodeUtil.findChild(init, ASTBlock.class);
+        ASTBlock astBlk = Node.of(init).findChild(ASTBlock.class);
         this.block = astBlk == null ? null : new Block("static block", astBlk);
     }
 
@@ -44,7 +44,7 @@ public class Initializer implements Diffable<Initializer> {
         return STATIC_BLOCK_MSGS.getDeleted();
     }
 
-    public SimpleNode getNode() {
+    public AbstractJavaNode getNode() {
         return init;
     }
 }

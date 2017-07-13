@@ -6,9 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceType;
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceType;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import org.incava.pmdx.Node;
 import org.incava.pmdx.SimpleNodeUtil;
 
 /**
@@ -17,17 +18,17 @@ import org.incava.pmdx.SimpleNodeUtil;
 public class NameToDecl {
     private final Map<String, ASTClassOrInterfaceType> map;
 
-    public NameToDecl(ASTClassOrInterfaceDeclaration decl, Class<? extends SimpleNode> extImpClass) {
+    public NameToDecl(ASTClassOrInterfaceDeclaration decl, Class<? extends AbstractJavaNode> extImpClass) {
         this.map = new HashMap<String, ASTClassOrInterfaceType>();
-        SimpleNode list = SimpleNodeUtil.findChild(decl, extImpClass);
-
+        AbstractJavaNode list = Node.of(decl).findChild(extImpClass);
+        
         if (list == null) {
             return;
         }
         
-        Collection<ASTClassOrInterfaceType> types = SimpleNodeUtil.findChildren(list, ASTClassOrInterfaceType.class);
+        Collection<ASTClassOrInterfaceType> types = Node.of(list).findChildren(ASTClassOrInterfaceType.class);
         for (ASTClassOrInterfaceType type : types) {
-            map.put(SimpleNodeUtil.toString(type), type);
+            map.put(Node.of(type).toString(), type);
         }
     }
     

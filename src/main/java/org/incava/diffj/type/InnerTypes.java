@@ -1,6 +1,6 @@
 package org.incava.diffj.type;
 
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 
 public class InnerTypes extends Items<Type, ASTClassOrInterfaceDeclaration> {
     public InnerTypes(ASTClassOrInterfaceDeclaration typeDecl) {

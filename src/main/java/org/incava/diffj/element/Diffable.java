@@ -1,6 +1,6 @@
 package org.incava.diffj.element;
 
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import org.incava.ijdk.text.Message;
 
 /**
@@ -17,5 +17,5 @@ public interface Diffable<DiffType extends Diffable<DiffType>> {
 
     public Message getRemovedMessage();
 
-    public SimpleNode getNode();
+    public AbstractJavaNode getNode();
 }

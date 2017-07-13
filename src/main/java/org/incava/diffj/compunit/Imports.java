@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
-import net.sourceforge.pmd.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.ast.ASTImportDeclaration;
-import net.sourceforge.pmd.ast.ASTTypeDeclaration;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.lang.java.ast.ASTImportDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.CompilationUnitUtil;
+import org.incava.pmdx.Node;
 
 public class Imports {
     public static final Message IMPORT_REMOVED = new Message("import removed: {0}");
@@ -62,10 +63,10 @@ public class Imports {
 
     public String getImportAsString(ASTImportDeclaration imp) {
         StringBuilder sb = new StringBuilder();   
-        Token tk  = imp.getFirstToken().next;
+        Token tk  = Node.of(imp).getFirstToken().next;
         
         while (tk != null) {
-            if (tk == imp.getLastToken()) {
+            if (tk == Node.of(imp).getLastToken()) {
                 break;
             }
             else {
@@ -130,14 +131,14 @@ public class Imports {
 
     protected Token getFirstTypeToken() {
         List<ASTTypeDeclaration> types = CompilationUnitUtil.getTypeDeclarations(compUnit);
-        Token t = types.size() > 0 ? types.get(0).getFirstToken() : null;
+        Token t = types.size() > 0 ? Node.of(types.get(0)).getFirstToken() : null;
 
         // if there are no types (ie. the file has only a package and/or import
         // statements), then just point to the first token in the compilation
         // unit.
 
         if (t == null) {
-            t = compUnit.getFirstToken();
+            t = Node.of(compUnit).getFirstToken();
         }
         return t;
     }

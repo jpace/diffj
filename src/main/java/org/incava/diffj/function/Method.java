@@ -1,12 +1,12 @@
 package org.incava.diffj.function;
 
-import net.sourceforge.pmd.ast.ASTBlock;
-import net.sourceforge.pmd.ast.ASTFormalParameters;
-import net.sourceforge.pmd.ast.ASTMethodDeclaration;
-import net.sourceforge.pmd.ast.ASTMethodDeclarator;
-import net.sourceforge.pmd.ast.ASTNameList;
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.ASTBlock;
+import net.sourceforge.pmd.lang.java.ast.ASTFormalParameters;
+import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator;
+import net.sourceforge.pmd.lang.java.ast.ASTNameList;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diffj.code.Block;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
@@ -14,7 +14,7 @@ import org.incava.diffj.params.Parameters;
 import org.incava.diffj.util.Messages;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.MethodUtil;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 
 public class Method extends Function implements Diffable<Method> {
     public static final Message METHOD_REMOVED = new Message("method removed: {0}");
@@ -32,7 +32,7 @@ public class Method extends Function implements Diffable<Method> {
     public Method(ASTMethodDeclaration method) {
         super(method);
         this.method = method;
-        ASTBlock astBlk = SimpleNodeUtil.findChild(method, ASTBlock.class);
+        ASTBlock astBlk = Node.of(method).findChild(ASTBlock.class);
         this.name = MethodUtil.getFullName(method);
         this.block = astBlk == null ? null : new Block(name, astBlk);
     }
@@ -54,8 +54,8 @@ public class Method extends Function implements Diffable<Method> {
         return block;
     }
 
-    protected SimpleNode getReturnType() {
-        return SimpleNodeUtil.findChild(method);
+    protected AbstractJavaNode getReturnType() {
+        return Node.of(method).findChild();
     }
 
     /**
@@ -80,8 +80,6 @@ public class Method extends Function implements Diffable<Method> {
     }
 
     protected void compareBodies(Method toMethod, Differences differences) {
-        tr.Ace.log("name", getName());
-
         if (hasBlock()) {
             if (toMethod.hasBlock()) {
                 block.compareCode(toMethod.block, differences);
@@ -96,13 +94,13 @@ public class Method extends Function implements Diffable<Method> {
     }
 
     protected void compareReturnTypes(Method toMethod, Differences differences) {
-        SimpleNode fromRetType    = getReturnType();
-        SimpleNode toRetType      = toMethod.getReturnType();
-        String     fromRetTypeStr = SimpleNodeUtil.toString(fromRetType);
-        String     toRetTypeStr   = SimpleNodeUtil.toString(toRetType);
+        Node<AbstractJavaNode> fromRetType = Node.of(getReturnType());
+        Node<AbstractJavaNode> toRetType   = Node.of(toMethod.getReturnType());
+        String     fromRetTypeStr = fromRetType.toString();
+        String     toRetTypeStr   = toRetType.toString();
 
         if (!fromRetTypeStr.equals(toRetTypeStr)) {
-            differences.changed(fromRetType, toRetType, RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
+            differences.changed(fromRetType.astNode(), toRetType.astNode(), RETURN_TYPE_CHANGED, fromRetTypeStr, toRetTypeStr);
         }
     }
 
@@ -111,7 +109,7 @@ public class Method extends Function implements Diffable<Method> {
      */
     public String getMethodName() {
         ASTMethodDeclarator decl = MethodUtil.getDeclarator(method);
-        return decl.getFirstToken().image;
+        return Node.of(decl).getFirstToken().image;
     }
 
     public double getMatchScore(Method toMethod) {

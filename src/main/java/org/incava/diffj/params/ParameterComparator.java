@@ -2,7 +2,7 @@ package org.incava.diffj.params;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTFormalParameter;
+import net.sourceforge.pmd.lang.java.ast.ASTFormalParameter;
 import org.incava.pmdx.ParameterUtil;
 
 public class ParameterComparator {

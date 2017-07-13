@@ -1,9 +1,9 @@
 package org.incava.diffj.params;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTFormalParameter;
-import net.sourceforge.pmd.ast.ASTFormalParameters;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.ASTFormalParameter;
+import net.sourceforge.pmd.lang.java.ast.ASTFormalParameters;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.ParameterUtil;

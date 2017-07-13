@@ -1,18 +1,17 @@
 package org.incava.diffj.field;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTType;
-import net.sourceforge.pmd.ast.ASTVariableDeclarator;
-import net.sourceforge.pmd.ast.ASTVariableInitializer;
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.ASTType;
+import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
+import net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diffj.code.Code;
 import org.incava.diffj.code.TokenList;
 import org.incava.diffj.element.CodedElement;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.FieldUtil;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 
 /**
  * A list of variables within a type, such as:
@@ -35,7 +34,7 @@ public class Variable extends CodedElement {
         
         this.type = type;
         this.variable = variable;
-        this.init = SimpleNodeUtil.findChild(variable, ASTVariableInitializer.class);
+        this.init = Node.of(variable).findChild(ASTVariableInitializer.class);
     }
 
     public void diff(Variable toVariable, Differences differences) {
@@ -63,7 +62,7 @@ public class Variable extends CodedElement {
     }
     
     public String getTypeName() {
-        return SimpleNodeUtil.toString(type);
+        return Node.of(type).toString();
     }
 
     protected void compareVariableInits(Variable toVariable, Differences differences) {

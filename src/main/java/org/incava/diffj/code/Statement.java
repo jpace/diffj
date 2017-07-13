@@ -1,8 +1,9 @@
 package org.incava.diffj.code;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTBlockStatement;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.ASTBlockStatement;
+import net.sourceforge.pmd.lang.java.ast.Token;
+import org.incava.pmdx.Node;
 import org.incava.pmdx.SimpleNodeUtil;
 
 public class Statement implements Comparable<Statement> {

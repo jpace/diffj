@@ -1,20 +1,21 @@
 package org.incava.diffj.element;
 
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 
 public class Element {
-    private final SimpleNode node;
+    private final AbstractJavaNode node;
     
-    public Element(SimpleNode node) {
+    public Element(AbstractJavaNode node) {
         this.node = node;
     }
 
-    public SimpleNode getNode() {
+    public AbstractJavaNode getNode() {
         return node;
     }
 
     public void dump() {
-        SimpleNodeUtil.dump(node);
+        Node.of(node).dump();
     }
 }

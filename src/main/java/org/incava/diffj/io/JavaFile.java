@@ -8,26 +8,29 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.EnumSet;
-import net.sourceforge.pmd.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.ast.JavaCharStream;
-import net.sourceforge.pmd.ast.JavaParser;
-import net.sourceforge.pmd.ast.ParseException;
-import net.sourceforge.pmd.ast.TokenMgrError;
+import net.sourceforge.pmd.lang.ParserOptions;
+import net.sourceforge.pmd.lang.ast.JavaCharStream;
+import net.sourceforge.pmd.lang.ast.ParseException;
+import net.sourceforge.pmd.lang.ast.TokenMgrError;
+import net.sourceforge.pmd.lang.java.Java16Parser;
+import net.sourceforge.pmd.lang.java.Java17Parser;
+import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.lang.java.ast.JavaParser;
 import org.incava.analysis.Report;
 import org.incava.diffj.compunit.CompilationUnit;
+import org.incava.diffj.compunit.Parser;
 import org.incava.diffj.lang.DiffJException;
 import org.incava.ijdk.io.ReadOptionType;
 import org.incava.ijdk.io.ReaderExt;
 import org.incava.java.Java;
 
 /**
- * Represents a Java file in this crazy DiffJ world of ours.
+ * Represents a Java file.
  */
 public class JavaFile extends JavaFSElement {
     public static final long serialVersionUID = 1L;
 
     public static JavaFile createFile(File dir, JavaFSElement otherElmt) throws DiffJException {
-        tr.Ace.log("dir: " + dir + "; otherElmt: " + otherElmt);
         try {
             JavaElementFactory jef = new JavaElementFactory();
             return jef.createFile(new File(dir, otherElmt.getName()), null, otherElmt.getSourceVersion());
@@ -102,31 +105,14 @@ public class JavaFile extends JavaFSElement {
         return contents;
     }
 
-    protected JavaParser getParser() throws DiffJException {
-        Reader reader = new StringReader(contents);
-        JavaCharStream jcs = new JavaCharStream(reader);
-        JavaParser parser = new JavaParser(jcs);
-        String sourceVersion = getSourceVersion();
-        
-        if (sourceVersion.equals(Java.SOURCE_1_3)) {
-            parser.setJDK13();
-        }
-        else if (sourceVersion.equals(Java.SOURCE_1_5) || sourceVersion.equals(Java.SOURCE_1_6)) {
-            // no setJDK16 yet in PMD
-            parser.setJDK15();
-        }
-        else if (!sourceVersion.equals(Java.SOURCE_1_4)) {
-            throw new DiffJException("source version '" + sourceVersion + "' not recognized");
-        }
-
-        // nothing to do for 1.4 (currently the default for PMD)
-
-        return parser;
+    protected ASTCompilationUnit parse() throws Exception {
+        String version = getSourceVersion();
+        return new Parser().parse(label, contents, version);
     }
 
     public CompilationUnit compile() throws DiffJException {
         try {
-            ASTCompilationUnit cu = getParser().CompilationUnit();
+            ASTCompilationUnit cu = parse();
             return cu == null ? null : new CompilationUnit(cu);
         }
         catch (TokenMgrError tme) {

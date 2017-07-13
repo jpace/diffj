@@ -1,9 +1,9 @@
 package org.incava.diffj.function;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
-import net.sourceforge.pmd.ast.ASTFormalParameters;
-import net.sourceforge.pmd.ast.ASTNameList;
+import net.sourceforge.pmd.lang.java.ast.ASTConstructorDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTFormalParameters;
+import net.sourceforge.pmd.lang.java.ast.ASTNameList;
 import org.incava.diffj.code.Block;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;

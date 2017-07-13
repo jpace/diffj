@@ -3,20 +3,20 @@ package org.incava.diffj.element;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.Message;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 
 public abstract class Modifiers {
     public static final Message MODIFIER_REMOVED = new Message("modifier removed: {0}");
     public static final Message MODIFIER_ADDED = new Message("modifier added: {0}");
     public static final Message MODIFIER_CHANGED = new Message("modifier changed from {0} to {1}");
 
-    private final SimpleNode node;
+    private final AbstractJavaNode node;
 
-    public Modifiers(SimpleNode node) {
+    public Modifiers(AbstractJavaNode node) {
         this.node = node;
     }
 
@@ -34,11 +34,11 @@ public abstract class Modifiers {
             
             if (fromMod == null) {
                 if (toMod != null) {
-                    differences.changed(node.getFirstToken(), toMod, MODIFIER_ADDED, toMod.image);
+                    differences.changed(Node.of(node).getFirstToken(), toMod, MODIFIER_ADDED, toMod.image);
                 }
             }
             else if (toMod == null) {
-                differences.changed(fromMod, toModifiers.node.getFirstToken(), MODIFIER_REMOVED, fromMod.image);
+                differences.changed(fromMod, Node.of(toModifiers.node).getFirstToken(), MODIFIER_REMOVED, fromMod.image);
             }
         }
     }
@@ -49,7 +49,7 @@ public abstract class Modifiers {
      * node.
      */
     protected Map<Integer, Token> getModifierMap() {
-        List<Token> mods = SimpleNodeUtil.getLeadingTokens(node);
+        List<Token> mods = Node.of(node).getLeadingTokens();
         Map<Integer, Token> byKind = new TreeMap<Integer, Token>();
 
         for (Token tk : mods) {

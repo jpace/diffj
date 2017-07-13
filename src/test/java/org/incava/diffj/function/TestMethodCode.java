@@ -3,6 +3,8 @@ package org.incava.diffj.function;
 import org.incava.analysis.FileDiffChange;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.util.Lines;
+import org.incava.java.Java;
+
 import static org.incava.diffj.code.Code.*;
 
 public class TestMethodCode extends ItemsTest {
@@ -248,5 +250,23 @@ public class TestMethodCode extends ItemsTest {
                            "}"),
                  
                  makeCodeDeletedRef(CODE_REMOVED, "bar()", locrg(3, 9, 4, 24), locrg(3, 5, 5)));
+    }
+
+    public void testSyntax() {
+        evaluate(new Lines("class Test {",
+                           "    void bar() {",
+                           "        new ArrayList<>();",
+                           "    }",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "    void bar() {",
+                           "        new ArrayList<>();",
+                           "    }",
+                           "}"),
+
+                 Java.SOURCE_1_7,
+                 
+                 NO_CHANGES);
     }
 }

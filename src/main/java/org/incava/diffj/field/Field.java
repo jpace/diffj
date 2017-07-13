@@ -3,11 +3,11 @@ package org.incava.diffj.field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import net.sourceforge.pmd.ast.ASTFieldDeclaration;
-import net.sourceforge.pmd.ast.ASTType;
-import net.sourceforge.pmd.ast.ASTVariableDeclarator;
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTType;
+import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diffj.element.AccessibleElement;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
@@ -15,7 +15,7 @@ import org.incava.diffj.util.Messages;
 import org.incava.ijdk.text.Message;
 import org.incava.ijdk.util.CollectionExt;
 import org.incava.pmdx.FieldUtil;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 import org.incava.pmdx.VariableUtil;
 
 public class Field extends AccessibleElement implements Diffable<Field> {
@@ -59,11 +59,11 @@ public class Field extends AccessibleElement implements Diffable<Field> {
     }
 
     protected ASTType getType() {
-        return SimpleNodeUtil.findChild(field, net.sourceforge.pmd.ast.ASTType.class);
+        return Node.of(field).findChild(net.sourceforge.pmd.lang.java.ast.ASTType.class);
     }
 
     protected Variables getVariables() {
-        List<ASTVariableDeclarator> varDecls = SimpleNodeUtil.findChildren(field, ASTVariableDeclarator.class);
+        List<ASTVariableDeclarator> varDecls = Node.of(field).findChildren(ASTVariableDeclarator.class);
         return new Variables(getType(), varDecls);
     }
 
@@ -78,7 +78,7 @@ public class Field extends AccessibleElement implements Diffable<Field> {
      * field.
      */
     public List<String> getNameList() {
-        List<ASTVariableDeclarator> varDecls = SimpleNodeUtil.findChildren(field, ASTVariableDeclarator.class);
+        List<ASTVariableDeclarator> varDecls = Node.of(field).findChildren(ASTVariableDeclarator.class);
         List<String> names = new ArrayList<String>();
         for (ASTVariableDeclarator varDecl : varDecls) {
             names.add(VariableUtil.getName(varDecl).image);
@@ -111,9 +111,9 @@ public class Field extends AccessibleElement implements Diffable<Field> {
     /**
      * Returns the token images for the node.
      */
-    public String toString(SimpleNode node) {
-        Token tk = node.getFirstToken();
-        Token last = node.getLastToken();
+    public String toString(AbstractJavaNode node) {
+        Token tk = Node.of(node).getFirstToken();
+        Token last = Node.of(node).getLastToken();
         StringBuilder sb = new StringBuilder(tk.image);
         while (tk != last) {
             tk = tk.next;

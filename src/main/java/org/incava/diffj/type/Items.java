@@ -2,8 +2,8 @@ package org.incava.diffj.type;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import org.incava.diffj.element.Diffable;
 import org.incava.diffj.element.Differences;
 
@@ -11,7 +11,7 @@ import org.incava.diffj.element.Differences;
  * Items represents the methods, ctors, fields and inner types of a parent type.
  * Collects PMD AST types into DiffJ Java types.
  */
-public abstract class Items<DiffJType extends Diffable<DiffJType>, PmdAstType extends SimpleNode> {
+public abstract class Items<DiffJType extends Diffable<DiffJType>, PmdAstType extends AbstractJavaNode> {
     private final Class<PmdAstType> cls;
     private final Type type;
 

@@ -1,13 +1,13 @@
 package org.incava.diffj.code;
 
 import java.util.List;
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diff.Differ;
 import org.incava.diff.Difference;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.util.ListExt;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 
 /**
  * A list of tokens representing code.
@@ -19,8 +19,8 @@ public class TokenList implements Comparable<TokenList> {
         this.tokens = tokens;
     }
 
-    public TokenList(SimpleNode node) {
-        this(SimpleNodeUtil.getChildTokens(node));
+    public TokenList(AbstractJavaNode node) {
+        this(Node.of(node).getChildTokens());
     }
 
     public List<TokenDifference> diff(TokenList toTokenList) {

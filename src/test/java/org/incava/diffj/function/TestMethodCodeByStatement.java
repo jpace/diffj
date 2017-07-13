@@ -4,12 +4,12 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import net.sourceforge.pmd.ast.ASTBlock;
-import net.sourceforge.pmd.ast.ASTBlockStatement;
-import net.sourceforge.pmd.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.ast.ASTMethodDeclaration;
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.ASTBlock;
+import net.sourceforge.pmd.lang.java.ast.ASTBlockStatement;
+import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.code.Block;
 import org.incava.diffj.code.Statement;
@@ -19,37 +19,37 @@ import org.incava.diffj.function.Method;
 import org.incava.diffj.io.JavaFile;
 import org.incava.diffj.util.Lines;
 import org.incava.ijdk.text.Location;
+import org.incava.pmdx.Node;
 import org.incava.pmdx.SimpleNodeUtil;
+
 import static org.incava.diffj.code.Code.*;
 
 public class TestMethodCodeByStatement extends ItemsTest {
     public TestMethodCodeByStatement(String name) {
         super(name);
-        tr.Ace.setVerbose(true);
-        tr.Ace.log("name", name);
     }
 
     public URL seek(String name) {
         return ClassLoader.getSystemResource(name);
     }
 
-    public TokenList dumpTokens(SimpleNode node) {
+    public TokenList dumpTokens(AbstractJavaNode node) {
         TokenList tokens = new TokenList(node);
         tr.Ace.log("tokens", tokens);
         String str = tokens.toString();
         return tokens;
     }
 
-    public SimpleNode getChildNode(SimpleNode parent, int idx) {
-        return SimpleNodeUtil.findChild(parent, null, idx);
+    public AbstractJavaNode getChildNode(AbstractJavaNode parent, int idx) {
+        return Node.of(parent).findChild(null, idx);
     }
 
-    public SimpleNode getDescendantNode(SimpleNode parent, int depth) {
+    public AbstractJavaNode getDescendantNode(AbstractJavaNode parent, int depth) {
         if (depth <= 0) {
             return null;
         }
         else {
-            SimpleNode child = SimpleNodeUtil.findChild(parent, null, 0);
+            AbstractJavaNode child = Node.of(parent).findChild(null, 0);
             return depth == 1 ? child : getDescendantNode(child, depth - 1);
         }
     }
@@ -65,15 +65,15 @@ public class TestMethodCodeByStatement extends ItemsTest {
      * Returns the first method. Assumes type->class->body->method.
      */
     public ASTMethodDeclaration getFirstMethod(ASTCompilationUnit ast) {
-        SimpleNode typeDecl = getChildNode(ast, 0);
-        SimpleNode clsDecl = getChildNode(typeDecl, 0);
-        SimpleNode body = getChildNode(clsDecl, 0);
-        SimpleNode bodyDecl = getChildNode(body, 0);
+        AbstractJavaNode typeDecl = getChildNode(ast, 0);
+        AbstractJavaNode clsDecl = getChildNode(typeDecl, 0);
+        AbstractJavaNode body = getChildNode(clsDecl, 0);
+        AbstractJavaNode bodyDecl = getChildNode(body, 0);
         return (ASTMethodDeclaration)getChildNode(bodyDecl, 0);
     }
 
-    public List<ASTBlockStatement> getStatements(SimpleNode node) {
-        return SimpleNodeUtil.findChildren(node, ASTBlockStatement.class);
+    public List<ASTBlockStatement> getStatements(AbstractJavaNode node) {
+        return Node.of(node).findChildren(ASTBlockStatement.class);
     }
 
     public List<TokenList> showMethod(String fileName) throws Exception {
@@ -84,8 +84,8 @@ public class TestMethodCodeByStatement extends ItemsTest {
         tr.Ace.onRed("methBlk", methBlk);
         meth.dump();
 
-        ASTBlock astBlk = SimpleNodeUtil.findChild(methNode, ASTBlock.class);
-        List<Token> tokens = SimpleNodeUtil.getChildTokens(astBlk);
+        ASTBlock astBlk = Node.of(methNode).findChild(ASTBlock.class);
+        List<Token> tokens = Node.of(astBlk).getChildTokens();
         tr.Ace.log("tokens", tokens);
 
         List<TokenList> tokenLists = new ArrayList<TokenList>();
@@ -112,11 +112,11 @@ public class TestMethodCodeByStatement extends ItemsTest {
 
     public List<TokenList> showCtor(String fileName) throws Exception {
         ASTCompilationUnit ast = getCompilationUnit(fileName).getAstCompUnit();
-        SimpleNode typeDecl = getChildNode(ast, 0);
-        SimpleNode clsDecl = getChildNode(typeDecl, 0);
-        SimpleNode body = getChildNode(clsDecl, 0);
-        SimpleNode bodyDecl = getChildNode(body, 0);
-        SimpleNode ctorDecl = getChildNode(bodyDecl, 0);
+        AbstractJavaNode typeDecl = getChildNode(ast, 0);
+        AbstractJavaNode clsDecl = getChildNode(typeDecl, 0);
+        AbstractJavaNode body = getChildNode(clsDecl, 0);
+        AbstractJavaNode bodyDecl = getChildNode(body, 0);
+        AbstractJavaNode ctorDecl = getChildNode(bodyDecl, 0);
         
         List<TokenList> tokenLists = new ArrayList<TokenList>();
         List<ASTBlockStatement> statements = getStatements(ctorDecl);

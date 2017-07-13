@@ -1,7 +1,7 @@
 package org.incava.diffj.element;
 
-import net.sourceforge.pmd.ast.SimpleNode;
-import net.sourceforge.pmd.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import net.sourceforge.pmd.lang.java.ast.Token;
 import org.incava.analysis.FileDiff;
 import org.incava.analysis.FileDiffAdd;
 import org.incava.analysis.FileDiffChange;
@@ -11,6 +11,7 @@ import org.incava.analysis.Report;
 import org.incava.analysis.TokenUtil;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.text.Message;
+import org.incava.pmdx.Node;
 
 public class Differences {
     private final Report report;    
@@ -46,7 +47,7 @@ public class Differences {
         return DiffParameters.toParameters(a, b);
     }
 
-    public Object[] toParameters(SimpleNode a, SimpleNode b) {
+    public Object[] toParameters(AbstractJavaNode a, AbstractJavaNode b) {
         return DiffParameters.toParameters(a, b);
     }
 
@@ -70,23 +71,23 @@ public class Differences {
         changed(from, from, to, to, msg, params);
     }
 
-    public void changed(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
-        changed(from.getFirstToken(), from.getLastToken(), to.getFirstToken(), to.getLastToken(), msg, params);
+    public void changed(AbstractJavaNode from, AbstractJavaNode to, Message msg, Object ... params) {
+        changed(Node.of(from).getFirstToken(), Node.of(from).getLastToken(), Node.of(to).getFirstToken(), Node.of(to).getLastToken(), msg, params);
     }
 
-    public void changed(SimpleNode from, Token to, Message msg, Object ... params) {
-        changed(from.getFirstToken(), from.getLastToken(), to, to, msg, params);
+    public void changed(AbstractJavaNode from, Token to, Message msg, Object ... params) {
+        changed(Node.of(from).getFirstToken(), Node.of(from).getLastToken(), to, to, msg, params);
     }
 
-    public void changed(Token from, SimpleNode to, Message msg, Object ... params) {
-        changed(from, from, to.getFirstToken(), to.getLastToken(), msg, params);
+    public void changed(Token from, AbstractJavaNode to, Message msg, Object ... params) {
+        changed(from, from, Node.of(to).getFirstToken(), Node.of(to).getLastToken(), msg, params);
     }
 
     public void changed(Token from, Token to, Message msg) {
         changed(from, to, msg, toParameters(from, to));
     }
 
-    public void changed(SimpleNode from, SimpleNode to, Message msg) {
+    public void changed(AbstractJavaNode from, AbstractJavaNode to, Message msg) {
         changed(from, to, msg, toParameters(from, to));
     }
 
@@ -102,15 +103,15 @@ public class Differences {
         deleted(from, from, to, to, msg, params);
     }
 
-    public void deleted(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
-        deleted(from.getFirstToken(), from.getLastToken(), to.getFirstToken(), to.getLastToken(), msg, params);
+    public void deleted(AbstractJavaNode from, AbstractJavaNode to, Message msg, Object ... params) {
+        deleted(Node.of(from).getFirstToken(), Node.of(from).getLastToken(), Node.of(to).getFirstToken(), Node.of(to).getLastToken(), msg, params);
     }
 
     public void deleted(Token from, Token to, Message msg) {
         deleted(from, to, msg, toParameters(from, null));
     }
 
-    public void deleted(SimpleNode from, SimpleNode to, Message msg) {
+    public void deleted(AbstractJavaNode from, AbstractJavaNode to, Message msg) {
         deleted(from, to, msg, toParameters(from, null));
     }
 
@@ -130,11 +131,11 @@ public class Differences {
         added(from, to, msg, toParameters(null, to));
     }
 
-    public void added(SimpleNode from, SimpleNode to, Message msg, Object ... params) {
-        added(from.getFirstToken(), from.getLastToken(), to.getFirstToken(), to.getLastToken(), msg, params);
+    public void added(AbstractJavaNode from, AbstractJavaNode to, Message msg, Object ... params) {
+        added(Node.of(from).getFirstToken(), Node.of(from).getLastToken(), Node.of(to).getFirstToken(), Node.of(to).getLastToken(), msg, params);
     }
 
-    public void added(SimpleNode from, SimpleNode to, Message msg) {
+    public void added(AbstractJavaNode from, AbstractJavaNode to, Message msg) {
         added(from, to, msg, toParameters(null, to));
     }
 }

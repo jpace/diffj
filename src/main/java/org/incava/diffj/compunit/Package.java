@@ -1,13 +1,13 @@
 package org.incava.diffj.compunit;
 
-import net.sourceforge.pmd.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.ast.ASTName;
-import net.sourceforge.pmd.ast.ASTPackageDeclaration;
-import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.lang.java.ast.ASTName;
+import net.sourceforge.pmd.lang.java.ast.ASTPackageDeclaration;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import org.incava.diffj.element.Differences;
 import org.incava.ijdk.text.Message;
 import org.incava.pmdx.CompilationUnitUtil;
-import org.incava.pmdx.SimpleNodeUtil;
+import org.incava.pmdx.Node;
 
 public class Package {
     public static final Message PACKAGE_REMOVED = new Message("package removed: {0}");
@@ -30,20 +30,20 @@ public class Package {
         if (isEmpty()) {
             if (!toPackage.isEmpty()) {
                 ASTName    name    = toPackage.getPackageName();
-                SimpleNode fromPos = getChild();
+                AbstractJavaNode fromPos = getChild();
                 differences.added(fromPos, name, PACKAGE_ADDED);
             }
         }
         else if (toPackage.isEmpty()) {
             ASTName    name  = getPackageName();
-            SimpleNode toPos = toPackage.getChild();
+            AbstractJavaNode toPos = toPackage.getChild();
             differences.deleted(name, toPos, PACKAGE_REMOVED);
         }
         else {
             ASTName fromName = getPackageName();
-            String  fromStr  = SimpleNodeUtil.toString(fromName);
+            String  fromStr  = Node.of(fromName).toString();
             ASTName toName   = toPackage.getPackageName();
-            String  toStr    = SimpleNodeUtil.toString(toName);
+            String  toStr    = Node.of(toName).toString();
 
             if (!fromStr.equals(toStr)) {
                 differences.changed(fromName, toName, PACKAGE_RENAMED);
@@ -51,12 +51,12 @@ public class Package {
         }
     }
 
-    protected SimpleNode getChild() {
-        SimpleNode child = SimpleNodeUtil.findChild(compUnit);
+    protected AbstractJavaNode getChild() {
+        AbstractJavaNode child = Node.of(compUnit).findChild();
         return child == null ? compUnit : child;
     }
 
     public ASTName getPackageName() {
-        return SimpleNodeUtil.findChild(pkg, net.sourceforge.pmd.ast.ASTName.class);
+        return Node.of(pkg).findChild(net.sourceforge.pmd.lang.java.ast.ASTName.class);
     }
 }
