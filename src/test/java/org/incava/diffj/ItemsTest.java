@@ -17,7 +17,7 @@ import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.ijdk.text.Message;
 
-public class ItemsTest extends DiffJTest {
+public class ItemsTest extends DiffJTestCase {
     protected final static Message[] MODIFIER_MSGS = new Message[] {
         Modifiers.MODIFIER_REMOVED,
         Modifiers.MODIFIER_CHANGED,

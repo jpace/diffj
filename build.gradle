@@ -32,8 +32,8 @@ jar {
 }
 
 test {
-    excludes = [ '**/IncavaTestCase*', '**/.#*', '**/DiffJTest.class', '**/ItemsTest.class', '**/OutputTest.class' ]
-    includes = [ '**/Test*' ]
+    excludes = [ '**/*TestCase*', '**/.#*', '**/ItemsTest.class', '**/OutputTest.class' ]
+    includes = [ '**/*Test*' ]
     testLogging {
         exceptionFormat = "full"
     }
