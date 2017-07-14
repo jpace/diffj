@@ -3,7 +3,7 @@ apply plugin: 'application'
 apply plugin: 'pmd'
 
 group = 'org.incava.diffj'
-version ='1.5.1'
+version ='1.6.0'
 mainClassName = 'org.incava.diffj.app.DiffJ'
 
 repositories {
