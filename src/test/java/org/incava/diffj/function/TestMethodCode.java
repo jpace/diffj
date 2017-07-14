@@ -10,11 +10,9 @@ import static org.incava.diffj.code.Code.*;
 public class TestMethodCode extends ItemsTest {
     public TestMethodCode(String name) {
         super(name);
-        tr.Ace.setVerbose(true);
     }
 
     public void testCodeNotChanged() {
-        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { return -1; }",
                            "",
@@ -32,7 +30,6 @@ public class TestMethodCode extends ItemsTest {
     }
 
     public void testCodeChanged() {
-        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { return -1; }",
                            "",
@@ -49,7 +46,6 @@ public class TestMethodCode extends ItemsTest {
     }
     
     public void testCodeInserted() {
-        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { return -1; }",
                            "",
@@ -67,7 +63,6 @@ public class TestMethodCode extends ItemsTest {
     }
 
     public void testCodeDeleted() {
-        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { ",
                            "        int i = 0;",
@@ -85,7 +80,6 @@ public class TestMethodCode extends ItemsTest {
     }
 
     public void testCodeInsertedAndChanged() {
-        tr.Ace.onRed("this", this);
         evaluate(new Lines("class Test {",
                            "    int bar() { return -1; }",
                            "",
@@ -105,7 +99,6 @@ public class TestMethodCode extends ItemsTest {
     // See comment in TestDiff.java, with regard to misleading LCSes.
 
     public void misleading_diffs_testZipDiff() {
-        tr.Ace.onRed("this", this);
         evaluate(new Lines("/**",
                            " * This class implements an output stream filter for writing files in the",
                            " * ZIP file format. Includes support for both compressed and uncompressed",
@@ -252,7 +245,7 @@ public class TestMethodCode extends ItemsTest {
                  makeCodeDeletedRef(CODE_REMOVED, "bar()", locrg(3, 9, 4, 24), locrg(3, 5, 5)));
     }
 
-    public void testSyntax() {
+    public void test17Syntax() {
         evaluate(new Lines("class Test {",
                            "    void bar() {",
                            "        new ArrayList<>();",
@@ -266,6 +259,46 @@ public class TestMethodCode extends ItemsTest {
                            "}"),
 
                  Java.SOURCE_1_7,
+                 
+                 NO_CHANGES);
+    }
+
+    public void test18SyntaxClosure() {
+        evaluate(new Lines("class Test {",
+                           "    void bar() {",
+                           "        Set<Integer> numbers = new HashSet<Integer>();",
+                           "        numbers.stream().reduce(0, (x, y) -> x + y);",
+                           "    }",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "    void bar() {",
+                           "        Set<Integer> numbers = new HashSet<Integer>();",
+                           "        numbers.stream().reduce(0, (x, y) -> x + y);",
+                           "    }",
+                           "}"),
+
+                 Java.SOURCE_1_8,
+                 
+                 NO_CHANGES);
+    }
+
+    public void test18SyntaxMethodName() {
+        evaluate(new Lines("class Test {",
+                           "    void bar() {",
+                           "        Set<Integer> numbers = new HashSet<Integer>();",
+                           "        numbers.stream().reduce(0, Integer::sum);",
+                           "    }",
+                           "}"),
+
+                 new Lines("class Test {",
+                           "    void bar() {",
+                           "        Set<Integer> numbers = new HashSet<Integer>();",
+                           "        numbers.stream().reduce(0, Integer::sum);",
+                           "    }",
+                           "}"),
+
+                 Java.SOURCE_1_8,
                  
                  NO_CHANGES);
     }
