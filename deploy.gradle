@@ -34,7 +34,7 @@ bintray {
     configurations = ['archives'] // Use the archives Configuration.
     pkg {
         repo = 'org.incava'
-        name = 'ijdk'
+        name = 'diffj'
         userOrg = user
         licenses = [pkgLicense]
         publicDownloadNumbers = true

@@ -18,9 +18,9 @@ group = 'org.incava'
 version ='1.6.0'
 mainClassName = 'org.incava.diffj.app.DiffJ'
 ext {
-    pkgName = 'ijdk'
-    pkgDesc = 'Incava Java Development Kit'
-    githubRepo = 'github.com/jpace/ijdk'
+    pkgName = 'diffj'
+    pkgDesc = 'Java code comparison'
+    githubRepo = 'github.com/jpace/diffj'
     pkgLicense = 'Apache-2.0'
     pkgLicenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     devInfo = {
