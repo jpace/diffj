@@ -3,7 +3,8 @@ package org.incava.diffj.app;
 import java.util.Arrays;
 import java.util.List;
 import org.incava.analysis.DetailedReport;
-import org.incava.ijdk.lang.StringExt;
+import org.incava.ijdk.collect.StringList;
+import org.incava.ijdk.lang.Str;
 import org.incava.jagol.BooleanOption;
 import org.incava.jagol.IntegerOption;
 import org.incava.jagol.OptionSet;
@@ -11,8 +12,8 @@ import org.incava.jagol.StringOption;
 import org.incava.java.Java;
 
 public class Options extends OptionSet {
-    public static final String VERSION = "1.4.0";
-    public static final String DEFAULT_SOURCE = Java.SOURCE_1_5;
+    public static final String VERSION = "1.6.1";
+    public static final String DEFAULT_SOURCE = Java.SOURCE_1_8;
 
     private boolean briefOutput = false;
     private boolean contextOutput = false;
@@ -70,19 +71,19 @@ public class Options extends OptionSet {
         verboseOpt    = addBooleanOption("verbose",   "Whether to run in verbose mode (for debugging)");
         versionOpt    = addOption(new BooleanOption("version",   "Displays the version", 'v'));
 
-        String javaVersions = StringExt.join(Arrays.asList(new String[] {
-                    Java.SOURCE_1_3,
-                    Java.SOURCE_1_4,
-                    Java.SOURCE_1_5 + " (the default)",
-                    "or " + Java.SOURCE_1_6,
-                }), ", ");
+        String javaVersions = StringList.of(Java.SOURCE_1_3,
+                                            Java.SOURCE_1_4,
+                                            Java.SOURCE_1_5,
+                                            Java.SOURCE_1_6,
+                                            Java.SOURCE_1_7,
+                                            Java.SOURCE_1_8 + " (the default)").join(", ");
         
         fromSourceOpt = addOption(new StringOption("from-source", "The Java source version, of the from-file; " + javaVersions));
-        toSourceOpt   = addOption(new StringOption("to-source",   "The Java source version, of the to-file; " + javaVersions));
+        toSourceOpt   = addOption(new StringOption("to-source",   "The Java source version, of the to-file"));
         sourceOpt     = addOption(new StringOption("source",      "The Java source version of both from-file and the to-file"));
 
         // processed as a valid option, but unused.
-        addOption(new BooleanOption("unified",   "Output unified context. Unused; for compatibility with GNU diff", 'u'));
+        addOption(new BooleanOption("unified",   "Output unified context. Ignored; for compatibility with GNU diff", 'u'));
         
         // svn diff --diff-cmd cmd passes "-u, -L first, -L second, file1, file2":
         StringOption nameOpt = new StringOption("name",   "Sets the first/second name to be displayed", 'L') {
