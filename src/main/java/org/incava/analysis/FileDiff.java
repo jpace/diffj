@@ -96,7 +96,7 @@ public abstract class FileDiff implements Comparable<FileDiff> {
      * Compares this reference to another. FileDiffs are sorted in order by
      * their beginning locations, then their end locations.
      *
-     * @param obj The reference to compare this to.
+     * @param other The reference to compare this to.
      * @return -1, 0, or 1, for less than, equivalent to, or greater than.
      */
     public int compareTo(FileDiff other) {

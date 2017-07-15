@@ -104,10 +104,10 @@ public class MethodCodeByStatementTest extends ItemsTest {
     }
 
     public void testMethod() throws Exception {
-        tr.Ace.onBlue("******************************************");
+        tr.Ace.log("******************************************");
         List<TokenList> a = showMethod("diffj/codecomp/d0/Changed.java");
         List<TokenList> b = showMethod("diffj/codecomp/d1/Changed.java");
-        tr.Ace.onBlue("******************************************");
+        tr.Ace.log("******************************************");
     }
 
     public List<TokenList> showCtor(String fileName) throws Exception {
@@ -132,9 +132,9 @@ public class MethodCodeByStatementTest extends ItemsTest {
     }
 
     public void testCtor() throws Exception {
-        tr.Ace.onGreen("******************************************");
+        tr.Ace.log("******************************************");
         List<TokenList> a = showCtor("diffj/codecomp/d0/ChangedCtor.java");
         List<TokenList> b = showCtor("diffj/codecomp/d1/ChangedCtor.java");
-        tr.Ace.onGreen("******************************************");
+        tr.Ace.log("******************************************");
     }
 }

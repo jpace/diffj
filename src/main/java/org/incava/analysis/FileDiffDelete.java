@@ -7,8 +7,6 @@ import org.incava.ijdk.text.Message;
 /**
  * A reference to code deleted, associated with a file by a starting and ending
  * position. Note that code deleted is not the same as a section of code deleted.
- *
- * @todo fix the names.
  */
 public class FileDiffDelete extends FileDiff {
     public FileDiffDelete(String message, LocationRange fromLoc, LocationRange toLoc) {

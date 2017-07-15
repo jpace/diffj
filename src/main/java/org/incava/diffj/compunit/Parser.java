@@ -21,13 +21,7 @@ import org.incava.java.Java;
 
 public class Parser {
     public ASTCompilationUnit parse(String label, String contents, String version) throws Exception {
-        tr.Ace.setVerbose(true);
-        tr.Ace.onBlue("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-        tr.Ace.onBlue("version", version);
-
         net.sourceforge.pmd.lang.Parser p = getParser(version);
-        tr.Ace.log("p", p);
-        
         Reader reader = new StringReader(contents);
         return (ASTCompilationUnit)p.parse(label, reader);
     }

@@ -2,12 +2,12 @@ package org.incava.diffj.function;
 
 import org.incava.diffj.ItemsTest;
 import org.incava.diffj.util.Lines;
+
 import static org.incava.diffj.code.Code.*;
 
 public class CtorCodeTest extends ItemsTest {
     public CtorCodeTest(String name) {
         super(name);
-        tr.Ace.setVerbose(true);
     }
 
     public void testCodeNotChanged() {
@@ -73,11 +73,7 @@ public class CtorCodeTest extends ItemsTest {
                            "    }",
                            "}"),
                  
-                 // the new implementation:
                  makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 14, 16), locrg(4, 9, 18)));
-
-                 // the old one:
-                 // makeCodeAddedRef(CODE_ADDED, "Test()", locrg(2, 18, 18), locrg(4, 13, 5, 11)));
     }
 
     public void testCodeChangedOneStatementToTwo() {
@@ -150,7 +146,6 @@ public class CtorCodeTest extends ItemsTest {
                            "    Test() { int i = -1; }",
                            "}"),
                  
-                 // makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 13, 4, 11), locrg(3, 18, 18)));
                  makeCodeDeletedRef(CODE_REMOVED, "Test()", locrg(3, 9, 18), locrg(3, 14, 16)));
     }
 
