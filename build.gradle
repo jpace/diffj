@@ -39,11 +39,14 @@ apply from: 'deploy.gradle'
 
 dependencies {
     compile files('libs/pmdx-3.0.0.jar')
-    compile files('libs/ijdk-3.4.2.jar')
+    compile files('libs/ijdk-3.4.3.jar')
     compile files('libs/jagol-1.1.0.jar')
     compile files('libs/java-diff-1.0.0.jar')
     compile files('libs/qualog-2.2.0.jar')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '1.0.6'
+    testCompile 'org.incava:attest:[0.0.4,)'
+    testCompile 'org.hamcrest:hamcrest-library:[1.3,)'
 }
 
 allprojects {
