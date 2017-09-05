@@ -15,7 +15,7 @@ apply plugin: 'application'
 apply plugin: 'pmd'
 
 group = 'org.incava'
-version ='1.6.2'
+version ='1.6.3'
 mainClassName = 'org.incava.diffj.app.DiffJ'
 ext {
     pkgName = 'diffj'
