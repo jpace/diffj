@@ -83,7 +83,6 @@ public class DetailedReport extends Report {
 
     public void writeDifferences() {
         try {
-            tr.Ace.stack("flushing differences");
             Collection<FileDiff> diffs = getDifferences();
 
             if (fromContents == null) {

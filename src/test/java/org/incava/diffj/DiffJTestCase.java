@@ -68,11 +68,8 @@ public class DiffJTestCase extends IncavaTestCase {
                  makeDetailedReport(writer),
                  (FileDiff[])null);         // no code expectation comparisons
         
-        // tr.Ace.setVerbose(true);
-        // tr.Ace.red("*******************************************************");
-
-        String[] lines = StringExt.split(writer.getBuffer().toString(), "\n");
-        // tr.Ace.log("lines", lines);
+        String str = writer.getBuffer().toString();
+        String[] lines = StringExt.split(str, "\n");
         return lines;
     }
 

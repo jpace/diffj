@@ -20,6 +20,8 @@ public class IncavaTestCase extends TestCase {
     static public void assertEquals(String msg, Collection<?> expected, Collection<?> actual) {
         String m = toMessage(msg);
 
+        // assertEquals(expected.size(), actual.size());
+
         int count = Math.max(expected.size(), actual.size());
         Iterator<?> eit = expected.iterator();
         Iterator<?> ait = actual.iterator();
