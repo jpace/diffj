@@ -54,7 +54,6 @@ public class DiffJTest extends DiffJTestCase {
         expected.add("!         " + ANSI.YELLOW + "}" + ANSI.RESET);
         expected.add("      }");
         expected.add("  }");
-        expected.add("");
 
         tr.Ace.log("expected", expected);
 
@@ -83,9 +82,6 @@ public class DiffJTest extends DiffJTestCase {
         expected.add("  public class FN {");
         expected.add("!     " + ANSI.YELLOW + "void f() {}" + ANSI.RESET);
         expected.add("  }");
-        expected.add("");
-        
-        tr.Ace.log("expected", expected);
 
         assertOutputEquals(new Lines("public class FN {",
                                      "}"),

@@ -27,12 +27,6 @@ public class OutputNoContextTest extends OutputTest {
     public void testCodeChangedMultipleLines() {
         String[] output = doCodeChangedMultipleLinesTest();
         
-        tr.Ace.log("output", output);
-
-        for (String outstr : output) {
-            tr.Ace.yellow("<<<" + outstr + ">>>");
-        }
-
         // output doesn't have end-of-lines
         List<String> expected = new ArrayList<String>();
 
@@ -42,28 +36,21 @@ public class OutputNoContextTest extends OutputTest {
         expected.add("---");
         expected.add(">         int j = 0;");
         expected.add(">         i = 2; ");
-        expected.add("");
 
         assertEquals(expected, Arrays.asList(output));
     }
 
     public void testCodeDeleted() {
         String[] output = doCodeDeletedTest();
-        
-        tr.Ace.log("output", output);
 
         List<String> expected = new ArrayList<String>();
 
         // @todo change so that the non-context output shows the previous block.
-
         expected.add("- <=> -");
         expected.add("3d3 code removed in Test()");
         expected.add("<         int j = 0;");
         expected.add("---");
         expected.add(">     Test() { int i = -1; }");
-        expected.add("");
-
-        tr.Ace.cyan("expected", expected);
 
         assertEquals(expected, Arrays.asList(output));
     }
@@ -71,20 +58,14 @@ public class OutputNoContextTest extends OutputTest {
     public void testCodeAdded() {
         String[] output = doCodeAddedTest();
         
-        tr.Ace.log("output", output);
-
         List<String> expected = new ArrayList<String>();
 
         // @todo change so that the non-context output shows the previous block.
-
         expected.add("- <=> -");
         expected.add("4a5 code added in Test()");
         expected.add("<         int i = -1;");
         expected.add("---");
         expected.add(">         int i = -1, k = 666;");
-        expected.add("");
-
-        tr.Ace.cyan("expected", expected);
 
         assertEquals(expected, Arrays.asList(output));
     }

@@ -11,6 +11,7 @@ import org.incava.analysis.Report;
 import org.incava.diffj.io.JavaFile;
 import org.incava.diffj.util.Lines;
 import org.incava.ijdk.lang.StringExt;
+import org.incava.ijdk.lang.Str;
 import org.incava.ijdk.text.Location;
 import org.incava.ijdk.text.LocationRange;
 import org.incava.java.Java;
@@ -69,8 +70,11 @@ public class DiffJTestCase extends IncavaTestCase {
                  (FileDiff[])null);         // no code expectation comparisons
         
         String str = writer.getBuffer().toString();
-        String[] lines = StringExt.split(str, "\n");
-        return lines;
+        Str sy = new Str(str);
+        List<String> ly = sy.split("\n", null);
+        tr.Ace.log("ly", ly);
+
+        return ly.toArray(new String[0]);
     }
 
     public String[] getOutput(Lines fromLines, Lines toLines) {

@@ -49,7 +49,6 @@ public abstract class OutputContextTest extends OutputTest {
         expected.add("! " + adorn("        i = 2", false) + "; ");
         expected.add("      }");
         expected.add("  }");
-        expected.add("");
 
         assertEquals(expected, Arrays.asList(output));
     }
@@ -68,7 +67,6 @@ public abstract class OutputContextTest extends OutputTest {
         expected.add("          int i = -1;");
         expected.add("      }");
         expected.add("  }");
-        expected.add("");
 
         assertEquals(expected, Arrays.asList(output));
     }
@@ -87,7 +85,6 @@ public abstract class OutputContextTest extends OutputTest {
         expected.add("!         int i = -1" + adorn(", k = 666", false) + ";");
         expected.add("      }");
         expected.add("  }");
-        expected.add("");
 
         assertEquals(expected, Arrays.asList(output));
     }
@@ -109,7 +106,6 @@ public abstract class OutputContextTest extends OutputTest {
         expected.add("! " + adorn("import org.incava.qualog.Qualog;", true));
         expected.add("  ");
         expected.add("  public class TimedEvent {}");
-        expected.add("");
 
         assertEquals(expected, Arrays.asList(output));        
     }
